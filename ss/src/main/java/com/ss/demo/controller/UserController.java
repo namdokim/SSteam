@@ -119,4 +119,13 @@ public class UserController
 		value = "{\"uNick\":\""+cnt+"\"}";
 		return value;
 	}
+	
+	//최종 서브밋 검사
+	@RequestMapping(value="/User/submitAction.do")
+	public String submitAction(
+			
+			)
+	{
+		return "redirect:../index.do";
+	}
 }

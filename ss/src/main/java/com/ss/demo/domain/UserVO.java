@@ -14,6 +14,8 @@ public class UserVO {
 	private String uType;
 	private String uDely;
 	private String uPoint;
+	//비밀번호 일치 확인 
+	
 	
 	public int getuNo() {
 		return uNo;

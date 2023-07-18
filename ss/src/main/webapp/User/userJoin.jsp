@@ -4,7 +4,7 @@
 <script>
 function DoRewrite()
 {
-	alert("잘되누?");
+
 	$("#uId").val("").focus();
 }
 function check()
@@ -24,12 +24,10 @@ function check()
 </script>
 
 <style>
-	tr
-	{
-	text-align: center;
-	padding: auto;
-	
-	width: 40%;
+	tr{
+		text-align: center;
+		padding: auto;
+		width: 40%;
 	}
 </style>
 회원가입 페이지
@@ -225,7 +223,6 @@ function check()
 			}else
 			{
 				$("#pwmsg").text("비밀번호가 불일치합니다");
-				$("#pwmsg").focus();
 			}
 		});
 	</script>
