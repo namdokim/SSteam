@@ -219,10 +219,10 @@ function check()
 			var uPwc	= $("#uPwc").val();
 			
 			
-			if()
-				{
+			if(uPw == uPwc)
+			{
 				
-				}
+			}
 			$.ajax({
 				
 			});
