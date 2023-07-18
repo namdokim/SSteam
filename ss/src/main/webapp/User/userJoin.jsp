@@ -214,18 +214,19 @@ function check()
 	</script>
 	<!-- 비밀번호 확인 절차  -->
 	<script type="text/javascript">
-		${"#uPwc"}.keyup(function(){
+		$("#uPwc").keyup(function(){
 			var uPw		= $("#uPw").val();
 			var uPwc	= $("#uPwc").val();
 			
-			
 			if(uPw == uPwc)
 			{
-				
+				$("#pwmsg").text("비밀번호가 일치합니다");
+				$("#pwmsg").css("color","#2E2EFE");
+			}else
+			{
+				$("#pwmsg").text("비밀번호가 불일치합니다");
+				$("#pwmsg").focus();
 			}
-			$.ajax({
-				
-			});
 		});
 	</script>
 	
