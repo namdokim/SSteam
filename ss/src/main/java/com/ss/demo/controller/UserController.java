@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ss.demo.domain.userVO;
+import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.UserService;
 
 @Controller
-public class userController 
+public class UserController 
 {
 	// 유저 서비스 
 	@Autowired
@@ -44,7 +44,7 @@ public class userController
 	}
 	//회원가입 처리
 	@RequestMapping(value="User/userJoinAction.do")
-	public String userJoinAction( userVO uv
+	public String userJoinAction( UserVO uv
 			
 			)
 	{
@@ -70,7 +70,7 @@ public class userController
 			)
 	
 	{
-		userVO uv = us.userlogin(uId);
+		UserVO uv = us.userlogin(uId);
 		System.out.println("login: " +uv);
 		System.out.println("upw"+ uv.getuPw());
 		System.out.println("uPw" +rbcryptPasswordEncoder.matches(uPw, uv.getuPw()));
@@ -104,5 +104,19 @@ public class userController
 			// TODO: handle exception
 		}
 		return "redirect:../index.do";
+	}
+	
+	//유저 닉네임 중복체크
+	@ResponseBody
+	@RequestMapping(value="/User/uNickCheck.do")
+	public String uNickCheck(
+			@RequestParam("uNick") String uNick
+			)
+	{
+		String value =null;
+		System.out.println(uNick);
+		int cnt = us.uNickCheck(uNick);
+		value = "{\"uNick\":\""+cnt+"\"}";
+		return value;
 	}
 }

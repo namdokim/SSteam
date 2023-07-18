@@ -1,6 +1,6 @@
 package com.ss.demo.domain;
 
-public class userVO {
+public class UserVO {
 	
 	private int uNo;
 	private String uId;

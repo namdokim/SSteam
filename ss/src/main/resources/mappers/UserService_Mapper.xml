@@ -11,4 +11,8 @@
 	<select id="userlogin" parameterType="String" resultType="uv">
 		select * from user where uDely="N" and uId=#{uId};
 	</select>
+	<!-- 닉네임 중복체크 -->
+	<select id="uNickCheck" parameterType="String" resultType="int">
+		select count(*) as cnt from user where uDely="N" and uNick=#{uNick};
+	</select>
 </mapper>

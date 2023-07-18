@@ -22,6 +22,7 @@ function check()
 	}
 }
 </script>
+
 <style>
 	tr
 	{
@@ -42,9 +43,9 @@ function check()
 					<input type="text" id="uId" name="uId" style="width:97%; " required value="">
 				</td>
 				<td >
-					<input type="button" value="중복확인" id="memberIdCheck" onclick="idCheck();">
+					<input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();">
 					<input type="button" value="인증하기" id="emailCheck" >
-					<input type="hidden" name="idchecked" value="checkednot">
+					<input type="hidden" name="idchecked" id=""value="checkednot">
 				</td>
 			</tr>
 			<tr>
@@ -75,6 +76,14 @@ function check()
 					<span id="msg_pw"></span>
 				</td>
 			</tr>
+			<!-- 비밀번호 확인 안내문자  -->
+			<tr>
+				<td>
+				</td>
+				<td>
+					<div id="pwmsg"></div>
+				</td>
+			</tr>
 			<!--
 			<tr>
 				<td id="jbar">
@@ -98,13 +107,21 @@ function check()
 			<tr>
 				<td id="jbar">
 					<p id="join bar"> 닉네임 <span style="color: red">(*)</span> </p>
+					<div><input type="hidden" ></div>
 				</td>
 				<td>
 					<input type="text" id="uNick" name="uNick" style="width:97%;" required value="">
 				</td>
 				<td>
-					<input type="button" value="중복확인" id="nickcheck">
-					<input type="hidden" name="nickcehecked" value="checkednot">
+<!-- 					<input type="button" value="중복확인" id="nickcheck" onclick="uNickCheck()"> -->
+				</td>
+			</tr>
+			<!-- 닉네임 중복 체크 안내 문자  -->
+			<tr>
+				<td>
+				</td>
+				<td>
+					<div id="nickCheck" style="font-family: sans-serif; font-size:24px"></div>
 				</td>
 			</tr>
 			<tr>
@@ -164,4 +181,52 @@ function check()
 		</table>
 		
 	</form>
+	<!-- 닉네임 중복 체크 -->
+	<script type="text/javascript">
+
+		$("#uNick").keyup(function(){
+			var uNick = $("#uNick").val();
+				
+			$.ajax({
+				url : "<%= request.getContextPath()%>/User/uNickCheck.do",
+				type : "POST",
+				data : {"uNick": uNick},
+				dataType : "JSON",
+				success :function(data){
+					console.log(data.uNick);
+					if(data.uNick == 1){
+						console.log("실행 되남???");
+						$("#nickCheck").text("이미 사용중입니다");
+						$("#nickCheck").css("color","#dc3545");
+						var check = data.uNick;
+					}else{
+						$("#nickCheck").text("사용 가능합니다");
+						$("#nickCheck").css("color","#2E2EFE");
+					}
+				},
+				error : function(){
+					alert("요청실패");
+				}
+			});
+			//return;
+		});
+	
+	</script>
+	<!-- 비밀번호 확인 절차  -->
+	<script type="text/javascript">
+		${"#uPwc"}.keyup(function(){
+			var uPw		= $("#uPw").val();
+			var uPwc	= $("#uPwc").val();
+			
+			
+			if()
+				{
+				
+				}
+			$.ajax({
+				
+			});
+		});
+	</script>
+	
 <%@ include file="/include/footer.jsp" %>
