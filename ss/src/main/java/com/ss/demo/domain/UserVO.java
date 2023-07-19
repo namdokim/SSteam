@@ -14,6 +14,8 @@ public class UserVO {
 	private String uType;
 	private String uDely;
 	private String uPoint;
+	//추가 변수
+	private String uZipcode;
 	//비밀번호 일치 확인 
 	
 	

@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService{
 		return value;
 	}
 	//유저 로그인
+	@Override
 	public UserVO userlogin(String uId)
 	{
 		UserVO uv = null;
@@ -35,11 +36,18 @@ public class UserServiceImpl implements UserService{
 		return uv;
 	}
 	// 유저 닉네임 중복체크 
+	@Override
 	public int uNickCheck(String uNick)
 	{
-		
 		int value = usm.uNickCheck(uNick);
-		System.out.println("sql :" +value);
+		System.out.println("check int : " +value);
+		return value;
+	}
+	// 유저 id 중복체크
+	@Override
+	public int uIdCheck(String uId) {
+		int value = usm.uIdCheck(uId);
+		System.out.println("check int : " + value);
 		return value;
 	}
 }

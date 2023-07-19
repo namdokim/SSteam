@@ -16,6 +16,7 @@ import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.UserService;
 
 @Controller
+@RequestMapping(value="/User")
 public class UserController 
 {
 	// 유저 서비스 
@@ -34,7 +35,7 @@ public class UserController
 		return "index";
 	}
 	// 회원가입 페이지 이동 
-	@RequestMapping(value="/User/userJoin.do" )
+	@RequestMapping(value="/userJoin.do" )
 	public String userJoin(
 			
 			)
@@ -43,7 +44,7 @@ public class UserController
 		return "User/userJoin";
 	}
 	//회원가입 처리
-	@RequestMapping(value="User/userJoinAction.do")
+	@RequestMapping(value="/userJoinAction.do")
 	public String userJoinAction( UserVO uv
 			
 			)
@@ -51,10 +52,10 @@ public class UserController
 		String uPw = rbcryptPasswordEncoder.encode(uv.getuPw());
 		uv.setuPw(uPw);
 		int value = us.userInsert(uv);
-		return "redirect:../index.do";
+		return "redirect:index.do";
 	}
 	//로그인 화면
-	@RequestMapping(value="/User/userLogin.do")
+	@RequestMapping(value="/userLogin.do")
 	public String userLogin(
 			
 			)
@@ -62,7 +63,7 @@ public class UserController
 		return "User/userLogin";
 	}
 	//로그인 처리
-	@RequestMapping(value="/User/userLoginAction.do", method = {RequestMethod.POST})
+	@RequestMapping(value="/userLoginAction.do", method = {RequestMethod.POST})
 	public String userLoginAction(@RequestParam("uId") String uId,
 			@RequestParam("uPw") String uPw,
 			HttpServletRequest requset,
@@ -87,11 +88,11 @@ public class UserController
 			System.out.println("로그인 실패");
 			return "redirect:../User/userLogin.do";
 		}
-		return "redirect:../index.do";
+		return "redirect:index.do";
 	}
 	
 	//유저 로그아웃
-	@RequestMapping(value="/User/userLogoutAction.do")
+	@RequestMapping(value="/userLogoutAction.do")
 	public String userLogoutAction(HttpServletRequest request,
 			HttpSession session
 			)
@@ -103,12 +104,12 @@ public class UserController
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return "redirect:../index.do";
+		return "redirect:index.do";
 	}
 	
 	//유저 닉네임 중복체크
 	@ResponseBody
-	@RequestMapping(value="/User/uNickCheck.do")
+	@RequestMapping(value="/uNickCheck.do")
 	public String uNickCheck(
 			@RequestParam("uNick") String uNick
 			)
@@ -116,12 +117,25 @@ public class UserController
 		String value =null;
 		System.out.println(uNick);
 		int cnt = us.uNickCheck(uNick);
+		//제이슨 형식으로 값 집어넣어서 ajax에서 불러오기
 		value = "{\"uNick\":\""+cnt+"\"}";
+		return value;
+	}
+	// 유저 id 중복체크
+	@ResponseBody
+	@RequestMapping(value="/uIdCheck.do")
+	public String uIdCheck(
+			@RequestParam("uId") String uId
+			)
+	{
+		String value = null;
+		int cnt = us.uIdCheck(uId);
+		value = "{\"uId\":\""+cnt+"\"}";
 		return value;
 	}
 	
 	//최종 서브밋 검사
-	@RequestMapping(value="/User/submitAction.do")
+	@RequestMapping(value="/submitAction.do")
 	public String submitAction(
 			
 			)
