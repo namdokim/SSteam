@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/include/header.jsp" %>
 <script>
+// 진규야 정신차려라 제발 플리즈
 function DoRewrite()
 {
 	$("#uId").val("").focus();
@@ -221,7 +222,7 @@ function DoRewrite()
 			//return;
 		});
 
-	<!-- 비밀번호 확인 절차  -->
+	//비밀번호 확인 절차
 
 		$("#uPwc").keyup(function(){
 			var uPw		= $("#uPw").val();
