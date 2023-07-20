@@ -46,15 +46,23 @@ public class UserController
 	//회원가입 처리
 	@RequestMapping(value="/userJoinAction.do")
 	public String userJoinAction( UserVO uv,
+			HttpServletRequest requset,
 			@RequestParam("uId_email") String uId_email
 			)
 	{
+		//서블릿 퀘스트에 담긴 session 가져 오기 
+		HttpSession session = requset.getSession();
+		
+		//String email = uId_email;
 		uv.getuId();
-		uv.getuId_email();
 		String id = uv.getuId() + uv.getuId_email();
 		System.out.println("id : " + id);
+		//System.out.println("id : " + email);
 		System.out.println(uv.getuId());
-		
+		if(uv.getuId() == null || uv.getuId().equals(""))
+		{
+			return "index";
+		}
 		uv.setuId(id);
 		
 		String uPw = rbcryptPasswordEncoder.encode(uv.getuPw());
@@ -135,7 +143,6 @@ public class UserController
 			)
 	{
 		String value =null;
-		System.out.println(uNick);
 		int cnt = us.uNickCheck(uNick);
 		//제이슨 형식으로 값 집어넣어서 ajax에서 불러오기
 		value = "{\"uNick\":\""+cnt+"\"}";
