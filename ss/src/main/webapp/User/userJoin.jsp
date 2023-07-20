@@ -21,7 +21,7 @@ function DoRewrite()
 	}
 </style>
 <!-- 회원가입 입력 란  -->
-	<form name="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do" onsubmit="return false;">
+	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
 		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
 			<tr>
 				<td style="width:60%;">
@@ -150,9 +150,10 @@ function DoRewrite()
 	<!-- 최종 서브밋  -->
 <script type="text/javascript">
 	//중복체크및 일치 확인 여부 
-		<!-- id 중복체크 -->
+		var uNickDup	= false;
 		var uIdDup		= false;
 		var uPwDup		= false;
+	//id 중복체크
 	$("#uId").on("propertychange change keyup paste input",function(){
 		var uId = $("#uId").val();
 		$.ajax({
@@ -191,7 +192,6 @@ function DoRewrite()
 	});
 	*/
 	// 닉네임 중복 체크 
-		var uNickDup	= false;
 		$("#uNick").keyup(function(){
 			var uNick = $("#uNick").val();
 				
@@ -223,7 +223,6 @@ function DoRewrite()
 		});
 
 	//비밀번호 확인 절차
-
 		$("#uPwc").keyup(function(){
 			var uPw		= $("#uPw").val();
 			var uPwc	= $("#uPwc").val();
@@ -245,7 +244,6 @@ function DoRewrite()
 	function DoSubmit()
 	{
 		// submit시 최종 유효성검사 submit막기
-		console.log("밖에 : " + uIdDup);
 		var uPw		= $("#uPw").val();
 		var uPwc	= $("#uPwc").val();
 		var uName	= $("#uName").val();
@@ -290,8 +288,8 @@ function DoRewrite()
 			$("#uNcik").focus();
 			return false;
 		}
+		$("#join").submit();
 		
-		return true;
 	}
 </script>
 	

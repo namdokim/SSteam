@@ -40,14 +40,12 @@ public class UserServiceImpl implements UserService{
 	public int uNickCheck(String uNick)
 	{
 		int value = usm.uNickCheck(uNick);
-		System.out.println("check int : " +value);
 		return value;
 	}
 	// 유저 id 중복체크
 	@Override
 	public int uIdCheck(String uId) {
 		int value = usm.uIdCheck(uId);
-		System.out.println("check int : " + value);
 		return value;
 	}
 }
