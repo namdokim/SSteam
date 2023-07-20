@@ -145,9 +145,13 @@ function DoRewrite()
 		</table>
 		
 	</form>
-	<!-- id 중복체크 -->
-	<script type="text/javascript">
+
+	<!-- 최종 서브밋  -->
+<script type="text/javascript">
+	//중복체크및 일치 확인 여부 
+		<!-- id 중복체크 -->
 		var uIdDup		= false;
+		var uPwDup		= false;
 	$("#uId").on("propertychange change keyup paste input",function(){
 		var uId = $("#uId").val();
 		$.ajax({
@@ -181,17 +185,11 @@ function DoRewrite()
 	console.log("결과값 변경 : " +uIdDup);
 	/*
 	$("#uId").keyup(function(){
-		
-		
-		
 		console.log("밖에 : " + uIdDup);
 		return true;
 	});
 	*/
-	</script>
-	
-	<!-- 닉네임 중복 체크 -->
-	<script type="text/javascript">
+	// 닉네임 중복 체크 
 		var uNickDup	= false;
 		$("#uNick").keyup(function(){
 			var uNick = $("#uNick").val();
@@ -222,9 +220,9 @@ function DoRewrite()
 			});
 			//return;
 		});
-	</script>
+
 	<!-- 비밀번호 확인 절차  -->
-	<script type="text/javascript">
+
 		$("#uPwc").keyup(function(){
 			var uPw		= $("#uPw").val();
 			var uPwc	= $("#uPwc").val();
@@ -241,13 +239,7 @@ function DoRewrite()
 				uPwDup = false;
 			}
 		});
-	</script>
-	<!-- 최종 서브밋  -->
-<script type="text/javascript">
-	//중복체크및 일치 확인 여부 
-	uNickDup
 	
-	var uPwDup		= false;
 	// 최종 유효성 검사 
 	function DoSubmit()
 	{
@@ -256,9 +248,6 @@ function DoRewrite()
 		var uPw		= $("#uPw").val();
 		var uPwc	= $("#uPwc").val();
 		var uName	= $("#uName").val();
-		
-		
-		
 		
 		if(join.uId.value.length == 0 || $("#uId").val() == "")
 		{
@@ -280,6 +269,7 @@ function DoRewrite()
 		}else if(uName == null || $("#uName").val() == "")
 		{
 			alert("이름을 써주세요");
+
 			$("#uName").val("").focus();
 			return false;
 			
