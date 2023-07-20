@@ -1,4 +1,4 @@
-<%@page import="com.ss.demo.controller.userController"%>
+<%@page import="com.ss.demo.controller.UserController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% // 설정 파일을 인클루드 한다 %>
 
@@ -17,6 +17,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>게시판</title>
+		<!-- 소스 불러오기 -->
 		<script type="text/javascript" src="./smarteditor/js/HuskyEZCreator.js" charset="UTF-8"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 		<link rel="stylesheet" href="./css/board.css"/>
@@ -48,8 +49,7 @@
 		<link rel="stylesheet" href="<%=request.getContextPath() %>/static/assets/dist/style.css">
 		
 		 <!-- include libraries(jQuery, bootstrap) -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        
+
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>                     
  
@@ -161,26 +161,28 @@
 					padding: 0.5rem 1rem; /* 원하는 패딩 크기로 조정하세요 */
 					}
 				</style>
-	<!-- 카테고리 -->			
-	<ul class=" nav-tabs nav-scroller py-1 mb-2 "  >
-		<nav class="nav d-flex justify-content-between" >						
-			<div class="nav-item offset-2" style="margin-right: 2rem;">
-				<a class="nav-link" aria-current="page" style="color: black; align:center;" 
-					href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do">숙박</a>
-			</div>					
-			<div class="nav-item offset-1" style="margin-right: 2rem;">
-				<a class="nav-link" style="color: black; align:center;" 
-					href="index.jsp?type=I">맛집</a>
-			</div>
-			<div class="nav-item offset-1" style="margin-right: 2rem;">
-				<a class="nav-link" style="color: black; align:center;" 
-					href="index.jsp?type=P">축제</a>
-			</div>
-			<div class="nav-item offset-1" style="margin-right: 24rem;">
-				<a class="nav-link " style="color: black; text-align: center;" 
-					href="index.jsp?type=S">커뮤니티</a>
-			</div>									
-		</nav>
-	</ul>						
+
+	<!-- 카테고리 -->	
+				<ul class=" nav-tabs nav-scroller py-1 mb-2 " >
+					<nav class="nav d-flex justify-content-between" >						
+						<div class="nav-item offset-2" style="margin-right: 2rem;">
+							<a class="nav-link" aria-current="page" style="color: black; align:center;" 
+								href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do">숙박</a>
+						</div>					
+						<div class="nav-item offset-1" style="margin-right: 2rem;">
+							<a class="nav-link" style="color: black; align:center;" 
+								href="<%=request.getContextPath()%>/Food/FoodMain.do">맛집</a>
+						</div>
+						<div class="nav-item offset-1" style="margin-right: 2rem;">
+							<a class="nav-link" style="color: black; align:center;" 
+								href="index.jsp?type=P">축제</a>
+						</div>
+						<div class="nav-item offset-1" style="margin-right: 24rem;">
+							<a class="nav-link " style="color: black; text-align: center;" 
+								href="index.jsp?type=S">커뮤니티</a>
+						</div>									
+					</nav>
+				</ul>						
+
 			</div>
 		</header>
