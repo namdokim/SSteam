@@ -20,7 +20,7 @@
 			여행지 설정
 		</div>
 		<div style="border:1px solid black; width:250px; height:100%; display:inline-block;" >
-			체크인 체크아웃 설정
+			체크인 체크아웃
 		</div>
 		<div style="border:1px solid black; width:250px; height:100%; display:inline-block;" >
 			인원수 설정
