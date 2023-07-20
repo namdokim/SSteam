@@ -6,91 +6,6 @@ function DoRewrite()
 {
 	$("#uId").val("").focus();
 }
-/* 
-function check()
-{
-	var uPw		= $("#uPw").val();
-	var uPwc	= $("#uPwc").val();
-	
-	if(join.uId.value.length == 0 || $("#uId").val() == "")
-	{
-		alert("아이디가 없어요");
-		join.id.focus();
-		return false;
-	}else if(uPw != uPwc )
-	{
-		
-		
-		return false;
-	}
-	else if(join.uIdCheck.value != "Y")
-	{
-		alert(" 중복 체크 해라 유효성 검사를 해주세요")
-		join.id.focus();
-		return true;
-	}
-}
- */
-</script>
-
-<!-- 최종 서브밋  -->
-<script type="text/javascript">
-	// 최종 유효성 검사 
-	function DoSubmit()
-	{
-		// submit시 최종 유효성검사 submit막기
-		
-		var uPw		= $("#uPw").val();
-		var uPwc	= $("#uPwc").val();
-		var uName	= $("#uName").val();
-		
-		// 중복체크및 일치 확인 여부 
-		var uNickDup	= false;
-		var uIdDup		= false;
-		var uPwDup		= false;
-		
-		if(join.uId.value.length == 0 || $("#uId").val() == "")
-		{
-			alert("아이디를 써주세요");
-			join.id.focus();
-			return false;
-			
-		}else if( uIdDup == false){
-			alert("아이디가 중복됩니다");
-			$("#uId").val("").focus();
-			return false;
-			
-		}else if(uPw != uPwc )
-		{
-			alert("비밀번호가 일치 하지 않습니다");
-			$("#uPw").val("").focus();
-			uPwDup = true;
-			return true;
-		}else if(uName == null || $("#uName").val() == "")
-		{
-			alert("이름을 써주세요");
-			$("#uName").val("").focus();
-			return false;
-			
-		}else if (uNick == null || $("#uNick").val() == "")
-		{
-			alert("닉네임을 써주세요");
-			$("#uNick").val("").focus();
-			return false;
-		}else if( uAdds == null || $("#uAdds").val() == "")
-		{
-			alert("주소를 써주세요");
-			$("#uAdds").val("").focus();
-			return false;
-		}else if (uNickDup == false)
-		{
-			alert("닉네임이 중복 됩니다 고쳐주세요");
-			$("#uNcik").focus();
-			return false;
-		}
-		
-		return true;
-	}
 </script>
 <style>
 	tr{
@@ -232,7 +147,8 @@ function check()
 	</form>
 	<!-- id 중복체크 -->
 	<script type="text/javascript">
-	$("#uId").keyup(function(){
+		var uIdDup		= false;
+	$("#uId").on("propertychange change keyup paste input",function(){
 		var uId = $("#uId").val();
 		$.ajax({
 			url : "<%= request.getContextPath()%>/User/uIdCheck.do",
@@ -240,31 +156,43 @@ function check()
 			data : {"uId": uId},
 			dataType : "JSON",
 			success :function(data){
-				console.log(data.uId);
 				if(data.uId == 1 || data.uId >= 2){
 					$("#msg_id").text("이미 사용중입니다");
 					$("#msg_id").css("color","#dc3545");
 					uIdDup = false;
+					console.log(uIdDup);
+					console.log();
 					
-					return false;
 				}else{
 					$("#msg_id").text("사용 가능합니다");
 					$("#msg_id").css("color","#2E2EFE");
 					uIdDup = true;
 					
-					return true;
+					console.log(uIdDup);
+					
 				}
 			},
 			error : function(){
 				alert("요청실패");
 			}
-		});
+			}); //ajax 끝 
 		
 	});
+	console.log("결과값 변경 : " +uIdDup);
+	/*
+	$("#uId").keyup(function(){
+		
+		
+		
+		console.log("밖에 : " + uIdDup);
+		return true;
+	});
+	*/
 	</script>
 	
 	<!-- 닉네임 중복 체크 -->
 	<script type="text/javascript">
+		var uNickDup	= false;
 		$("#uNick").keyup(function(){
 			var uNick = $("#uNick").val();
 				
@@ -314,5 +242,66 @@ function check()
 			}
 		});
 	</script>
+	<!-- 최종 서브밋  -->
+<script type="text/javascript">
+	//중복체크및 일치 확인 여부 
+	uNickDup
+	
+	var uPwDup		= false;
+	// 최종 유효성 검사 
+	function DoSubmit()
+	{
+		// submit시 최종 유효성검사 submit막기
+		console.log("밖에 : " + uIdDup);
+		var uPw		= $("#uPw").val();
+		var uPwc	= $("#uPwc").val();
+		var uName	= $("#uName").val();
+		
+		
+		
+		
+		if(join.uId.value.length == 0 || $("#uId").val() == "")
+		{
+			alert("아이디를 써주세요");
+			join.id.focus();
+			return false;
+			
+		}else if( uIdDup == false){
+			alert("아이디가 중복됩니다");
+			$("#uId").val("").focus();
+			return false;
+			
+		}else if(uPw != uPwc )
+		{
+			alert("비밀번호가 일치 하지 않습니다");
+			$("#uPw").val("").focus();
+			uPwDup = true;
+			return true;
+		}else if(uName == null || $("#uName").val() == "")
+		{
+			alert("이름을 써주세요");
+			$("#uName").val("").focus();
+			return false;
+			
+		}else if (uNick == null || $("#uNick").val() == "")
+		{
+			alert("닉네임을 써주세요");
+			$("#uNick").val("").focus();
+			return false;
+		}else if( uAdds == null || $("#uAdds").val() == "")
+		{
+			alert("주소를 써주세요");
+			$("#uAdds").val("").focus();
+			return false;
+		}else if (uNickDup == false)
+		{
+			alert("닉네임이 중복 됩니다 고쳐주세요");
+			$("#uNcik").focus();
+			return false;
+		}
+		
+		return true;
+	}
+</script>
 	
 <%@ include file="/include/footer.jsp" %>

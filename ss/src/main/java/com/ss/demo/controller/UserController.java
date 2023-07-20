@@ -45,12 +45,21 @@ public class UserController
 	}
 	//회원가입 처리
 	@RequestMapping(value="/userJoinAction.do")
-	public String userJoinAction( UserVO uv
-			
+	public String userJoinAction( UserVO uv,
+			@RequestParam("uId_email") String uId_email
 			)
 	{
+		uv.getuId();
+		uv.getuId_email();
+		String id = uv.getuId() + uv.getuId_email();
+		System.out.println("id : " + id);
+		System.out.println(uv.getuId());
+		
+		uv.setuId(id);
+		
 		String uPw = rbcryptPasswordEncoder.encode(uv.getuPw());
 		uv.setuPw(uPw);
+		
 		int value = us.userInsert(uv);
 		return "redirect:index.do";
 	}
@@ -71,18 +80,29 @@ public class UserController
 			)
 	
 	{
-		UserVO uv = us.userlogin(uId);
-		System.out.println("login: " +uv);
-		System.out.println("upw"+ uv.getuPw());
-		System.out.println("uPw" +rbcryptPasswordEncoder.matches(uPw, uv.getuPw()));
-		if(uv != null && rbcryptPasswordEncoder.matches(uPw, uv.getuPw()))
+		//서블릿 퀘스트에 담긴 session 가져 오기 
+		HttpSession session = requset.getSession();
+		
+		//로그인 된 정보
+		UserVO loginVO = us.userlogin(uId);
+		
+		//UserVO uv = us.userlogin(uId);
+		System.out.println("login: " +loginVO);
+		System.out.println("upw"+ loginVO.getuPw());
+		System.out.println("uPw" +rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()));
+		if(loginVO != null && rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
 		{
 			System.out.println("로그인 성공  ");
+			//로그인 된 정보들의 특정 컬럼들의 값을 따로 따로 집어넣어준다 
+			/*
 			requset.getSession().setAttribute("uNo", uv.getuNo());
 			requset.getSession().setAttribute("uId", uv.getuId());
 			requset.getSession().setAttribute("uName", uv.getuName());
 			requset.getSession().setAttribute("uNick", uv.getuNick());
-			model.addAttribute(uv);
+			model.addAttribute(loginVO);
+			*/
+			// 로그인 된 정보를 session에 담아준다  (쿼리문에서 select 할 값들을 따로 지정해서 그 값들만 담을수 있다 )
+			session.setAttribute("login", loginVO);
 		}else
 		{
 			System.out.println("로그인 실패");
@@ -131,6 +151,7 @@ public class UserController
 		String value = null;
 		int cnt = us.uIdCheck(uId);
 		value = "{\"uId\":\""+cnt+"\"}";
+		
 		return value;
 	}
 	

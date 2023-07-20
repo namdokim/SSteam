@@ -16,7 +16,16 @@ public class UserVO {
 	private String uPoint;
 	//추가 변수
 	private String uZipcode;
+	private String uId_email;
 	//비밀번호 일치 확인 
+	
+	//추가 된 get set 
+	public String getuId_email() {
+		return uId_email;
+	}
+	public void setuId_email(String uId_email) {
+		this.uId_email = uId_email;
+	}
 	
 	
 	public int getuNo() {
