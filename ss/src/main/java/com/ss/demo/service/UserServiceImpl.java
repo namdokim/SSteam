@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService{
 	}
 	//유저 로그인
 	@Override
-	public UserVO userlogin(String uId)
+	public UserVO userlogin(UserVO uv)
 	{
-		UserVO uv = null;
-		uv = usm.userlogin(uId);
+		
+		uv = usm.userlogin(uv);
 		System.out.println("sql"+uv);
 		return uv;
 	}
@@ -47,5 +47,11 @@ public class UserServiceImpl implements UserService{
 	public int uIdCheck(String uId) {
 		int value = usm.uIdCheck(uId);
 		return value;
+	}
+	//로그인 체크 
+	@Override
+	public UserVO loginCheck(UserVO uv) {
+		uv = usm.userlogin(uv);
+		return uv;
 	}
 }

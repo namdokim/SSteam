@@ -53,23 +53,25 @@ public class UserController
 		//서블릿 퀘스트에 담긴 session 가져 오기 
 		HttpSession session = requset.getSession();
 		
-		//String email = uId_email;
+		String email = uId_email;
 		uv.getuId();
+		//선택된 이메일 도메인을 가져와서 id text와 합체 시키기 
 		String id = uv.getuId() + uv.getuId_email();
 		System.out.println("id : " + id);
-		//System.out.println("id : " + email);
+		System.out.println("id : " + email);
 		System.out.println(uv.getuId());
 		if(uv.getuId() == null || uv.getuId().equals(""))
 		{
+			System.out.println("회원가입 오류 ");
 			return "index";
 		}
-		uv.setuId(id);
 		
 		String uPw = rbcryptPasswordEncoder.encode(uv.getuPw());
+		uv.setuId(id);
 		uv.setuPw(uPw);
 		
 		int value = us.userInsert(uv);
-		return "redirect:index.do";
+		return "redirect:/";
 	}
 	//로그인 화면
 	@RequestMapping(value="/userLogin.do")
@@ -81,42 +83,52 @@ public class UserController
 	}
 	//로그인 처리
 	@RequestMapping(value="/userLoginAction.do", method = {RequestMethod.POST})
-	public String userLoginAction(@RequestParam("uId") String uId,
+	public String userLoginAction(UserVO uv,
+			@RequestParam("uId") String uId,
 			@RequestParam("uPw") String uPw,
 			HttpServletRequest requset,
 			Model model
 			)
-	
 	{
 		//서블릿 퀘스트에 담긴 session 가져 오기 
 		HttpSession session = requset.getSession();
-		
-		//로그인 된 정보
-		UserVO loginVO = us.userlogin(uId);
-		
-		//UserVO uv = us.userlogin(uId);
-		System.out.println("login: " +loginVO);
-		System.out.println("upw"+ loginVO.getuPw());
-		System.out.println("uPw" +rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()));
-		if(loginVO != null && rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
-		{
-			System.out.println("로그인 성공  ");
-			//로그인 된 정보들의 특정 컬럼들의 값을 따로 따로 집어넣어준다 
-			/*
+			//이메일화된 문자 @뒤 지우기
+			// 특정 값 앞의 값만 가져오기 
+			//uv.getuId().split("@")[0];
+			int lengthindex = uv.getuId().indexOf("@");	//@가 위치한 길이(index) 구하기 
+			String idindex = uv.getuId().substring(0, lengthindex);
+			String indexback = uv.getuId().substring(lengthindex+1);
+			if(idindex.length() >= 2)
+			{
+				System.out.println("가고 오는 값이 많아서 안됨");
+				return "redirect:../User/userLogin.do";
+			}
+			
+			UserVO loginVO = us.userlogin(uv);
+			
+			// 로그인 시 유효성검사
+			System.out.println("login: " +loginVO);
+			
+			if(loginVO != null && rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
+			{
+				System.out.println("로그인 성공  ");
+				//로그인 된 정보들의 특정 컬럼들의 값을 따로 따로 집어넣어준다 
+				/*
 			requset.getSession().setAttribute("uNo", uv.getuNo());
 			requset.getSession().setAttribute("uId", uv.getuId());
 			requset.getSession().setAttribute("uName", uv.getuName());
 			requset.getSession().setAttribute("uNick", uv.getuNick());
 			model.addAttribute(loginVO);
-			*/
-			// 로그인 된 정보를 session에 담아준다  (쿼리문에서 select 할 값들을 따로 지정해서 그 값들만 담을수 있다 )
-			session.setAttribute("login", loginVO);
-		}else
-		{
-			System.out.println("로그인 실패");
-			return "redirect:../User/userLogin.do";
-		}
-		return "redirect:index.do";
+				*/
+				// 로그인 된 정보를 session에 담아준다  (쿼리문에서 select 할 값들을 따로 지정해서 그 값들만 담을수 있다 )
+				session.setAttribute("login", loginVO);
+			}else
+			{
+				System.out.println("로그인 실패 첫번쨰");
+				return "redirect:../User/userLogin.do";
+			}
+
+		return "redirect:/";
 	}
 	
 	//유저 로그아웃
@@ -142,7 +154,10 @@ public class UserController
 			@RequestParam("uNick") String uNick
 			)
 	{
+		UserVO uv = new UserVO();
+		System.out.println(uv.getuId());
 		String value =null;
+		
 		int cnt = us.uNickCheck(uNick);
 		//제이슨 형식으로 값 집어넣어서 ajax에서 불러오기
 		value = "{\"uNick\":\""+cnt+"\"}";
@@ -162,6 +177,27 @@ public class UserController
 		return value;
 	}
 	
+	// 로그인 시 아이디 비밀번호 확인 절차
+	@RequestMapping(value="/loginCheck.do")
+	@ResponseBody
+	public UserVO loginCheck(UserVO uv
+			)
+	{
+		UserVO loginuv = us.loginCheck(uv);
+		int loginId = us.uIdCheck(loginuv.getuId());
+		boolean loginPw = rbcryptPasswordEncoder.matches(uv.getuPw(), loginuv.getuPw());
+		
+		System.out.println(uv);
+		if( ( loginId ==0 && loginId >= 2) || loginPw == false)
+		{
+			System.out.println("잘못된 정보 입니다 ");
+			loginuv = null;
+			return loginuv;
+		}else
+		{
+			return loginuv;
+		}
+	}
 	//최종 서브밋 검사
 	@RequestMapping(value="/submitAction.do")
 	public String submitAction(

@@ -29,7 +29,7 @@ function DoRewrite()
 					
 				</td>
 				<td>	
-					@<select id="uId_email" name="uId_email" style="width: 90%;" onchange="this.value">	
+					@<select id="uId_email" name="uId_email" style="width: 90%;" >	
 						<option value="">도메인을 선택해주세요</option>
 						<option value="@naver.com">naver.com</option>
 						<option value="@daum.net">daum.net</option>
@@ -44,6 +44,8 @@ function DoRewrite()
 				<td>
 					<!-- <input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();"> -->
 					<input type="button" value="인증하기" id="emailCheck" >
+					<input type="button" value="email도메인" id="emaildomain" onclick="emaildomain();">
+					
 					<input type="hidden" name="idchecked" id=""value="checkednot">
 				</td>
 			</tr>
@@ -146,7 +148,11 @@ function DoRewrite()
 		</table>
 		
 	</form>
-
+<script type="text/javascript">
+	$("select[name=uId_email]").change(function(){
+		console.log($(this).val());
+	});
+</script>
 	<!-- 최종 서브밋  -->
 <script type="text/javascript">
 	//중복체크및 일치 확인 여부 
@@ -244,17 +250,28 @@ function DoRewrite()
 	function DoSubmit()
 	{
 		// submit시 최종 유효성검사 submit막기
+		var uId		= $("#uId").val();
 		var uPw		= $("#uPw").val();
 		var uPwc	= $("#uPwc").val();
 		var uName	= $("#uName").val();
-		
+		var uId_email = $("#uId_email").val();
 		if(join.uId.value.length == 0 || $("#uId").val() == "")
 		{
 			alert("아이디를 써주세요");
-			join.id.focus();
+			join.uId.focus();
 			return false;
 			
-		}else if( uIdDup == false){
+		}else if(uId.length <= 2)
+		{
+			alert("2글자 이상 써주세요")
+			join.uId.focus();
+			return false;
+		}else if(uId_email == "" || uId_email == null )
+		{
+			alert("도메인을 선택해주세요");
+			return false;
+		}
+		else if( uIdDup == false){
 			alert("아이디가 중복됩니다");
 			$("#uId").val("").focus();
 			return false;
@@ -277,17 +294,18 @@ function DoRewrite()
 			alert("닉네임을 써주세요");
 			$("#uNick").val("").focus();
 			return false;
+		}else if (uNickDup == false)
+		{
+			alert("닉네임이 중복 됩니다 고쳐주세요");
+			$("#uNcik").val("").focus();
+			return false;
 		}else if( uAdds == null || $("#uAdds").val() == "")
 		{
 			alert("주소를 써주세요");
 			$("#uAdds").val("").focus();
 			return false;
-		}else if (uNickDup == false)
-		{
-			alert("닉네임이 중복 됩니다 고쳐주세요");
-			$("#uNcik").focus();
-			return false;
 		}
+		return false;
 		$("#join").submit();
 		
 	}
