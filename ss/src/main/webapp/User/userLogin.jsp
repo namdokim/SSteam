@@ -8,7 +8,7 @@ PW : <input type="text" id="uPw"  name="uPw" width="70%"><br>
 <div id="msg_login"></div>
 <button value="로그인" onclick="check();">로그인</button>
 <input type="button" value="취죠" >
-
+<input type="text" placeholder="건들면 죽여버린다 ">
 </form>
 <script>
 
