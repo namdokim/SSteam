@@ -10,7 +10,7 @@ public class RentalhomeController {
 	@RequestMapping(value="/rentalhomeMain.do")
 	public String rentalhomeMain(){
 		
-		return "rentalhome/rentalhomeMain1";
+		return "rentalhome/rentalhomeMain";
 	}
 	
 	@RequestMapping(value="/rentalhomeView.do")

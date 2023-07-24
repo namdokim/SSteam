@@ -4,19 +4,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value="/Food")
+@RequestMapping(value="/food")
 public class FoodController {
 	
-	@RequestMapping(value="/FoodMain.do")
-	public String rentalhomeMain(){
+	@RequestMapping(value="/foodMain.do")
+	public String foodMain(){
 		
-		return "Food/FoodMain";
+		return "food/foodMain1";
 	}
 	
-	@RequestMapping(value="/FoodView.do")
-	public String rentalhomeView(){
+	@RequestMapping(value="/foodView.do")
+	public String foodView(){
 		
-		return "Food/FoodView";
+		return "food/foodView";
 	}
-	
 }
