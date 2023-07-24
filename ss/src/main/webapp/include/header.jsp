@@ -63,7 +63,7 @@
 		<header>
 			<div class="root-container">
 				<div class="navbar-wrapper">
-					<nav class="navbar navbar-dark d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start "  style="background-color: #eceeef; ">
+					<nav class="navbar navbar-dark d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start "  style="width:100%;background-color: #0863ec;">
 						<a class="navbar-brand ms-3 offset-2" href="<%=request.getContextPath() %>/index.jsp" title="Arcalive">
 							<svg class=" ms-3 offset-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-google-play" viewBox="0 0 16 16">
 								<path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
@@ -164,7 +164,7 @@
 					<li class="nav d-flex justify-content-between" >						
 						<div class="nav-item offset-2" style="margin-right: 2rem;">
 							<a class="nav-link" aria-current="page" style="color: black; align:center;" 
-								href="<%=request.getContextPath()%>/Accommodation/rentalhomeMain.do">숙박</a>
+								href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do">숙박</a>
 						</div>					
 						<div class="nav-item offset-1" style="margin-right: 2rem;">
 							<a class="nav-link" style="color: black; align:center;" 
