@@ -10,7 +10,7 @@ public class FoodController {
 	@RequestMapping(value="/foodMain.do")
 	public String foodMain(){
 		
-		return "food/foodMain1";
+		return "food/foodMain";
 	}
 	
 	@RequestMapping(value="/foodView.do")

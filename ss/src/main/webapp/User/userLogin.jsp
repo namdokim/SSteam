@@ -28,7 +28,6 @@ function check(){
 		$("#uPw").focus();
 		return false;
 	}
-	<%-- 
 	$.ajax({
 		url: "<%=request.getContextPath()%>/User/loginCheck.do",
 		method: "POST",
@@ -48,7 +47,7 @@ function check(){
 		return false;
 		}
 	});
-	 --%>
+	
 	$("#login").submit();
 	return false;
 	<%-- 
