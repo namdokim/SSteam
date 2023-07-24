@@ -160,21 +160,21 @@
 					</nav>
 				</div>
 				<!-- 카테고리 -->			
-				<ul class=" nav-tabs nav-scroller py-2 mb-2 ">
+				<ul class="nav-scroller py-3" >
 					<li class="nav d-flex justify-content-between" >						
-						<div class="nav-item offset-2" style="margin-right: 2rem;">
+						<div class="nav-item offset-3" style="margin-right: 2rem;">
 							<a class="nav-link" aria-current="page" style="color: black; align:center;" 
 								href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do">숙박</a>
 						</div>					
 						<div class="nav-item offset-1" style="margin-right: 2rem;">
 							<a class="nav-link" style="color: black; align:center;" 
-								href="<%=request.getContextPath()%>/food/foodhomeMain.do">맛집</a>
+								href="<%=request.getContextPath()%>/food/foodMain.do">맛집</a>
 						</div>
 						<div class="nav-item offset-1" style="margin-right: 2rem;">
 							<a class="nav-link" style="color: black; align:center;" 
-								href="<%=request.getContextPath()%>/event/eventhomeMain.do">축제</a>
+								href="<%=request.getContextPath()%>/event/eventMain.do">축제</a>
 						</div>
-						<div class="nav-item offset-1" style="margin-right: 24rem;">
+						<div class="nav-item offset-1" style="margin-right: 36rem;">
 							<a class="nav-link " style="color: black; text-align: center;" 
 								href="index.jsp?type=S">커뮤니티</a>
 						</div>									

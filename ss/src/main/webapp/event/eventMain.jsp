@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<%
+// 게시판 타입이 선택되었는지 확인후, 기본값 셋팅
+String type = request.getParameter("type");
+if( type == null || type.equals("") )
+{
+	type = "TT"; 			// 전체게시판으로 셋팅
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,9 +149,9 @@
 				</a>
 				<hr>
 				<ul class="nav nav-pills flex-column mb-auto">
-					<% //String activeTab = type != null && !type.equals("") ? type : "TT"; %>
+					<% String activeTab = type != null && !type.equals("") ? type : "TT"; %>
 					<%
-						/*	String boardTitle = "";
+						String boardTitle = "";
 					switch (type)
 					{
 						case "TT":
@@ -187,66 +195,66 @@
 					        activeTab = "JJ";
 					        break;
 					}
-							*/
+							
 							%>
 				
 				
 				
 					<li class="nav-item" >
-						<a href="#" class="nav-link active" aria-current="page"  style="text-align:center;">
+						<a href="eventMain.do?type=TT" class="nav-link link-dark  <%= activeTab.equals("TT") ? "active" : "" %>"  style="text-align:center;">
 							
 							전체
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=GG" class="nav-link link-dark <%= activeTab.equals("GG") ? "active" : "" %>" style="text-align:center;">
 							
 							경기
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=GW" class="nav-link link-dark <%= activeTab.equals("GW") ? "active" : "" %>" style="text-align:center;">
 							
 							강원
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark" style="text-align:center;">
+						<a href="eventMain.do?type=CB" class="nav-link link-dark <%= activeTab.equals("CB") ? "active" : "" %>" style="text-align:center;">
 							
 							충북
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=CN" class="nav-link link-dark <%= activeTab.equals("CN") ? "active" : "" %>" style="text-align:center;">
 							
 							충남
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=GB" class="nav-link link-dark <%= activeTab.equals("GB") ? "active" : "" %>" style="text-align:center;">
 							
 							경북
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=GN" class="nav-link link-dark <%= activeTab.equals("GN") ? "active" : "" %>" style="text-align:center;">
 							
 							경남
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark" style="text-align:center;">
+						<a href="eventMain.do?type=JB" class="nav-link link-dark <%= activeTab.equals("JB") ? "active" : "" %>" style="text-align:center;">
 							
 							전북
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark" style="text-align:center;">
+						<a href="eventMain.do?type=JN" class="nav-link link-dark <%= activeTab.equals("JN") ? "active" : "" %>" style="text-align:center;">
 							전남
 						</a>
 					</li>
 					<li>
-						<a href="#" class="nav-link link-dark " style="text-align:center;">
+						<a href="eventMain.do?type=JJ" class="nav-link link-dark <%= activeTab.equals("JJ") ? "active" : "" %>" style="text-align:center;">
 							
 							제주
 						</a>
@@ -288,7 +296,7 @@
 							긴 경우에는 3줄까지만 보이고 더보기를 눌러서 전체 내용을 확인할 수 있습니다. 설명에 대한 더
 							많은 정보를 보고 싶다면 더보기를 클릭하세요.</p>
 							<p class="restaurant-address" style="color: silver; text-align:right;"><a href="
-							<%=request.getContextPath()%>/event/eventhomeView.do">상세보기</a></p>
+							<%=request.getContextPath()%>/event/eventView.do">상세보기</a></p>
 						</div>
 					</div>
 				</div>
@@ -316,7 +324,7 @@
 							긴 경우에는 3줄까지만 보이고 더보기를 눌러서 전체 내용을 확인할 수 있습니다. 설명에 대한 더
 							많은 정보를 보고 싶다면 더보기를 클릭하세요.</p>
 							<p class="restaurant-address" style="color: silver; text-align:right;"><a href="
-							<%=request.getContextPath()%>/event/eventhomeView.do">상세보기</a></p>
+							<%=request.getContextPath()%>/event/eventView.do">상세보기</a></p>
 						</div>
 					</div>
 				</div>
@@ -344,25 +352,29 @@
 							긴 경우에는 3줄까지만 보이고 더보기를 눌러서 전체 내용을 확인할 수 있습니다. 설명에 대한 더
 							많은 정보를 보고 싶다면 더보기를 클릭하세요.</p>
 							<p class="restaurant-address" style="color: silver; text-align:right;"><a href="
-							<%=request.getContextPath()%>/event/eventhomeView.do">상세보기</a></p>
+							<%=request.getContextPath()%>/event/eventView.do">상세보기</a></p>
 						</div>
 					</div>
 				</div>
 		
-				<nav aria-label="Page navigation example ">
-					<ul class="pagination offset-3">
-						<li class="page-item"><a class="page-link" href="#">Previous</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">Next</a></li>
+				<nav aria-label="Page navigation example">
+					 <ul class="pagination justify-content-center">
+						<li class="page-item">
+			<!-- 			<a href="첫번째 페이지로 이동하는 주소">|◀</a>&nbsp; -->
+						<a class="page-link" href="eventMain.jsp?type=<%= type %>&page=1">
+						
+						Previous</a> &nbsp;
+						<li class="page-item"><a class="page-link" href="eventMain.jsp?type=<%= type %>">Next</a></li>
 					</ul>
 				</nav>
 			</div>
 				<!-- 메인 부문 ======================================================================= -->
+					<div class="float-right ">
+						<button type="button" class="btn btn-outline-secondary" style="--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: .15rem;">
+						</button>
+					</div>
 		</div>
 	</div>
-	
 
 
 <%@ include file="../include/footer.jsp" %>
