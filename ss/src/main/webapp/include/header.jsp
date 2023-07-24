@@ -168,7 +168,7 @@
 						</div>					
 						<div class="nav-item offset-1" style="margin-right: 2rem;">
 							<a class="nav-link" style="color: black; align:center;" 
-								href="<%=request.getContextPath()%>/food2/foodMain.do">맛집</a>
+								href="<%=request.getContextPath()%>/food/foodMain.do">맛집</a>
 						</div>
 						<div class="nav-item offset-1" style="margin-right: 2rem;">
 							<a class="nav-link" style="color: black; align:center;" 
