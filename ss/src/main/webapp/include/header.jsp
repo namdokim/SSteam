@@ -121,7 +121,7 @@
 							            <li>
 								           	<div class="help-item" style="text-align:center;">
 								            	<div>
-													<a class="btn btn-primary"  href="login.jsp">로그인</a>
+													<a class="btn btn-primary"  href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a>
 												</div>
 												<div style="margin-top: 0.5rem;">
 													<a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a>

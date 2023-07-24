@@ -6,7 +6,7 @@
 ID : <input type="text" id="uId"  name="uId" width="70%"><br>
 PW : <input type="text" id="uPw"  name="uPw" width="70%"><br>
 <div id="msg_login"></div>
-<button value="로그인" onclick="check();">로그인</button>
+<button value="login" onclick="check();">로그인</button>
 <input type="button" value="취죠" >
 <input type="text" placeholder="건들면 죽여버린다 ">
 </form>
@@ -20,6 +20,7 @@ function check(){
 	var formdata = new FormData(editdata[0])
 	if ($("#uId").val() == "" ){
 		alert("아이디를 입력하세요");
+		
 		$("#uId").focus();
 		return false;
 	}else if ($("#uPw").val() == ""){
@@ -27,7 +28,7 @@ function check(){
 		$("#uPw").focus();
 		return false;
 	}
-	
+	<%-- 
 	$.ajax({
 		url: "<%=request.getContextPath()%>/User/loginCheck.do",
 		method: "POST",
@@ -35,7 +36,7 @@ function check(){
 		dataType: "json",
 		success : function(data){
 			console.log(data);
-			if(data.uId == 1 ){
+			if(data == 1 ){
 				alert("환영합니다");
 				return true;
 			}else
@@ -47,6 +48,7 @@ function check(){
 		return false;
 		}
 	});
+	 --%>
 	$("#login").submit();
 	return false;
 	<%-- 

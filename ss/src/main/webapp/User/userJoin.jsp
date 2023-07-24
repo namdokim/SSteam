@@ -280,8 +280,8 @@ function DoRewrite()
 		{
 			alert("비밀번호가 일치 하지 않습니다");
 			$("#uPw").val("").focus();
-			uPwDup = true;
-			return true;
+			uPwDup = false;
+			return false;
 		}else if(uName == null || $("#uName").val() == "")
 		{
 			alert("이름을 써주세요");
@@ -305,7 +305,7 @@ function DoRewrite()
 			$("#uAdds").val("").focus();
 			return false;
 		}
-		return false;
+		//return false;
 		$("#join").submit();
 		
 	}
