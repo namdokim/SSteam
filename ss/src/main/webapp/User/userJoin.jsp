@@ -21,7 +21,7 @@ function DoRewrite()
 	}
 </style>
 <!-- 회원가입 입력 란  -->
-	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do" onsubmit="return false;" >
 		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
 			<tr>
 				<td style="width:60%;">
@@ -263,8 +263,8 @@ function DoRewrite()
 			
 		}else if(uId.length <= 2)
 		{
-			alert("2글자 이상 써주세요")
-			join.uId.focus();
+			alert("3글자 이상 써주세요")
+			$("#uId").focus();
 			return false;
 		}else if(uId_email == "" || uId_email == null )
 		{
@@ -304,9 +304,12 @@ function DoRewrite()
 			alert("주소를 써주세요");
 			$("#uAdds").val("").focus();
 			return false;
+		}else
+		{
+			return false;
 		}
 		//return false;
-		$("#join").submit();
+			$("#join").submit();
 		
 	}
 </script>

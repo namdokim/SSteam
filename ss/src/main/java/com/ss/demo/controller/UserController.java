@@ -54,7 +54,7 @@ public class UserController
 		HttpSession session = requset.getSession();
 		
 		String email = uId_email;
-		uv.getuId();
+		String frontid = uv.getuId();
 		//선택된 이메일 도메인을 가져와서 id text와 합체 시키기 
 		String id = uv.getuId() + uv.getuId_email();
 		System.out.println("id : " + id);
@@ -95,16 +95,17 @@ public class UserController
 			//이메일화된 문자 @뒤 지우기
 			// 특정 값 앞의 값만 가져오기 
 			//uv.getuId().split("@")[0];
-			int lengthindex = uv.getuId().indexOf("@");	//@가 위치한 길이(index) 구하기 
-			String idindex = uv.getuId().substring(0, lengthindex);
-			String indexback = uv.getuId().substring(lengthindex+1);
-			if(idindex.length() >= 2)
+			//int lengthindex = uv.getuId().indexOf("@");	//@가 위치한 길이(index) 구하기 
+			//String idindex = uv.getuId().substring(0, lengthindex);
+			//System.out.println(idindex);
+			//String indexback = uv.getuId().substring(lengthindex+1);
+			//System.out.println(indexback);
+			UserVO loginVO = us.userlogin(uv);
+			if(loginVO == null)
 			{
 				System.out.println("가고 오는 값이 많아서 안됨");
 				return "redirect:../User/userLogin.do";
 			}
-			
-			UserVO loginVO = us.userlogin(uv);
 			
 			// 로그인 시 유효성검사
 			System.out.println("login: " +loginVO);
@@ -170,33 +171,27 @@ public class UserController
 			@RequestParam("uId") String uId
 			)
 	{
+
 		String value = null;
 		int cnt = us.uIdCheck(uId);
 		value = "{\"uId\":\""+cnt+"\"}";
 		
 		return value;
 	}
-	
-	// 로그인 시 아이디 비밀번호 확인 절차
-	@RequestMapping(value="/loginCheck.do")
+	// 유저 로그인 시  비밀번호 체크
 	@ResponseBody
-	public UserVO loginCheck(UserVO uv
+	@RequestMapping(value="/uPwCheck.do")
+	public int uPwCheck(UserVO uv,
+			@RequestParam("uPw") String uPw
 			)
 	{
-		UserVO loginuv = us.loginCheck(uv);
-		int loginId = us.uIdCheck(loginuv.getuId());
-		boolean loginPw = rbcryptPasswordEncoder.matches(uv.getuPw(), loginuv.getuPw());
-		
-		System.out.println(uv);
-		if( ( loginId ==0 && loginId >= 2) || loginPw == false)
+		UserVO loginVO = us.userlogin(uv);
+		int value = us.uPwCheck(uPw);
+		if(rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
 		{
-			System.out.println("잘못된 정보 입니다 ");
-			loginuv = null;
-			return loginuv;
-		}else
-		{
-			return loginuv;
+			return value;
 		}
+		return 0;
 	}
 	//최종 서브밋 검사
 	@RequestMapping(value="/submitAction.do")

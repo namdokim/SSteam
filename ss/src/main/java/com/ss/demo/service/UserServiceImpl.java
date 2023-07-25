@@ -48,10 +48,11 @@ public class UserServiceImpl implements UserService{
 		int value = usm.uIdCheck(uId);
 		return value;
 	}
-	//로그인 체크 
 	@Override
-	public UserVO loginCheck(UserVO uv) {
-		uv = usm.userlogin(uv);
-		return uv;
+	public int uPwCheck(String uPw) {
+		int value = usm.uPwCheck(uPw);
+		return value;
 	}
+
+
 }
