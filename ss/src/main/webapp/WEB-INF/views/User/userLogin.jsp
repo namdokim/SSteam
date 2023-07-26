@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/include/header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 
 <form name="login" id="login" method="post" action="<%= request.getContextPath()%>/User/userLoginAction.do">
 ID : <input type="text" id="uId"  name="uId" width="70%"><br>
@@ -39,7 +39,7 @@ function check(){
 			dataType : "JSON",
 			success :function(data){
 				console.log(data);
-				if(data.uId == 0 || data.uId >= 2){
+				if(data == 0 || data >= 2){
 					$("#msg_login").text("아이디 및 비밀번호가 틀렸습니다1");
 					$("#msg_login").css("color","#dc3545");
 					uIdDup = false;
@@ -57,6 +57,9 @@ function check(){
 				alert("요청실패");
 			}
 		}); //ajax 끝 
+	}else if( $("#uPw").val() != "" )
+	{
+		
 	}
 	<%-- 
 	var fm = document.frm;
@@ -73,4 +76,4 @@ function check(){
 </script>
 <script type="text/javascript">
 </script>
-<%@ include file="/include/footer.jsp" %>
+<%@ include file="../include/footer.jsp" %>

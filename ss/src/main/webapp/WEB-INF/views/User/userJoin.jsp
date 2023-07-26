@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/include/header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 <script>
 // 진규야 정신차려라 제발 플리즈
 function DoRewrite()
@@ -25,11 +25,11 @@ function DoRewrite()
 		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
 			<tr id="loginid" name="loginid">
 				<td style="width:60%;">
-					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email를 써주세요" required value="">
+					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
 					
 				</td>
 				<td>	
-					@<select id="uId_email" name="uId_email" style="width: 90%;" >	
+					@<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
 						<option value="">도메인을 선택해주세요</option>
 						<option value="@naver.com">naver.com</option>
 						<option value="@daum.net">daum.net</option>
@@ -44,7 +44,7 @@ function DoRewrite()
 				<td>
 					<!-- <input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();"> -->
 					<input type="button" value="인증하기" id="emailCheck" >
-					<input type="button" value="email도메인" id="emaildomain" onclick="emaildomain();">
+					<input type="button" value="중복확인 " id="emaildomain" onclick="emailcheck();">
 					
 					<input type="hidden" name="idchecked" id=""value="checkednot">
 				</td>
@@ -159,7 +159,58 @@ function DoRewrite()
 		var uNickDup	= false;
 		var uIdDup		= false;
 		var uPwDup		= false;
+		var uIdemailDup	= false;
 	//id 중복체크
+	function emailcheck(){
+		var frontuId = $("#uId").val();
+		var uId_email =$("#uId_email").val();
+		if( frontuId.trim() == "")
+		{
+			$("#msg_id").text("이메일 이름을 써주세요");
+			$("#msg_id").css("color","gray");
+			$("#uId").focus();
+		}else if( uId_email.trim() == "")
+		{
+			$("#msg_id").text("도메인을 선택해주세요");
+			$("#msg_id").css("color","gray");
+			$("#uId_email").focus();
+		}else
+		{
+			$("#msg_id").text("둘 다 완료 됫을떄 "+frontuId+uId_email);
+			var uId = frontuId+uId_email;
+			console.log(uId);
+			$.ajax({
+				url : "<%= request.getContextPath()%>/User/uIdCheck.do",
+				type : "POST",
+				data : {"uId": uId},
+				dataType : "JSON",
+				success :function(data){
+					if(data.uId == 1 || data.uId >= 2){
+						
+						$("#msg_id").text("이미 사용중입니다");
+						$("#msg_id").css("color","#dc3545");
+						uIdDup = false;
+						uIdemailDup = false;
+						console.log(uIdDup);
+						console.log();
+						
+					}else{
+						$("#msg_id").text("사용 가능합니다");
+						$("#msg_id").css("color","#2E2EFE");
+						uIdDup = true;
+						uIdemailDup = true;
+						console.log(uIdDup);
+					}
+				},
+				error : function(){
+					alert("요청실패");
+				}
+				}); //ajax 끝 
+			uIdDup = false;
+			console.log("uIdDup ajax="+uIdDup)
+		}
+	}
+	<%-- 
 	$("#uId").on("propertychange change keyup paste input",function(){
 		var uId = $("#uId").val();
 		var uId_email =$("#uId_email").val();
@@ -190,6 +241,7 @@ function DoRewrite()
 			}); //ajax 끝 
 		
 	});
+	 --%>
 	/*
 	$("#uId").keyup(function(){
 		console.log("밖에 : " + uIdDup);
@@ -269,9 +321,16 @@ function DoRewrite()
 		{
 			alert("도메인을 선택해주세요");
 			return false;
-		}
-		else if( uIdDup == false){
+		}else if( uIdemailDup == false){
+			
+			alert("중복 체크를 해주세요");
+			console.log("uIdemailDup = "+uIdemailDup);
+			$("#uId").val("").focus();
+			return false;
+		}else if( uIdDup == false){
+			
 			alert("아이디가 중복됩니다");
+			console.log("uIdDup="+uIdDup);
 			$("#uId").val("").focus();
 			return false;
 			
@@ -295,6 +354,7 @@ function DoRewrite()
 		}else if (uNickDup == false)
 		{
 			alert("닉네임이 중복 됩니다 고쳐주세요");
+			console.log(uNickDup);
 			$("#uNcik").val("").focus();
 			return false;
 		}else if( uAdds == null || $("#uAdds").val() == "")
@@ -319,4 +379,4 @@ function DoRewrite()
 	}
 </script>
 	
-<%@ include file="/include/footer.jsp" %>
+<%@ include file="../include/footer.jsp" %>
