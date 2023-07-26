@@ -34,6 +34,7 @@ public class UserController
 	{
 		return "index";
 	}
+
 	// 회원가입 페이지 이동 
 	@RequestMapping(value="/userJoin.do" )
 	public String userJoin(
@@ -53,12 +54,9 @@ public class UserController
 		//서블릿 퀘스트에 담긴 session 가져 오기 
 		HttpSession session = requset.getSession();
 		
-		String email = uId_email;
-		String frontid = uv.getuId();
 		//선택된 이메일 도메인을 가져와서 id text와 합체 시키기 
 		String id = uv.getuId() + uv.getuId_email();
 		System.out.println("id : " + id);
-		System.out.println("id : " + email);
 		System.out.println(uv.getuId());
 		if(uv.getuId() == null || uv.getuId().equals(""))
 		{
@@ -92,14 +90,7 @@ public class UserController
 	{
 		//서블릿 퀘스트에 담긴 session 가져 오기 
 		HttpSession session = requset.getSession();
-			//이메일화된 문자 @뒤 지우기
-			// 특정 값 앞의 값만 가져오기 
-			//uv.getuId().split("@")[0];
-			//int lengthindex = uv.getuId().indexOf("@");	//@가 위치한 길이(index) 구하기 
-			//String idindex = uv.getuId().substring(0, lengthindex);
-			//System.out.println(idindex);
-			//String indexback = uv.getuId().substring(lengthindex+1);
-			//System.out.println(indexback);
+		// 유저 로그인 정보 가져오기
 			UserVO loginVO = us.userlogin(uv);
 			if(loginVO == null)
 			{
@@ -123,7 +114,7 @@ public class UserController
 				*/
 				// 로그인 된 정보를 session에 담아준다  (쿼리문에서 select 할 값들을 따로 지정해서 그 값들만 담을수 있다 )
 				session.setAttribute("login", loginVO);
-			}else
+			}else 
 			{
 				System.out.println("로그인 실패 첫번쨰");
 				return "redirect:../User/userLogin.do";
@@ -171,9 +162,14 @@ public class UserController
 			@RequestParam("uId") String uId
 			)
 	{
-
-		String value = null;
+		if( uId !=null)
+		{
+			System.out.println("uId"+uId);
+			UserVO uv = us.userONE(uId);
+			System.out.println("uv"+uv);
+		}
 		int cnt = us.uIdCheck(uId);
+		String value = null;
 		value = "{\"uId\":\""+cnt+"\"}";
 		
 		return value;

@@ -21,9 +21,9 @@ function DoRewrite()
 	}
 </style>
 <!-- 회원가입 입력 란  -->
-	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do" onsubmit="return false;" >
+	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
 		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
-			<tr>
+			<tr id="loginid" name="loginid">
 				<td style="width:60%;">
 					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email를 써주세요" required value="">
 					
@@ -140,7 +140,7 @@ function DoRewrite()
 				<td id="jbar" colspan="3" style="text-align:center;">
 					<!-- <a href="javascript:DoSubmit();" onclick="javascript:document.join.DoSubmit()" id="check" class="btn sfn">가입하기</a> -->
 					<!-- <input type="submit" value="가입하기" onclick="false DoSubmit();"> -->
-					<button value="가입하기2" onclick="DoSubmit();">회원가입</button>
+					<button type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
 					<a href="javascript:DoRewrite()"><input type="button" value="다시쓰기"></a>
 					<a href="<%=request.getContextPath() %>/index.jsp"><input type="button" value="취소"></a> 
 				</td>
@@ -162,6 +162,7 @@ function DoRewrite()
 	//id 중복체크
 	$("#uId").on("propertychange change keyup paste input",function(){
 		var uId = $("#uId").val();
+		var uId_email =$("#uId_email").val();
 		$.ajax({
 			url : "<%= request.getContextPath()%>/User/uIdCheck.do",
 			type : "POST",
@@ -169,6 +170,7 @@ function DoRewrite()
 			dataType : "JSON",
 			success :function(data){
 				if(data.uId == 1 || data.uId >= 2){
+					
 					$("#msg_id").text("이미 사용중입니다");
 					$("#msg_id").css("color","#dc3545");
 					uIdDup = false;
@@ -179,9 +181,7 @@ function DoRewrite()
 					$("#msg_id").text("사용 가능합니다");
 					$("#msg_id").css("color","#2E2EFE");
 					uIdDup = true;
-					
 					console.log(uIdDup);
-					
 				}
 			},
 			error : function(){
@@ -190,7 +190,6 @@ function DoRewrite()
 			}); //ajax 끝 
 		
 	});
-	console.log("결과값 변경 : " +uIdDup);
 	/*
 	$("#uId").keyup(function(){
 		console.log("밖에 : " + uIdDup);
@@ -280,7 +279,6 @@ function DoRewrite()
 		{
 			alert("비밀번호가 일치 하지 않습니다");
 			$("#uPw").val("").focus();
-			uPwDup = false;
 			return false;
 		}else if(uName == null || $("#uName").val() == "")
 		{
@@ -306,10 +304,17 @@ function DoRewrite()
 			return false;
 		}else
 		{
+			if( uIdDup == true && uNickDup == true && uPwDup == true)
+				{
+					$("form").submit();
+				}
+			else
+				{
+					alert("잘 못 된 입 력 값 이 있 습 니 다 ");
+					$("#uId").focus();
+				}
 			return false;
 		}
-		//return false;
-			$("#join").submit();
 		
 	}
 </script>

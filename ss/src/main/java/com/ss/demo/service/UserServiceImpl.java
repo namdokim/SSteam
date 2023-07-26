@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService{
 	// 유저 id 중복체크
 	@Override
 	public int uIdCheck(String uId) {
+		//
 		int value = usm.uIdCheck(uId);
 		return value;
 	}
@@ -52,6 +53,12 @@ public class UserServiceImpl implements UserService{
 	public int uPwCheck(String uPw) {
 		int value = usm.uPwCheck(uPw);
 		return value;
+	}
+	//유저 조회
+	@Override
+	public UserVO userONE(String uId) {
+		UserVO uv = usm.userONE(uId);
+		return uv;
 	}
 
 

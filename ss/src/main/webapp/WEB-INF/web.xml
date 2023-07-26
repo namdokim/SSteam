@@ -37,28 +37,43 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
+  
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+  	 <!-- 파일 업로드 설정 제한  -->
+	 <!-- fileupload multipart-config maxSize set -->
+		<multipart-config>
+	        <max-file-size>104857600</max-file-size> <!-- 10MB limit -->
+	        <max-request-size>104857600</max-request-size>
+	        <file-size-threshold>0</file-size-threshold>
+	    </multipart-config>
+	    <!-- fileupload multipart-config -->
+  
   <servlet>
     <description></description>
     <display-name>UserService</display-name>
     <servlet-name>UserService</servlet-name>
     <servlet-class>com.ss.demo.service.UserService</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>UserService</servlet-name>
     <url-pattern>/UserService</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>UserServiceImpl</display-name>
     <servlet-name>UserServiceImpl</servlet-name>
     <servlet-class>com.ss.demo.service.UserServiceImpl</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>UserServiceImpl</servlet-name>
     <url-pattern>/UserServiceImpl</url-pattern>
   </servlet-mapping>
+  
 </web-app>

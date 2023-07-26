@@ -28,4 +28,12 @@ public class HomeController {
 		
 		return "home";
 	}
+	
+	//리다이렉트로 안 돌리면은 이미지가 안 나옴 ㄷㄷ
+	// 메인 홈 화면으로 돌아갈떄 
+	@RequestMapping(value="reHome.do")
+	public String reHome()
+	{
+		return "redirect:/";
+	}
 }

@@ -27,13 +27,8 @@
 		select count(*) as cnt from user where uDely="N" and uPw=#{uPw};
 	</select>
 	<!-- 유저 조회 메소드  -->
-	<select id="userONE" parameterType="uv" resultType="uv">
-		select * from user where uDely="N"
-		<if test="uv != null and uv eq 'uId'">
-			and uId=#{uId}
-		</if>
-		<if test="uv != null and uv eq 'uNick'">
-			and uNick=#{uNick}
-		</if>
+	<select id="userONE" parameterType="String" resultType="uv">
+		select * from user where uDely="N" and uId=#{uId};
+
 	</select>
 </mapper>

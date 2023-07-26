@@ -3,7 +3,7 @@ package com.ss.demo.domain;
 public class UserVO {
 	
 	private int uNo;
-	private String uId;
+	private String uId; // email 도메인도 합쳐서 DB에 넣음 
 	private String uPw;
 	private String uName;
 	private String uNick;
