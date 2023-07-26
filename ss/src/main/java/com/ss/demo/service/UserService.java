@@ -15,7 +15,7 @@ public interface UserService {
 	public int uNickCheck(String uNick);
 	//id 중복체크
 	public int uIdCheck(String uId);
-	public int uPwCheck(String uPw);
+	public UserVO uPwCheck(String uId);
 	//유저 조회
 	public UserVO userONE(String uId);
 	/*

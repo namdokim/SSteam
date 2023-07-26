@@ -23,8 +23,8 @@
 		select count(*) as cnt from user where uDely="N" and uId=#{uId};
 	</select>
 	<!-- 비밀번호  -->
-	<select id="uPwCheck" parameterType="String" resultType="int">
-		select count(*) as cnt from user where uDely="N" and uPw=#{uPw};
+	<select id="uPwCheck" parameterType="String" resultType="uv">
+		select uId,uPw from user where uDely="N" and uId=#{uId};
 	</select>
 	<!-- 유저 조회 메소드  -->
 	<select id="userONE" parameterType="String" resultType="uv">

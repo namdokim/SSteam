@@ -116,7 +116,7 @@ public class UserController
 				session.setAttribute("login", loginVO);
 			}else 
 			{
-				System.out.println("로그인 실패 첫번쨰");
+				System.out.println("로그인 실패 비밀번호만 틀림 ");
 				return "redirect:../User/userLogin.do";
 			}
 
@@ -160,14 +160,17 @@ public class UserController
 	@RequestMapping(value="/uIdCheck.do")
 	public String uIdCheck(
 			@RequestParam("uId") String uId
+
 			)
 	{
-		if( uId !=null)
+		if( uId != null && uId.contains("@") == false)
 		{
+			
 			System.out.println("uId"+uId);
 			UserVO uv = us.userONE(uId);
 			System.out.println("uv"+uv);
 		}
+
 		int cnt = us.uIdCheck(uId);
 		String value = null;
 		value = "{\"uId\":\""+cnt+"\"}";
@@ -177,17 +180,17 @@ public class UserController
 	// 유저 로그인 시  비밀번호 체크
 	@ResponseBody
 	@RequestMapping(value="/uPwCheck.do")
-	public int uPwCheck(UserVO uv,
+	public UserVO uPwCheck(UserVO uv,
 			@RequestParam("uPw") String uPw
 			)
 	{
-		UserVO loginVO = us.userlogin(uv);
-		int value = us.uPwCheck(uPw);
+		UserVO loginVO = us.uPwCheck(uPw);
+		UserVO value = us.uPwCheck(uPw);
 		if(rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
 		{
 			return value;
 		}
-		return 0;
+		return null;
 	}
 	//최종 서브밋 검사
 	@RequestMapping(value="/submitAction.do")

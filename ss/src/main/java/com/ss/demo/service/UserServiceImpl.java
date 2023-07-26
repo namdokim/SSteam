@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService{
 		return value;
 	}
 	@Override
-	public int uPwCheck(String uPw) {
-		int value = usm.uPwCheck(uPw);
+	public UserVO uPwCheck(String uId) {
+		UserVO value = usm.uPwCheck(uId);
 		return value;
 	}
 	//유저 조회
