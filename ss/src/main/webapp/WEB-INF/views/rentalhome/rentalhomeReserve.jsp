@@ -89,29 +89,34 @@
 		<span style="font-size:10pt; padding:0px 20px;">사정에 따라 요청사항에 대한 제공이 불가능할 수 있습니다.</span><br>
 		<textarea placeholder="숙소의 소개글을 입력해주세요." style="width:97%; margin:20px 20px; padding:10px 20px; height:200px; resize:none; border-radius:10px;border:1px solid lightgray;"></textarea>
 	</div>
-	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px;">
+	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
 		<span style="font-size:14pt; font-weight:bold; padding:0px 20px;">결제 정보</span><br>
-		<div style="width:30%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
+		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="font-weight:bold;">객실 가격</span>
 		</div>
-		<div style="width:35%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
+		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="font-weight:bold;">21,000원</span>
 		</div>
-		
-		<div style="width:30%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
-			<span style="font-weight:bold;">할인 가격</span>
+		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
+			<span style="font-weight:bold;">이벤트 할인</span>
 		</div>
-		<div style="width:35%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
+		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="font-weight:bold; color:#f51818;">6,000원</span>
 		</div>
-
-		<div style="width:30%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
-			<span style="font-weight:bold;">최종 가격</span>
+		<div style="width:100%; height:1px; background-color:lightgray; text-align:center; margin:10px 0px; display:inline-block;">
+			
 		</div>
-		<div style="width:35%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
+		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
+			<span style="font-weight:bold;">결제 금액</span>
+		</div>
+		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="font-weight:bold;">15,000원</span>
 		</div>
-		
+	</div>
+	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
+		<input type="checkbox" value="parking" style="width:15px; height:15px;">
+		<span style="font-size:10pt; padding:0px 10px;">예약 내용이 정확한지 확인하였고, 예약할 숙소 정책에 동의합니다.</span><br>
+		<input type="button" value="결제하기" style="width:100%; height:50px; background-color:#0863ec; border:0px; border-radius:10px; font-size:18pt; color:white;">
 	</div>
 </div>
 <%@ include file="../include/footer.jsp" %>
