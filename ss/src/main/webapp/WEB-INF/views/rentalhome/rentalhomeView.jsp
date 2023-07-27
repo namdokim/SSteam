@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>숙박 메인</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -75,10 +70,8 @@
 		border-radius:0px;
 	}
 </style>
-</head>
-<body>
-<div style="width:1920px; text-align:center; background-color:#f5f9fe; padding:50px 0px;">
-	<div class="view" style="width:1224px; margin:0 auto; padding:10px;  line-height:50px; ">
+<div style="width:1920px; text-align:center; background-color:#f0f7fe; padding:20px 0px;">
+	<div class="view" style="width:1224px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
 			<input type="text" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
@@ -115,23 +108,6 @@
 			<span style="font-weight:bold;color:white; font-size:15pt;">검색</span><br>
 		</div>
 	</div>
-<!-- 	<div class="view" style="width:1224px; margin:0 auto; padding:10px;  line-height:50px; "> -->
-<!-- 		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" > -->
-<!-- 			<span style="color:#777777; font-size:10pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br> -->
-<!-- 			<input type="text" class="search" style="font-size:10pt;width:230px;position:absolute; top:28px; left:10px; height:20px; outline:none;"> -->
-<!-- 		</div> -->
-<!-- 		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" > -->
-<!-- 			<span style="color:#777777; font-size:10pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인 체크아웃</span><br> -->
-<!-- 			<input type="text" class="search" style="font-size:10pt;width:230px;position:absolute; top:28px; left:10px; height:20px; outline:none;"> -->
-<!-- 		</div> -->
-<!-- 		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" > -->
-<!-- 			<span style="color:#777777; font-size:10pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br> -->
-<!-- 			<input type="text" class="search" style="font-size:10pt;width:230px;position:absolute; top:28px; left:10px; height:20px; outline:none;"> -->
-<!-- 		</div> -->
-<!-- 		<div style="background-color:#0863ec; width:80px; height:50px; display:inline-block; border-radius:5px; text-align:center; position:relative;" > -->
-<!-- 			<span style="color:white; font-size:12pt;">검색</span><br> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
 	<div class="view" style="width:1224px; text-align:left; height:600px; margin:10px auto; padding:10px; position:relative;">
 		<div style="width:1000px; height:500px; margin:0 auto; padding:10px; display:inline-block; position:absolute; top:10px; left:10px;"> 
 			<span style="font-size:20pt; font-weight:bold;">페어필드 바이 메리어트 서울 (Fairfield by Marriott Seoul)</span><br>
@@ -208,8 +184,12 @@
 			<div style="width:150px; height:100%; display:inline-block; padding:10px 0px; font-weight:bold;">객실</div>
 			<div style="width:150px; height:100%; display:inline-block; padding:10px 0px; font-weight:bold;">리뷰</div>
 			<div style="width:150px; height:100%; display:inline-block; padding:10px 0px; font-weight:bold;">숙소 규정</div>
+			<button onclick="location.href='rentalhomeWrite_room.do'"style="background-color:transparent; border:0px;width:150px; height:100%; display:inline-block; padding:10px 0px; font-weight:bold;">객실 등록하기</button>
 		</div>
-		<div style="width:100%; height:200px; text-align:center; position:relative;">
+		<%
+			for(int i=0; i<5; i++){
+		%>
+		<div style="width:100%; height:200px; text-align:center; position:relative; border-bottom:1px solid #d5d9e0;">
 			<div class="hotel" style="border-radius:20px; width:200px; height:150px; margin:20px; display:inline-block; position:absolute; top:0px; left:0px;"></div>
 			<div style="text-align:left; width:790px; height:150px; margin:20px; padding:10px; display:inline-block; position:absolute; top:0px; left:210px;">
 				<div style="margin-bottom:10px;">
@@ -233,8 +213,13 @@
 					<span style="font-size:25pt; font-weight:bold; ">15,000원</span>
 				</div>
 			</div>
-			<span style="text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:80px; margin:10px; left:1030px; background-color:#0863ec; border-radius:20px; font-size:20pt; color:white; font-weight:bold;">예약</span>
+			<span onclick="location.href='rentalhomeReserve.do'"style="cursor:pointer; text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:80px; margin:10px; left:1030px; background-color:#0863ec; border-radius:20px; font-size:20pt; color:white; font-weight:bold;">예약</span>
+			<span style="cursor:pointer; text-align:center; height:40px;  position:absolute; top:0px; margin:10px; left:1080px; font-size:12pt; color:gray; text-decoration:underline;">객실 정보 수정</span>
+			<span style="cursor:pointer; text-align:center; height:40px;  position:absolute; top:40px; margin:10px; left:1115px; font-size:12pt; color:gray; text-decoration:underline;">객실 삭제</span>
 		</div>
+		<%
+			}
+		%>
 	</div>
 	<div class="view" style="width:1224px; height:450px; text-align:left; padding:10px; margin:10px auto; position:relative;">
 		<span style="font-weight:bold; font-size:15pt; padding:10px;">주변숙소</span>&nbsp;<span style="color:gray;">1박 기준 객실 최저가</span>
@@ -355,6 +340,4 @@
 		</div>
 	</div>
 </div>
-</body>
-</html>
 <%@ include file="../include/footer.jsp" %>
