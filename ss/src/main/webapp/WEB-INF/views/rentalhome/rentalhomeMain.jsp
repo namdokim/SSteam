@@ -1,12 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>숙박 메인</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -201,9 +195,7 @@ inputLeft.addEventListener("input", setLeftValue);
 inputRight.addEventListener("input", setRightValue);
 }
 </script>
-</head>
-<body>
-<div style="width:1920px; text-align:center; background-color:#f8f9fb; padding:50px 0px;">
+<div style="width:1920px; text-align:center; background-color:#f0f7fe; padding:20px 0px;">
 	<div class="view" style="width:1224px; margin:0 auto; padding:10px;  line-height:50px; ">
 		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
@@ -308,7 +300,6 @@ inputRight.addEventListener("input", setRightValue);
 					<input type="checkbox" value="hotel"><span style="font-size:10pt; color:#0f294d;">야외 수영장</span><br>
 					<input type="checkbox" value="resort"><span style="font-size:10pt; color:#0f294d;">주차장</span><br>
 					<input type="checkbox" value="pension"><span style="font-size:10pt; color:#0f294d;">픽업</span><br>
-					<input type="checkbox" value="guesthouse"><span style="font-size:10pt; color:#0f294d;">객실 내 흡연</span><br>
 					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">와이파이</span><br>
 					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">인근해변</span><br>
 					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">바베큐</span><br>
@@ -318,11 +309,11 @@ inputRight.addEventListener("input", setRightValue);
 			</div>
 		</div>	
 	</div>
-	<div style="width:900px; height:1000px; display:inline-block; margin:20px 0px 50px 0px; vertical-align:top;">
+	<div style="width:900px; display:inline-block; margin:20px 0px 50px 0px; vertical-align:top;">
 		
 		<div style="width:900px; display:inline-block; vertical-align:top;">
 			<%
-				for(int i=0; i<5; i++){
+				for(int i=0; i<10; i++){
 			%>
 				<div class="view" style="width:100%; height:200px; display:inline-block; margin-bottom:10px;vertical-align:top; position:relative;">
 					<div class="hotel"style="cursor:pointer;width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do'">
@@ -352,9 +343,10 @@ inputRight.addEventListener("input", setRightValue);
 			<%
 				}
 			%>
+			<div style="width:100%; text-align:right; margin:20px 0px;" onclick="location.href='rentalhomeWrite.do'">
+				<span style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
+			</div>
 		</div>
 	</div>
 </div>
-</body>
-</html>
 <%@ include file="../include/footer.jsp" %>
