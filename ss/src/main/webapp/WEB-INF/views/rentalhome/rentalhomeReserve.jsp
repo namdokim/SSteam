@@ -91,10 +91,10 @@
 	</div>
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
 		<span style="font-size:14pt; font-weight:bold; padding:0px 20px;">결제 정보</span><br>
-		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
+		<div style="width:30%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
 			<span style="font-weight:bold;">객실 가격</span>
 		</div>
-		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
+		<div style="width:35%; text-align:right; margin:20px 20px 20px 0px; display:inline-block;">
 			<span style="font-weight:bold;">21,000원</span>
 		</div>
 		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
@@ -118,5 +118,6 @@
 		<span style="font-size:10pt; padding:0px 10px;">예약 내용이 정확한지 확인하였고, 예약할 숙소 정책에 동의합니다.</span><br>
 		<input type="button" value="결제하기" style="width:100%; height:50px; background-color:#0863ec; border:0px; border-radius:10px; font-size:18pt; color:white;">
 	</div>
+	
 </div>
 <%@ include file="../include/footer.jsp" %>
