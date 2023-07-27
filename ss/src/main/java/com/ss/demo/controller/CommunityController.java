@@ -12,4 +12,10 @@ public class CommunityController
 	{
 		return "Community/ChattingTest";
 	}
+	
+	@RequestMapping (value = "/CommunityMain.do")
+	public String toCommunityMain()
+	{
+		return "Community/CommunityMain";
+	}
 }
