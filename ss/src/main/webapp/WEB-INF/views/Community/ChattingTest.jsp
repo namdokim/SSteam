@@ -6,48 +6,92 @@
 <html>
 	<head>
 		<meta charset = "UTF-8">
-		<title> 채팅 테스트 개발 </title>
-		<script src = "http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"> </script>
-		<script src = "https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.5/sockjs.min.js"> </script>
-		
-		<script>
-			function sendMsg()
-			{
-				sendMessage();
-				$('#message').val('');
-			}
-		
-			var sock = new SockJS("http://localhost:8081/chatting");
-			sock.onmessage = onMessage;
-			sock.onclose = onClose;
-			
-			// 메시지 전송
-			function sendMessage()
-			{
-				alert("메시지 전송");
-				sock.send($("#message").val());
-			}
-			// 서버로부터 메시지를 받았을 때
-			function onMessage(msg)
-			{
-				alert("메시지 받음");
-				var data = msg.data;
-				$("#messageArea").append(data + "<br/>");
-			}
-			// 서버와 연결을 끊었을 때
-			function onClose(evt)
-			{
-				alert("연결 끊김");
-				$("#messageArea").append("연결 끊김");
-			}
-		</script>
+		<title> 채팅 테스트 개발 </title>	
 	</head>
 	
 	<body>
-		현재 로그인 한 유저: <br> <br>
-		 
-		<input type = "text" id = "message" />
-		<button onclick = "sendMsg()"> 메시지 전송 </button>
-		<div id = "messageArea"> </div>
+		<div>
+			<!-- 채팅에 필요한 오브젝트 -->
+        	<button type = "button" onclick = "openSocket()"> 대화방 참여 </button>
+        	<button type = "button" onclick = "closeSocket()"> 대회방 나가기 </button> <br> <br> <br>
+	  		메시지 입력 : <input type = "text" id = "sender" value = "${sessionScope.id}" style = "display: none">
+	        <input type = "text" id = "messageInput">
+	        <button type = "button" onclick = "send()"> 메세지 전송 </button>
+	        <button type = "button" onclick = "clearText()"> 대화내용 지우기 </button>
+	        
+	        <!-- 메시지 표시 공간 -->
+	        <div id = "messages">
+	        
+    		</div>
+    	</div>
+    	
+    	<script>
+	        var ws;
+	        var messages = document.getElementById("messages");
+	        
+	        // 웹 소켓 열기
+	        function openSocket()
+	        {
+	        	// 웹 소켓 연결에 오류가 없다면
+	            if (ws !== undefined && ws.readyState !== WebSocket.CLOSED )
+	            {
+	                writeResponse("WebSocket is already opened.");
+	                return;
+	            }
+	        	
+	            // 웹 소켓 객체 생성
+	            ws = new WebSocket("ws://localhost:8090/<%= request.getContextPath() %>/echo.do");
+	            
+	            /* 웹 소켓 요청 대기 */
+	            // 웹 소켓 열기를 요청 받았을 때
+	            ws.onopen = function(event)
+	            {
+	                if(event.data === undefined)
+	                {
+	              		return;
+	                }
+	                writeResponse(event.data);
+	            };
+	            // 메시지 보내기를 요청 받았을 때
+	            ws.onmessage = function(event)
+	            {
+	                console.log('writeResponse');
+	                console.log(event.data)
+	                writeResponse(event.data);
+	            };
+	            // 웹 소켓 닫기를 요청 받았을 때
+	            ws.onclose = function(event)
+	            {
+	                writeResponse("대화 종료");
+	            }
+	        }
+	        
+	        // 메시지 전송
+	        function send()
+	        {
+	            var text = document.getElementById("messageInput").value + ", " + document.getElementById("sender").value;
+	            ws.send(text);
+	            text = "";
+	        }
+	         
+	        // 웹 소켓 닫기
+	        function closeSocket()
+	        {
+	            ws.close();
+	        }
+	         
+	        // 메시지 표시
+	        function writeResponse(text)
+	        {
+	            messages.innerHTML += "<br>" + text;
+	        }
+	
+	        // 메시지 초기화
+	        function clearText()
+	        {
+	            console.log(messages.parentNode);
+	            messages.parentNode.removeChild(messages)
+	       	}
+        </script>
 	</body>
 </html>
