@@ -13,7 +13,7 @@ public interface UserService_Mapper {
 	public int uIdCheck(String uId);
 	public UserVO uPwCheck(String uId);
 	// 유저 조회 
-	public UserVO userONE(String uId);
+	public UserVO userONE(UserVO uv);
 	/*
 	 * public userVO login(String uId); public int memberIdCheckcnt(String uId);
 	 * public userVO memberLogin(String uId);

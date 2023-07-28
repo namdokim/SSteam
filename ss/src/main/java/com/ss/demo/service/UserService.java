@@ -17,7 +17,7 @@ public interface UserService {
 	public int uIdCheck(String uId);
 	public UserVO uPwCheck(String uId);
 	//유저 조회
-	public UserVO userONE(String uId);
+	public UserVO userONE(UserVO uv);
 	/*
 	 * public int memberIdCheckcnt(String uId); public userVO login(String uId);
 	 * 

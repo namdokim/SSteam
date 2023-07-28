@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
-// 진규야 정신차려라 제발 플리즈
 function DoRewrite()
 {
 	$("#uId").val("").focus();
 }
 </script>
+
+
 <style>
 	tr{
 		text-align: center;
@@ -45,7 +47,6 @@ function DoRewrite()
 					<!-- <input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();"> -->
 					<input type="button" value="인증하기" id="emailCheck" >
 					<input type="button" value="중복확인 " id="emaildomain" onclick="emailcheck();">
-					
 					<input type="hidden" name="idchecked" id=""value="checkednot">
 				</td>
 			</tr>
@@ -54,12 +55,6 @@ function DoRewrite()
 					<span id="msg_id"></span>
 				</td>
 			</tr>
-<!-- 			<tr>
-				<td width="100px"><span style="visibility:hidden;">MSG</span></td>
-				<td>
-					
-				</td>
-			</tr> -->
 			<tr>
 				<td colspan="2">
 					<input type="text" id="uPw" name="uPw" style="width:100%;" placeholder="비밀번호" required value="">
@@ -71,25 +66,6 @@ function DoRewrite()
 					<span id="msg_pw"></span>
 				</td >
 			</tr>
-			<!-- 비밀번호 확인 안내문자  -->
-			<!-- <tr>
-				<td width="100px"><span style="visibility:hidden;">MSG</span></td>
-				<td>
-					
-				</td>
-			</tr> -->
-			<!--
-			<tr>
-				<td id="jbar">
-					<p id="join bar"> 주민등록번호 <span style="color: red">(*)</span> </p>
-				</td>
-				<td >
-					<input type="text" id="uidNo" name="uidNo" style="width:40%; ">-
-					<input type="text" id="uidNo" name="uidNo" style="width:40%; ">
-				</td>
-			</tr>
-			 -->
-			
 			<tr>
 				<td colspan="2">
 					<input type="text" id="uName" name="uName" style="width:100%;" placeholder="이름" required value="">
@@ -104,19 +80,14 @@ function DoRewrite()
 					<span id="msg_nick"></span>
 				</td>
 				<td>
-				<!--<input type="button" value="중복확인" id="nickcheck" onclick="uNickCheck()"> -->
 				</td>
 			</tr>
-			<!-- 닉네임 중복 체크 안내 문자  -->
-			<!-- <tr>
-				<td width="100px"><span style="visibility:hidden;">MSG</span></td>
-				<td>
-				</td>
-			</tr> -->
 			<tr>
 				<td colspan="2">
 					<input type="text" id="uPhone" name="uPhone" style="width:100%;" placeholder="전화번호(ex= 01012345678)" required value="">
+					<input type="button" id="Auth" name="Auth" onclick="Authentication();" value="Auth"> 
 				</td>
+				
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -148,11 +119,61 @@ function DoRewrite()
 		</table>
 		
 	</form>
+<!-- api 연동 -->
+<script type="text/javascript">
+//coolsms
+//비바톤
+//나이스아이디
+//facebook account kit
+</script>
 <script type="text/javascript">
 	$("select[name=uId_email]").change(function(){
 		console.log($(this).val());
 	});
 </script>
+<!-- 포트원 연결  -->
+<script type="text/javascript">
+
+	function Authentication()
+	{
+		const IMP = window.IMP;      // 생략 가능
+		IMP.init("imp28316721"); // 예: imp00000000
+		
+		// IMP.certification(param, callback) 호출
+		  IMP.certification({ // param
+		    // 주문 번호
+		    pg:'A010002002',//본인인증 설정이 2개이상 되어 있는 경우 필
+		    //merchant_uid : 'merchant_' + new Date().getTime(),
+		    // 모바일환경에서 popup:false(기본값) 인 경우 필수
+		    m_redirect_url : "https://api.iamport.kr/certifications/otp/request", 
+		    // PC환경에서는 popup 파라미터가 무시되고 항상 true 로 적용됨
+		    popup : true
+		    
+		  }, function (rsp) { // callback
+		    if (rsp.success) {
+		      // 인증 성공 시 로직,
+		    	 console.log(rsp.imp_uid);
+		         console.log(rsp.merchant_uid);
+		         
+		         $.ajax({
+		 				type : 'POST',
+		 				url : '/certifications/confirm',
+		 				dataType : 'json',
+		 				data : {
+		 					imp_uid : rsp.imp_uid
+		 				}
+		 		 }).done(function(rsp) {
+		 		 		// 이후 Business Logic 처리하시면 됩니다.
+		 		 });
+		    } else {
+		      console.log("222");
+		      // 인증 실패 시 로직,
+		      
+		    }
+		  });
+	}// 인증 함수 끝
+</script>
+	
 	<!-- 최종 서브밋  -->
 <script type="text/javascript">
 	//중복체크및 일치 확인 여부 
@@ -242,12 +263,6 @@ function DoRewrite()
 		
 	});
 	 --%>
-	/*
-	$("#uId").keyup(function(){
-		console.log("밖에 : " + uIdDup);
-		return true;
-	});
-	*/
 	// 닉네임 중복 체크 
 		$("#uNick").keyup(function(){
 			var uNick = $("#uNick").val();

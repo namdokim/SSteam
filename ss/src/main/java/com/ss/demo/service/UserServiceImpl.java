@@ -51,13 +51,13 @@ public class UserServiceImpl implements UserService{
 	}
 	@Override
 	public UserVO uPwCheck(String uId) {
-		UserVO value = usm.uPwCheck(uId);
-		return value;
+		UserVO uv = usm.uPwCheck(uId);
+		return uv;
 	}
 	//유저 조회
 	@Override
-	public UserVO userONE(String uId) {
-		UserVO uv = usm.userONE(uId);
+	public UserVO userONE(UserVO uv) {
+		uv = usm.userONE(uv);
 		return uv;
 	}
 

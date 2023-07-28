@@ -1,6 +1,7 @@
 package com.ss.demo.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,11 @@ public class UserController
 {
 	// 유저 서비스 
 	@Autowired
-	private UserService us;
+	UserService us;
 	
 	// 암호화 
 	@Autowired
-	private BCryptPasswordEncoder rbcryptPasswordEncoder;
+	BCryptPasswordEncoder rbcryptPasswordEncoder;
 	
 	
 	//메인 화면 
@@ -159,15 +160,25 @@ public class UserController
 	@ResponseBody
 	@RequestMapping(value="/uIdCheck.do")
 	public String uIdCheck(
-			@RequestParam("uId") String uId
-
+			@RequestParam("uId") String uId,
+			@RequestParam("uPw") String uPw
 			)
 	{
+		UserVO uv = new UserVO();
+		System.out.println("uPw="+uPw);
+		System.out.println("uId="+uId);
+		System.out.println("uv.getuId()="+uv.getuId());
+		uv.getuId();
+		UserVO loginVO = us.userONE(uv);
+		System.out.println("loginVO="+loginVO);
+		if(uId != null && rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
+		{
+			System.out.println("로그인 성공  ");
+		}
 		if( uId != null && uId.contains("@") == false)
 		{
 			
 			System.out.println("uId"+uId);
-			UserVO uv = us.userONE(uId);
 			System.out.println("uv"+uv);
 		}
 
@@ -180,24 +191,55 @@ public class UserController
 	// 유저 로그인 시  비밀번호 체크
 	@ResponseBody
 	@RequestMapping(value="/uPwCheck.do")
-	public UserVO uPwCheck(UserVO uv,
+	public UserVO uPwCheck(
+			@RequestParam("uId") String uId,
 			@RequestParam("uPw") String uPw
 			)
 	{
-		UserVO loginVO = us.uPwCheck(uPw);
-		UserVO value = us.uPwCheck(uPw);
-		if(rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
+		//UserVO loginVO = us.uPwCheck(uId);
+		UserVO value = us.uPwCheck(uId);
+		System.out.println("uPw"+uPw);
+		System.out.println(value.getuPw());
+		if( rbcryptPasswordEncoder.matches(uPw, value.getuPw()) )
 		{
+			System.out.println("value"+value);
 			return value;
 		}
 		return null;
 	}
-	//최종 서브밋 검사
-	@RequestMapping(value="/submitAction.do")
-	public String submitAction(
-			
-			)
+	// 로그인 에이작스
+	@ResponseBody
+	@RequestMapping(value="/loginFn.do", method=RequestMethod.POST)
+	public String loginFn(UserVO uv, HttpServletRequest req, HttpSession session, Model model)
 	{
-		return "redirect:../index.do";
-	}
+		
+		UserVO login = us.userlogin(uv);
+		System.out.println("login"+login);
+		System.out.println("login="+uv.getuId());
+		System.out.println("login="+uv.getuPw());
+		if(login == null)
+		{
+			System.out.println("잘못 된 값 입력");
+			return "FAIL";
+		}
+		boolean pwdcheck = rbcryptPasswordEncoder.matches(uv.getuPw(), login.getuPw());
+		
+		System.out.println("login" + pwdcheck);
+		if (login.getuDely().equals("Y")) {
+			System.out.println("login" + login);
+			return "FAIL2";
+		} else if (login.getuPw() == null) {
+			System.out.println("login" + login);
+			return "SOCIAL";
+		} else if (pwdcheck == true) {
+			session = req.getSession();
+			session.setAttribute("login", login);
+			return "Y";
+		} else {
+			return "FAIL";
+		}
+	} //로그인 끝
+	
+	
+	
 }
