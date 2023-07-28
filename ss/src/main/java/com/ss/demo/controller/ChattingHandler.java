@@ -19,18 +19,18 @@ import org.springframework.stereotype.Controller;
 @ServerEndpoint (value = "/echo.do")
 public class ChattingHandler
 {
-    // ¼¼¼Ç ¸®½ºÆ®
+    // ì„¸ì…˜ ë¦¬ìŠ¤íŠ¸
     private static final List<Session> sessionList = new ArrayList<Session>();
-    // ·Î±×
+    // ë¡œê·¸
     private static final Logger logger = LoggerFactory.getLogger(ChattingHandler.class);
     
-    // »ı¼ºÀÚ
+    // ìƒì„±ì
     public ChattingHandler()
     {
-        System.out.println("À¥ ¼ÒÄÏ °´Ã¼ »ı¼º");
+        System.out.println("ì›¹ ì†Œì¼“ ê°ì²´ ìƒì„±");
     }
     
-    // À¥ ¼ÒÄÏ ¿­±â
+    // ì›¹ ì†Œì¼“ ì—´ê¸°
     @OnOpen
     public void onOpen(Session session)
     {
@@ -38,7 +38,7 @@ public class ChattingHandler
         try
         {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("Ã¤ÆÃ¹æ¿¡ ¿¬°á µÇ¾ú½À´Ï´Ù.");
+            basic.sendText("ì±„íŒ…ë°©ì— ì—°ê²° ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
         catch (Exception e)
         {
@@ -48,7 +48,7 @@ public class ChattingHandler
     }
     
     /*
-     * ¸ğµç À¯Àú¿¡°Ô ¸Ş½ÃÁö¸¦ Àü¼Û
+     * ëª¨ë“  ìœ ì €ì—ê²Œ ë©”ì‹œì§€ë¥¼ ì „ì†¡
      * @param self
      * @param sender
      * @param message
@@ -72,7 +72,7 @@ public class ChattingHandler
     }
     
     /*
-     * ³»°¡ ÀÔ·ÂÇÏ´Â ¸Ş¼¼Áö
+     * ë‚´ê°€ ì…ë ¥í•˜ëŠ” ë©”ì„¸ì§€
      * @param message
      * @param session
      */
@@ -86,7 +86,7 @@ public class ChattingHandler
         try
         {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("<³ª>: " + message);
+            basic.sendText("<ë‚˜>: " + message);
         }
         catch (Exception e)
         {
@@ -101,7 +101,7 @@ public class ChattingHandler
         
     }
     
-    // À¥ ¼ÒÄÏ ´İ±â
+    // ì›¹ ì†Œì¼“ ë‹«ê¸°
     @OnClose
     public void onClose(Session session)
     {
