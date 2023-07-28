@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file = "../include/header.jsp" %>
-<%@ page import = "java.util.ArrayList" %>
+<%@ include file="../include/header.jsp" %>
 
 <%
 	// url 에서 현재 선택 된 게시판 종류 얻기
@@ -16,236 +15,366 @@
 	}
 %>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title> 커뮤니티 메인 </title>
-		<meta charset = "utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<script>
+			$(document).ready(function()
+			{
+				// 초기에 보여질 아이템 개수 설정
+				var itemsToShow = 2;
+
+				// 더보기 버튼을 클릭할 때마다 추가로 보여질 아이템 개수 설정
+				var itemsToAdd = 2;
+
+				// 모든 lead 아이템을 숨깁니다.
+				$('.lead').hide();
+
+				// 초기에 일부 아이템만 보이도록 설정
+				$('.lead:lt(' + itemsToShow + ')').show();
+
+				// 더보기 버튼을 클릭할 때 이벤트 처리
+				$('#load').on('click', function(e) {
+				e.preventDefault();
+			    
+				// 보이도록 할 아이템의 인덱스 범위 계산
+			    var startIndex = itemsToShow;
+			    var endIndex = itemsToShow + itemsToAdd;
+			    
+			    // 인덱스 범위에 해당하는 아이템 보이기
+			    $('.lead:lt(' + endIndex + '):lt(' + endIndex + ')').show();
+			    
+			    // 보여진 아이템 개수 업데이트
+			    itemsToShow += itemsToAdd;
+			    
+			    // 더보기 버튼 숨기기 (만약 모든 아이템을 다 보여줬을 경우)
+			    if (itemsToShow >= $('.lead').length)
+			    {
+			    	$('#load').hide();
+			    }
+			});
+		</script>
 		
-		<style>
+		<style type="text/css">
 			a
 			{
 				text-decoration: none;
-			}
-			h2
-			{
-				font-size: 1.4rem;
-				font-family: verdana;
 				color: black;
-				font-weight: normal;
 			}
-			h2:hover
+			body
 			{
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+			.container
+			{
+				margin: 20px auto;
+				max-width: 960px;
+				padding: 0 20px;
+			}
+			.restaurant-item
+			{
+				border: none;
+				margin-bottom: 20px;
+				padding: 20px;
+				display: flex;
+				border-bottom: 1px solid #ddd;
+			}
+			.restaurant-thumbnail
+			{
+				flex: 0 0 auto;
+				margin-right: 20px;
+			}
+			.restaurant-thumbnail img
+			{
+				width: 250px;
+				height: 250px;
+				object-fit: cover;
+			}
+			.restaurant-info
+			{
+				flex: 1 1 auto;
+			}
+			.restaurant-title
+			{
+				font-size: 24px;
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
+			.restaurant-title span.mirai
+			{
+				font-family: "미라이", sans-serif;
+				color: #ff7f00;
+				font-size: 30px;
+				margin-left: 10px;
+			}
+			.restaurant-rating
+			{
+				font-size: 16px;
+				margin-bottom: 10px;
+			}
+			.restaurant-address
+			{
+				font-size: 10pt;
+				color: silver;
+			}
+			.restaurant-description
+			{
+				font-size: 16px;
+				line-height: 1.5;
+				max-height: 4.5em;
+				overflow: hidden;
+				position: relative;
+			}
+			.restaurant-description::after
+			{
+				content: "";
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 70%);
+				width: 100%;
+				height: 1.5em;
+			}
+			.restaurant-more
+			{
+				color: #ff7f00;
 				cursor: pointer;
-				text-decoration: underline;
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				margin: 0;
+				padding: 0;
+				background: none;
+				border: none;
+				font-size: 16px;
+				line-height: 1;
 			}
-			h2:active
+			.user-info
 			{
-				color: lightsalmon;
+				display: flex;
+				align-items: center;
+				margin-bottom: 10px;
 			}
-			h3
+			.user-thumbnail
 			{
-				/* font-size: 1.2rem; */
-				font-size: 1.0rem;
-				font-family: verdana;
-				font-weight: normal;
+				width: 40px;
+				height: 40px;
+				margin-right: 10px;
+				border-radius: 50%;
+				overflow: hidden;
 			}
-			table
+			.user-thumbnail img
 			{
-				border-collapse : collapse;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
 			}
-			th
+			.user-nickname
 			{
-				background-color: lightgray;
+				font-size: 14px;
+				font-weight: bold;
 			}
-			input
+			.restaurant-favorite-btn
 			{
-				font-size: 1.5rem;
-				font-family: verdana;
+			    width: 60px;
+			    height: 60px;
+			    background-color: #ff7f00;
+			    color: white;
+			    border: none;
+			    border-radius: 5px;
+			    font-size: 35px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+			    cursor: pointer;
+		  	}
+		  	.bd-sidebar
+		  	{
+				position: sticky;
+				top: 0rem;
+				height: calc(100vh - 0rem);
+				background: #eee;
+			
+				display: flex;
+				padding: 0;
+				overflow-y: hidden;
+				flex-direction: column;
+			}
+			.bd-sidebar-body
+			{
+				height: 100%;
+				overflow-y: auto;
+				display: block;
+			}
+			.bd-sidebar-body .nav 
+			{
+				display: block;
+			}
+			.bd-sidebar-body .nav>li>a
+			{
+				display: block;
+				padding: .25rem 1.5rem;
+				font-size: 90%;
+			}
+			.bd-sidebar-footer
+			{
+				padding: 1rem;
+				background: #ddd;
 			}
 		</style>
-		
-		<script>	
-			function boardSelect(boardType)
-			{
-				// 세션에 게시판 정보 쓰기
-				sessionStorage.setItem("boardType", Number(boardType));
-				// 게시판 이동
-				location.href = "./Board_Select.jsp?" + "boardType=" + boardType + "&" + "page=1";
-			}
-		</script>
 	</head>
 	
 	<body>
-		<%
-			// 페이지당 게시글 개수
-			int unitPage = 10;
-			// 페이징 블럭 크기
-			int pagingBlockSize = 10;
-			
-			/*
-			// 페이지 번호를 뺀 페이지 이동 url
-			String moveUrl = "./Board_Select.jsp?" + "boardType=" + boardType;
-			// 게시글 번호를 뺀 게시글 이동 url
-			String viewUrl = "./View.jsp?" + "boardNumber=";
-			*/
-		
-			/*
-			// 선택된 페이지 번호 확인
-			int nowPage = Integer.parseInt(request.getParameter("page"));
-			System.out.println("페이지 번호: " + nowPage);
-			*/
-			
-			// 선택된 게시판의 총 게시글 개수
-			// Board_Control board_Control = new Board_Control();
-			int boardCount = 0;
-			/*
-			if (boardType.equals("-1"))
-			{
-				// 전체 게시글
-				boardCount = board_Control.getAllBoardCount();
-			}
-			else
-			{
-				// 선택된 게시판에 대한 게시글
-				boardCount = board_Control.getAllBoardCount("board_type", boardType);
-			}
-			*/
-			System.out.println("선택된 게시판의 총 게시글 개수: " + boardCount);
-			
-			// 최대 페이지 번호 계산
-			/*
-			int maxPage = (boardCount - 1) / unitPage + 1;
-			// 페이징 블럭의 시작번호와 끝번호 계산
-			int pageStart = ((nowPage - 1) / unitPage) * unitPage + 1;
-			int pageEnd = pageStart + pagingBlockSize - 1;
-			if (pageEnd > maxPage)
-			{
-				pageEnd = maxPage;
-			}
-			*/
-		%>
-			
-		<table border = "0" style = "width: 100%; height: 100%;">
-			<tr>
-				<td width = "10%">
-					<table border = "0" style = "width: 95%; height: 100%; margin-left: 5%">
-						<tr style = "vertical-align: top">
-							<td>				
-								<%
-									if (boardType != null && boardType.equals("-1")) { %> <a href = "javascript:boardSelect('-1')"> <h2 style = "font-weight: bold"> 전체글 보기 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('-1')"> <h2> 전체글 보기 </h2> </a> <% }
-								%>
-								<%
-									if (boardType != null && boardType.equals("0")) { %> <a href = "javascript:boardSelect('0')"> <h2 style = "font-weight: bold"> 공지사항 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('0')"> <h2> 공지사항 </h2> </a> <% }
-								%>
-								<%
-									if (boardType != null && boardType.equals("1")) { %> <a href = "javascript:boardSelect('1')"> <h2 style = "font-weight: bold"> 게임정보 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('1')"> <h2> 정보 게시판 </h2> </a> <% }
-								%>
-								<%
-									if (boardType != null && boardType.equals("2")) { %> <a href = "javascript:boardSelect('2')"> <h2 style = "font-weight: bold"> 이벤트 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('2')"> <h2> 후기 게시판 </h2> </a> <% }
-								%>
-								<%
-									if (boardType != null && boardType.equals("3")) { %> <a href = "javascript:boardSelect('3')"> <h2 style = "font-weight: bold"> 질문 게시판 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('3')"> <h2> 질문 게시판 </h2> </a> <% }
-								%>
-								<%
-									if (boardType != null && boardType.equals("4")) { %> <a href = "javascript:boardSelect('4')"> <h2 style = "font-weight: bold"> 창작 게시판 </h2> </a> <% }
-									else { %> <a href = "javascript:boardSelect('4')"> <h2> 자유 게시판 </h2> </a> <% }
-								%>
-							</td>
-						</tr>
-					</table>
-				</td>
-			
-				<td width = "90%">
-					<table border = "1" style = "width: 100%; height: 100%;">
-						<tr style = "height: 10%">
-							<th style = "width: 5%">
-								<h3> <b> 글 번호 </b> </h3>
-							</th>
-							<th style = "width: 55%">
-								<h3> <b> 제목 </b> </h3>
-							</th>
-							<th style = "width: 20%">
-								<h3> <b> 작성자 </b> </h3>
-							</th>
-							<th style = "width: 10%">
-								<h3> <b> 작성일 </b> </h3>
-							</th>
-							<th style = "width: 5%">
-								<h3> <b> 조회수 </b> </h3> 
-							</th>
-							<th style = "width: 5%">
-								<h3> <b> 좋아요 </b> </h3>
-							</th>
-						</tr>
+		<div class = "btns-board border-top d-flex justify-content-between px-3 border-bottom bg-light">					
+			<a class = "float-right" >
+				<span>
+					<c:if test = "${not empty login}">
+						유저: ${login.uName} 권한: ${login.uName}
+					</c:if>
+				</span>
+			</a>
+			<div class = "float-right">
+				<button type = "button" class = "btn btn-outline-secondary" style = "--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: 15rem">
+				<a href = "CommunityWrite.do?type=<%= boardType %>" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> &nbsp; 글쓰기 </a>
+				<%--
+				<%
+					if( loginVo != null )
+					{
+						%><a href="write.jsp?type=<%= type %>" class="btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
+						%><a href="write.jsp?type=<%= type %>" class=" float-right btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
+					}
+				%>
+				--%>
+				</button>
+			</div>
+		</div>	
+		<div class = "container-fluid offset-2" style = "max-width: 1280px">
+			<div class="row" >
+			<!-- 사이드바 -->
+				<div class = "bd-sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" style = "width: 280px">
+					<a href = "/" class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
+						<span class = "fs-4"> 지역별 구분 </span>
+					</a>
+					<hr>
+					<ul class = "nav nav-pills flex-column mb-auto">
+						<%--
+						<% String activeTab = type != null && !type.equals("") ? type : "TT"; %>
 						<%
-					/* 게시글 리스트를 화면에 출력 */
-					for (int i = 0; i < 10; i++)
-					{ %>
-						<tr style = "height: 7%">
-							<td style = "text-align: center">
-								<h3> 1 </h3>
-							</td>
-							<td style = "text-align: left">
-								<h3> &nbsp; 제목 입니다. </h3>
-							</td>
-							<td style = "text-align: left">
-								<h3> &nbsp; 작성자 이름 </h3>
-							</td>
-							<td style = "text-align: center">
-								<h3> 2023. 07. 26 </h3>
-							</td>
-							<td style = "text-align: center">
-								<h3> 0 </h3>
-							</td>
-							<td style = "text-align: center">
-								<h3> 0 </h3>
-							</td>
-						</tr> <%
-					} %>
+							String boardTitle = "";
+							switch (type)
+							{
+								case "T":
+							        boardTitle = "전체글";
+							        activeTab = "T";
+							        break;
+							    case "N":
+							        boardTitle = "공지사항";
+							        activeTab = "N";
+							        break;
+							    case "I":
+							        boardTitle = "정보 게시판";
+							        activeTab = "I";
+							        break;
+							    case "R":
+							        boardTitle = "후기 게시판";
+							        activeTab = "R";
+							        break;
+							    case "Q":
+							        boardTitle = "질문 게시판 ";
+							        activeTab = "Q";
+							        break;
+							    case "F":
+							        boardTitle = "자유 게시판";
+							        activeTab = "F";
+							        break;
+							}
+						%>
+						--%>
+						<li class = "nav-item" >
+							<a href = "CommunityMain.do?type=TT" class = "nav-link link-dark  <%-- <%= activeTab.equals("T") ? "active" : "" %> --%>"  style = "text-align:center">						
+								전체글
+							</a>
+						</li>
+						<li>
+							<a href = "CommunityMain.do?type=GG" class = "nav-link link-dark <%-- <%= activeTab.equals("N") ? "active" : "" %> --%>" style = "text-align:center;">			
+								공지사항
+							</a>
+						</li>
+						<li>
+							<a href="CommunityMain.do?type=GW" class = "nav-link link-dark <%-- <%= activeTab.equals("I") ? "active" : "" %> --%>" style = "text-align:center;">								
+								정보 게시판
+							</a>
+						</li>
+						<li>
+							<a href="CommunityMain.do?type=CB" class = "nav-link link-dark <%-- <%= activeTab.equals("R") ? "active" : "" %> --%>" style = "text-align:center;">							
+								후기 게시판
+							</a>
+						</li>
+						<li>
+							<a href="CommunityMain.do?type=CN" class = "nav-link link-dark <%-- <%= activeTab.equals("Q") ? "active" : "" %> --%>" style = "text-align:center;">							
+								질문 게시판 
+							</a>
+						</li>
+						<li>
+							<a href="CommunityMain.do?type=GB" class = "nav-link link-dark <%-- <%= activeTab.equals("F") ? "active" : "" %> --%>" style = "text-align:center;">							
+								자유 게시판
+							</a>
+						</li>					
+					</ul>								
+				</div>
+				<!-- 사이드바 -->
+				
+				<!-- 메인 -->
+				<div class = "tab-content container-fluid ml-1 col-md-9" >		
+					<table class = "table table-striped">
+						<thead>
+							<tr class = "vrow-inner">
+								<th class = "vcol col-id"> 번호 </th>
+								<th class = "vcol col-title"> 제목 </th>
+								<th class = "vcol col-author"> 작성자 </th>
+								<th class = "vcol col-time"> 작성일 </th>
+								<th class = "vcol col-view"> 조회수 </th>
+								<th class = "vcol col-recom"> 추천수 </th>
+							</tr>						
+							<tr class = "vrow-inner" style = "background-color: lightgrey">					
+								<th class = "vcol col-id"> <b> 공지 </b> </th>
+								<th class = "vcol col-title">
+									<b> 커뮤니티 게시판 이용 안내 </b>
+								</th>
+								<th class = "vcol col-author"> ㅎㅎ </th>
+								<th class = "vcol col-time">
+									2023. 07. 28
+								</th>
+								<th class = "vcol col-view"> 18734526 </th>
+								<th class = "vcol col-recom"> 20 </th>
+							</tr>
+						</thead>
 					</table>
-				</td>
-			</tr>
-		</table>
-		
-		<%
-			// 현재 선택된 게시판에 대한, 현재 선택된 페이지의 게시글 목록 리스트 생성
-			/*
-			ArrayList<Board_Manager> boardPageArray = new ArrayList<Board_Manager>();
-			
-			// 전체글 보기 게시판
-			if (boardType.equals("-1"))
-			{
-				boardPageArray = board_Control.getBoardPage(nowPage);
-				upperBoard = board_Control.getLastUpperBoard();
-			}
-			// 공지사항 게시판
-			else if (boardType.equals("0"))
-			{
-				boardPageArray = board_Control.getNoticeBoardPage(nowPage);
-				upperBoard = board_Control.getLastUpperBoard();
-			}
-			// 이외의 게시판
-			else
-			{
-				boardPageArray = board_Control.getBoardPage(nowPage, "board_type", boardType);
-				upperBoard = board_Control.getLastUpperBoard("board_type", boardType);
-			}
-			*/
-			
-			
-		
-			/* 한 페이지에 게시글 10개가 안된다면 */
-			// ...
-		
-			/* 페이징 블럭 처리 */
-			// ...
-			
-		%>
+					
+					<nav aria-label = "Page navigation example">
+						 <ul class = "pagination justify-content-center">
+							<li class = "page-item">
+								<!-- <a href = "첫번째 페이지로 이동하는 주소"> |◀ </a> &nbsp; -->
+							<a class = "page-link" href = "index.jsp?type=<%= boardType %>&page=1">
+								Previous
+							</a> &nbsp;				
+						</ul>
+					</nav>
+				</div>	
+				<!-- 메인 -->	
+			</div>
+		</div>
 	</body>
 
-<%@ include file = "../include/footer.jsp" %>
+<%@ include file="../include/footer.jsp" %>
