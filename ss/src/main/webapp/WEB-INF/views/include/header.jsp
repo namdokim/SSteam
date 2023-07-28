@@ -176,7 +176,7 @@
 						</div>
 						<div class="nav-item offset-1" style="margin-right: 36rem;">
 							<a class="nav-link " style="color: black; text-align: center;" 
-								href="index.jsp?type=S">커뮤니티</a>
+								href="<%=request.getContextPath()%>/Community/CommunityMain.do"> 커뮤니티 </a>
 						</div>									
 					</li>
 				</ul>						
