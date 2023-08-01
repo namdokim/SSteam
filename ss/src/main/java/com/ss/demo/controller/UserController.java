@@ -1,10 +1,16 @@
 package com.ss.demo.controller;
 
+import java.util.Random;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ss.demo.domain.UserVO;
+import com.ss.demo.service.MailSendService;
 import com.ss.demo.service.UserService;
 
 @Controller
@@ -24,10 +31,15 @@ public class UserController
 	@Autowired
 	UserService us;
 	
+	// 이메일 서비스 불러오기
+	@Autowired
+	private MailSendService mailService;
+	
 	// 암호화 
 	@Autowired
 	BCryptPasswordEncoder rbcryptPasswordEncoder;
 	
+
 	
 	//메인 화면 
 	@RequestMapping(value="index.do")
@@ -160,21 +172,15 @@ public class UserController
 	@ResponseBody
 	@RequestMapping(value="/uIdCheck.do")
 	public String uIdCheck(
-			@RequestParam("uId") String uId,
-			@RequestParam("uPw") String uPw
+			@RequestParam("uId") String uId
 			)
 	{
 		UserVO uv = new UserVO();
-		System.out.println("uPw="+uPw);
 		System.out.println("uId="+uId);
 		System.out.println("uv.getuId()="+uv.getuId());
 		uv.getuId();
 		UserVO loginVO = us.userONE(uv);
 		System.out.println("loginVO="+loginVO);
-		if(uId != null && rbcryptPasswordEncoder.matches(uPw, loginVO.getuPw()))
-		{
-			System.out.println("로그인 성공  ");
-		}
 		if( uId != null && uId.contains("@") == false)
 		{
 			
@@ -188,6 +194,23 @@ public class UserController
 		
 		return value;
 	}
+	
+	// 유저 이메일 인증하기 
+	@ResponseBody
+	@RequestMapping(value="/emailAuth.do")
+	public String emailAuth(
+			@RequestParam(value= "uId",  required=false) String uId
+			)
+	{
+		
+		System.out.println("이메일 인증 요청 들어옴");
+		System.out.println("emailAuth="+uId);
+		return mailService.joinmail(uId);
+	}
+	//유저 인증번호 확인 
+	
+	
+	
 	// 유저 로그인 시  비밀번호 체크
 	@ResponseBody
 	@RequestMapping(value="/uPwCheck.do")
