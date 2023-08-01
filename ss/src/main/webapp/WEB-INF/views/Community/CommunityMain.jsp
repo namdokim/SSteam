@@ -1,13 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import = "java.util.List" %>
 <%@ include file="../include/header.jsp" %>
 
 <%
-	// url 에서 현재 선택 된 게시판 종류 얻기
-	String boardType = "";
+	int boardType = 0;
+	List<String> nowPageBoardList;
 	
 	try
 	{
-		boardType = request.getParameter("boardType");
+		// url 에서 현재 선택 된 게시판 종류 얻기
+		// boardType = request.getParameter("boardType");
+		boardType = 0;	// TEMP
+		// url 에서 현재 선택 된 게시판의 게시글 얻기
+		nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
 	}
 	catch (Exception e)
 	{
@@ -16,17 +21,17 @@
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset = "UTF-8">
+		<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
 		<title> 커뮤니티 메인 </title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+		<script src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"> </script>
+		<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"> </script>
+		<link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+		<link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+		<script src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"> </script>
 		<script>
 			$(document).ready(function()
 			{
@@ -246,7 +251,7 @@
 			</a>
 			<div class = "float-right">
 				<button type = "button" class = "btn btn-outline-secondary" style = "--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: 15rem">
-				<a href = "CommunityWrite.do?type=<%= boardType %>" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> &nbsp; 글쓰기 </a>
+				<a href = "CommunityWrite.do?type=<%= boardType %>" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
 				<%--
 				<%
 					if( loginVo != null )
@@ -264,7 +269,7 @@
 			<!-- 사이드바 -->
 				<div class = "bd-sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" style = "width: 280px">
 					<a href = "/" class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
-						<span class = "fs-4"> 지역별 구분 </span>
+						<span class = "fs-4"> 게시판 구분 </span>
 					</a>
 					<hr>
 					<ul class = "nav nav-pills flex-column mb-auto">
@@ -338,28 +343,34 @@
 				<!-- 메인 -->
 				<div class = "tab-content container-fluid ml-1 col-md-9" >		
 					<table class = "table table-striped">
-						<thead>
-							<tr class = "vrow-inner">
-								<th class = "vcol col-id"> 번호 </th>
-								<th class = "vcol col-title"> 제목 </th>
-								<th class = "vcol col-author"> 작성자 </th>
-								<th class = "vcol col-time"> 작성일 </th>
-								<th class = "vcol col-view"> 조회수 </th>
-								<th class = "vcol col-recom"> 추천수 </th>
-							</tr>						
-							<tr class = "vrow-inner" style = "background-color: lightgrey">					
-								<th class = "vcol col-id"> <b> 공지 </b> </th>
-								<th class = "vcol col-title">
-									<b> 커뮤니티 게시판 이용 안내 </b>
-								</th>
-								<th class = "vcol col-author"> ㅎㅎ </th>
-								<th class = "vcol col-time">
-									2023. 07. 28
-								</th>
-								<th class = "vcol col-view"> 18734526 </th>
-								<th class = "vcol col-recom"> 20 </th>
+							<tr class = "vrow-inner" style = "background-color: lightgrey">
+								<th class = "vcol col-id" style = "text-align: center"> 번호 </th>
+								<th class = "vcol col-title" style = "text-align: center"> 제목 </th>
+								<th class = "vcol col-author" style = "text-align: center"> 작성자 </th>
+								<th class = "vcol col-time" style = "text-align: center"> 작성일 </th>
+								<th class = "vcol col-view" style = "text-align: center"> 조회수 </th>
+								<th class = "vcol col-recom" style = "text-align: center"> 추천 </th>
 							</tr>
-						</thead>
+						<c:forEach items = "${nowPageBoardList}" var = "element">
+							<tr class = "vrow-inner">
+								<td class = "vcol col-id" style = "text-align: center"> ${element.board_number} </td>
+								<td class = "vcol col-title"> <a href="view.do?bidx=${element.board_number}"> ${element.board_title} </a> </td>
+								<td class = "vcol col-time" style = "text-align: center"> ${element.write_date} </td>
+								<td class = "vcol col-recom" style = "text-align: center"> ${element.hit_count} </td>
+							</tr>
+						</c:forEach>
+							<!-- <tr class = "vrow-inner">					
+								<td class = "vcol col-id" style = "text-align: center"> 1 </td>
+								<td class = "vcol col-title">
+									커뮤니티 게시판 이용 안내
+								</td>
+								<td class = "vcol col-author" style = "text-align: center"> 포포몬 </td>
+								<td class = "vcol col-time" style = "text-align: center">
+									2023. 07. 28
+								</td>
+								<td class = "vcol col-view" style = "text-align: center"> 18734526 </td>
+								<td class = "vcol col-recom" style = "text-align: center"> 20 </td>
+							</tr> -->
 					</table>
 					
 					<nav aria-label = "Page navigation example">

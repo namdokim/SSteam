@@ -6,9 +6,13 @@
 <typeAliases>
 	<!-- 회원 정보 -->
 	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
+	
+	<!-- 게시글 -->
+	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
 </typeAliases>
-	<!-- 테스트 -->
-
-
+<!-- 
+<mappers>
+	<mapper resource = "../mappers/Community_Mapper.xml" />
+</mappers> -->
 
 </configuration>
