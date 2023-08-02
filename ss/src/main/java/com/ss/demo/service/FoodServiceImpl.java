@@ -15,6 +15,7 @@ import com.ss.demo.domain.SearchVO;
 @Service
 public class FoodServiceImpl implements FoodService {
 
+	
 	//============================ @Autowired foodDAO
 	@Autowired
 	private FoodDAO foodDAO;

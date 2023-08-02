@@ -27,6 +27,7 @@ public class FoodController
 	
 	
 	
+	
 	// ===================================================================== food Main <List> (메인페이지) 
 	@RequestMapping(value="/foodMain.do")
 	public String foodMain(Model model ,SearchVO searchVO){

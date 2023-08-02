@@ -13,6 +13,7 @@ import com.ss.demo.domain.SearchVO;
 @Repository
 public class FoodDAO {
 	
+	
 	//============================ @Autowired sqlSession
 	@Autowired
 	private SqlSession sqlSession;
