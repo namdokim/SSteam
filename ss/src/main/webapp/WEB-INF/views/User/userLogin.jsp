@@ -1,15 +1,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+/>
 <!-- action="<%= request.getContextPath()%>/User/userLoginAction.do" -->
-<form name="login" id="login">
-ID : <input type="text" id="uId"  name="uId" width="70%"><br>
-PW : <input type="text" id="uPw"  name="uPw" width="70%"><br>
+
+<style>
+	/* 비밀번호 감추기 보여주기 눈 스타일  */
+	.input {
+	position: relative;
+	}
+	.input .eyes {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto ;
+	height: 13px ;
+	font-size: 25px;
+	cursor: pointer;
+}
+</style>
+<!-- 로그인 폼  -->
+<form name="login" id="login" >
+<div style=" width:20%; padding : auto; margin: auto">
+ID : <input type="text" id="uId"  name="uId" style="width: 100%;"><br>
+	<div class="input password">
+PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
+		<div class="eyes">
+			<i class="fas fa-eye"></i>
+		</div>
+	</div>
+	<br>
 <div id="msg_login"></div>
 <button type="button" id="loginbtn" onclick="loginFn();">로그인</button>
 <input type="button" value="취죠" onclick="location.href='<%= request.getContextPath()%>/reHome.do'">
 <input type="text" placeholder="힘들다 힘들어 힘들다고!!! ">
+</div >
+
 </form>
+<script type="text/javascript">
+$(function(){
+	  // 눈표시 클릭 시 패스워드 보이기
+	  $('.eyes').on('click',function(){
+	    $('.input.password').toggleClass('active');
+
+	    if( $('.input.password').hasClass('active') == true ){
+	    	$(this).find('.fa-eye').attr('class',"fas fa-eye-slash").parents('.input').find('#uPw').attr('type','text');
+	    				// i 클래스                // 텍스트 보이기 i 클래스
+	    }
+	    else{
+	    	$(this).find('.fa-eye-slash').attr('class',"fas fa-eye").parents('.input').find('#uPw').attr('type','password');
+	    }
+	  });
+	});
+	
+</script>
 <!-- 로그인 유효성 검사  -->
 <script>
 /* 버튼에 타입 버튼  안주면은 무조건 submit타입으로 인식해서 서브밋이 되는건가  */

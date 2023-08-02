@@ -93,6 +93,7 @@ public class UserController
 		return "User/userLogin";
 	}
 	//로그인 처리
+	//에이작스로 안 할떄 현재 미사용 
 	@RequestMapping(value="/userLoginAction.do", method = {RequestMethod.POST})
 	public String userLoginAction(UserVO uv,
 			@RequestParam("uId") String uId,

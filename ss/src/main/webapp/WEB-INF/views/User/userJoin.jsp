@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+  />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
 function DoRewrite()
@@ -8,7 +12,6 @@ function DoRewrite()
 	$("#uId").val("").focus();
 }
 </script>
-
 
 <style>
 	tr{
@@ -21,17 +24,43 @@ function DoRewrite()
 		text-align: center;
 		color: 
 	}
+/* 비밀번호 감추기 보여주기  */
+.input {
+  position: relative;
+}
+
+.input .eyes {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  margin: auto ;
+  height: 40px;
+  font-size: 25px;
+  cursor: pointer;
+}
+.input .eyes2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  margin: auto ;
+  height: 40px;
+  font-size: 25px;
+  cursor: pointer;
+}
+}
 </style>
 <!-- 회원가입 입력 란  -->
 	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
 		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
 			<tr id="loginid" name="loginid">
-				<td style="width:60%;">
+				<td style="width:45%;">
 					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
 					
 				</td>
 				<td>	
-					@<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
+					<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
 						<option value="">도메인을 선택해주세요</option>
 						<option value="@naver.com">naver.com</option>
 						<option value="@daum.net">daum.net</option>
@@ -52,7 +81,7 @@ function DoRewrite()
 			</tr>
 			<tr>
 				<td colspan="2">
-					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
+					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
 				</td>
 			</tr>
 			<tr>
@@ -67,12 +96,22 @@ function DoRewrite()
 			</tr>
 			<tr>
 				<td colspan="2">
-					<input type="text" id="uPw" name="uPw" style="width:100%;" placeholder="비밀번호" required value="">
+					<div class="input password">
+					<input type="password" id="uPw" name="uPw" style="width:100%;" placeholder="비밀번호" required value="">
+						<div class="eyes">
+							<i class="fas fa-eye"></i>
+						</div>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2">
-					<input type="text" id="uPwc" name="uPwc" style="width:100%;" placeholder="비밀번호 확인"required value="">
+					<div class="input password">
+					<input type="password" id="uPwc" name="uPwc" style="width:100%;" placeholder="비밀번호 확인" required value="">
+						<div class="eyes2">
+							<i class="fas fa-eye"></i>
+						</div>
+					</div>
 					<span id="msg_pw"></span>
 				</td >
 			</tr>
@@ -127,7 +166,6 @@ function DoRewrite()
 				</td>
 			</tr>
 		</table>
-		
 	</form>
 <!-- api 연동 -->
 <script type="text/javascript">
@@ -136,10 +174,44 @@ function DoRewrite()
 //나이스아이디
 //facebook account kit
 </script>
+<!-- 셀렉트 태그 값 바꿀시 브라우저 로그에 보여주기  -->
 <script type="text/javascript">
 	$("select[name=uId_email]").change(function(){
 		console.log($(this).val());
 	});
+</script>
+<!-- 비밀번호 보여주기 감추기  -->
+<script type="text/javascript">
+$(function(){
+	  // 눈표시 클릭 시 패스워드 보이기
+	  $('.eyes').on('click',function(){
+	    $('.input.password').toggleClass('active');
+
+	    if( $('.input.password').hasClass('active') == true ){
+	    	$(this).find('.fa-eye').attr('class',"fas fa-eye-slash").parents('.input').find('#uPw').attr('type',"text");
+	    				// i 클래스                // 텍스트 보이기 i 클래스
+	    }
+	    else{
+	    	$(this).find('.fa-eye-slash').attr('class',"fas fa-eye").parents('.input').find('#uPw').attr('type','password');
+	    }
+	  });
+	});
+	
+$(function(){
+	  // 눈표시 클릭 시 패스워드 보이기
+	  $('.eyes2').on('click',function(){
+	    $('.input.password').toggleClass('active');
+
+	    if( $('.input.password').hasClass('active') == true ){
+	    	$(this).find('.fa-eye').attr('class',"fas fa-eye-slash").parents('.input').find('#uPwc').attr('type',"text");
+	    				// i 클래스                // 텍스트 보이기 i 클래스
+	    }
+	    else{
+	    	$(this).find('.fa-eye-slash').attr('class',"fas fa-eye").parents('.input').find('#uPwc').attr('type','password');
+	    }
+	  });
+	});
+
 </script>
 <!-- 이메일 인증  -->
 <script type="text/javascript">

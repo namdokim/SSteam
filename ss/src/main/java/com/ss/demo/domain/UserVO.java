@@ -17,14 +17,38 @@ public class UserVO {
 	//추가 변수
 	private String uZipcode;
 	private String uId_email;
+	//추가된 값
+	private String uAdds_sub;
+	private String uAddsId; //우편번호인데 문자열로 받을거임 
 	//비밀번호 일치 확인 
 	
+	
+	
+	
 	//추가 된 get set 
+	public String getuZipcode() {
+		return uZipcode;
+	}
+	public void setuZipcode(String uZipcode) {
+		this.uZipcode = uZipcode;
+	}
 	public String getuId_email() {
 		return uId_email;
 	}
 	public void setuId_email(String uId_email) {
 		this.uId_email = uId_email;
+	}
+	public String getuAdds_sub() {
+		return uAdds_sub;
+	}
+	public void setuAdds_sub(String uAdds_sub) {
+		this.uAdds_sub = uAdds_sub;
+	}
+	public String getuAddsId() {
+		return uAddsId;
+	}
+	public void setuAddsId(String uAddsId) {
+		this.uAddsId = uAddsId;
 	}
 	
 	
