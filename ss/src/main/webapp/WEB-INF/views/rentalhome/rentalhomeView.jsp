@@ -110,9 +110,11 @@
 	</div>
 	<div class="view" style="width:1224px; text-align:left; height:600px; margin:10px auto; padding:10px; position:relative;">
 		<div style="width:1000px; height:500px; margin:0 auto; padding:10px; display:inline-block; position:absolute; top:10px; left:10px;"> 
-			<span style="font-size:20pt; font-weight:bold;">페어필드 바이 메리어트 서울 (Fairfield by Marriott Seoul)</span><br>
-			<span style="color:#545454;">대한민국 서울특별시 영등포구 경인로 870</span><br>
-			<span style="color:#545454;">페어필드 바이 메리어트 서울 (Fairfield by Marriott Seoul)의 숙소 정보</span><br>
+			<span style="font-size:20pt; font-weight:bold;">${rentalhomeVO.name}</span><br>
+			<span style="color:#545454;">${rentalhomeVO.address}</span><br>
+			<div style="width:700px; margin:5px 0px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all">
+				<span style="font-size:10pt; color:#545454;">${rentalhomeVO.info}</span><br>
+			</div>
 		</div>
 		<div class="like" style="width:50px; height:50px; margin:0 auto; display:inline-block; position:absolute; top:37px; left:820px;">
 		</div>
@@ -151,31 +153,47 @@
 		</div>
 		<div style="border:1px solid #ddd; border-radius:5px; text-align:left;width:360px; height:210px; position:absolute; top:340px; left:320px; padding:10px 20px;margin:10px;" >
 			<div style="width:100px; height:30px; margin:5px 0px;"><span style="font-weight:bold;color:#282828;">호텔 시설</span></div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
+				<c:if test="${rentalhomeVO.inPool_yn == 'Y' || rentalhomeVO.outPool_yn == 'Y'}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.parking_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.pickup_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.wifi_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.beach_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
+					</div>	
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.bbq_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.breakfast_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty rentalhomeVO.animal_yn}">
+					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+						<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
+					</div>
+				</c:if>
 			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
-			</div>
-			<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-				<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
-			</div>
-		</div>
 		<div class="map" style="text-align:center;border:1px solid #ddd; border-radius:5px; width:500px; height:210px; position:absolute; top:340px; left:690px; margin:10px;" >
 		</div>
 	</div>
@@ -301,19 +319,19 @@
 			체크인 가능시간
 		</div>
 		<div style="display:inline-block; width:200px;">
-			<span style="font-weight:bold;">15:00 이후</span>
+			<span style="font-weight:bold;">${rentalhomeVO.checkIn}</span>
 		</div>
 		<div style="display:inline-block; width:200px;">
 			체크아웃 가능시간
 		</div>
 		<div style="display:inline-block; width:200px;">
-			<span style="font-weight:bold;">11:00 이전까지</span>
+			<span style="font-weight:bold;">${rentalhomeVO.checkOut}</span>
 		</div>
 		<div style="display:inline-block; width:300px;margin-top:30px;">
 		<span style="font-weight:bold;">체크인 방법</span>
 		</div>
 		<div style="display:inline-block; width:800px;">
-			프런트 데스크에서 숙소 열쇠 또는 객실 카드키를 수령하세요.
+			${rentalhomeVO.checkIn_info}
 		</div>
 		<div style="display:inline-block; width:300px; margin-top:30px; margin-bottom:20px">
 		<span style="font-weight:bold;">조식</span>
@@ -322,7 +340,7 @@
 			요금
 		</div>
 		<div style="display:inline-block; width:500px;">
-			<span style="font-weight:bold;">14.900원/1인당</span>
+			<span style="font-weight:bold;">${rentalhomeVO.breakfast_price}원/1인당</span>
 		</div>
 		<div style="display:inline-block; width:300px;">
 		</div>
@@ -330,14 +348,60 @@
 			영업시간
 		</div>
 		<div style="display:inline-block; width:600px;">
-			<span style="font-weight:bold;">06:30~10:30 [월 - 일]</span>
+			<span style="font-weight:bold;">${rentalhomeVO.breakfast_open}~${rentalhomeVO.breakfast_close} [${rentalhomeVO.breakfast_day}]</span>
 		</div>
 		<div style="display:inline-block; width:300px; margin-top:40px;">
 			<span style="font-weight:bold;">시설</span>
 		</div>
 		<div style="display:inline-block; width:800px;">
-			수영장, 주차장, 픽업, 와이파이, 인근해변, 바베큐, 조식, 반려동물
+			<c:if test="${rentalhomeVO.inPool_yn == 'Y' || rentalhomeVO.outPool_yn == 'Y'}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.parking_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.pickup_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.wifi_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.beach_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
+				</div>	
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.bbq_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.breakfast_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty rentalhomeVO.animal_yn}">
+				<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
+					<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
+				</div>
+			</c:if>
+			
 		</div>
 	</div>
+		<!-- and login.id eq vo.id -->
+<%-- 				<c:if test="${not empty login}"> --%>
+					<div style="width:1224px; display:inline-block; text-align:right; margin:20px 0px;">
+						<span onclick="location.href='rentalhomeModify.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 정보 변경</span>
+					</div>
+<%-- 				</c:if> --%>
 </div>
 <%@ include file="../include/footer.jsp" %>
