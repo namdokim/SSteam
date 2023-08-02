@@ -9,6 +9,17 @@
 	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
 	<!-- 게시글 -->
 	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
+	
+	<!-- ==================== food ==================================-->
+	<typeAlias type="com.ss.demo.domain.FoodVO" alias="foodVO"/>
+	<!-- <typeAlias type="com.ss.demo.domain.FoodAttachVO" alias="attachVO"/> -->
+	
+
+	<!-- evnet --> 
+	<typeAlias type="com.ss.demo.domain.EventVO" alias="ev"/>
+	<typeAlias type="com.ss.demo.domain.EventReviewVO" alias="erv"/>
+	<typeAlias type="com.ss.demo.domain.SearchVO" alias="searchVO"/>
+	
 </typeAliases>
 <!-- 
 <mappers>

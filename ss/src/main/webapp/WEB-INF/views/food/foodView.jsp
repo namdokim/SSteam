@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="../include/header.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -250,7 +251,8 @@
 					<div style="width: 100%;"><br><br>
 						<h2>
 							<span>
-								<span style="color: black;">미라이</span>
+								<!-- 제목  <span style="color: black;">미라이</span> -->
+								<span style="color: black;">${vo.food_name}</span>
 								<span style="color: orange;">&nbsp;4.8</span>
 							</span>
 							<button style="float: right;">★<br>가고싶다 </button>
@@ -269,23 +271,29 @@
 				<hr>
 				<br><br>
 
-				<p><strong>주소</strong> 서울특별시 강남구 논현로153길 24 끌레르빌 1F</p>
-				<p><strong>지번</strong> 서울시 강남구 신사동 557-25 끌레르빌 1F</p>
-				<p><strong>전화번호</strong> 02-540-0934</p>
-				<p><strong>음식 종류</strong> 이자카야 / 오뎅 / 꼬치</p>
-				<p><strong>가격대</strong> 3만원-4만원</p>
-				<p><strong>주차</strong> 주차공간없음</p>
-				<p><strong>영업시간</strong> 18:00 - 01:00</p>
-				<p><strong>휴일</strong> 일</p>
-				<p><strong>웹 사이트</strong> <a href="식당 홈페이지 링크">식당 홈페이지로 가기</a></p><br><br>
+				<!-- <p><strong>주소</strong> 서울특별시 강남구 논현로153길 24 끌레르빌 1F</p> -->
+				<p><strong>주소 </strong>${vo.food_address}</p>
+				<!-- <p><strong>지번</strong> 서울시 강남구 신사동 557-25 끌레르빌 1F</p> -->
+				<!-- <p><strong>전화번호</strong> 02-540-0934</p> -->
+				<p><strong>전화번호 </strong>${vo.food_phone}</p>
+				<p><strong>음식 종류 </strong>${vo.food_food_kind}</p>
+				<p><strong>가격대 </strong> ${vo.food_avg_price}</p>
+				<p><strong>주차 </strong> 주차공간없음</p>
+				<p><strong>영업시간 </strong>${vo.food_working_hours}</p>
+				<p><strong>휴일 </strong>${vo.food_holiday}</p>
+				<p><strong>웹사이트 </strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a></p><br><br>
 
-				<h3>메뉴</h3>
+				<h3>메뉴</h3> 
+				<button><a href="<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}">메뉴등록버튼 </a></button>
 				<ul>
-					<li>사시미8종 (2인) - 41,000원</li>
-					<li>마구로치즈아에 - 19,000원</li>
-					<li>양갈비 스미비 야끼 - 23,000원</li>
-					<li>노도구로 시오 야끼 - 35,000원</li>
-					<li>규 스테이크 - 41,000원</li>
+					<c:forEach items="${list}" var="vo">
+						<li>${vo.food_menu_name} - ${vo.food_menu_price}</li>
+						
+						<!-- <li>마구로치즈아에 - 19,000원</li>
+						<li>양갈비 스미비 야끼 - 23,000원</li>
+						<li>노도구로 시오 야끼 - 35,000원</li>
+						<li>규 스테이크 - 41,000원</li> -->
+					</c:forEach>
 				</ul>
 				<br><br>
 				
@@ -295,7 +303,7 @@
 					<img src="https://mp-seoul-image-production-s3.mangoplate.com/112634_1551905616194724.jpg?fit=around|63:63&crop=63:63;*,*&output-format=jpg&output-quality=80" alt="메뉴 사진 3">
 					<img src="https://mp-seoul-image-production-s3.mangoplate.com/112634_1551905616451296.jpg?fit=around|63:63&crop=63:63;*,*&output-format=jpg&output-quality=80" alt="메뉴 사진 4">
 				</div>
-				
+				<div style="float: right; color:silver;"> 업데이트날짜 : ${vo.food_write_date}</div>
 				<br>
 				<hr>
 			</div>
@@ -430,18 +438,18 @@
 
 		var map = new kakao.maps.Map(container, options);
 		
-		// 마커가 표시될 위치입니다 
+		// 마커가 표시될 위치 
 		var markerPosition  = new kakao.maps.LatLng(37.521202058933774, 127.02618079647772); 
 		
-		// 마커를 생성합니다
+		// 마커를 생성
 		var marker = new kakao.maps.Marker({
 		    position: markerPosition
 		});
 
-		// 마커가 지도 위에 표시되도록 설정합니다
+		// 마커가 지도 위에 표시되도록 설정
 		marker.setMap(map);
 
-		// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+		// 아래 코드는 지도 위의 마커를 제거하는 코드
 		// marker.setMap(null);    
 	</script>
 <!-- =========================================================================================== -->	
