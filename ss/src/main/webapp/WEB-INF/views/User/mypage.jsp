@@ -3,6 +3,6 @@
 <%@ include file="../include/header.jsp" %>
 <!-- main -->
 
-	
+	<h1>요주 인물 설무리</h1>
 
 <%@ include file="../include/footer.jsp" %>
