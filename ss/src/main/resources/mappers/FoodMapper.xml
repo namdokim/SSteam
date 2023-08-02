@@ -109,22 +109,22 @@
 	
 	
 	
-	<!-- @사진 등록@  -->
-	<insert id="insertImg" parameterType="attachVO">
-		INSERT INTO
-		food(
-			food_attach_number 
-			,food_attach_logical_name 
-			,food_attach_physical_name 
-		)VALUES(
-			#{food_attach_number }
-			,#{food_attach_logical_name}
-			,#{food_attach_physical_name}
-		)
-		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
-			SELECT MAX(fNo)
-		  	   FROM food
-		</selectKey>
-	</insert>
+<!-- @사진 등록@  --> 
+<!-- 	<insert id="insertImg" parameterType="attachVO"> -->
+<!-- 		INSERT INTO -->
+<!-- 		food( -->
+<!-- 			food_attach_number  -->
+<!-- 			,food_attach_logical_name  -->
+<!-- 			,food_attach_physical_name  -->
+<!-- 		)VALUES( -->
+<!-- 			#{food_attach_number } -->
+<!-- 			,#{food_attach_logical_name} -->
+<!-- 			,#{food_attach_physical_name} -->
+<!-- 		) -->
+<!-- 		<selectKey order="AFTER" keyProperty="fNo" resultType="int"> -->
+<!-- 			SELECT MAX(fNo) -->
+<!-- 		  	   FROM food -->
+<!-- 		</selectKey> -->
+<!-- 	</insert> -->
 	
 </mapper>
