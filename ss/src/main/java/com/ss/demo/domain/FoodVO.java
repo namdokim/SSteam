@@ -1,71 +1,73 @@
 package com.ss.demo.domain;
 
+import java.util.Arrays;
+
 public class FoodVO 
-{
-	private int food_number;
-	private String food_title;
-	private double food_grade;
-	private String food_adress;
-	private int food_call;
-	private String food_foodkind;
-	private int food_money;
-	private String food_car;
+{ 
+	private int    fNo;
 	
+	private String food_name;
+	private String food_address;
+	private String food_phone;
+	private String food_food_kind;
+	private String food_avg_price;
+	private String food_parking;
 	private String food_write_date;
-	private String food_working;
-	private int food_rest;
+	private String food_working_hours;
+	private String food_holiday;
 	private String food_website;
-	private int food_map;
+	private String food_local_type;
+	private String food_content;
+
+	private int    food_menu_number;
+	private String food_menu_name;
+	private String food_menu_price;
 	
-	private int uNo;
-	// ============================================= getter, setter
-	public int getFood_number() {
-		return food_number;
+	private String  LType;
+	
+	
+	//========================================== getter.setter 	
+	public int getfNo() {
+		return fNo;
 	}
-	public void setFood_number(int food_number) {
-		this.food_number = food_number;
+	public void setfNo(int fNo) {
+		this.fNo = fNo;
 	}
-	public String getFood_title() {
-		return food_title;
+	public String getFood_name() {
+		return food_name;
 	}
-	public void setFood_title(String food_title) {
-		this.food_title = food_title;
+	public void setFood_name(String food_name) {
+		this.food_name = food_name;
 	}
-	public double getFood_grade() {
-		return food_grade;
+	public String getFood_address() {
+		return food_address;
 	}
-	public void setFood_grade(double food_grade) {
-		this.food_grade = food_grade;
+	public void setFood_address(String food_address) {
+		this.food_address = food_address;
 	}
-	public String getFood_adress() {
-		return food_adress;
+	public String getFood_phone() {
+		return food_phone;
 	}
-	public void setFood_adress(String food_adress) {
-		this.food_adress = food_adress;
+	public void setFood_phone(String food_phone) {
+		this.food_phone = food_phone;
 	}
-	public int getFood_call() {
-		return food_call;
+	public String getFood_food_kind() {
+		return food_food_kind;
 	}
-	public void setFood_call(int food_call) {
-		this.food_call = food_call;
+	public void setFood_food_kind(String food_food_kind) {
+		this.food_food_kind = food_food_kind;
 	}
-	public String getFood_foodkind() {
-		return food_foodkind;
+	public String getFood_avg_price() {
+		return food_avg_price;
 	}
-	public void setFood_foodkind(String food_foodkind) {
-		this.food_foodkind = food_foodkind;
+	public void setFood_avg_price(String food_avg_price) {
+		this.food_avg_price = food_avg_price;
 	}
-	public int getFood_money() {
-		return food_money;
+	public String getFood_parking() {
+		return food_parking;
 	}
-	public void setFood_money(int food_money) {
-		this.food_money = food_money;
-	}
-	public String getFood_car() {
-		return food_car;
-	}
-	public void setFood_car(String food_car) {
-		this.food_car = food_car;
+	public void setFood_parking(String food_parking) {
+		this.food_parking = food_parking;
 	}
 	public String getFood_write_date() {
 		return food_write_date;
@@ -73,17 +75,17 @@ public class FoodVO
 	public void setFood_write_date(String food_write_date) {
 		this.food_write_date = food_write_date;
 	}
-	public String getFood_working() {
-		return food_working;
+	public String getFood_working_hours() {
+		return food_working_hours;
 	}
-	public void setFood_working(String food_working) {
-		this.food_working = food_working;
+	public void setFood_working_hours(String food_working_hours) {
+		this.food_working_hours = food_working_hours;
 	}
-	public int getFood_rest() {
-		return food_rest;
+	public String getFood_holiday() {
+		return food_holiday;
 	}
-	public void setFood_rest(int food_rest) {
-		this.food_rest = food_rest;
+	public void setFood_holiday(String food_holiday) {
+		this.food_holiday = food_holiday;
 	}
 	public String getFood_website() {
 		return food_website;
@@ -91,26 +93,59 @@ public class FoodVO
 	public void setFood_website(String food_website) {
 		this.food_website = food_website;
 	}
-	public int getFood_map() {
-		return food_map;
+	public String getFood_local_type() {
+		return food_local_type;
 	}
-	public void setFood_map(int food_map) {
-		this.food_map = food_map;
+	public void setFood_local_type(String food_local_type) {
+		this.food_local_type = food_local_type;
+	}
+	public String getFood_content() {
+		return food_content;
+	}
+	public void setFood_content(String food_content) {
+		this.food_content = food_content;
 	}
 	
-	public int getuNo() {
-		return uNo;
+	
+	public int getFood_menu_number() {
+		return food_menu_number;
 	}
-	public void setuNo(int uNo) {
-		this.uNo = uNo;
+	public void setFood_menu_number(int food_menu_number) {
+		this.food_menu_number = food_menu_number;
 	}
+	
+	public String getFood_menu_name() {
+		return food_menu_name;
+	}
+	public void setFood_menu_name(String food_menu_name) {
+		this.food_menu_name = food_menu_name;
+	}
+	public String getFood_menu_price() {
+		return food_menu_price;
+	}
+	public void setFood_menu_price(String food_menu_price) {
+		this.food_menu_price = food_menu_price;
+	}
+
+	
+	public String getLType() {
+		return LType;
+	}
+	public void setLType(String lType) {
+		LType = lType;
+	}
+	
+	
+	//======================================================== toString
 	@Override
 	public String toString() {
-		return "FoodVO [food_number=" + food_number + ", food_title=" + food_title + ", food_grade=" + food_grade
-				+ ", food_adress=" + food_adress + ", food_call=" + food_call + ", food_foodkind=" + food_foodkind
-				+ ", food_money=" + food_money + ", food_car=" + food_car + ", food_write_date=" + food_write_date
-				+ ", food_working=" + food_working + ", food_rest=" + food_rest + ", food_website=" + food_website
-				+ ", food_map=" + food_map + ", uNo=" + uNo + "]";
+		return "FoodVO [fNo=" + fNo + ", food_name=" + food_name + ", food_address=" + food_address + ", food_phone="
+				+ food_phone + ", food_food_kind=" + food_food_kind + ", food_avg_price=" + food_avg_price
+				+ ", food_parking=" + food_parking + ", food_write_date=" + food_write_date + ", food_working_hours="
+				+ food_working_hours + ", food_holiday=" + food_holiday + ", food_website=" + food_website
+				+ ", food_local_type=" + food_local_type + ", food_content=" + food_content + ", food_menu_number="
+				+ food_menu_number + ", food_menu_name=" + food_menu_name + ", food_menu_price=" + food_menu_price
+				+ ", LType=" + LType + "]";
 	}
 	
 	

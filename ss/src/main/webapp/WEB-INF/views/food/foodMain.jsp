@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="../include/header.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+
 
 <!-- 게시판 타입 선택 ========================================================================= -->
 <%
@@ -22,6 +24,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>맛집 메인</title>
+	<script src="<%=request.getContextPath()%>/js/jquery-3.6.3.min.js"></script>
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -192,6 +196,16 @@
 		<div style="font-size: 10pt; color:silver;">“맛있는 여행으로 즐거운 추억을 만들어보세요!”</div>
 	</div>
 	
+	<!-- form 태그  -->
+<%-- 	<form action="foodMain.do" method="get">
+		<select name="searchType">
+			<option value="food_name" <c:if test="${param.searchType eq 'food_name'}">selected</c:if>>식당이름 </option>
+			<option value="food_address" <c:if test="${param.searchType eq 'food_address'}">selected</c:if>>식당주소 </option>
+		</select>
+		<input type="text" name="searchValue" size="30" value="${param.searchValue }">
+		<button>검색</button>
+	</form>
+	 --%>
 	<div class="container-fluid offset-2" style="max-width: 1280px;">
 		<div class="row " >
 		
@@ -322,50 +336,44 @@
 			
 			<div class="tab-content container-fluid ml-2 col-md-8" >
 <!-- 메인 부문S ======================================================================= -->
-				<%
-					for(int i = 0; i < 5; i++)
-					{ 
-				%>
-						<div class="container tab-pane fade show p-0 active" style="margin-right: 18rem;">
-							<div class="restaurant-item" >
+				<c:forEach items="${list}" var="food" begin="0" end="10">
+				
+					<div class="container tab-pane fade show p-0 active" style="margin-right: 18rem;">
+						<div class="restaurant-item" >
+						
+							<!-- 이미지 -->
+							<div class="restaurant-thumbnail">
+								<img src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
+							</div>
 							
-								<div class="restaurant-thumbnail">
-									<img src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
-								</div>
+							<div class="restaurant-info">
+								<h2 class="restaurant-title"><span>${food.fNo}. </span><span>${food.food_name}</span><!-- <span class="mirai">4.7</span> -->
+								</h2>
+								<div class="user-info">
 								
-								<div class="restaurant-info">
-									<h2 class="restaurant-title"><span> 5. 작은피자집 </span><span class="mirai">4.7</span>
-									</h2>
-									<div class="user-info">
-									
-										<div class="user-thumbnail">
-											<img src="https://slp-
-											statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?
-											width=580&format=webp" alt="사용자 썸네일">
-										</div>
-										
-										<div class="user-nickname" style = "width:375px;">세이콩</div>
-										<div class="button-container">
-	 											<button class="restaurant-favorite-btn" onclick="handleFavoriteButtonClick(this);">❤</button>
-	 											<p align="center"  style="font-size: 15px; color: #ff1493;">좋아요</p>
-										</div>
+									<div class="user-thumbnail">
+										<img src="https://slp-
+										statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?
+										width=580&format=webp" alt="사용자 썸네일">
 									</div>
 									
-									<p class="restaurant-address" style="color: silver;">서울특별시 강남구 논현로153길 24 끌레르빌 1F</p>
-									<p class="restaurant-description">맛집에 대한 설명 내용이 여기에 들어갑니다. 설명 글이
-									긴 경우에는 3줄까지만 보이고 더보기를 눌러서 전체 내용을 확인할 수 있습니다. 설명에 대한 더
-									많은 정보를 보고 싶다면 더보기를 클릭하세요.</p>
-									<p class="restaurant-address" style="color: silver; text-align:right;">
-									<a href="<%=request.getContextPath()%>/food/foodView.do">미라이 더보기></a></p>
+									<div class="user-nickname" style = "width:375px;">세이콩</div>
+									<div class="button-container">
+ 											<button class="restaurant-favorite-btn" onclick="handleFavoriteButtonClick(this);">❤</button>
+ 											<p align="center"  style="font-size: 15px; color: #ff1493;">좋아요</p>
+									</div>
 								</div>
+								
+								<p class="restaurant-address" style="color: silver;">${food.food_address}</p>
+								<p class="restaurant-description">${food.food_content}</p>
+								<p class="restaurant-address" style="color: silver; text-align:right;">
+								<a href="<%=request.getContextPath()%>/food/foodView.do?fNo=${food.fNo}">${food.food_name} 더보기></a></p>
 							</div>
 						</div>
-				<% 
-					}
-				%>				
-				
+					</div>
+				</c:forEach>			
+								
 <!-- 페이징S ----------------------------------------------------------------------- -->
-
 
 	 			<nav aria-label="Page navigation example">
 					<ul class="pagination justify-content-center">
@@ -396,30 +404,22 @@
 					<div style="text-align: center;">
 						<!-- <button class="container1_CancleButton" type="submit">식당 등록하기</button> -->
 						<%-- <c:if test="${ not empty login}"> --%>
-					<button class="container1_CancleButton"><a href="<%=request.getContextPath()%>/food/foodMainWrite.do">식당 등록하기</a></button>
+					<button class="container1_CancleButton"><a href="<%=request.getContextPath()%>/food/foodMainWrite.do?type=<%= type %>">식당 등록하기</a></button>
 						<%-- </c:if> --%>
 					</div>
 					<br>
 				</nav>
-<!-- 메인 부문E ======================================================================= -->
 			</div>
-				
-				
+<!-- 지도 표시되는 부분  ===============================================================================-->	
 
-
-		<!-- 	<div class="float-right ">
-				<button type="button" class="btn btn-outline-secondary" style="--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: .15rem;">
-				글쓰기 
-				</button>
-			</div> -->
 			<div style="color:#ff7f00; height:80px; font-size:18pt; border-top: 1px solid #ddd; display: flex; align-items: center; /* justify-content: center; */">
 			  리스트 지도
 			</div>
 			
-<!-- ========================  지도 표시되는 부분  ==========================================-->			
 			<div id="map" style="width:100%;height:400px; margin:0 auto;"></div>
 		</div>
 	</div>
+	
 <!-- ========================  카카오지도api (8080포트설정하기) ==========================================-->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57"></script>
 	<script>
@@ -432,18 +432,18 @@
 
 		var map = new kakao.maps.Map(container, options);
 		
-		// 마커가 표시될 위치입니다 
+		// 마커가 표시될 위치
 		var markerPosition  = new kakao.maps.LatLng(37.521202058933774, 127.02618079647772); 
 		
-		// 마커를 생성합니다
+		// 마커를 생성
 		var marker = new kakao.maps.Marker({
 		    position: markerPosition
 		});
 
-		// 마커가 지도 위에 표시되도록 설정합니다
+		// 마커가 지도 위에 표시되도록 설정
 		marker.setMap(map);
 
-		// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+		// 아래 코드는 지도 위의 마커를 제거하는 코드 
 		// marker.setMap(null);    
 	</script>
 	

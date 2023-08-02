@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ss.demo.mapper.foodMapper">
+	<!-- 파라미터 객체의 필드값을 쿼리에 대입할때는 $기호 말고 #기호를 반드시 써야 합니다. -->
+
+	 <select id="selectAll" resultType="foodVO">
+		SELECT *
+		  FROM food 
+	  	 WHERE 1=1
+		<if test='searchType != null and searchType.equals("food_name")'>
+		   AND title like concat('%', #{searchValue}, '%')
+		</if>
+		
+		<if test='type != null and !type.equals("TT")'>
+			AND LType = #{type}
+		</if>
+	</select> 
+
+
+	 <select id="selectAllMenu" resultType="foodVO">
+		SELECT *
+		  FROM food_menu
+		  WHERE fNo = #{fNo}
+	</select> 
+	
+		
+		<!--  WHERE 1=1
+		<if test='searchType != null and searchType.equals("food_name")'>
+		   AND title like concat('%', #{searchValue}, '%')
+		</if>
+		<if test='searchType != null and searchType.equals("food_address")'>
+		   AND id like concat('%', #{searchValue}, '%')
+		</if> -->
+	
+	<!-- @글 등록@  -->
+	<insert id="insert" parameterType="foodVO">
+		INSERT INTO
+		food(
+			food_name
+			,food_address
+			,food_phone
+			,food_food_kind
+			,food_avg_price
+			,food_write_date
+			,food_working_hours
+			,food_holiday
+			,food_website
+			,food_content
+			,LType
+		)VALUES(
+			#{food_name}
+			,#{food_address}
+			,#{food_phone}
+			,#{food_food_kind}
+			,#{food_avg_price}
+			,#{food_write_date}
+			,#{food_working_hours}
+			,#{food_holiday}
+			,#{food_website}
+			,#{food_content}
+			,#{LType}
+		)
+		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
+			SELECT MAX(fNo)
+		  	   FROM food
+		</selectKey>
+	</insert>
+	
+	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
+		SELECT *
+		  FROM food
+		 WHERE fno = #{fno}
+	</select>
+	
+	
+	
+	<!-- @메뉴 등록@ -->
+	<!-- =================================================================== -->
+	
+	<insert id="insertMenu" parameterType="foodVO">
+		INSERT INTO
+		food_menu(
+			fNo
+			,food_menu_name
+			,food_menu_price
+		)VALUES(
+			#{fNo}
+			,#{food_menu_name}
+			,#{food_menu_price}
+		)
+		<selectKey order="AFTER" keyProperty="food_menu_number" resultType="int">
+			SELECT MAX(food_menu_number)
+		  	   FROM food_menu
+		</selectKey> 
+	</insert>
+	
+	<!-- <select id="selectOneByFood_menu_number" resultType="foodVO" parameterType="int" >
+		SELECT *
+		  FROM food_menu
+		 WHERE food_menu_number = #{food_menu_number}
+	</select>  -->
+	
+	<!-- =================================================================== -->
+	
+	
+	
+	
+	
+	<!-- @사진 등록@  -->
+	<insert id="insertImg" parameterType="attachVO">
+		INSERT INTO
+		food(
+			food_attach_number 
+			,food_attach_logical_name 
+			,food_attach_physical_name 
+		)VALUES(
+			#{food_attach_number }
+			,#{food_attach_logical_name}
+			,#{food_attach_physical_name}
+		)
+		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
+			SELECT MAX(fNo)
+		  	   FROM food
+		</selectKey>
+	</insert>
+	
+</mapper>
