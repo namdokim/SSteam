@@ -1,6 +1,7 @@
 package com.ss.demo.domain;
 
 public class SearchVO {
+	
 	private String searchType;
 	private String searchValue;
 	private String type;
