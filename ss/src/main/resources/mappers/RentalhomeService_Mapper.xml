@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- persistance의 UserService_Mapper에서 메소드를 찾아서 매핑 -->
+<!--  -->
+<mapper namespace="com.ss.demo.dao.RentalhomeService_Mapper">
+<!-- id는 메소드이름 parameterType은 매개변수 타입  (별칭 설정은 mybatis_config에서 한다)-->
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="rentalhomeVO">
+	<selectKey resultType="int" keyProperty="rentalhome_idx" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+		insert into rentalhome (
+			uNo,
+			name, 
+			address, 
+			info, 
+			type, 
+			inPool_yn, 
+			outPool_yn,
+			parking_yn,
+			pickup_yn,
+			wifi_yn,
+			beach_yn,
+			bbq_yn,
+			breakfast_yn,
+			animal_yn,
+			checkIn,
+			checkOut,
+			checkIn_info,
+			breakfast_price,
+			breakfast_open,
+			breakfast_close,
+			breakfast_day ) 
+		values (
+			#{uNo},
+			#{name},
+			#{address},
+			#{info},
+			#{type},
+			#{inPool_yn},
+			#{outPool_yn},
+			#{parking_yn},
+			#{pickup_yn},
+			#{wifi_yn},
+			#{beach_yn},
+			#{bbq_yn},
+			#{breakfast_yn},
+			#{animal_yn},
+			#{checkIn},
+			#{checkOut},
+			#{checkIn_info},
+			#{breakfast_price},
+			#{breakfast_open},
+			#{breakfast_close},
+			#{breakfast_day} )
+	</insert>
+
+	<insert id="insert_file" parameterType="rentalhomeVO">
+		INSERT INTO rentalhome_attach(
+			rentalhome_idx,
+			logical_name,
+			physical_name
+	<if test='thumbnail.equals("Y")'>
+			,thumbnail
+	</if>
+		) VALUES (
+			#{rentalhome_idx},
+			#{logical_name},
+			#{physical_name}
+	<if test='thumbnail.equals("Y")'>
+			,#{thumbnail}
+	</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="rentalhomeVO">
+		UPDATE rentalhome SET 
+			name = #{name}, 
+			address = #{address}, 
+			info = #{info}, 
+			type = #{type}, 
+			inPool_yn = #{inPool_yn}, 
+			outPool_yn = #{outPool_yn},
+			parking_yn = #{parking_yn},
+			pickup_yn = #{pickup_yn},
+			wifi_yn = #{wifi_yn},
+			beach_yn = #{beach_yn},
+			bbq_yn = #{bbq_yn},
+			breakfast_yn = #{breakfast_yn},
+			animal_yn = #{animal_yn},
+			checkIn = #{checkIn},
+			checkOut = #{checkOut},
+			checkIn_info = #{checkIn_info},
+			breakfast_price = #{breakfast_price},
+			breakfast_open = #{breakfast_open},
+			breakfast_close = #{breakfast_close},
+			breakfast_day = #{breakfast_day} 
+		WHERE 
+			rentalhome_idx = #{rentalhome_idx}
+	</update>
+	
+	<select id="selectAll" resultType="rentalhomeVO">
+		SELECT * 
+		FROM rentalhome S LEFT OUTER JOIN (select * from rentalhome_attach where thumbnail = 'Y') D
+		ON S.rentalhome_idx = D.rentalhome_idx
+		ORDER BY s.rentalhome_idx desc
+	</select>
+	
+	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
+		select * from rentalhome where rentalhome_idx = #{rentalhome_idx}
+	</select>
+
+</mapper>

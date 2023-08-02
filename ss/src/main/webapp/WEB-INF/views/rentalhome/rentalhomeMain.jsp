@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<%
+	if(session.getAttribute("login") != null)
+	{
+		System.out.println("로그인 됨");
+	}
+%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -44,6 +50,11 @@
 	}
 	.hotel {
 		background-image: url(../img/hotel.jpg);
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	.image {
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -294,7 +305,7 @@ inputRight.addEventListener("input", setRightValue);
 			</div>
 			<div style="width:100%; margin:30px 0px; border-top:1px solid #f2f2f2;"></div>
 			<div style="width:100%;">
-				<div style="text-align:left;font-size:12pt; font-weight:bold;">숙소 종류</div>
+				<div style="text-align:left;font-size:12pt; font-weight:bold;">숙소 내 시설</div>
 				<div class="check" style="margin:20px 0px; width:100%;text-align:left;">
 					<input type="checkbox" value="motel"><span style="font-size:10pt; color:#0f294d;">내부 수영장</span><br>
 					<input type="checkbox" value="hotel"><span style="font-size:10pt; color:#0f294d;">야외 수영장</span><br>
@@ -309,27 +320,41 @@ inputRight.addEventListener("input", setRightValue);
 			</div>
 		</div>	
 	</div>
-	<div style="width:900px; display:inline-block; margin:20px 0px 50px 0px; vertical-align:top;">
+	<div style="width:900px; display:inline-block; margin:10px 0px 50px 0px; vertical-align:top;">
 		
 		<div style="width:900px; display:inline-block; vertical-align:top;">
 			<%
-				for(int i=0; i<10; i++){
+				//for(int i=0; i<10; i++){
 			%>
-				<div class="view" style="width:100%; height:200px; display:inline-block; margin-bottom:10px;vertical-align:top; position:relative;">
-					<div class="hotel"style="cursor:pointer;width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do'">
-					</div>
+			<c:forEach items="${list}" var="list">
+				<div class="view" style="width:100%; height:200px; display:inline-block; margin:10px 0px;vertical-align:top; position:relative;">
+					<c:choose>
+						<c:when test="${empty list.logical_name}">
+							<div class="hotel" style="cursor:pointer;width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+							</div>
+						</c:when>
+						<c:otherwise>
+							<img src="<%=request.getContextPath() %>/resources/uploadFiles/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+						</c:otherwise>
+					</c:choose>
+					
 					<div style="width:550px; height:180px; display:inline-block; position:absolute; top:10px; left:220px; text-align:left;">
 						<div style="width:100%; text-align:left; display:inline-block; margin:5px;">
-							<a style="text-decoration:none; color:black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do">
-								<span style="font-size:13pt; font-weight:bold;">페어필드 바이 메리어트 서울 (Fairfield by Marriott Seoul)</span>
+							<a style="text-decoration:none; color:black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}">
+<!-- 								<span style="font-size:13pt; font-weight:bold;">페어필드 바이 메리어트 서울 (Fairfield by Marriott Seoul)</span> -->
+								<span style="font-size:13pt; font-weight:bold;">${list.name}</span>
 							</a>
 						</div>
-						<div style="width:450px; height:200px; text-align:left; display:inline-block; margin:5px;">
+						<div style="width:450px; height:120px; text-align:left; display:inline-block; margin:5px;">
 							<span style="font-size:10pt; padding:2px 7px; border-radius:0px 5px 5px 10px;font-weight:bold; background-color:#333fff; color:white;">8.1<span style="color:#e2e2e2;">/10</span></span>
 							<span style="font-size:10pt; color:#686868;">이용자 리뷰 113개</span><br>
-							<span style="font-size:10pt; color:#686868;">대한민국 서울특별시 영등포구 경인로 870</span>
+<!-- 							<span style="font-size:10pt; color:#686868;">대한민국 서울특별시 영등포구 경인로 870</span> -->
+							<span style="font-size:10pt; color:#686868;">${list.address}</span>
 							<span style="font-size:10pt; color:#686868;">현재 위치에서 134km</span>
 						</div>
+					</div>
+					<div style="width:100px; text-align:center; display:inline-block; position:absolute; top:60px; left:775px;">
+					<span style="color:#0f294d; font-weight:bold;">62</span>
 					</div>
 					<div class="like" style="width:50px; height:50px; text-align:center; display:inline-block; position:absolute; top:15px; left:800px;">
 					</div>
@@ -340,11 +365,12 @@ inputRight.addEventListener("input", setRightValue);
 						<span style="font-size:18pt; font-weight:bold;">15,000원</span>
 					</div>
 				</div>
+			</c:forEach>
 			<%
-				}
+				//}
 			%>
-			<div style="width:100%; text-align:right; margin:20px 0px;" onclick="location.href='rentalhomeWrite.do'">
-				<span style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
+			<div style="width:100%; text-align:right; margin:20px 0px;">
+				<span onclick="location.href='rentalhomeWrite.do'" style="padding:12px 20px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
 			</div>
 		</div>
 	</div>
