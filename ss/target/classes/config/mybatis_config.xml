@@ -6,9 +6,22 @@
 <typeAliases>
 	<!-- 회원 정보 -->
 	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
+	<!-- rentalhome -->
+	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
+	<!-- 게시글 -->
+	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
+	<!-- food -->
+	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
+	<!-- <typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
+	<!-- Event -->
+	<typeAlias type="com.ss.demo.domain.EventVO" alias="ev" /> 
+	<typeAlias type="com.ss.demo.domain.EventReviewVO" alias="erv" />
+	
+	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
 </typeAliases>
-	<!-- 테스트 -->
-
-
+<!-- 
+<mappers>
+	<mapper resource = "../mappers/Community_Mapper.xml" />
+</mappers> -->
 
 </configuration>
