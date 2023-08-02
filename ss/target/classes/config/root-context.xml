@@ -45,30 +45,6 @@
 		<!-- 위에 sqlSessionFactory를 참조해서 프레임워크 객체 sqlSession을 만들고 사용 -->
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
 	</bean>
-	
-	<!-- 메일 인증용 메일 보내기 -->
-	<!-- 비밀번호 ${email.password}로 우선 감추기-->
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="comfoop007@gmail.com" />
-		<property name="password" value="${email.password}" />
-		<property name="javaMailProperties">
-		<props>
-			<prop key="mail.transport.protocol">smtp</prop>
-			<prop key="mail.smtp.auth">true</prop>
-			<!-- gmail의 경우 보안문제 업데이트로 인해 SSLSocketFactory를 추가해야 smtp 사용 가능. -->
-			<prop key="mail.smtp.starttls.enable">true</prop>
-			<prop key="mail.debug">true</prop>
-			<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
-			<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
-			<prop key="mail.smtp.ssl.enable">false</prop>
-			<prop key="mail.smtp.starttls.enable">true</prop>
-			<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
-		</props>
-		</property>
-	</bean>
-	
  	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>
 
 	
