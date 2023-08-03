@@ -150,7 +150,7 @@ public class UserController
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return "redirect:index.do";
+		return "redirect:/";
 	}
 	
 	//유저 닉네임 중복체크

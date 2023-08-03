@@ -572,11 +572,6 @@ $(function(){
 			console.log(uNickDup);
 			$("#uNcik").val("").focus();
 			return false;
-		}else if( uAdds == null || $("#uAdds").val() == "")
-		{
-			alert("주소를 써주세요");
-			$("#uAdds").val("").focus();
-			return false;
 		}else
 		{
 			if( uIdDup == true && uNickDup == true && uPwDup == true)

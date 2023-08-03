@@ -6,7 +6,7 @@
 <!-- id는 메소드이름 parameterType은 매개변수 타입  (별칭 설정은 mybatis_config에서 한다)-->
 	<!-- 회원가입 -->
 	<insert id="userInsert" parameterType="uv">
-		insert into user(uId, uPw, uName, uNick, uPhone, uAdds) values ( #{uId}, #{uPw}, #{uName}, #{uNick}, #{uPhone}, #{uAdds});
+		insert into user(uId, uPw, uName, uNick, uPhone) values ( #{uId}, #{uPw}, #{uName}, #{uNick}, #{uPhone});
 	</insert>
 	<!-- 추후 암호화된 비밀번호도 조건으로 걸어준다 -->
 	<!-- 로그인  -->

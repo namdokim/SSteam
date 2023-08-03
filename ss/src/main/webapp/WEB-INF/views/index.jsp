@@ -16,10 +16,11 @@
 	</style>
 	<!-- 전광판 점보트론 -->
 	<style type="text/css">
+		/* 깜빡임 효과를 위해서  */
 		@keyframes blink-effect {
 		50% { opacity: 0; }
 		}
-		.jumbotron {
+		.notice {
 		/* background-image : url('img/jumbotronBackground.jpg'); */
 		background-color: black;
 		background-position: center;
@@ -28,12 +29,12 @@
 		text-shadow: black 0.2em 0.2em 0.2em;
 		color : red;
 		}
-		.jumbotoncontainer{
+		.jumbotroncontainer{
 			margin-left: 5%;
 			margin-right: 5%;
 		}
 		
-		.text-center{
+		.notice-text-center{
 		animation: blink-effect 1s step-end infinite;
 		}
 	</style>
@@ -42,9 +43,14 @@
 	
 	
 	<!-- 전광판 점보 트론  -->
-<div class="jumbotoncontainer"> <!--어떤 내용이 담기는 하나의 공간, 그릇-->
-	<div class="jumbotron">
-		<span class="text-center"> 김삿갓 삿갓 삿갓 삿갓</span>
+<div class="jumbotroncontainer"> <!--어떤 내용이 담기는 하나의 공간, 그릇-->
+	<div class="notice">
+		<c:if test="${empty login}">
+		<span class="notice-text-center">로그인을 해주세요 로그인이 안되잇어요</span>
+		</c:if>
+		<c:if test="${not empty login}">
+		<span class="notice-text-center">${login.uName}님 환영합니다</span>
+		</c:if>
 			<!-- <p class="text-center"> 코딩 부스터는 IT 교육 사이트입니다. 다양한 IT 관련 무료 및 유료 강의가 존재합니다.</p>
 			<p class="text-center">
 				<a class="bit btn-primary btn-lg" href="tt" role="button">강의 들으러 가기</a>
