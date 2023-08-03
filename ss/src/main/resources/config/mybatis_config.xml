@@ -4,15 +4,22 @@
 <configuration> 
 	
 <typeAliases>
+	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
+	
 	<!-- 회원 정보 -->
 	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
 	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
+	
 	<!-- 게시글 -->
 	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
 	
 	<!-- food -->
 	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
-	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
+	
+	<!-- event -->
+	<typeAlias type="com.ss.demo.domain.EventVO" alias="ev" /> 
+	<typeAlias type="com.ss.demo.domain.EventReviewVO" alias="erv" /> 
+	
 <!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
 </typeAliases>
 <!-- 

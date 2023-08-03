@@ -1,5 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="../include/header.jsp" %>
+<%@page import="com.ss.demo.domain.EventVO"%>
+<%
+// 파라메타로 조회할 게시글 번호를 받는다
+String no = request.getParameter("no");
+
+// 넘어온 게시글 번호가 없으면 메인으로 보낸다
+//if (no == null) { response.sendRedirect("index.jsp"); return; }
+
+// 게시글을 조회하기 위한 객체를 선언한다
+
+EventVO vo = new EventVO();
+
+// 본문에 포함된 엔터문자를 <br>태그로 변경한다
+if (vo.getEvent_content() != null) {
+	vo.setEvent_content(vo.getEvent_content().replace("\n", "<br>"));
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,12 +30,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="/plugin/slick/slick.css"/>
-	<link rel="stylesheet" type="text/css" href="/plugin/slick/slick-theme.css"/>
 	
-	<script type="text/javascript" src="/js/jquery.js"></script>
-	<script type="text/javascript" src="/plugin/slick/slick.js"></script>
 	<script>
 $(document).ready(function() {
   // 초기에 보여질 아이템 개수 설정
@@ -53,12 +66,8 @@ $(document).ready(function() {
   });
 });
 </script>
-	
+
 	<style type="text/css">
-		a {
-			text-decoration: none;
-			color: black;
-		}
 		
 		.carousel-item {	
 			height: 400px; 	
@@ -80,48 +89,60 @@ $(document).ready(function() {
 			width: 100%;
 			height: 100%;
 		}
+		.overflow-hidden {
+		  overflow: hidden;
+		}
 		
 	</style>
 </head>
 <body>
 	
 	
-	<div class="container-fluid offset-2 col-md-8 shadow-sm">
+	<div class="container-fluid offset-2 col-md-8 shadow-sm overflow-hidden" >
 		<!-- 메인 부문 ======================================================================= -->
+	
 		<div class="tab-content ">
-			<div id="myCarousel" class="carousel slide shadow-sm" data-bs-ride="carousel" >
-			  <!-- 캐로셀 1의 인디케이터 -->
-			  <div class="carousel-inner rounded">
-			     <div class="carousel-item">
-					<img class="icon" src="<%=request.getContextPath() %>/static/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			<div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+			  <div class="carousel-inner">
+			    <div class="carousel-item active d-flex">
+			      <!-- 첫 번째 세트의 이미지 -->
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/bed.png" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/bbq.png" alt="아이콘" width="100%" height="100%">
 			    </div>
-			    <div class="carousel-item">
-					<img class="icon" src="<%=request.getContextPath() %>/static/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			    <div class="carousel-item d-flex">
+			      <!-- 두 번째 세트의 이미지 -->
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
 			    </div>
-			    <div class="carousel-item active">			
-				<img class="icon" src="<%=request.getContextPath() %>/static/hotel.jpg" alt="아이콘" width="100%" height="100%">			
+			    <div class="carousel-item  d-flex">
+			      <!-- 세 번째 세트의 이미지 -->
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
+			      <img class="icon d-block w-100" src="<%=request.getContextPath() %>/img/hotel.jpg" alt="아이콘" width="100%" height="100%">
 			    </div>
 			  </div>
-				<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev"  onclick="prevCarousel()">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">이전</span>					
-				</button>
-				<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next" onclick="nextCarousel()">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">다음</span>
-				</button>
-			</div>			
+			  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev" onclick="prevCarousel()">
+			    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			    <span class="visually-hidden">이전</span>					
+			  </button>
+			  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next" onclick="nextCarousel()">
+			    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+			    <span class="visually-hidden">다음</span>
+			  </button>
+			</div>
 		</div>
 		<div class="row">
 		<div class="col text-center my-3 my-md-4">
-			<h1 class="place_name">김제지평선축제</h1>
+			<h1 class="place_name ">${vo.event_title} </h1>
 			<h6 class="preriod">							
 				<span class="local_info mr-1">
-					전라북도 김제시				
+					${vo.event_local}		
 				</span>
 				<span class="date_format">
-					2023. 10. 05				-
-					2023.10. 09
+					${vo.event_start}				-
+					${vo.event_end}			
 					<span class="btn status_eventdate2 text-white p-0 px-2">
 						예정
 					</span>			
@@ -132,36 +153,30 @@ $(document).ready(function() {
 		</div>
 		<nav class="row mb-3 text-center py-2 shadow-sm">
 			<ul class="col-4 ">
-				<button type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading1">
+				<a type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading1">
 					행사정보
-				</button>
+				</a>
 			</ul >
 			<ul class="col-4 border-start">
-				<button type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading2">
+				<a type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading2">
 					리뷰
-				</button>
+				</a>
 			</ul >
 			<ul class="col-4 border-start">
-				<button type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading3">
+				<a type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading3">
 					주변정보
-				</button>
+				</a>
 			</ul>
 		</nav >
 		<div class="col-lg-10 mx-auto ">
 			<div class="lead mb-4">
-			대한민국 명예대표 문화관광축제 중 유일하게 전통농경문화를 주제로 개최하는 김제지평선축제는 우리나라 최고(最古), 최대(最大) 수리시설인 김제 벽골제를 중심으로 진행된다.
-			<br> 
-			광활한 지평선을 무대로 개최되는 대통령배 전국 농악경연대회를 비롯한 다양한 볼거리와 아궁이 쌀밥 짓기, 메뚜기 잡기, 벼 수확 체험 등 각종 농경문화체험프로그램 및 330M 가래떡 뽑기 퍼포먼스, 대형 쌀떡 모자이크 만들기와 같은 이슈 메이킹 프로그램도 현장에서 참여 할 수 있다.
+			${vo.event_content}
 			</div>
 			<div class="lead mb-4">
-			대한민국 명예대표 문화관광축제 중 유일하게 전통농경문화를 주제로 개최하는 김제지평선축제는 우리나라 최고(最古), 최대(最大) 수리시설인 김제 벽골제를 중심으로 진행된다. 
-			<br> 
-			광활한 지평선을 무대로 개최되는 대통령배 전국 농악경연대회를 비롯한 다양한 볼거리와 아궁이 쌀밥 짓기, 메뚜기 잡기, 벼 수확 체험 등 각종 농경문화체험프로그램 및 330M 가래떡 뽑기 퍼포먼스, 대형 쌀떡 모자이크 만들기와 같은 이슈 메이킹 프로그램도 현장에서 참여 할 수 있다.
+			${vo.event_content}
 			</div>
 			<div class="lead mb-4">
-			대한민국 명예대표 문화관광축제 중 유일하게 전통농경문화를 주제로 개최하는 김제지평선축제는 우리나라 최고(最古), 최대(最大) 수리시설인 김제 벽골제를 중심으로 진행된다.
-			<br> 
-			광활한 지평선을 무대로 개최되는 대통령배 전국 농악경연대회를 비롯한 다양한 볼거리와 아궁이 쌀밥 짓기, 메뚜기 잡기, 벼 수확 체험 등 각종 농경문화체험프로그램 및 330M 가래떡 뽑기 퍼포먼스, 대형 쌀떡 모자이크 만들기와 같은 이슈 메이킹 프로그램도 현장에서 참여 할 수 있다.
+			${vo.event_content}
 			</div>
 			<div class="lead mb-4">
 			대한민국 명예대표 문화관광축제 중 유일하게 전통농경문화를 주제로 개최하는 김제지평선축제는 우리나라 최고(最古), 최대(最大) 수리시설인 김제 벽골제를 중심으로 진행된다. 
@@ -176,12 +191,12 @@ $(document).ready(function() {
 		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0" id="scrollspyHeading1" >
 			<h3>행사기간</h3>
 			<br>
-			<h4 style="color:gray">2023.08.22 ~ 2023.09.10</h4>
+			<h4 style="color:gray">${vo.event_start} ~ ${vo.event_end}	</h4>
 		</div>
 		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0"  >
 			<h3>행사장소</h3>
 			<br>
-			<h4 style="color:gray">전라북도 김제시 부량면 신용리 242-2</h4>
+			<h4 style="color:gray">${vo.event_local}</h4>
 		</div>
 		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0"  >
 			<h3>이용요금</h3>
@@ -201,7 +216,7 @@ $(document).ready(function() {
 		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0"  >
 			<h3>전화번호</h3>
 			<br>
-			<h4 style="color:gray">063-540-3172</h4>
+			<h4 style="color:gray">${vo.event_tel}</h4>
 		</div>
 		<div class="detail_info mb-5 expandable-init" style="padding-top: 1px; padding-bottom: 1px;">
 			<p style="text-align: center;"><img src="https://xn--ok0b236bp0a.com/data/editor/2302/20230215130120_b5bea023ec8455e11b3bebf0e2d232b2_swsc.png" class="lazyload lazy img-fluid loaded" style="margin: auto auto;" data-ll-status="loaded"></p>
@@ -236,31 +251,88 @@ $(document).ready(function() {
 			
 		</div>
 		
-		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0" id="scrollspyHeading1" >
+		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0" id="scrollspyHeading2" >
 			<h3>
 			리뷰
 			<div class="row col-md-2 align-items-md-end float-right">
-				<button type="button" class="btn btn-primary nav-link link-button " >
-					리뷰작성
-				</button>
+			    <a href="<%=request.getContextPath()%>/event/eventReviewWrite.do?event_number=${vo.event_number}">
+			        <button type="button" class="btn btn-primary nav-link link-button">
+			           	 리뷰작성
+			        </button>
+			    </a>
 			</div>
-			
 			</h3>
 			<br>
-			<p style="text-align: center;"><span style="color:#000000;"> 첫 리뷰를 작성해 주세요 </span></p>
+			<div class="container review-container">
+				<div class="row">
+					<div class="col-md-1 ">
+			            <h1 class="font-400 ">
+			                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-circle " viewBox="0 0 16 16" color="gray">
+			                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+			                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+			                </svg>
+			            </h1>
+			        </div>
+			        <div class="col-md-11">
+			            <h2><span class="member">설무리</span> <a href="/_publish/review.delete.php?place_id=3062&amp;comment_id=2085&amp;token=169087573864c8b75a42ec6&amp;page=1" onfocus="blur()" class="btn btn-outline-dark btn-sm py-0 ml-3 delbutton" target="_self">리뷰삭제</a></h2>
+			            <div class="review-stars">
+			                <i class="fa fa-star color-yellow1-dark"></i>
+			                <i class="fa fa-star color-yellow1-dark"></i>
+			                <i class="fa fa-star color-yellow1-dark"></i>
+			                <i class="fa fa-star color-yellow1-dark"></i>
+			                <i class="fa fa-star color-gray2-light"></i>
+			            </div>
+			            <p class="bottom-10 py-md-1 Place_ReviewContent">
+			                에어쇼를 관람할 수 있을 정도로 꽤나 큰 축제다
+			            </p>
+					</div>
+				</div>
+			</div>
+			
+<!-- 			<p style="text-align: center;"><span style="color:#000000;"> 첫 리뷰를 작성해 주세요 </span></p> -->
 		</div>
 		<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0" id="scrollspyHeading1" >
 			<p class="ititle">위치안내</p>
 			<br>
-			<div id="static_map" style="width: 100%; height: 40vh; overflow: hidden; background: url(&quot;https://t1.daumcdn.net/mapjsapi/images/bg_tile.png&quot;);">
-				<a target="_blank" href="http://map.daum.net?mapJson=%7B%22mapCenterX%22%3A466560%2C%22mapCenterY%22%3A626605%2C%22mapLevel%22%3A8%2C%22coordinate%22%3A%22wcongnamul%22%2C%22map_type%22%3A%22TYPE_MAP%22%2C%22map_hybrid%22%3A%22false%22%2C%22markInfo%22%3A%5B%7B%22coordinate%22%3A%22wcongnamul%22%2C%22x%22%3A466638.7250002948%2C%22y%22%3A626611.2249906734%7D%2C%7B%22coordinate%22%3A%22wcongnamul%22%2C%22x%22%3A466638.7250002948%2C%22y%22%3A626611.2249906734%2C%22content%22%3A%22%EA%B9%80%EC%A0%9C%EC%A7%80%ED%8F%89%EC%84%A0%EC%B6%95%EC%A0%9C%22%7D%5D%7D"><img src="https://spi.maps.daum.net/map2/map/imageservice?IW=1110&amp;IH=433&amp;MX=466560&amp;MY=626605&amp;SCALE=80&amp;CX=466638&amp;CY=626611&amp;CX=466638&amp;CY=626611&amp;TX=466638&amp;TY=631891&amp;TEXT=%EA%B9%80%EC%A0%9C%EC%A7%80%ED%8F%89%EC%84%A0%EC%B6%95%EC%A0%9C&amp;service=open" 
-				style="border: 0px; width: 1110px; height: 433px;" title="">
-				</a>
-			</div>
+			
+			<div id="map" style="width: 100%; height: 40vh; overflow: hidden;"></div>
+			<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services,clusterer"></script>
+			<script>
+				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+				    mapOption = { 
+				        center: new kakao.maps.LatLng(35.75479164366817 , 126.8537350106012), // 지도의 중심좌표
+				        level: 7 // 지도의 확대 레벨
+				    };
+				
+				var map = new kakao.maps.Map(mapContainer, mapOption);
+				
+				// 마커가 표시될 위치입니다 
+				var markerPosition  = new kakao.maps.LatLng(35.75479164366817 , 126.8537350106012); 
+				
+				// 마커를 생성합니다
+				var marker = new kakao.maps.Marker({
+				    position: markerPosition
+				});
+				
+				// 마커가 지도 위에 표시되도록 설정합니다
+				marker.setMap(map);
+				
+				var iwContent = '<div style="padding:5px;">지평선 축제 <br><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+				    iwPosition = new kakao.maps.LatLng(35.75479164366817 , 126.8537350106012); //인포윈도우 표시 위치입니다
+				
+				// 인포윈도우를 생성합니다
+				var infowindow = new kakao.maps.InfoWindow({
+				    position : iwPosition, 
+				    content : iwContent 
+				});
+				  
+				// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+				infowindow.open(map, marker); 
+			</script>
 		</div>
 		
 		<div class="row">
-			<div class="col-12 col-md-6">
+			<div class="col-12 col-md-6" id="scrollspyHeading3">
 			<p class="ititle1 mt-3 my-md-4">주변 음식</p>					
 				<div class="double-slider-hold-arround owl-carousel owl-no-dots visible-slider-medium owl-loaded owl-drag">
 					<div class="owl-stage-outer">
@@ -303,6 +375,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 		</div>	
+	
 	</div>
 			<!-- 메인 부문 ======================================================================= -->
 		

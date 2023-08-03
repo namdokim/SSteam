@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- persistance의 UserService_Mapper에서 메소드를 찾아서 매핑 -->
+<!--  -->
+<mapper namespace="com.ss.demo.persistence.EventService_Mapper">
+<!-- id는 메소드이름 parameterType은 매개변수 타입  (별칭 설정은 mybatis_config에서 한다)-->
+	<!-- 회원가입 -->
+	<insert id="EventInsert" parameterType="ev">
+		insert into Event_index( event_title, event_content,uNo,event_tel,event_start,event_end,event_local,LType) 
+		 
+		 values ( #{event_title}, #{event_content},#{uNo},#{event_tel},#{event_start},#{event_end},#{event_local},#{LType} );
+	</insert> 
+
+	<insert id="EventReviewInsert" parameterType="erv">
+		insert into event_review_list(comment_title,comment_number,event_number,comment_content,write_date,Ratio,uNo) 
+		 
+		 values (  #{comment_title},#{comment_number}, #{event_number},#{comment_content},#{write_date},#{Ratio},#{uNo});
+	</insert> 
+	
+	<select id="selectAll" resultType="ev" parameterType="searchVO">
+		SELECT *
+		  FROM event_index
+		 WHERE 1=1
+		<if test='searchType != null and searchType.equals("event_title")'>
+		   AND title like concat('%', #{searchValue}, '%')
+		</if>
+		
+		<if test='type != null and !type.equals("TT")'>
+			AND LType = #{type}
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectOneByevent_number" resultType="ev" parameterType="int" >
+		SELECT *
+		  FROM event_index
+		 WHERE event_number = #{event_number}
+	</select>
+	<update id="update" parameterType="ev">
+		UPDATE event_index
+		   SET event_title = #{event_title} <!-- boardVO.getTitle() -->
+		     , event_content = #{event_content}
+		 WHERE event_number = #{event_number}
+	</update>
+	
+	<insert id="insert" parameterType="ev">
+		INSERT INTO
+		event_index(
+			 event_title
+			,event_content
+			,uNo
+		)VALUES(
+			 #{event_title}
+			,#{event_content}
+			,#{uNo}
+		)
+		<selectKey order="AFTER" keyProperty="event_number" resultType="int">
+			SELECT MAX(event_number)
+		  	   FROM event_index
+		</selectKey>
+	</insert>
+	
+	
+	<insert id="Reviewinsert" parameterType="erv">
+		INSERT INTO
+		event_review_list(
+			 comment_title
+			,comment_number
+			,comment_content
+			,Ratio
+		)VALUES(
+			 #{comment_title}
+			,#{comment_number}
+			,#{comment_content}
+			,#{Ratio}
+		)
+
+	</insert>
+</mapper>
