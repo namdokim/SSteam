@@ -15,6 +15,7 @@ import com.ss.demo.domain.SearchVO;
 @Service
 public class FoodServiceImpl implements FoodService {
 
+	
 	//============================ @Autowired foodDAO
 	@Autowired
 	private FoodDAO foodDAO;
@@ -44,6 +45,17 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public List<FoodVO> listMenu(int fNo) {
 		return foodDAO.listMenu(fNo);
+	}
+
+	//============================== insert Img()
+	@Override
+	public int insert_file(FoodVO vo) {
+		return foodDAO.insert_file(vo);
+	}
+
+	@Override
+	public int update(FoodVO vo) {
+		return foodDAO.update(vo);
 	}
 
 

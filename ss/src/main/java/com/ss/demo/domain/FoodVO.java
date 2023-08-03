@@ -4,9 +4,14 @@ import java.util.Arrays;
 
 public class FoodVO 
 { 
-	private int    fNo;
+	//-------------- 맛집 고유번호 
+	private int fNo;
 	
-	private String food_name;
+	//-------------- 회원번호 
+	private int uNo;						
+	
+	
+	private String food_name;					// food 관련 컬럼 (식당등록) 
 	private String food_address;
 	private String food_phone;
 	private String food_food_kind;
@@ -23,10 +28,20 @@ public class FoodVO
 	private String food_menu_name;
 	private String food_menu_price;
 	
+	
+	//-------------- 지역선택 
 	private String  LType;
 	
 	
-	//========================================== getter.setter 	
+	//-------------- 첨부파일 
+	private String food_attach_logical_name;	// 사용자가 올린 파일 이름
+	private String food_attach_physical_name;	// 로컬에 저장된 파일 이름
+	private String thumbnail;					// 썸네일 Y, N
+	
+	
+	
+	
+	//========================================== GETTER / SETTER
 	public int getfNo() {
 		return fNo;
 	}
@@ -126,7 +141,8 @@ public class FoodVO
 	public void setFood_menu_price(String food_menu_price) {
 		this.food_menu_price = food_menu_price;
 	}
-
+	
+	//-------------------------------------- ltype (지역선택)  
 	
 	public String getLType() {
 		return LType;
@@ -135,19 +151,43 @@ public class FoodVO
 		LType = lType;
 	}
 	
-	
-	//======================================================== toString
-	@Override
-	public String toString() {
-		return "FoodVO [fNo=" + fNo + ", food_name=" + food_name + ", food_address=" + food_address + ", food_phone="
-				+ food_phone + ", food_food_kind=" + food_food_kind + ", food_avg_price=" + food_avg_price
-				+ ", food_parking=" + food_parking + ", food_write_date=" + food_write_date + ", food_working_hours="
-				+ food_working_hours + ", food_holiday=" + food_holiday + ", food_website=" + food_website
-				+ ", food_local_type=" + food_local_type + ", food_content=" + food_content + ", food_menu_number="
-				+ food_menu_number + ", food_menu_name=" + food_menu_name + ", food_menu_price=" + food_menu_price
-				+ ", LType=" + LType + "]";
+	//--------------------------------------
+	public int getuNo() {
+		return uNo;
+	}
+	public void setuNo(int uNo) {
+		this.uNo = uNo;
+	}
+	public String getFood_attach_logical_name() {
+		return food_attach_logical_name;
+	}
+	public void setFood_attach_logical_name(String food_attach_logical_name) {
+		this.food_attach_logical_name = food_attach_logical_name;
+	}
+	public String getFood_attach_physical_name() {
+		return food_attach_physical_name;
+	}
+	public void setFood_attach_physical_name(String food_attach_physical_name) {
+		this.food_attach_physical_name = food_attach_physical_name;
+	}
+	public String getThumbnail() {
+		return thumbnail;
+	}
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	
+	//======================================================== toString
 	
-	
+	@Override
+	public String toString() {
+		return "FoodVO [fNo=" + fNo + ", uNo=" + uNo + ", food_name=" + food_name + ", food_address=" + food_address
+				+ ", food_phone=" + food_phone + ", food_food_kind=" + food_food_kind + ", food_avg_price="
+				+ food_avg_price + ", food_parking=" + food_parking + ", food_write_date=" + food_write_date
+				+ ", food_working_hours=" + food_working_hours + ", food_holiday=" + food_holiday + ", food_website="
+				+ food_website + ", food_local_type=" + food_local_type + ", food_content=" + food_content
+				+ ", food_menu_number=" + food_menu_number + ", food_menu_name=" + food_menu_name + ", food_menu_price="
+				+ food_menu_price + ", LType=" + LType + ", food_attach_logical_name=" + food_attach_logical_name
+				+ ", food_attach_physical_name=" + food_attach_physical_name + ", thumbnail=" + thumbnail + "]";
+	}
 }

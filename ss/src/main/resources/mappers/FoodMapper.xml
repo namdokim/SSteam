@@ -9,15 +9,20 @@
 	 <select id="selectAll" resultType="foodVO">
 		SELECT *
 		  FROM food 
+		  LEFT OUTER JOIN (select * from food_attach where thumbnail = 'Y') D 
+		  ON food.fNo = D.fNo
 	  	 WHERE 1=1
-		<if test='searchType != null and searchType.equals("food_name")'>
-		   AND title like concat('%', #{searchValue}, '%')
-		</if>
+<!-- 		<if test='searchType != null and searchType.equals("food_name")'>
+		   AND food_name like concat('%', #{searchValue}, '%')
+		</if> -->
 		
 		<if test='type != null and !type.equals("TT")'>
 			AND LType = #{type}
 		</if>
+		
+		order by food.fNo desc
 	</select> 
+	
 
 
 	 <select id="selectAllMenu" resultType="foodVO">
@@ -37,6 +42,9 @@
 	
 	<!-- @글 등록@  -->
 	<insert id="insert" parameterType="foodVO">
+	<selectKey resultType="int" keyProperty="fNo" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
 		INSERT INTO
 		food(
 			food_name
@@ -63,10 +71,10 @@
 			,#{food_content}
 			,#{LType}
 		)
-		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
+		<!-- <selectKey order="AFTER" keyProperty="fNo" resultType="int">
 			SELECT MAX(fNo)
 		  	   FROM food
-		</selectKey>
+		</selectKey> -->
 	</insert>
 	
 	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
@@ -109,22 +117,42 @@
 	
 	
 	
-<!-- @사진 등록@  --> 
-<!-- 	<insert id="insertImg" parameterType="attachVO"> -->
-<!-- 		INSERT INTO -->
-<!-- 		food( -->
-<!-- 			food_attach_number  -->
-<!-- 			,food_attach_logical_name  -->
-<!-- 			,food_attach_physical_name  -->
-<!-- 		)VALUES( -->
-<!-- 			#{food_attach_number } -->
-<!-- 			,#{food_attach_logical_name} -->
-<!-- 			,#{food_attach_physical_name} -->
-<!-- 		) -->
-<!-- 		<selectKey order="AFTER" keyProperty="fNo" resultType="int"> -->
-<!-- 			SELECT MAX(fNo) -->
-<!-- 		  	   FROM food -->
-<!-- 		</selectKey> -->
-<!-- 	</insert> -->
+	<!-- @사진 등록1@  -->
+<!-- 	<insert id="insertImg" parameterType="attachVO">
+		INSERT INTO
+		food(
+			food_attach_number 
+			,food_attach_logical_name 
+			,food_attach_physical_name 
+		)VALUES(
+			#{food_attach_number }
+			,#{food_attach_logical_name}
+			,#{food_attach_physical_name}
+		)
+		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
+			SELECT MAX(fNo)
+		  	   FROM food
+		</selectKey>
+	</insert> -->
+	
+	
+	<!-- @사진 등록2@  -->
+	<insert id="insert_file_attach" parameterType="foodVO">
+		INSERT INTO food_attach(
+			fNo,
+			food_attach_logical_name,
+			food_attach_physical_name
+	<if test='thumbnail.equals("Y")'>
+			,thumbnail
+	</if>
+		) VALUES (
+			#{fNo},
+			#{food_attach_logical_name},
+			#{food_attach_physical_name}
+	<if test='thumbnail.equals("Y")'>
+			,#{thumbnail}
+	</if>
+		)
+	</insert>
 	
 </mapper>

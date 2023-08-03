@@ -10,6 +10,7 @@ import com.ss.demo.domain.SearchVO;
 //================================================
 public interface FoodService {
 
+	
 	List<FoodVO> list(SearchVO searchVO);
 	
 	FoodVO selectOneByFno(int fNo);
@@ -21,6 +22,12 @@ public interface FoodService {
 	
 	// insert Menu()
 	int insertMenu(FoodVO vo);
+
+	// insert Img()
+	int insert_file(FoodVO vo);
+
+	// update 식당 
+	int update(FoodVO foodVO);
 	
 	
 }
