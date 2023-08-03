@@ -3,6 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List" %>
 
+<!-- 로그인 여부  ========================================================================= -->
+
+<%-- <%
+	if(session.getAttribute("login") != null)
+	{
+		System.out.println("로그인 됨");
+	}
+%> --%>
 
 <!-- 게시판 타입 선택 ========================================================================= -->
 <%
@@ -336,18 +344,28 @@
 			
 			<div class="tab-content container-fluid ml-2 col-md-8" >
 <!-- 메인 부문S ======================================================================= -->
-				<c:forEach items="${list}" var="food" begin="0" end="10">
+				<c:forEach items="${list}" var="food" begin="0" end="9">
 				
 					<div class="container tab-pane fade show p-0 active" style="margin-right: 18rem;">
 						<div class="restaurant-item" >
 						
 							<!-- 이미지 -->
 							<div class="restaurant-thumbnail">
-								<img src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
+								<!-- <img src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일"> -->
+								
+								<c:choose>
+									<c:when test="${empty food.food_attach_logical_name}">
+										<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
+									</c:when>
+									<c:otherwise>
+										<img src="<%=request.getContextPath() %>/resources/upload/${food.food_attach_physical_name}" onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'">           
+									</c:otherwise>
+								</c:choose>
 							</div>
-							
+							<%int i = 1;%>
 							<div class="restaurant-info">
-								<h2 class="restaurant-title"><span>${food.fNo}. </span><span>${food.food_name}</span><!-- <span class="mirai">4.7</span> -->
+							<%-- 	<h2 class="restaurant-title"><span>${food.fNo}. </span><span>${food.food_name}</span><!-- <span class="mirai">4.7</span> --> --%>
+								<h2 class="restaurant-title"><span><%=i %>. </span><span>${food.food_name}</span><!-- <span class="mirai">4.7</span> -->
 								</h2>
 								<div class="user-info">
 								
@@ -363,11 +381,19 @@
  											<p align="center"  style="font-size: 15px; color: #ff1493;">좋아요</p>
 									</div>
 								</div>
-								
+								<%i++; %>
 								<p class="restaurant-address" style="color: silver;">${food.food_address}</p>
 								<p class="restaurant-description">${food.food_content}</p>
 								<p class="restaurant-address" style="color: silver; text-align:right;">
 								<a href="<%=request.getContextPath()%>/food/foodView.do?fNo=${food.fNo}">${food.food_name} 더보기></a></p>
+								
+								<!--  글 수정, 삭제 버튼  --> 
+								<div style="float:right;">
+								<%-- <c:if test="${not empty login and login.id eq vo.id }"> --%>
+									<button onclick="location.href='foodMainModify.do?fNo=${food.fNo}'">수정하기</button>
+									<!-- <button onclick="delFn()">삭제하기</button> -->
+								<%-- </c:if> --%>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -453,7 +479,6 @@
 </body>
 </html><br>
 <%@ include file="../include/footer.jsp" %>
-
 
 
 

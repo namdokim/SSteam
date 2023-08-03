@@ -125,7 +125,8 @@
 		<br> -->
 		
 		<!--첨부파일 -->
-			file : <input type="file" name="uploadFile">
+			<!-- <input type="file" name="uploadFile"> -->
+			<input type="file" name="multiFile" multiple>
 			<br>
 		<button>등록</button>
 	</form>

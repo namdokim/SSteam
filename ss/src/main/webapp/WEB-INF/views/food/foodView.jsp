@@ -278,7 +278,7 @@
 				<p><strong>전화번호 </strong>${vo.food_phone}</p>
 				<p><strong>음식 종류 </strong>${vo.food_food_kind}</p>
 				<p><strong>가격대 </strong> ${vo.food_avg_price}</p>
-				<p><strong>주차 </strong> 주차공간없음</p>
+				<!-- <p><strong>주차 </strong> 주차공간없음</p> -->
 				<p><strong>영업시간 </strong>${vo.food_working_hours}</p>
 				<p><strong>휴일 </strong>${vo.food_holiday}</p>
 				<p><strong>웹사이트 </strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a></p><br><br>
