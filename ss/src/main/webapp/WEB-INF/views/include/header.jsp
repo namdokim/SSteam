@@ -40,18 +40,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>                     
-		<script>
-			window.onload = function() { $("#title").focus(); }
-		</script>
-		<script>
-			$(document).ready(function() {
-				$('#summernote').summernote({
-					placeholder: '내용을 입력해주세요',
-					tabsize: 2,
-					height: 300
-				});
-			});
-		</script>
+		
 	</head>
 	<body>
 		<header>
