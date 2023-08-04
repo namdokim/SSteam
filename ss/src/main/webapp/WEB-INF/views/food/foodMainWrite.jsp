@@ -127,6 +127,7 @@
 		<!--첨부파일 -->
 			<!-- <input type="file" name="uploadFile"> -->
 			<input type="file" name="multiFile" multiple>
+			<div id="preview"></div>
 			<br>
 		<button>등록</button>
 	</form>
@@ -214,6 +215,70 @@
         // 모든 필수 입력란이 작성된 경우 true를 반환하여 폼 제출을 허용합니다.
         return true;
     }
+    
+    // ============================================================ 미리보기 
+    $(document).ready(function (e){
+        $("input[type='file']").change(function(e){
+
+          //div 내용 비워주기
+          $('#preview').empty();
+
+          var files = e.target.files;
+          var arr =Array.prototype.slice.call(files);
+          
+          //업로드 가능 파일인지 체크
+          for(var i=0;i<files.length;i++){
+            if(!checkExtension(files[i].name,files[i].size)){
+              return false;
+            }
+          }
+          
+          preview(arr);
+          
+          
+        });//file change
+        
+        function checkExtension(fileName,fileSize){
+
+          var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+          var maxSize = 20971520;  //20MB
+          
+          if(fileSize >= maxSize){
+            alert('파일 사이즈 초과');
+            $("input[type='file']").val("");  //파일 초기화
+            return false;
+          }
+          
+          if(regex.test(fileName)){
+            alert('업로드 불가능한 파일이 있습니다.');
+            $("input[type='file']").val("");  //파일 초기화
+            return false;
+          }
+          return true;
+        }
+// 수정 (이미지파일 하나만 뜨게)        
+        function preview(arr) {
+            arr.forEach(function (f) {
+              // 파일명이 길면 파일명...으로 처리
+              var fileName = f.name;
+              if (fileName.length > 10) {
+                fileName = fileName.substring(0, 7) + "...";
+              }
+
+              // 이미지 파일인 경우에만 미리보기를 생성
+              if (f.type.match('image.*')) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                  var str = '<div style="display: inline-flex; padding: 10px;"><li>';
+                  str += '<span>' + fileName + '</span><br>';
+                  str += '<img src="' + e.target.result + '" title="' + f.name + '" width=100 height=100 />';
+                  str += '</li></div>';
+                  $(str).appendTo('#preview');
+                };
+                reader.readAsDataURL(f);
+              }
+            });
+          }
 	</script>
 </body>
 </html>

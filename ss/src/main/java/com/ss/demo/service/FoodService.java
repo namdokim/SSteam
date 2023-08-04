@@ -28,6 +28,12 @@ public interface FoodService {
 
 	// update 식당 
 	int update(FoodVO foodVO);
+
+	// delete
+	int delete(int fNo);
+	
+	// list MenuAttach()
+		List<FoodVO> selectListByFno(int fNo);
 	
 	
 }

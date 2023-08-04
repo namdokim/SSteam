@@ -58,6 +58,17 @@ public class FoodServiceImpl implements FoodService {
 		return foodDAO.update(vo);
 	}
 
+	@Override
+	public int delete(int fNo) {
+		return foodDAO.delete(fNo);
+	}
+
+	//========================================
+	@Override
+	public List<FoodVO> selectListByFno(int fNo) {
+		return foodDAO.selectListByFno(fNo);
+	}
+
 
 
 

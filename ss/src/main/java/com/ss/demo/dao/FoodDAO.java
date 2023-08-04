@@ -63,6 +63,15 @@ public class FoodDAO {
 		System.out.println("DAO 진입");
 		return sqlSession.update("com.ss.demo.mapper.foodMapper.update", vo);
 	}
+
+	public int delete(int fNo) {
+		return sqlSession.delete("com.ss.demo.mapper.foodMapper.delete", fNo);
+	}
+	
+	// ================ 상세페이지 사진5개 List 
+	public List<FoodVO> selectListByFno(int fNo) {
+		return sqlSession.selectList("com.ss.demo.mapper.foodMapper.selectListByFno", fNo);
+	}
+	
 	
 }
-
