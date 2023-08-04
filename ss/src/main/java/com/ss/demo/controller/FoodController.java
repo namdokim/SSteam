@@ -1,6 +1,8 @@
 package com.ss.demo.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +88,20 @@ public class FoodController
 		model.addAttribute("list", list);
 //		list.get(0);
 //		System.out.println(list.get(0).getFood_menu_name());
+		
+		
+		List<FoodVO> listAttach = foodService.selectListByFno(fNo);
+		model.addAttribute("listAttach", listAttach);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return "food/foodView";
 	}
 	
@@ -153,7 +170,7 @@ public class FoodController
 		for(int i = 0; i < multiFileList.size(); i++) {
 			String originFile = multiFileList.get(i).getOriginalFilename();
 			String etc = originFile.substring(originFile.lastIndexOf("."));
-			String changeFile = originFile + UUID.randomUUID().toString() + etc;
+			String changeFile = UUID.randomUUID().toString() + etc;
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
@@ -172,6 +189,7 @@ public class FoodController
 			for(int i = 0; i < multiFileList.size(); i++) {
 				// 윈도우 
 				File uploadFile = new File(path + "\\" + fileList.get(i).get("changeFile"));
+				
 				// 맥 
 //				File uploadFile = new File(path + "/" + fileList.get(i).get("changeFile"));
 				multiFileList.get(i).transferTo(uploadFile);
@@ -240,8 +258,8 @@ public class FoodController
 		return "food/foodMainModify";
 	}
 	
-	//========================================================================
-	@RequestMapping(value="/modify.do", method=RequestMethod.POST)
+	//======================================================================== 메인 수정. 
+	@RequestMapping(value="/foodMainModify.do", method=RequestMethod.POST)
 	public String modify(FoodVO foodVO) {
 		
 		System.out.println(foodVO.toString());
@@ -258,5 +276,23 @@ public class FoodController
 			
 		}
 		
+	}
+	//==================================================================== delete.do
+	@RequestMapping(value="/delete.do",method=RequestMethod.POST)
+	public void delete(int fNo,HttpServletResponse res) throws IOException {
+		
+		
+		int result = foodService.delete(fNo);
+		
+		res.setContentType("text/html;charset=UTF-8");
+		PrintWriter pw = res.getWriter();
+		
+		if(result>0) {
+			pw.append("<script>alert('삭제되었습니다.');location.href='foodMain.do';</script>");
+		}else {
+			pw.append("<script>alert('삭제되지 않았습니다.');location.href='foodMain.do';</script>");
+		}
+		
+		pw.flush();
 	}
 }

@@ -6,25 +6,33 @@
 <mapper namespace="com.ss.demo.mapper.foodMapper">
 	<!-- 파라미터 객체의 필드값을 쿼리에 대입할때는 $기호 말고 #기호를 반드시 써야 합니다. -->
 
-	 <select id="selectAll" resultType="foodVO">
+
+	<!-- selectAll  -->
+	 <select id="selectAll" resultType="foodVO" parameterType="searchVO">
 		SELECT *
 		  FROM food 
 		  LEFT OUTER JOIN (select * from food_attach where thumbnail = 'Y') D 
 		  ON food.fNo = D.fNo
 	  	 WHERE 1=1
-<!-- 		<if test='searchType != null and searchType.equals("food_name")'>
+	  	 
+		<!-- 글 검색 -->
+		<if test='searchType != null and searchType.equals("food_name")'>
 		   AND food_name like concat('%', #{searchValue}, '%')
-		</if> -->
+		</if>
+		<if test='searchType != null and searchType.equals("food_address")'>
+		   AND food_address like concat('%', #{searchValue}, '%')
+		</if>
 		
+		<!-- 지역 검색 -->
 		<if test='type != null and !type.equals("TT")'>
 			AND LType = #{type}
 		</if>
-		
-		order by food.fNo desc
+			order by food.fNo desc
 	</select> 
+
+
 	
-
-
+	<!-- selectAllMenu  -->
 	 <select id="selectAllMenu" resultType="foodVO">
 		SELECT *
 		  FROM food_menu
@@ -32,15 +40,9 @@
 	</select> 
 	
 		
-		<!--  WHERE 1=1
-		<if test='searchType != null and searchType.equals("food_name")'>
-		   AND title like concat('%', #{searchValue}, '%')
-		</if>
-		<if test='searchType != null and searchType.equals("food_address")'>
-		   AND id like concat('%', #{searchValue}, '%')
-		</if> -->
-	
-	<!-- @글 등록@  -->
+		
+	<!-- ================================= crud ========================================= -->	
+	<!-- 글쓰기  -->
 	<insert id="insert" parameterType="foodVO">
 	<selectKey resultType="int" keyProperty="fNo" order="AFTER">
 		SELECT LAST_INSERT_ID()
@@ -71,22 +73,52 @@
 			,#{food_content}
 			,#{LType}
 		)
-		<!-- <selectKey order="AFTER" keyProperty="fNo" resultType="int">
-			SELECT MAX(fNo)
-		  	   FROM food
-		</selectKey> -->
 	</insert>
 	
+	<!-- 글 수정  (사진 수정에 대해서 추가 수정할 것)-->
+	<update id="update" parameterType="foodVO">
+		UPDATE food
+		   SET food_name = #{food_name} <!-- boardVO.getTitle() -->
+		     , food_address = #{food_address}
+		     , food_phone = #{food_phone}
+		     , food_food_kind = #{food_food_kind}
+		     , food_avg_price = #{food_avg_price}
+		     , food_write_date = #{food_write_date}
+		     , food_working_hours = #{food_working_hours}
+		     , food_holiday = #{food_holiday}
+		     , food_website = #{food_website}
+		     , food_content = #{food_content}
+		     , LType = #{LType}
+		 WHERE fNo = #{fNo}
+	</update>
+	
+	<!-- 글 삭제  -->
+	<delete id="delete" parameterType="int">
+		DELETE
+		  FROM food
+		 WHERE fNo = #{fNo}
+	</delete>	
+	
+	<!-- =================================================================== -->
+	<!-- 선택 -->
 	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
 		SELECT *
 		  FROM food
 		 WHERE fno = #{fno}
 	</select>
 	
-	
-	
-	<!-- @메뉴 등록@ -->
 	<!-- =================================================================== -->
+	<!-- 선택(View페이지)  -->
+	<select id="selectListByFno" resultType="foodVO" parameterType="int" >
+		SELECT *
+		  FROM food_attach
+		 WHERE fno = #{fno}
+	</select>
+	
+	
+	
+	<!-- =================================================================== -->
+	<!-- @메뉴 등록@ -->
 	
 	<insert id="insertMenu" parameterType="foodVO">
 		INSERT INTO
@@ -104,39 +136,12 @@
 		  	   FROM food_menu
 		</selectKey> 
 	</insert>
+		
 	
-	<!-- <select id="selectOneByFood_menu_number" resultType="foodVO" parameterType="int" >
-		SELECT *
-		  FROM food_menu
-		 WHERE food_menu_number = #{food_menu_number}
-	</select>  -->
+	
 	
 	<!-- =================================================================== -->
-	
-	
-	
-	
-	
-	<!-- @사진 등록1@  -->
-<!-- 	<insert id="insertImg" parameterType="attachVO">
-		INSERT INTO
-		food(
-			food_attach_number 
-			,food_attach_logical_name 
-			,food_attach_physical_name 
-		)VALUES(
-			#{food_attach_number }
-			,#{food_attach_logical_name}
-			,#{food_attach_physical_name}
-		)
-		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
-			SELECT MAX(fNo)
-		  	   FROM food
-		</selectKey>
-	</insert> -->
-	
-	
-	<!-- @사진 등록2@  -->
+	<!-- @사진 등록@  -->
 	<insert id="insert_file_attach" parameterType="foodVO">
 		INSERT INTO food_attach(
 			fNo,

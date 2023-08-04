@@ -22,23 +22,19 @@
       padding: 20px;
       text-align: center;
     }
-    .container {
-      margin: 20px 80px;
-      max-width: 90%;
-      padding: 20px;
-      display: flex; /* 추가 */
-      align-items: center; /* 가운데 정렬 추가 */
-      justify-content: space-between; /* 지도와 아이템 사이에 공간 추가 */
-    }
-    .restaurant-item {
-      border: none; /* 회색 선 제거 */
-      margin-bottom: 0px;
-      padding: 0px;
-      display: flex;
-      border-bottom: 0px solid #ddd; /* 바닥선만 추가 */
-      flex: 1 1 50%; /* 추가 */
-     /*  border-top: 0px solid #ddd; /* 탑선만 추가 */ */
-    }
+	.container {
+	margin: 20px auto;
+	max-width: 960px;
+	padding: 0 20px;
+	}
+	.restaurant-item {
+	border: none;
+	margin-bottom: 20px;
+	padding: 20px;
+	display: flex;
+	border-bottom: 1px solid #ddd;
+	align-items: flex-start; /* 요소들을 flex 컨테이너의 위쪽에 정렬합니다. */
+	}
 
     .restaurant-thumbnail {
       flex: 0 0 auto;
@@ -230,17 +226,19 @@
 
 <!-- 메뉴 이미지 ================================================ -->
 <body>
-
 	<div class="header-images">
 		<div>
-			<img src="https://mp-seoul-image-production-s3.mangoplate.com/281547/753280_1550146766591_11966?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 1" width="250" height="250">
+			<c:forEach items="${listAttach}" var="listAttach">
+				<img src="<%=request.getContextPath() %>/resources/upload/${listAttach.food_attach_physical_name}" width="250" height="250" alt="맛집 썸네일">  
+			</c:forEach>
+			<!-- <img src="https://mp-seoul-image-production-s3.mangoplate.com/281547/753280_1550146766591_11966?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 1" width="250" height="250">
 			<img src="https://mp-seoul-image-production-s3.mangoplate.com/549779_1688722095256513.jpg?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 2" width="250" height="250">
 			<img src="https://mp-seoul-image-production-s3.mangoplate.com/549779_1688722097838776.jpg?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 3" width="250" height="250">
 			<img src="https://mp-seoul-image-production-s3.mangoplate.com/549779_1688722099215636.jpg?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 4" width="250" height="250">
-			<img src="https://mp-seoul-image-production-s3.mangoplate.com/549779_1688722100253838.jpg?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 5" width="250" height="250">
+			<img src="https://mp-seoul-image-production-s3.mangoplate.com/549779_1688722100253838.jpg?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80" alt="음식 사진 5" width="250" height="250"> -->
 		</div>
 	</div>
-<!-- =============== 상단의 이미지 사진 5개 ======================== -->
+<!-- =============== (위) 상단의 이미지 사진 5개 ======================== -->
 
 <!-- 상세 페이지 ================================================ -->
 	<div class="container">
