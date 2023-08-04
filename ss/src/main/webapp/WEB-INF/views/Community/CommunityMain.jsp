@@ -3,21 +3,8 @@
 <%@ include file="../include/header.jsp" %>
 
 <%
-	int boardType = 0;
-	List<String> nowPageBoardList;
-	
-	try
-	{
-		// url 에서 현재 선택 된 게시판 종류 얻기
-		// boardType = request.getParameter("boardType");
-		boardType = 0;	// TEMP
-		// url 에서 현재 선택 된 게시판의 게시글 얻기
-		nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
-	}
-	catch (Exception e)
-	{
-		System.out.println("게시판 최초 선택");
-	}
+	// url 에서 현재 선택 된 게시판의 게시글 얻기
+	List<String> nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
 %>
 
 <!DOCTYPE html>
@@ -251,16 +238,16 @@
 			</a>
 			<div class = "float-right">
 				<button type = "button" class = "btn btn-outline-secondary" style = "--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: 15rem">
-				<a href = "CommunityWrite.do?type=<%= boardType %>" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
-				<%--
-				<%
-					if( loginVo != null )
-					{
-						%><a href="write.jsp?type=<%= type %>" class="btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-						%><a href="write.jsp?type=<%= type %>" class=" float-right btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-					}
-				%>
-				--%>
+					<a href = "CommunityWrite.do?boardType=${boardType}" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
+					<%--
+					<%
+						if( loginVo != null )
+						{
+							%><a href="write.jsp?type=<%= type %>" class="btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
+							%><a href="write.jsp?type=<%= type %>" class=" float-right btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
+						}
+					%>
+					--%>
 				</button>
 			</div>
 		</div>	
@@ -273,66 +260,33 @@
 					</a>
 					<hr>
 					<ul class = "nav nav-pills flex-column mb-auto">
-						<%--
-						<% String activeTab = type != null && !type.equals("") ? type : "TT"; %>
-						<%
-							String boardTitle = "";
-							switch (type)
-							{
-								case "T":
-							        boardTitle = "전체글";
-							        activeTab = "T";
-							        break;
-							    case "N":
-							        boardTitle = "공지사항";
-							        activeTab = "N";
-							        break;
-							    case "I":
-							        boardTitle = "정보 게시판";
-							        activeTab = "I";
-							        break;
-							    case "R":
-							        boardTitle = "후기 게시판";
-							        activeTab = "R";
-							        break;
-							    case "Q":
-							        boardTitle = "질문 게시판 ";
-							        activeTab = "Q";
-							        break;
-							    case "F":
-							        boardTitle = "자유 게시판";
-							        activeTab = "F";
-							        break;
-							}
-						%>
-						--%>
 						<li class = "nav-item" >
-							<a href = "CommunityMain.do?type=TT" class = "nav-link link-dark  <%-- <%= activeTab.equals("T") ? "active" : "" %> --%>"  style = "text-align:center">						
+							<a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark"  style = "text-align:center">						
 								전체글
 							</a>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?type=GG" class = "nav-link link-dark <%-- <%= activeTab.equals("N") ? "active" : "" %> --%>" style = "text-align:center;">			
+							<a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">			
 								공지사항
 							</a>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=GW" class = "nav-link link-dark <%-- <%= activeTab.equals("I") ? "active" : "" %> --%>" style = "text-align:center;">								
+							<a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">								
 								정보 게시판
 							</a>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=CB" class = "nav-link link-dark <%-- <%= activeTab.equals("R") ? "active" : "" %> --%>" style = "text-align:center;">							
+							<a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
 								후기 게시판
 							</a>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=CN" class = "nav-link link-dark <%-- <%= activeTab.equals("Q") ? "active" : "" %> --%>" style = "text-align:center;">							
+							<a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
 								질문 게시판 
 							</a>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=GB" class = "nav-link link-dark <%-- <%= activeTab.equals("F") ? "active" : "" %> --%>" style = "text-align:center;">							
+							<a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
 								자유 게시판
 							</a>
 						</li>					
@@ -355,31 +309,57 @@
 							<tr class = "vrow-inner">
 								<td class = "vcol col-id" style = "text-align: center"> ${element.board_number} </td>
 								<td class = "vcol col-title"> <a href="view.do?bidx=${element.board_number}"> ${element.board_title} </a> </td>
+								<td class = "vcol col-author" style = "text-align: center"> 작성작성 </td>
 								<td class = "vcol col-time" style = "text-align: center"> ${element.write_date} </td>
-								<td class = "vcol col-recom" style = "text-align: center"> ${element.hit_count} </td>
+								<td class = "vcol col-view" style = "text-align: center"> ${element.hit_count} </td>
+								<td class = "vcol col-recom" style = "text-align: center"> 추천추천 </td>
 							</tr>
 						</c:forEach>
-							<!-- <tr class = "vrow-inner">					
-								<td class = "vcol col-id" style = "text-align: center"> 1 </td>
-								<td class = "vcol col-title">
-									커뮤니티 게시판 이용 안내
-								</td>
-								<td class = "vcol col-author" style = "text-align: center"> 포포몬 </td>
-								<td class = "vcol col-time" style = "text-align: center">
-									2023. 07. 28
-								</td>
-								<td class = "vcol col-view" style = "text-align: center"> 18734526 </td>
-								<td class = "vcol col-recom" style = "text-align: center"> 20 </td>
-							</tr> -->
 					</table>
 					
+					<!-- 페이징 블럭 처리 -->
 					<nav aria-label = "Page navigation example">
-						 <ul class = "pagination justify-content-center">
-							<li class = "page-item">
-								<!-- <a href = "첫번째 페이지로 이동하는 주소"> |◀ </a> &nbsp; -->
-							<a class = "page-link" href = "index.jsp?type=<%= boardType %>&page=1">
-								Previous
-							</a> &nbsp;				
+						<ul class = "pagination justify-content-center">
+							<script>
+								// 사용할 변수 초기화
+								var nowPage = ${nowPage};
+								var pagingBlockSize = ${pagingBlockSize};
+								var boardType = ${boardType};
+								var pageStart = ${pageStart};
+								var pageEnd = ${pageEnd};
+								var boardCount = ${boardCount};
+								
+								// console.log("nowPage: " + nowPage);
+								// console.log("pagingBlockSize: " + pagingBlockSize);
+								// console.log("boardType: " + boardType);
+								// console.log("pageStart: " + pageStart);
+								// console.log("pageEnd: " + pageEnd);
+								// console.log("boardCount: " + boardCount);
+								
+								// 현재 페이지 번호가 페이징 블럭 크기를 넘는다면
+								if (nowPage > pagingBlockSize)
+								{
+									// 이전 페이지로 이동 기능 추가
+									document.write('<li class = "page-item">');
+					            	document.write('	<a class = "page-link" href = "CommunityMain.do?boardType=' + boardType + '&nowPage=' + (pageStart - 1) + '"> Previous </a>');
+					            	document.write('</li>');
+								}
+								// 숫자 페이징 블럭 생성
+								for (var i = pageStart; i <= pageEnd; i++)
+								{
+							        document.write('<li class="page-item">');
+							        document.write('	<a class = "page-link" href="CommunityMain.do?boardType=' + boardType + '&nowPage=' + i + '">' + i + '</a>');
+							        document.write('</li>');
+							    }
+								// 선택된 게시판의 총 게시글 개수가 100개가 넘고, 마지막 페이징 블럭이 아니라면
+							    if (boardCount > 100 && pageEnd !== maxPage)
+							    {
+							        // 다음 페이지로 이동 기능 추가
+							        document.write('<li class = "page-item">');
+							        document.write('	<a class = "page-link" href = "CommunityMain.do?boardType=' + boardType + '&nowPage=' + (pageEnd + 1) + '"> Next </a>');
+							        document.write('</li>');
+							    }
+							</script>
 						</ul>
 					</nav>
 				</div>	

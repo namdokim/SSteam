@@ -5,25 +5,6 @@
  
 <mapper namespace = "com.ss.demo.mapper.CommunityMapper">
 
-	<!-- 페이지에 대한 게시글 정보 얻기 -->   
-	<select id = "getBoardPage" parameterType = "java.util.Map" resultType = "Community_BoardVO">
-		SELECT *,
-				 (SELECT user_name
-				    FROM test_user_info
-				   WHERE user_number = community_board.user_number)
-				      AS user_name
-				 <!--
-				 (SELECT count(comment_number)
-				 	FROM comment_list
-				   WHERE board_number = community_board.user_number)
-				 	  AS comment_count,
-				 -->
-		  FROM community_board
-		 WHERE board_type = #{selectBoardType}
-	  ORDER BY board_number
-	      DESC limit #{startBoardNumber}, #{unitPage}
-	</select>
-	
 	<!-- 글 쓰기 -->
 	<insert id = "insertBoard" parameterType = "Community_BoardVO">
 		INSERT INTO community_board
@@ -41,7 +22,41 @@
 						#{board_content}
 			 		)
 	</insert>
-	 
+	
+	<!-- 전체 게시글 개수 얻기 -->
+	<select id = "getBoardCount" resultType = "int">
+		SELECT COUNT(*)
+			AS count
+		  FROM community_board
+	</select>
+	
+	<!-- 특정 게시글 개수 얻기 -->
+	<select id = "getBoardCount_TypeChoice" parameterType = "int" resultType = "int">
+		SELECT COUNT(*)
+			AS count
+		  FROM community_board
+		 WHERE board_type = #{boardType}
+	</select>
+	
+	<!-- 페이지에 대한 게시글 정보 얻기 -->   
+	<select id = "getBoardPage" parameterType = "java.util.Map" resultType = "Community_BoardVO">
+		SELECT *,
+				 (SELECT user_name
+				    FROM test_user_info
+				   WHERE user_number = community_board.user_number)
+				      AS user_name
+				 <!--
+				 (SELECT count(comment_number)
+				 	FROM comment_list
+				   WHERE board_number = community_board.user_number)
+				 	  AS comment_count,
+				 -->
+		  FROM community_board
+		 WHERE board_type = #{boardType}
+	  ORDER BY board_number
+	      DESC limit #{offset}, #{unitPage}
+	</select>
+
 </mapper>
 
 
