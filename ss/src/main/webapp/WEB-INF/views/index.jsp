@@ -49,7 +49,7 @@
 		<span class="notice-text-center">로그인을 해주세요 로그인이 안되잇어요</span>
 		</c:if>
 		<c:if test="${not empty login}">
-		<span class="notice-text-center">${login.uName}님 환영합니다</span>
+		<span class="notice-text-center">${login.uName}님 환영합니다//<%= login.getuNick() %>님 이랏샤이마세!</span>
 		</c:if>
 			<!-- <p class="text-center"> 코딩 부스터는 IT 교육 사이트입니다. 다양한 IT 관련 무료 및 유료 강의가 존재합니다.</p>
 			<p class="text-center">

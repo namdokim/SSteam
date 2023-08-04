@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.ss.demo.domain.UserVO" %>
 <%
-	/* UserVO login = (UserVO)session.getAttribute("login"); */
+	UserVO login = (UserVO)session.getAttribute("login");
 %>
 <!DOCTYPE html>
 <html>
@@ -142,60 +143,62 @@
 	<body>
 		<!-- 헤더영역 시작 -->
 		<!-- 시맨틱 헤더 영역 선언  -->
-<header>
+<!-- <header> -->
 	
 	<div class="header-container">
-			<nav class="navbar"  style="background-color: #A9E2F3;">
-				<!-- 로고 표시 영역  -->
-				<div class="header-navbar" >
-					<a class="navbar-brand ms-3 offset-2" href="<%=request.getContextPath() %>/" title="Arcalive">
-						<img src="<%=request.getContextPath() %>/img/logo.png" width="100px" height="60px">
-						<!-- <svg class=" ms-3 offset-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-google-play" viewBox="0 0 16 16">
-							<path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
-						</svg> -->
-					</a>
+		<nav class="navbar"  style="background-color: #A9E2F3;">
+			<!-- 로고 표시 영역  -->
+			<div class="header-navbar" >
+				<a class="navbar-brand ms-3 offset-2" href="<%=request.getContextPath() %>/" title="Arcalive">
+					<img src="<%=request.getContextPath() %>/img/logo.png" width="100px" height="60px">
+					<!-- <svg class=" ms-3 offset-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-google-play" viewBox="0 0 16 16">
+						<path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
+					</svg> -->
+				</a>
+			</div>
+			<!-- 검색기능 -->
+			<div class="header-search">
+			<form class="d-flex">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</form>
+			</div>
+			<!-- 로그인 폼 -->
+			<!-- <div class="mainlogin">
+			<form name="login" id="login" >
+				<div>
+				ID : <input type="text" id="uId"  name="uId" ><br>
+				PW : <input type="text" id="uPw"  name="uPw" >
+				<button type="button" id="loginbtn" onclick="loginFn();">로그인</button>
 				</div>
-				<!-- 검색기능 -->
-				<div class="header-search">
-				<form class="d-flex">
-					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-					<button class="btn btn-outline-success" type="submit">Search</button>
-				</form>
-				</div>
-				<!-- 로그인 폼 -->
-				<!-- <div class="mainlogin">
-				<form name="login" id="login" >
-					<div>
-					ID : <input type="text" id="uId"  name="uId" ><br>
-					PW : <input type="text" id="uPw"  name="uPw" >
-					<button type="button" id="loginbtn" onclick="loginFn();">로그인</button>
-					</div>
-				</form>
-				</div> -->
-				<!-- drop down bar -->
-				<div class="header-dropdown">
-				<div class="dropdown-center" >
-				<c:if test=""></c:if>
-					<button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static"  data-bs-auto-close="outside" aria-expanded="false">
-					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" style="color: white;" class="bi bi-person-circle" viewBox="0 0 16 16">
-						  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-						  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-					</svg>
-					</button>
-						<c:if test="${empty login}">
-					<ul id="dropdownbox" class="dropdown-menu" >
-						<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a></li>
-						<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a></li>
-					</ul>
-						</c:if>
-						<c:if test="${not empty login}">
-					<ul id="dropdownbox" class="dropdown-menu" >
-						<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/mypage.do">마이페이지</a></li>
-						<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userLogoutAction.do">로그아웃</a></li>
-					</ul>
-						</c:if>
-				</div>
-				</div> <!-- dropdown 영역 끝  -->
+			</form>
+			</div> -->
+			<!-- drop down bar -->
+			<div class="header-dropdown">
+			<div class="dropdown-center" >
+			<c:if test=""></c:if>
+				<button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static"  data-bs-auto-close="outside" aria-expanded="false">
+				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" style="color: white;" class="bi bi-person-circle" viewBox="0 0 16 16">
+					  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+					  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+				</svg>
+				</button>
+					<c:if test="${empty login}">
+				<ul id="dropdownbox" class="dropdown-menu" >
+					<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a></li>
+					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a></li>
+				</ul>
+					</c:if>
+					<c:if test="${not empty login}">
+				<ul id="dropdownbox" class="dropdown-menu" >
+					<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/mypage.do">마이페이지</a></li>
+					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userLogoutAction.do">로그아웃</a></li>
+				</ul>
+			</c:if>
+			</div>
+			</div> <!-- dropdown 영역 끝  -->
+		</nav>	<!-- 헤더 상단 바 끝  -->
+	</div>
 				<!-- 검색 기능 표시 영역  -->
 				<!--<div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 offset-2" >
 					<form class="form-inline search-form mb-0 offset-3" id="siteSearchForm" method="get" action="#">
@@ -285,7 +288,9 @@
 					<a class="nav-link " style="color: black; text-align: center;" 
 						href="<%=request.getContextPath()%>/Community/CommunityMain.do"> 커뮤니티 </a>
 				</div>	 --%>	
-				</nav>	<!-- 헤더 상단 바 끝  -->
+		<div class="container">
+			<img>
+		</div>	
 		<!-- 카테고리 -->			
 		<div class="container">
 			<div class="row">
@@ -303,10 +308,10 @@
 				</div>
 				<div class="col">
 					<a class="nav-link " style="color: black; text-align: center;" 
-						href="<%=request.getContextPath()%>/Community/CommunityMain.do"> 커뮤니티 </a>
+						href="<%=request.getContextPath()%>/Community/CommunityMain.do?boardType=0"> 커뮤니티 </a>
 				</div>
 			</div>
 		</div>
-	</div>
-</header>
+	
+<!-- </header> -->
 <!-- 헤더영역 끝 -->
