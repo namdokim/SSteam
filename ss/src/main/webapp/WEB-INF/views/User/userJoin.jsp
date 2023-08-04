@@ -15,6 +15,11 @@ function DoRewrite()
 </script>
 
 <style>
+	.container
+	{
+		text-align: center;
+		align-content: center;
+	}
 	tr{
 		text-align: center;
 		padding: auto;
@@ -22,21 +27,32 @@ function DoRewrite()
 	}
 	input::placeholder
 	{
-		text-align: center;
+		text-align: left;
 		color: 
+	}
+	.form-label
+	{
+		padding-top: 1%;
+		padding-bottom: 1%;
+		color: #2E2E2E;
+		background-color:#F2F2F2;
+		width:100%;
+		font-family: monospace;
+		font-size: 20px ;
+		font-weight: bolder;
 	}
 /* 비밀번호 감추기 보여주기  */
 .input {
   position: relative;
 }
 
-.input .eyes {
+ .input .eyes {
   position: absolute;
   top: 0;
   bottom: 0;
   right: 10px;
   margin: auto ;
-  height: 40px;
+  height: 1px;
   font-size: 25px;
   cursor: pointer;
 }
@@ -50,16 +66,123 @@ function DoRewrite()
   font-size: 25px;
   cursor: pointer;
 }
-}
+
+
 </style>
 <!-- 회원가입 입력 란  -->
-	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
-		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
-			<tr id="loginid" name="loginid">
-				<td style="width:45%;">
-					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
+<div class="container">
+	<div class="py-5 text-center">
+		<!-- <div class="row g-5"> -->
+			<!-- <div class="col-md-7 col-lg-8"> -->
+				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;"></div>
+				<!-- 회원가입 폼  -->
+				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+					<div class="g-3">
+						<div class="grid text-center">
+							<label for="ID" class="form-label">아이디</label>
+							<input class="g-col-6 form-control" type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
+							<div class="invalid-feedback">
+							이메일 이름을 써주세요
+							</div>
+							<div class="invalid-feedback">
+							도메인을 선택해주세요.
+							</div>
+							<select class="form-select " id="uId_email" name="uId_email" onchange="email();">	
+								<option value="">도메인을 선택해주세요</option>
+								<option value="@naver.com">naver.com</option>
+								<option value="@daum.net">daum.net</option>
+								<option value="@hanmail.net">hanmail.net</option>
+								<option value="@gmail.com">gmail.com</option>
+								<option value="@kakao.com">kakao.com</option>
+								<option value="@nate.com">nate.com</option>
+								<option value="@outlook.com">outlook.com</option>
+								<option value="@hotmail.com">hotmail.com</option>
+							</select>
+						</div>
+					</div>
+					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
+						<span id="msg_id"></span>
+						<span id="msg_email"></span>
+					<div class="col-12">
+						<div class="input password">
+						<label for="password" class="form-label">비밀번호 </label>
+						<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
+							<div class="eyes"><i class="fas fa-eye"></i></div>
+						<div class="invalid-feedback eyes">
+							비밀번호를 입력해 주세요
+						</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="input password">
+						<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
+						<input type="password" class="form-control" id="uPwc" name="uPwc" placeholder="비밀번호확인">
+							<div class="eyes2"><i class="fas fa-eye"></i></div>
+						<div class="invalid-feedback eyes">
+						비밀번호와 일치하지 않습니다
+						</div>
+						</div>
+					</div>
+						<span id="msg_pw"></span>
+					<div class="col-12">
+						<label for="Name" class="form-label">이름</label>
+						<input  class="form-control" type="text" id="uName" name="uName" placeholder="이름" required value="">
+						<div class="invalid-feedback">
+							이름을 입력하세요
+						</div>
+					</div>
+					<div class="col-12">
+						<label for="Nick" class="form-label">닉네임</label>
+						<input  class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
+						<div class="invalid-feedback">
+							닉네임을 입력하세요
+						</div>
+					</div>
+						<span id="msg_nick"></span>
+					<div class="col-12">
+						<label for="Phone" class="form-label">전화번호</label>
+						<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
+						<div class="invalid-feedback">
+							전화번호 입력하세요
+						</div>
+					</div>
+					<!-- 우편번호 주소 -->
+						<label for="address" class="form-label">우편번호</label>
+					<div class="col-md-5">
+						<input  class="form-control" type="text" id="uAddsPostCode"  placeholder="우편번호">
+						</div>
+						<div class="col-12">
+						<input class="form-control" type="text" id="uRoadAddress" style="width: 100%;" placeholder="도로명주소">
+						</div>
+						<div class="col-12">
+						<input  class="form-control" type="text" id="uJibunAddress" style="width: 100%;" placeholder="지번주소">            
+						</div>
+						
+						<div class="col-md-6">
+						<input class="form-control" type="text" id="uDetailAddress" style="width: 60%;" placeholder="상세주소">
+						</div>	
+						
+						<div class="col-md-5">
+						<label for="address" class="form-label">참고항목</label>
+						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
+					<!-- 회원가입 입력란 끝 -->
+						<hr class="my-4">
+						<div class="row">
+							<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
+							<a href="javascript:DoRewrite()">
+							<input class="w-33 btn btn-primary btn-lg" type="button" value="다시쓰기">
+							</a>
+							<a href="<%=request.getContextPath() %>/index.jsp">
+							<input class="w-33 btn btn-primary btn-lg" type="button" value="취소">
+							</a>
+						</div>
 					
-				</td>
+					</div>
+				</form>
+			</div>
+		<!-- </div> col-md-7 col-lg-8 -->
+	<!-- </div> row g-5 끝  -->
+	<%-- 
 				<td>	
 					<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
 						<option value="">도메인을 선택해주세요</option>
@@ -165,7 +288,9 @@ function DoRewrite()
 				</td>
 			</tr>
 		</table>
-	</form>
+	</form> 
+	--%>
+</div> <!-- container 끝 -->
 <!-- api 연동 -->
 <script type="text/javascript">
 //coolsms
