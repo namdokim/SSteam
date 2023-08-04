@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ss.demo.domain.RentalhomeVO;
+import com.ss.demo.domain.RoomVO;
 import com.ss.demo.service.RentalhomeService;
 
 @Controller
@@ -138,9 +139,22 @@ public class RentalhomeController {
 		System.out.println("update 성공");
 		return "redirect:/rentalhome/rentalhomeMain.do";
 	}
-	
+
+	@RequestMapping(value="/rentalhomeDelete.do", method=RequestMethod.POST)
+	public String rentalhomeDelete(int rentalhome_idx){
+		
+		int value = rentalhomeService.delete_rentalhome(rentalhome_idx);
+		return "redirect:/rentalhome/rentalhomeMain.do";
+	}
+
 	@RequestMapping(value="/rentalhomeWrite_room.do", method=RequestMethod.GET)
 	public String rentalhomeWrite_room(){
+		
+		return "rentalhome/rentalhomeWrite_room";
+	}
+
+	@RequestMapping(value="/rentalhomeWrite_room.do", method=RequestMethod.POST)
+	public String rentalhomeWrite_room(RoomVO roomVO){
 		
 		return "rentalhome/rentalhomeWrite_room";
 	}

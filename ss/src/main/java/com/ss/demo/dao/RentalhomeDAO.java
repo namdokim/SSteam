@@ -32,7 +32,6 @@ public class RentalhomeDAO {
 
 	// 숙소  업데이트 
 	public int update(RentalhomeVO rentalhomeVO) {
-		System.out.println("DAO 진입");
 		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update", rentalhomeVO);
 	}
 
@@ -44,5 +43,10 @@ public class RentalhomeDAO {
 	// 파일 불러오기 
 	public List<RentalhomeVO> selectAttach(RentalhomeVO rentalhomeVO) {
 		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAttach", rentalhomeVO);
+	}
+	
+	// 숙소 정보 삭제하기
+	public int delete_rentalhome(int rentalhome_idx) {
+		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_rentalhome", rentalhome_idx);
 	}
 }

@@ -400,6 +400,10 @@
 		<!-- and login.id eq vo.id -->
 <%-- 				<c:if test="${not empty login}"> --%>
 					<div style="width:1224px; display:inline-block; text-align:right; margin:20px 0px;">
+						<form action="rentalhomeDelete.do" method="post" style="display:inline-block;">
+							<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
+							<button style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; border:0px;">숙소 삭제</button>
+						</form>
 						<span onclick="location.href='rentalhomeModify.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 정보 변경</span>
 					</div>
 <%-- 				</c:if> --%>

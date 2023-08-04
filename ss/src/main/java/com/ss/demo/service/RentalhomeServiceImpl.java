@@ -43,5 +43,11 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 		
 		return rentalhomeDAO.insert_file(rentalhomeVO);
 	}
+
+	@Override
+	public int delete_rentalhome(int rentalhome_idx) {
+		
+		return rentalhomeDAO.delete_rentalhome(rentalhome_idx);
+	}
 	
 }
