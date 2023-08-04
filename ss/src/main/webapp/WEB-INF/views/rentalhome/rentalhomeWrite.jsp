@@ -50,11 +50,12 @@ window.onload = function(){
 		<div style="width:100%; padding:10px; margin:10px 0px; text-align:left;">
 			<form name="frm" action="rentalhomeWrite.do" method="post" enctype="multipart/form-data">
 				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
+					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px; vertical-align:top;">
 						<span style="font-weight:bold;">숙소 이미지 업로드</span>
 					</div>
 					<div class="form-group1" style="display:inline-block;">
-						<input type="file" name="multiFile" multiple>
+						<input type="file" name="multiFile" multiple required>
+						<div id="preview" style="width:800px;"></div>
 					</div>
 					<br>
 					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">

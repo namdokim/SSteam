@@ -109,5 +109,8 @@
 	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
 		select * from rentalhome where rentalhome_idx = #{rentalhome_idx}
 	</select>
-
+	
+	<delete id="delete_rentalhome" parameterType="int">
+		delete from rentalhome where rentalhome_idx = #{rentalhome_idx}
+	</delete>
 </mapper>

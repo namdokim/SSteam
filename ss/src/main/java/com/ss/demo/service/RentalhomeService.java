@@ -13,6 +13,8 @@ public interface RentalhomeService {
 	public RentalhomeVO selectOneByIdx(int rentalhome_idx);
 
 	public int update(RentalhomeVO rentalhomeVO);
+	
+	public int delete_rentalhome(int rentalhome_idx);
 
 	public int insert_file(RentalhomeVO rentalhomeVO);
 }
