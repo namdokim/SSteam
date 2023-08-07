@@ -167,6 +167,11 @@ input[type="range"]::-webkit-slider-thumb {
 	width:15px;
 	height:15px;
 }
+.check > input[type=radio]{
+	margin:0px 10px;
+	width:15px;
+	height:15px;
+}
 </style>
 <script>
 window.onload = function(){
@@ -178,6 +183,9 @@ const thumbLeft = document.querySelector(".slider > .thumb.left");
 const thumbRight = document.querySelector(".slider > .thumb.right");
 const range = document.querySelector(".slider > .range");
 
+const minPriceInput = document.getElementById("min-price");
+const maxPriceInput = document.getElementById("max-price");
+
 const setLeftValue = () => {
   const _this = inputLeft;
   const [min, max] = [parseInt(_this.min), parseInt(_this.max)];
@@ -187,7 +195,7 @@ const setLeftValue = () => {
   const percent = ((_this.value - min) / (max - min)) * 100;
   thumbLeft.style.left = percent + "%";
   range.style.left = percent + "%";
-  document.getElementById("min-price").value = inputLeft.value*10000+"원";
+  document.getElementById("min-price").value = inputLeft.value*10000;
 };
 
 const setRightValue = () => {
@@ -199,20 +207,52 @@ const setRightValue = () => {
   const percent = ((_this.value - min) / (max - min)) * 100;
   thumbRight.style.right = 100 - percent + "%";
   range.style.right = 100 - percent + "%";
-  document.getElementById("max-price").value = inputRight.value*10000+"원";
+  document.getElementById("max-price").value = inputRight.value*10000;
+};
+
+const setLeft = () => {
+  const _this = minPriceInput;
+  const percent = parseInt(_this.value/10000);
+  thumbLeft.style.left = percent + "%";
+  range.style.left = percent + "%";
+  inputLeft.value = percent;
+};
+
+const setRight = () => {
+  const _this = maxPriceInput;
+  const percent = parseInt(_this.value/10000);
+  thumbRight.style.right = 100 - percent + "%";
+  range.style.right = 100 - percent + "%";
+  inputRight.value = percent;
+  
 };
 
 inputLeft.addEventListener("input", setLeftValue);
 inputRight.addEventListener("input", setRightValue);
-}
+
+minPriceInput.addEventListener("blur", function() {
+    if ( parseInt(maxPriceInput.value) <= parseInt(this.value) ) {
+      alert("최소 가격은 최대 가격보다 작아야합니다.");
+      this.value = parseInt(maxPriceInput.value) - 10000;
+    }
+    setLeft();
+  });
+maxPriceInput.addEventListener("blur", function() {
+    if ( parseInt(this.value) <= parseInt(minPriceInput.value) ) {
+      alert("최대 가격은 최소 가격보다 커야합니다.");
+      this.value = parseInt(minPriceInput.value) + 10000;
+    }
+    setRight();
+  });
+};
 </script>
-<div style="width:1920px; text-align:center; background-color:#f0f7fe; padding:20px 0px;">
-	<div class="view" style="width:1224px; margin:0 auto; padding:10px;  line-height:50px; ">
-		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
+<div style="width:1920px; text-align:center; background-color:#dfecfb; padding-bottom:50px;">
+	<div style="position:sticky; top:0px; background-color:#0863ec; z-index:100; border-radius:0px 0px 50px 50px; width:100%; margin:0 auto; padding:10px;  line-height:50px; ">
+		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
 			<input type="text" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
 		</div>
-		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
+		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 				<div class="row justify-content-center">
 					<div class="col-md-5">
 						<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
@@ -224,7 +264,7 @@ inputRight.addEventListener("input", setRightValue);
 					</div>
 				</div>
 		</div>
-		<div style="border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
+		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br>
 			<select class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
 				<option selected ></option>
@@ -278,9 +318,9 @@ inputRight.addEventListener("input", setRightValue);
 				</div>
 			</div>
 			<div style="width:100%; margin-top:10px;">
-				<input id="min-price" type="text" value="250000원" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;">
+				<input id="min-price" type="text" value="250000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 				<div style="display:inline-block;">-</div>
-				<input id="max-price" type="text" value="750000원" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;">
+				<input id="max-price" type="text" value="750000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 			</div>
 			<div style="width:100%; margin:30px 0px; border-top:1px solid #f2f2f2;"></div>
 			<div style="width:100%;">
@@ -295,27 +335,27 @@ inputRight.addEventListener("input", setRightValue);
 			<div style="width:100%;">
 				<div style="text-align:left;font-size:12pt; font-weight:bold;">숙소 종류</div>
 				<div class="check" style="margin:20px 0px; width:100%;text-align:left;">
-					<input type="checkbox" value="motel"><span style="font-size:10pt; color:#0f294d;">모텔</span><br>
-					<input type="checkbox" value="hotel"><span style="font-size:10pt; color:#0f294d;">호텔</span><br>
-					<input type="checkbox" value="resort"><span style="font-size:10pt; color:#0f294d;">리조트</span><br>
-					<input type="checkbox" value="pension"><span style="font-size:10pt; color:#0f294d;">펜션</span><br>
-					<input type="checkbox" value="guesthouse"><span style="font-size:10pt; color:#0f294d;">게스트 하우스</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">캠핑  & 글램핑</span><br>
+					<input type="radio" name="type" value="motel"><span style="font-size:10pt; color:#0f294d;">모텔</span><br>
+					<input type="radio" name="type" value="hotel"><span style="font-size:10pt; color:#0f294d;">호텔</span><br>
+					<input type="radio" name="type" value="resort"><span style="font-size:10pt; color:#0f294d;">리조트</span><br>
+					<input type="radio" name="type" value="pension"><span style="font-size:10pt; color:#0f294d;">펜션</span><br>
+					<input type="radio" name="type" value="guesthouse"><span style="font-size:10pt; color:#0f294d;">게스트 하우스</span><br>
+					<input type="radio" name="type" value="camping"><span style="font-size:10pt; color:#0f294d;">캠핑  & 글램핑</span><br>
 				</div>
 			</div>
 			<div style="width:100%; margin:30px 0px; border-top:1px solid #f2f2f2;"></div>
 			<div style="width:100%;">
 				<div style="text-align:left;font-size:12pt; font-weight:bold;">숙소 내 시설</div>
 				<div class="check" style="margin:20px 0px; width:100%;text-align:left;">
-					<input type="checkbox" value="motel"><span style="font-size:10pt; color:#0f294d;">내부 수영장</span><br>
-					<input type="checkbox" value="hotel"><span style="font-size:10pt; color:#0f294d;">야외 수영장</span><br>
-					<input type="checkbox" value="resort"><span style="font-size:10pt; color:#0f294d;">주차장</span><br>
-					<input type="checkbox" value="pension"><span style="font-size:10pt; color:#0f294d;">픽업</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">와이파이</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">인근해변</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">바베큐</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">조식</span><br>
-					<input type="checkbox" value="camping"><span style="font-size:10pt; color:#0f294d;">반려동물</span><br>
+					<input type="checkbox" name="inPool_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">내부 수영장</span><br>
+					<input type="checkbox" name="outPool_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">야외 수영장</span><br>
+					<input type="checkbox" name="parking_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">주차장</span><br>
+					<input type="checkbox" name="pickup_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">픽업</span><br>
+					<input type="checkbox" name="wifi_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">와이파이</span><br>
+					<input type="checkbox" name="beach_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">인근해변</span><br>
+					<input type="checkbox" name="bbq_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">바베큐</span><br>
+					<input type="checkbox" name="breakfast_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">조식</span><br>
+					<input type="checkbox" name="animal_yn" value="Y"><span style="font-size:10pt; color:#0f294d;">반려동물</span><br>
 				</div>
 			</div>
 		</div>	
@@ -334,7 +374,7 @@ inputRight.addEventListener("input", setRightValue);
 							</div>
 						</c:when>
 						<c:otherwise>
-							<img src="<%=request.getContextPath() %>/resources/uploadFiles/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+							<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
 						</c:otherwise>
 					</c:choose>
 					

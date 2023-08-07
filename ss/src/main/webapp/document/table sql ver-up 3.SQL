@@ -402,7 +402,7 @@ CREATE TABLE Local
 );
 
 
-CREATE TABLE pay
+CREATE TABLE rentalhome_pay
 (
 	pay_idx int NOT NULL AUTO_INCREMENT,
 	room_idx int NOT NULL,
@@ -431,7 +431,7 @@ CREATE TABLE Point
 );
 
 
-CREATE TABLE price
+CREATE TABLE rentalhome_price
 (
 	price_idx int NOT NULL AUTO_INCREMENT,
 	change_yn char DEFAULT 'N' NOT NULL,
@@ -501,20 +501,6 @@ CREATE TABLE rentalhome_report
 	uNo int NOT NULL,
 	PRIMARY KEY (report_idx)
 );
-
-
-CREATE TABLE reserve
-(
-	reserve_idx int NOT NULL AUTO_INCREMENT,
-	room_idx int NOT NULL,
-	start_date datetime,
-	end_date datetime,
-	reserve_status varchar(10),
-	price int,
-	uNo int NOT NULL,
-	PRIMARY KEY (reserve_idx)
-);
-
 
 CREATE TABLE review
 (
@@ -792,9 +778,9 @@ ALTER TABLE food_review_report
 ;
 
 
-ALTER TABLE room
+ALTER TABLE rentalhome_price
 	ADD FOREIGN KEY (price_idx)
-	REFERENCES price (price_idx)
+	REFERENCES rentalhome_room (price_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
@@ -820,45 +806,45 @@ ALTER TABLE rentalhome_report
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review
+ALTER TABLE rentalhome_review
 	ADD FOREIGN KEY (rentalhome_idx)
 	REFERENCES rentalhome (rentalhome_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE room
+ALTER TABLE rentalhome_room
 	ADD FOREIGN KEY (rentalhome_idx)
 	REFERENCES rentalhome (rentalhome_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review_attach
+ALTER TABLE rentalhome_review_attach
 	ADD FOREIGN KEY (review_idx)
-	REFERENCES review (review_idx)
+	REFERENCES rentalhome_review (review_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review_report
+ALTER TABLE rentalhome_review_report
 	ADD FOREIGN KEY (review_idx)
-	REFERENCES review (review_idx)
+	REFERENCES rentalhome_review (review_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
 
-ALTER TABLE pay
+ALTER TABLE rentalhome_pay
 	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
+	REFERENCES rentalhome_room (room_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE room_attach
+ALTER TABLE rentalhome_room_attach
 	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
+	REFERENCES rentalhome_room (room_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
@@ -886,21 +872,21 @@ ALTER TABLE rentalhome_report
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review
+ALTER TABLE rentalhome_review
 	ADD FOREIGN KEY (uNo)
 	REFERENCES User (uNo)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review
+ALTER TABLE rentalhome_review
 	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
+	REFERENCES rentalhome_room (room_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review_report
+ALTER TABLE rentalhome_review_report
 	ADD FOREIGN KEY (uNo)
 	REFERENCES User (uNo)
 	ON UPDATE CASCADE
@@ -908,25 +894,9 @@ ALTER TABLE review_report
 ;
 
 
-ALTER TABLE pay
+ALTER TABLE rentalhome_room_attach
 	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE reserve
-	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE room_attach
-	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
+	REFERENCES rentalhome_room (room_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
@@ -1100,7 +1070,7 @@ ALTER TABLE rentalhome_report
 ;
 
 
-ALTER TABLE reserve
+ALTER TABLE rentalhome_reserve
 	ADD FOREIGN KEY (uNo)
 	REFERENCES User (uNo)
 	ON UPDATE CASCADE
@@ -1108,16 +1078,16 @@ ALTER TABLE reserve
 ;
 
 
-ALTER TABLE review
+ALTER TABLE rentalhome_review
 	ADD FOREIGN KEY (uNo)
 	REFERENCES User (uNo)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
 
-ALTER TABLE review
+ALTER TABLE rentalhome_review
 	ADD FOREIGN KEY (room_idx)
-	REFERENCES room (room_idx)
+	REFERENCES rentalhome_room (room_idx)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ;
