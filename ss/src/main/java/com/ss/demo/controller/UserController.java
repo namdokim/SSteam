@@ -57,6 +57,15 @@ public class UserController
 		System.out.println("실행여부");
 		return "User/userJoin";
 	}
+	// 회원가입시 개인정보및 타입 지정 페이지
+	@RequestMapping(value="/joinCheck.do" )
+	public String joinCheck(
+			
+			)
+	{
+		System.out.println("실행여부");
+		return "User/joinCheck";
+	}
 	//회원가입 처리
 	@RequestMapping(value="/userJoinAction.do")
 	public String userJoinAction( UserVO uv,

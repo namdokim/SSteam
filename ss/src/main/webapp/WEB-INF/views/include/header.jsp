@@ -157,12 +157,12 @@
 				</a>
 			</div>
 			<!-- 검색기능 -->
-			<div class="header-search">
+<!-- 			<div class="header-search">
 			<form class="d-flex">
 				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			</div>
+			</div> -->
 			<!-- 로그인 폼 -->
 			<!-- <div class="mainlogin">
 			<form name="login" id="login" >
@@ -187,6 +187,7 @@
 				<ul id="dropdownbox" class="dropdown-menu" >
 					<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a></li>
 					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a></li>
+					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/joinCheck.do">개인정보동의</a></li>
 				</ul>
 					</c:if>
 					<c:if test="${not empty login}">
