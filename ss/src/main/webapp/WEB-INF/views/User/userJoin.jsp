@@ -28,7 +28,10 @@ function DoRewrite()
 	input::placeholder
 	{
 		text-align: left;
-		color: 
+	}
+	#idbutton{
+		text-align: right;
+		align-content: right;
 	}
 	.form-label
 	{
@@ -41,6 +44,7 @@ function DoRewrite()
 		font-size: 20px ;
 		font-weight: bolder;
 	}
+	
 /* 비밀번호 감추기 보여주기  */
 .input {
   position: relative;
@@ -77,17 +81,18 @@ function DoRewrite()
 				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;"></div>
 				<!-- 회원가입 폼  -->
 				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+					<div class="col-12">
 					<div class="g-3">
 						<div class="grid text-center">
 							<label for="ID" class="form-label">아이디</label>
-							<input class="g-col-6 form-control" type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
+							<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
 							<div class="invalid-feedback">
 							이메일 이름을 써주세요
 							</div>
-							<div class="invalid-feedback">
+<!-- 							<div class="invalid-feedback">
 							도메인을 선택해주세요.
-							</div>
-							<select class="form-select " id="uId_email" name="uId_email" onchange="email();">	
+							</div> -->
+							<select class="form-select" id="uId_email" name="uId_email" onchange="email();">	
 								<option value="">도메인을 선택해주세요</option>
 								<option value="@naver.com">naver.com</option>
 								<option value="@daum.net">daum.net</option>
@@ -98,8 +103,19 @@ function DoRewrite()
 								<option value="@outlook.com">outlook.com</option>
 								<option value="@hotmail.com">hotmail.com</option>
 							</select>
+							<!-- float-end py-1 -->
+							<!-- d-flex justify-content -->
+							<!-- class="float-end btn btn-secondary mb-1" -->
+							<div id="idbutton" class="d-flex justify-content align-items-right">
+								<div class="col-md-12">
+								<input type="button" class="btn btn-secondary mb-1" value="인증하기" id="emailCheck" onclick="emailAuth();">
+								<input type="button" class="btn btn-primary mb-1" value="중복확인 " id="emaildomain" onclick="emailcheck();">
+								</div>
+								<!-- <input type="hidden" name="idchecked" id=""value="checkednot"> -->
+							</div>
 						</div>
-					</div>
+					</div> <!-- g-3 -->
+					</div> <!-- col-12 -->
 					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
 						<span id="msg_id"></span>
 						<span id="msg_email"></span>
@@ -107,7 +123,7 @@ function DoRewrite()
 						<div class="input password">
 						<label for="password" class="form-label">비밀번호 </label>
 						<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
-							<div class="eyes"><i class="fas fa-eye"></i></div>
+							<div class="eyes pt-5 mt-5"><i class="fas fa-eye"></i></div>
 						<div class="invalid-feedback eyes">
 							비밀번호를 입력해 주세요
 						</div>
@@ -148,37 +164,40 @@ function DoRewrite()
 					</div>
 					<!-- 우편번호 주소 -->
 						<label for="address" class="form-label">우편번호</label>
-					<div class="col-md-5">
+					<div class="col-12 d-flex justify-content-between align-items-center">
+						<div class="col-md-6">
 						<input  class="form-control" type="text" id="uAddsPostCode"  placeholder="우편번호">
 						</div>
+						<input class="float-end btn btn-secondary mb-1" onclick="DaumPostcode();" type="button" value="우편번호찾기">
+					</div>
 						<div class="col-12">
-						<input class="form-control" type="text" id="uRoadAddress" style="width: 100%;" placeholder="도로명주소">
+						<input class="form-control" type="text" id="uRoadAddress"  placeholder="도로명주소">
 						</div>
 						<div class="col-12">
-						<input  class="form-control" type="text" id="uJibunAddress" style="width: 100%;" placeholder="지번주소">            
+						<input  class="form-control" type="text" id="uJibunAddress"  placeholder="지번주소">            
 						</div>
 						
-						<div class="col-md-6">
-						<input class="form-control" type="text" id="uDetailAddress" style="width: 60%;" placeholder="상세주소">
+						<div class="col-12">
+						<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
 						</div>	
 						
-						<div class="col-md-5">
 						<label for="address" class="form-label">참고항목</label>
+						<div class="col-md-5">
 						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
+						</div>
 					<!-- 회원가입 입력란 끝 -->
 						<hr class="my-4">
-						<div class="row">
+						<div class="d-flex justify-content-center my-4">
 							<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
 							<a href="javascript:DoRewrite()">
-							<input class="w-33 btn btn-primary btn-lg" type="button" value="다시쓰기">
+							<input class="w-33 btn btn-primary btn-lg mx-2" type="button" value="다시쓰기">
 							</a>
-							<a href="<%=request.getContextPath() %>/index.jsp">
+							<a href="<%=request.getContextPath() %>/">
 							<input class="w-33 btn btn-primary btn-lg" type="button" value="취소">
 							</a>
 						</div>
-					
-					</div>
 				</form>
+					</div>
 			</div>
 		<!-- </div> col-md-7 col-lg-8 -->
 	<!-- </div> row g-5 끝  -->
@@ -667,7 +686,7 @@ $(function(){
 			console.log("uIdemailDup = "+uIdemailDup);
 			$("#uId").val("").focus();
 			return false;
-		}else if( uIdDup == false){
+		} else if( uIdDup == false){
 			
 			alert("아이디가 중복됩니다");
 			console.log("uIdDup="+uIdDup);
@@ -702,6 +721,7 @@ $(function(){
 			if( uIdDup == true && uNickDup == true && uPwDup == true)
 				{
 					$("form").submit();
+					alert("회원가입이 완료 되였습니다");
 				}
 			else
 				{
