@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ss.demo.dao.RentalhomeDAO;
 import com.ss.demo.domain.RentalhomeVO;
+import com.ss.demo.domain.RoomVO;
 
 @Service
 public class RentalhomeServiceImpl implements RentalhomeService{
@@ -48,6 +49,72 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	public int delete_rentalhome(int rentalhome_idx) {
 		
 		return rentalhomeDAO.delete_rentalhome(rentalhome_idx);
+	}
+
+	@Override
+	public int insert_room(RoomVO roomVO) {
+		
+		return rentalhomeDAO.insert_room(roomVO);
+	}
+
+	@Override
+	public int insert_room_file(RoomVO roomVO) {
+		
+		return rentalhomeDAO.insert_room_file(roomVO);
+	}
+
+	@Override
+	public List<RoomVO> selectAll_room(int rentalhome_idx) {
+		
+		return rentalhomeDAO.selectAll_room(rentalhome_idx);
+	}
+
+	@Override
+	public RoomVO selectOneByIdx_room(int room_idx) {
+		
+		return rentalhomeDAO.selectOneByIdx_room(room_idx);
+	}
+
+	@Override
+	public int update_room(RoomVO roomVO) {
+		
+		return rentalhomeDAO.update_room(roomVO);
+	}
+
+	@Override
+	public int delete_room(int room_idx) {
+		
+		return rentalhomeDAO.delete_room(room_idx);
+	}
+
+	@Override
+	public List<RentalhomeVO> selectAll_rentalhome_attach(int rentalhome_idx) {
+			
+		return rentalhomeDAO.selectAll_rentalhome_attach(rentalhome_idx);
+	}
+
+	@Override
+	public int init_attach_thumbmail(int rentalhome_idx) {
+		
+		return rentalhomeDAO.init_attach_thumbnail(rentalhome_idx);
+	}
+
+	@Override
+	public int attach_thumbmail(int attach_idx) {
+		
+		return rentalhomeDAO.attach_thumbnail(attach_idx);
+	}
+
+	@Override
+	public List<RoomVO> selectAll_room_attach() {
+		
+		return rentalhomeDAO.selectAll_room_attach();
+	}
+
+	@Override
+	public int delete_attach(int attach_idx) {
+		
+		return rentalhomeDAO.delete_attach(attach_idx);
 	}
 	
 }

@@ -44,7 +44,7 @@ window.onload = function(){
 }
 
 </script>
-<div style="width:1920px; text-align:center; background-color:#f0f7fe; padding:20px 0px;">
+<div style="width:1920px; text-align:center; background-color:#dfecfb; padding:20px 0px;">
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;  line-height:50px; ">
 		<div style="width:100%; padding:10px; margin:10px 0px;"><span style="font-size:20pt; font-weight:bold;">숙소 등록하기</span></div>
 		<div style="width:100%; padding:10px; margin:10px 0px; text-align:left;">

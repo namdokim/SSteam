@@ -9,64 +9,25 @@
 	<selectKey resultType="int" keyProperty="rentalhome_idx" order="AFTER">
 		SELECT LAST_INSERT_ID()
 	</selectKey>
-		insert into rentalhome (
-			uNo,
-			name, 
-			address, 
-			info, 
-			type, 
-			inPool_yn, 
-			outPool_yn,
-			parking_yn,
-			pickup_yn,
-			wifi_yn,
-			beach_yn,
-			bbq_yn,
-			breakfast_yn,
-			animal_yn,
-			checkIn,
-			checkOut,
-			checkIn_info,
-			breakfast_price,
-			breakfast_open,
-			breakfast_close,
-			breakfast_day ) 
-		values (
-			#{uNo},
-			#{name},
-			#{address},
-			#{info},
-			#{type},
-			#{inPool_yn},
-			#{outPool_yn},
-			#{parking_yn},
-			#{pickup_yn},
-			#{wifi_yn},
-			#{beach_yn},
-			#{bbq_yn},
-			#{breakfast_yn},
-			#{animal_yn},
-			#{checkIn},
-			#{checkOut},
-			#{checkIn_info},
-			#{breakfast_price},
-			#{breakfast_open},
-			#{breakfast_close},
-			#{breakfast_day} )
+		INSERT INTO rentalhome (
+			uNo, name, address, info, type, inPool_yn, outPool_yn, parking_yn, pickup_yn, wifi_yn,
+			beach_yn, bbq_yn, breakfast_yn, animal_yn, checkIn, checkOut, checkIn_info, breakfast_price,
+			breakfast_open, breakfast_close, breakfast_day 
+		) VALUES (
+			#{uNo}, #{name}, #{address}, #{info}, #{type}, #{inPool_yn}, #{outPool_yn}, #{parking_yn},
+			#{pickup_yn}, #{wifi_yn}, #{beach_yn}, #{bbq_yn}, #{breakfast_yn}, #{animal_yn}, #{checkIn},
+			#{checkOut}, #{checkIn_info}, #{breakfast_price}, #{breakfast_open}, #{breakfast_close}, #{breakfast_day}
+		)
 	</insert>
 
 	<insert id="insert_file" parameterType="rentalhomeVO">
 		INSERT INTO rentalhome_attach(
-			rentalhome_idx,
-			logical_name,
-			physical_name
+			rentalhome_idx, logical_name, physical_name
 	<if test='thumbnail.equals("Y")'>
 			,thumbnail
 	</if>
 		) VALUES (
-			#{rentalhome_idx},
-			#{logical_name},
-			#{physical_name}
+			#{rentalhome_idx}, #{logical_name}, #{physical_name}
 	<if test='thumbnail.equals("Y")'>
 			,#{thumbnail}
 	</if>
@@ -106,11 +67,83 @@
 		ORDER BY s.rentalhome_idx desc
 	</select>
 	
-	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
-		select * from rentalhome where rentalhome_idx = #{rentalhome_idx}
+	<select id="selectAll_room" resultType="roomVO">
+		SELECT *,
+			 (select physical_name from rentalhome_room_attach where thumbnail = 'Y' and room_idx = rentalhome_room.room_idx ) as physical_name 
+		FROM rentalhome_room 
+		WHERE rentalhome_idx = #{rentalhome_idx}
 	</select>
 	
+	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
+		SELECT* FROM rentalhome WHERE rentalhome_idx = #{rentalhome_idx}
+	</select>
+
+	<select id="selectOneByIdx_room" resultType="roomVO" parameterType="int">
+		SELECT* FROM rentalhome_room WHERE room_idx = #{room_idx}
+	</select>
+	
+	<select id="selectAll_rentalhome_attach" parameterType="int" resultType="rentalhomeVO">
+		SELECT * FROM rentalhome_attach WHERE rentalhome_idx = #{rentalhome_idx}
+	</select>
+
+	<select id="selectAll_room_attach" resultType="roomVO">
+		SELECT * FROM rentalhome_room_attach
+	</select>
+
 	<delete id="delete_rentalhome" parameterType="int">
-		delete from rentalhome where rentalhome_idx = #{rentalhome_idx}
+		DELETE FROM rentalhome WHERE rentalhome_idx = #{rentalhome_idx}
 	</delete>
+	
+	<insert id="insert_room_file" parameterType="roomVO">
+		INSERT INTO rentalhome_room_attach(
+			room_idx, logical_name, physical_name, thumbnail
+		) VALUES(
+			#{room_idx}, #{logical_name}, #{physical_name}, #{thumbnail}
+		)
+	</insert>
+
+	<insert id="insert_room" parameterType="roomVO">
+		<selectKey resultType="int" keyProperty="room_idx" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO rentalhome_room(
+			rentalhome_idx, name, min_person, max_person, weekday_price, weekend_price,
+			smoking, wifi, bed_info
+		) VALUES (
+			#{rentalhome_idx}, #{name}, #{min_person}, #{max_person}, #{weekday_price}, #{weekend_price},
+			#{smoking}, #{wifi}, #{bed_info}
+		)
+	</insert>
+	
+	<update id="update_room" parameterType="roomVO">
+		UPDATE rentalhome_room SET
+			name = #{name},
+			min_person = #{min_person},
+			max_person = #{max_person},
+			weekday_price = #{weekend_price},
+			smoking = #{smoking},
+			wifi = #{wifi},
+			bed_info = #{bed_info}
+		WHERE room_idx = #{room_idx}
+	</update>
+	
+	<delete id="delete_room" parameterType="int">
+		DELETE FROM rentalhome_room WHERE room_idx = #{room_idx}
+	</delete>
+
+	<delete id="delete_attach" parameterType="int">
+		DELETE FROM rentalhome_attach WHERE attach_idx = #{attach_idx}
+	</delete>
+	
+	<update id="init_attach_thumbnail" parameterType="int">
+		UPDATE rentalhome_attach SET
+			thumbnail = 'N'
+		WHERE rentalhome_idx = #{rentalhome_idx}
+	</update>
+	
+	<update id="attach_thumbnail" parameterType="int">
+		UPDATE rentalhome_attach SET
+			thumbnail = 'Y'
+		WHERE attach_idx = #{attach_idx}
+	</update>
 </mapper>

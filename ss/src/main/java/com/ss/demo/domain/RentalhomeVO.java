@@ -25,11 +25,18 @@ public class RentalhomeVO {
 	private String breakfast_close;	// 조식 마감시간
 	private String breakfast_day;	// 조식 영업일
 
+	private int attach_idx;			// 숙소 첨부파일 번호
 	private String logical_name;	// 사용자가 올린 파일 이름
 	private String physical_name;	// 로컬에 저장된 파일 이름
 	private String thumbnail;		// 썸네일 Y, N	
 	
 	
+	public int getAttach_idx() {
+		return attach_idx;
+	}
+	public void setAttach_idx(int attach_idx) {
+		this.attach_idx = attach_idx;
+	}
 	public String getThumbnail() {
 		return thumbnail;
 	}

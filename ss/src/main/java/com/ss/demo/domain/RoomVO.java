@@ -5,7 +5,6 @@ public class RoomVO {
 	
 	private int room_idx;			// 객실 번호
 	private int rentalhome_idx;		// 숙소 번호
-	private int price_idx;			// 할인 번호
 	private String name;			// 객실 이름
 	private int min_person;			// 최소 인원
 	private int max_person;			// 최대 인원
@@ -32,12 +31,6 @@ public class RoomVO {
 	}
 	public void setRentalhome_idx(int rentalhome_idx) {
 		this.rentalhome_idx = rentalhome_idx;
-	}
-	public int getPrice_idx() {
-		return price_idx;
-	}
-	public void setPrice_idx(int price_idx) {
-		this.price_idx = price_idx;
 	}
 	public String getName() {
 		return name;
@@ -108,7 +101,7 @@ public class RoomVO {
 	
 	@Override
 	public String toString() {
-		return "RoomVO [room_idx=" + room_idx + ", rentalhome_idx=" + rentalhome_idx + ", price_idx=" + price_idx
+		return "RoomVO [room_idx=" + room_idx + ", rentalhome_idx=" + rentalhome_idx
 				+ ", name=" + name + ", min_person=" + min_person + ", max_person=" + max_person + ", weekday_price="
 				+ weekday_price + ", weekend_price=" + weekend_price + ", smoking=" + smoking + ", wifi=" + wifi
 				+ ", bed_info=" + bed_info + ", logical_name=" + logical_name + ", physical_name=" + physical_name
