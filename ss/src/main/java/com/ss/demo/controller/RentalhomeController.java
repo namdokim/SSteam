@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ss.demo.domain.Criteria;
+import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.RoomVO;
 import com.ss.demo.service.RentalhomeService;
@@ -27,12 +29,23 @@ public class RentalhomeController {
 	
 	@Autowired
 	private RentalhomeService rentalhomeService;
+
+	@Autowired
+	private PageMaker pageMaker;
 	
 	@RequestMapping(value="/rentalhomeMain.do")
-	public String rentalhomeMain(Model model){
+	public String rentalhomeMain(Model model, Criteria cri){
 		
-		List<RentalhomeVO> list = rentalhomeService.selectAll();
+		List<RentalhomeVO> list = rentalhomeService.selectAll(cri);
 		model.addAttribute("list", list);
+		
+		int totalCount = rentalhomeService.select_rentalhome_count();
+		
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+		System.out.println(pageMaker.toString());
+		model.addAttribute("pageMaker", pageMaker);
+		
 		
 //		System.out.println(list.get(list.size()-1).getLogical_name());
 		return "rentalhome/rentalhomeMain";

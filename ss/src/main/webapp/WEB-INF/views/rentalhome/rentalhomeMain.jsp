@@ -1,3 +1,4 @@
+<%@page import="com.ss.demo.domain.PageMaker"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
@@ -6,6 +7,7 @@
 	{
 		System.out.println("로그인 됨");
 	}
+	PageMaker pageMaker = (PageMaker)request.getAttribute("pageMaker");
 %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -411,6 +413,23 @@ maxPriceInput.addEventListener("blur", function() {
 			%>
 			<div style="width:100%; text-align:right; margin:20px 0px;">
 				<span onclick="location.href='rentalhomeWrite.do'" style="padding:12px 20px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
+			</div>
+			<div style="width:100%; text-align:right; margin:20px 0px;">
+				<% if (pageMaker.isPrev()){ %>
+				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getStartPage()-1%>"><span style="padding:0px 10px;">◀</span></a>
+				<%} %>
+				<% 
+				for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
+				%>
+				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
+					<span style="padding:0px 10px;"><%=i %></span>
+				</a>
+				<%	
+				}
+				%>
+				<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %>
+				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>"><span style="padding:0px 10px;"></span>▶</a>
+				<% } %>
 			</div>
 		</div>
 	</div>
