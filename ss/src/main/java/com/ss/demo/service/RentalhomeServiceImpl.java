@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ss.demo.dao.RentalhomeDAO;
+import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.RoomVO;
 
@@ -22,9 +23,9 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	}
 
 	@Override
-	public List<RentalhomeVO> selectAll() {
-		
-		return rentalhomeDAO.selectAll();
+	public List<RentalhomeVO> selectAll(Criteria cri) {
+//		cri.setsNum((cri.getPage()-1)*cri.getPerPageNum());
+		return rentalhomeDAO.selectAll(cri);
 	}
 
 	@Override
@@ -35,7 +36,6 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 
 	@Override
 	public int update(RentalhomeVO rentalhomeVO) {
-		System.out.println("서비스 구현체 진입");
 		return rentalhomeDAO.update(rentalhomeVO);
 	}
 
@@ -115,6 +115,12 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	public int delete_attach(int attach_idx) {
 		
 		return rentalhomeDAO.delete_attach(attach_idx);
+	}
+
+	@Override
+	public int select_rentalhome_count() {
+		
+		return rentalhomeDAO.select_rentalhome_count();
 	}
 	
 }

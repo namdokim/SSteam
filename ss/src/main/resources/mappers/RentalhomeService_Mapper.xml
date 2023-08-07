@@ -60,18 +60,23 @@
 			rentalhome_idx = #{rentalhome_idx}
 	</update>
 	
-	<select id="selectAll" resultType="rentalhomeVO">
+	<select id="selectAll" resultType="rentalhomeVO" parameterType="cri">
 		SELECT * 
 		FROM rentalhome S LEFT OUTER JOIN (select * from rentalhome_attach where thumbnail = 'Y') D
 		ON S.rentalhome_idx = D.rentalhome_idx
+		WHERE s.status = 'Y' 
 		ORDER BY s.rentalhome_idx desc
+		LIMIT #{sNum},#{perPageNum}
 	</select>
-	
+	<select id="select_rentalhome_count" resultType="int">
+		SELECT COUNT(*) FROM rentalhome WHERE status = 'Y'
+	</select>
 	<select id="selectAll_room" resultType="roomVO">
 		SELECT *,
 			 (select physical_name from rentalhome_room_attach where thumbnail = 'Y' and room_idx = rentalhome_room.room_idx ) as physical_name 
 		FROM rentalhome_room 
 		WHERE rentalhome_idx = #{rentalhome_idx}
+			AND status = 'Y'
 	</select>
 	
 	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
@@ -90,9 +95,9 @@
 		SELECT * FROM rentalhome_room_attach
 	</select>
 
-	<delete id="delete_rentalhome" parameterType="int">
-		DELETE FROM rentalhome WHERE rentalhome_idx = #{rentalhome_idx}
-	</delete>
+	<update id="delete_rentalhome" parameterType="int">
+		UPDATE rentalhome SET status = 'N' WHERE rentalhome_idx = #{rentalhome_idx}
+	</update>
 	
 	<insert id="insert_room_file" parameterType="roomVO">
 		INSERT INTO rentalhome_room_attach(
@@ -127,9 +132,9 @@
 		WHERE room_idx = #{room_idx}
 	</update>
 	
-	<delete id="delete_room" parameterType="int">
-		DELETE FROM rentalhome_room WHERE room_idx = #{room_idx}
-	</delete>
+	<update id="delete_room" parameterType="int">
+		UPDATE rentalhome_room SET status = 'N' WHERE room_idx = #{room_idx}
+	</update>
 
 	<delete id="delete_attach" parameterType="int">
 		DELETE FROM rentalhome_attach WHERE attach_idx = #{attach_idx}

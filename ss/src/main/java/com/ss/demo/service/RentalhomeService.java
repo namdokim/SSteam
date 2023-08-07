@@ -2,6 +2,7 @@ package com.ss.demo.service;
 
 import java.util.List;
 
+import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.RoomVO;
 
@@ -9,7 +10,7 @@ public interface RentalhomeService {
 	
 	public int insert(RentalhomeVO rentalhomeVO);
 
-	public List<RentalhomeVO> selectAll();
+	public List<RentalhomeVO> selectAll(Criteria cri);
 
 	public List<RentalhomeVO> selectAll_rentalhome_attach(int rentalhome_idx);
 
@@ -19,6 +20,8 @@ public interface RentalhomeService {
 	public int update(RentalhomeVO rentalhomeVO);
 	
 	public int delete_rentalhome(int rentalhome_idx);
+
+	public int select_rentalhome_count();
 
 	public int insert_file(RentalhomeVO rentalhomeVO);
 

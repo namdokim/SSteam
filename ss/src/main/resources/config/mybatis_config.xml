@@ -8,6 +8,7 @@
 	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
 	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
 	<typeAlias type="com.ss.demo.domain.RoomVO" alias="roomVO" />
+	<typeAlias type="com.ss.demo.domain.Criteria" alias="cri" />
 	<!-- 게시글 -->
 	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
 	

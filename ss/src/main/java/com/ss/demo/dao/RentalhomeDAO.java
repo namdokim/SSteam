@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.RoomVO;
 
@@ -22,8 +23,13 @@ public class RentalhomeDAO {
 	}
 
 	// 숙소 리스트 불러오기
-	public List<RentalhomeVO> selectAll() {
-		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll");
+	public List<RentalhomeVO> selectAll(Criteria cri) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll", cri);
+	}
+
+	// 등록된 숙소카운트 (rentalhome.status = 'Y')
+	public int select_rentalhome_count() {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.select_rentalhome_count");
 	}
 
 	// 숙소 VIEW 데이터 
@@ -48,7 +54,7 @@ public class RentalhomeDAO {
 	
 	// 숙소 정보 삭제하기
 	public int delete_rentalhome(int rentalhome_idx) {
-		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_rentalhome", rentalhome_idx);
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.delete_rentalhome", rentalhome_idx);
 	}
 	
 	// 객실 등록하기
@@ -77,7 +83,7 @@ public class RentalhomeDAO {
 	
 	// 객실 정보 삭제하기
 	public int delete_room(int room_idx) {
-		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_room", room_idx);
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.delete_room", room_idx);
 	}
 
 	// 숙소 이미지 리스트 불러오기
