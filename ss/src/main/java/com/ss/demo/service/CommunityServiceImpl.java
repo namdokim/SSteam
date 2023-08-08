@@ -36,10 +36,17 @@ public class CommunityServiceImpl implements CommunityService
 		return communityDAO.getBoardCount_TypeChoice(boardType);
 	}
 	
-	// 페이지에 대한 게시글 정보 얻기
+	// 전체 게시글의 페이지에 대한 게시글 정보 얻기
 	@Override
-	public List<Community_BoardVO> getBoardPage(int boardType, int nowPage)
+	public List<Community_BoardVO> getBoardPage(int nowPage)
 	{
-		return communityDAO.getBoardPage(boardType, nowPage);
+		return communityDAO.getBoardPage(nowPage);
+	}
+	
+	// 특정 게시글의 페이지에 대한 게시글 정보 얻기
+	@Override
+	public List<Community_BoardVO> getBoardPage_TypeChoice(int boardType, int nowPage)
+	{
+		return communityDAO.getBoardPage_TypeChoice(boardType, nowPage);
 	}
 }
