@@ -239,15 +239,6 @@
 			<div class = "float-right">
 				<button type = "button" class = "btn btn-outline-secondary" style = "--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: 15rem">
 					<a href = "CommunityWrite.do?boardType=${boardType}" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
-					<%--
-					<%
-						if( loginVo != null )
-						{
-							%><a href="write.jsp?type=<%= type %>" class="btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-							%><a href="write.jsp?type=<%= type %>" class=" float-right btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-						}
-					%>
-					--%>
 				</button>
 			</div>
 		</div>	
@@ -260,36 +251,66 @@
 					</a>
 					<hr>
 					<ul class = "nav nav-pills flex-column mb-auto">
-						<li class = "nav-item" >
-							<a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark"  style = "text-align:center">						
-								전체글
-							</a>
+						<li class="nav-item">
+						    <c:choose>
+						        <c:when test = "${boardType == 0}">
+						            <a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 전체글 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 전체글 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">			
-								공지사항
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 1}">
+						            <a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 공지사항 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 공지사항 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">								
-								정보 게시판
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 2}">
+						            <a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 정보 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 정보 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
-								후기 게시판
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 3}">
+						            <a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 후기 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 후기 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
-								질문 게시판 
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 4}">
+						            <a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 질문 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 질문 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center;">							
-								자유 게시판
-							</a>
-						</li>					
+							<c:choose>
+						        <c:when test = "${boardType == 99}">
+						            <a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 자유 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 자유 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
+						</li>
 					</ul>								
 				</div>
 				<!-- 사이드바 -->
@@ -298,18 +319,18 @@
 				<div class = "tab-content container-fluid ml-1 col-md-9" >		
 					<table class = "table table-striped">
 							<tr class = "vrow-inner" style = "background-color: lightgrey">
-								<th class = "vcol col-id" style = "text-align: center"> 번호 </th>
-								<th class = "vcol col-title" style = "text-align: center"> 제목 </th>
-								<th class = "vcol col-author" style = "text-align: center"> 작성자 </th>
-								<th class = "vcol col-time" style = "text-align: center"> 작성일 </th>
-								<th class = "vcol col-view" style = "text-align: center"> 조회수 </th>
-								<th class = "vcol col-recom" style = "text-align: center"> 추천 </th>
+								<th class = "vcol col-id" style = "text-align: center; width: 10%"> 번호 </th>
+								<th class = "vcol col-title" style = "text-align: center; width: 40%"> 제목 </th>
+								<th class = "vcol col-author" style = "text-align: center; width: 15%"> 작성자 </th>
+								<th class = "vcol col-time" style = "text-align: center; width: 15%"> 작성일 </th>
+								<th class = "vcol col-view" style = "text-align: center; width: 10%"> 조회수 </th>
+								<th class = "vcol col-recom" style = "text-align: center; width: 10%"> 추천 </th>
 							</tr>
 						<c:forEach items = "${nowPageBoardList}" var = "element">
 							<tr class = "vrow-inner">
 								<td class = "vcol col-id" style = "text-align: center"> ${element.board_number} </td>
 								<td class = "vcol col-title"> <a href="view.do?bidx=${element.board_number}"> ${element.board_title} </a> </td>
-								<td class = "vcol col-author" style = "text-align: center"> 작성작성 </td>
+								<td class = "vcol col-author" style = "text-align: center"> ${element.user_name} </td>
 								<td class = "vcol col-time" style = "text-align: center"> ${element.write_date} </td>
 								<td class = "vcol col-view" style = "text-align: center"> ${element.hit_count} </td>
 								<td class = "vcol col-recom" style = "text-align: center"> 추천추천 </td>

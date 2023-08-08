@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ss.demo.domain.Community_BoardVO;
+import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.CommunityService;
 
 @RequestMapping (value = "/Community")
@@ -39,21 +40,28 @@ public class CommunityController
 								  @RequestParam(name = "nowPage", defaultValue = "1") int nowPage,
             					  Model model)
 	{
-		// 게시글 개수 얻기
+		// 게시글 정보 얻기
 		int boardCount = 0;
+		List<Community_BoardVO> nowPageBoardList;
 		if (boardType == 0)
 		{
-			System.out.println("전체 게시글 개수 얻기");
+			System.out.println("전체 게시글");
 			boardCount = communityService.getBoardCount();
+			nowPageBoardList = communityService.getBoardPage(nowPage);
 		}
 		else
 		{
-			System.out.println("특정 게시글 개수 얻기");
+			System.out.println("특정 게시글");
 			boardCount = communityService.getBoardCount_TypeChoice(boardType);
+			nowPageBoardList = communityService.getBoardPage_TypeChoice(boardType, nowPage);
 		}
-		
-		// url 에 현재 선택 된 게시판의 게시글 저장
-		List<Community_BoardVO> nowPageBoardList = communityService.getBoardPage(boardType, nowPage);
+
+		// 날짜형식 변경
+		for (int i = 0; i < nowPageBoardList.size(); i++)
+		{
+			nowPageBoardList.get(i).setWrite_date(nowPageBoardList.get(i).getWrite_date().substring(0, 11));
+		}
+		// 모델에 게시글 전달
 		model.addAttribute("nowPageBoardList", nowPageBoardList);
 			
 		// 최대 페이지 번호 계산
@@ -103,17 +111,6 @@ public class CommunityController
 		System.out.println("board_title: " + req.getParameter("board_title"));
 		System.out.println("board_type: " + req.getParameter("board_type"));
 		System.out.println("board_content: " + req.getParameter("board_content"));
-		
-		/*
-		UserVO loginVO = (UserVO)session.getAttribute("login");
-		
-		if(loginVO == null)
-		{
-			return "redirect:CommunityMain.do";
-		}
-		
-		boardVO.setId(loginVO.getId());
-		*/
 		
 		communityService.insertBoard(communityBoardVO);
 		

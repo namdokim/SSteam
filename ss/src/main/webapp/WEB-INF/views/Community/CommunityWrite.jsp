@@ -9,19 +9,18 @@
 	System.out.println("boardType: " + boardType);
 %>
 
-<%--
 <%
 	// 로그인 정보가 없으면 진입 불가
-	UserVO userVO = (UserVO)session.getAttribute("userVO");
+	UserVO userVO = (UserVO)session.getAttribute("login");
 
 	if (userVO == null)
 	{
 		// 로그인 페이지로 이동
-		response.sendRedirect("Login.jsp");
+		String loginPath = request.getContextPath() + "/User/userLogin.do";
+		response.sendRedirect(loginPath);
 		return;
 	}
 %>
---%>
 
 <!DOCTYPE html>
 <html>
@@ -39,16 +38,16 @@
 						<form name = "write" method = "post" action = "<%= request.getContextPath() %>/Community/CommunityWriteCheck.do" >	
 							<input type = "hidden" name = "contentType" value = "html">
 							<div class = "write-head border-top border-bottom py-md-1">
-								글쓰기 &nbsp; | &nbsp; 작성자 <%-- <%= loginVo.getuName() %> --%> <input type = "hidden" name = "user_number" id = "user_number" value = "1">
+								작성자:　<%= userVO.getuName() %> <input type = "hidden" name = "user_number" id = "user_number" value = <%= userVO.getuNo() %>>
 							</div>
 							<div class = "sub-row py-md-1">
-							<span> 게시판 구분 </span> &nbsp;
+							<span> 게시판 구분:　</span>
 							<span>
 								<input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-1" autocomplete = "off" value = "1" <%= boardType.equals("1") ? "checked" : "" %> >								
 								<label class = "btn btn-light" for = "success-outlined-1"> 공지사항 </label>								
 							</span>
 							<span>
-								<input  type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-2" autocomplete = "off" value = "2" <%= boardType.equals("2") ? "checked" : "" %> >
+								<input  type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-2" autocomplete = "off" value = "2" <%= boardType.equals("2") ? "checked" : "checked" %> >
 								<label class = "btn btn-light" for = "success-outlined-2"> 정보 게시판 </label>
 							</span>
 							<span>

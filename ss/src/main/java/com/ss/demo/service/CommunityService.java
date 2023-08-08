@@ -14,6 +14,8 @@ public interface CommunityService
 	public int getBoardCount();
 	// 특정 게시글 개수 얻기
 	public int getBoardCount_TypeChoice(int boardType);
-	// 페이지에 대한 게시글 정보 얻기
-	public List<Community_BoardVO> getBoardPage(int boardType, int nowPage);
+	// 전체 게시글의 페이지에 대한 게시글 정보 얻기
+	public List<Community_BoardVO> getBoardPage(int nowPage);
+	// 특정 게시글의 페이지에 대한 게시글 정보 얻기
+	public List<Community_BoardVO> getBoardPage_TypeChoice(int boardType, int nowPage);
 }
