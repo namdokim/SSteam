@@ -9,6 +9,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>게시판</title>
 		<!-- lib 모음  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -23,6 +24,31 @@
 		<!-- summernote -->
 		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+		
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,500,500i">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/animate.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/style.css">
+		
+		<!-- 스크롤 바 스크립트 -->
+	<script type="text/javascript">
+	window.onscroll = function(){navigo ()};
+		function navigo (){
+		  const header = document.querySelector('.headertop');
+		  const headerheight = header.clientHeight;
+		document.addEventListener('scroll', onScroll, { passive: true });
+		 function onScroll () {
+		     const scrollposition = pageYOffset;
+		   const nav = document.querySelector('.navbar');
+		   if (headerheight<=scrollposition){
+		     nav.classList.add('fix')
+		   }
+		   else {
+		     nav.classList.remove('fix');
+		   }
+		 } 
+		  
+		}
+	</script>
 		
 	<!-- 이미지 파일 미리보기  -->
 	<script type="text/javascript">
@@ -83,23 +109,49 @@
 		}
 	});
 	</script>
+
 	</head>
 <style>
 	/* ass 믹스인을 사용하여 고유한 컨테이너 */
-	@mixin header-container($padding-x: $container-padding-x) {
+/* 	@mixin header-container($padding-x: $container-padding-x) {
 	width: 100%;
-	height: 15%;
+	height: 5%;
 	padding-right: $padding-0;
 	padding-left: $padding-0;
 	margin-right: auto;
 	margin-left: auto;
+	} */
+	/* 스크롤 다운시 고정되는 바 스타일  및 네비 바 고정  */
+	a:hover{
+		background: yellowgreen;
+	}
+	/* .fix {
+	position:fixed;
+	animation: down 0.5s ease;
+	} */
+	@keyframes down {
+		0%{
+		transform: translateY(-50px)
+		}
+		100%{
+		transform: translateY(0px)
+		}
 	}
 	.navbar{
-	padding-top: 1.1%;
-	padding-bottom: 1.1%;
+	/* #A9E2F3 */
+	background-color: write;
+	opacity: 0.7;
+	box-shadow: 0 2px 0px 0px gray;
+	width:100%; 
+	color:white; 
+	text-align:center;
+	top:0;
+	left:0;
+	z-index:100;
 	}
+	/* 카테고리 바  */
 	.nav-link {
-	font-size: 1.2rem; /* 원하는 크기로 조정하세요 */
+	font-size: 1.5rem; /* 원하는 크기로 조정하세요 */
 	padding: 0.5rem 1rem; /* 원하는 패딩 크기로 조정하세요 */
 	}
 	/* navbar 로고 영역  */
@@ -108,19 +160,10 @@
 		margin-left: 5%;
 		margin-right: 0;
 	}
-	/*  */
-	/* div .navbar
-	{
-		width: 100%;
-	} */
 	/* 검색기능 위치 영역 */
 	.header-search{
 		margin-right:50%;
 		margin-left: 0;
-	}
-	.mainlogin{
-		padding-top: 1.1%;
-		padding-bottom: 1.1%;
 	}
 	/* 드롭다운 버튼 영역  */
 	.header-dropdown
@@ -137,69 +180,100 @@
 	#dropdownbox li .btn{
 		width: 100%;
 	}
-
+	.resp {
+	position: relative;
+	width: 100%;
+	}
+	/* 메인 상단 이미지 햇던거  */
+/* 	.overlay {
+	position: absolute ;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	}
+	.mainimg{
+	margin: 80px auto 30px auto;
+	right: 40%;
+	bottom: 40rem;
+	text-align: center;
+	/* color: #fff; */
+	color: #212529;
+	} */
+	.nav-link
+	{
+	padding: 5px;
+	padding-left: 0px;
+	padding-right: 0px;
+	}
+	#cate{
+	padding-left: 0px;
+	padding-right: 0px;
+	}
+	
+	.featurette-heading {
+    margin-top: 7rem;
+	}
+	h2{
+		font-size: 50px;
+	}
+	/* .lh-1 {
+    line-height: 1!important;
+	} */
+	rect{
+		color: #e9ecef; !important;
+		
+	}
 </style>
 	<!-- 화면 상위 단 -->
 	<body>
 		<!-- 헤더영역 시작 -->
 		<!-- 시맨틱 헤더 영역 선언  -->
 <!-- <header> -->
-	
 	<div class="header-container">
-		<nav class="navbar"  style="background-color: #A9E2F3;">
+		<nav class="navbar" role="navigation">
 			<!-- 로고 표시 영역  -->
 			<div class="header-navbar" >
-				<a class="navbar-brand ms-3 offset-2" href="<%=request.getContextPath() %>/" title="Arcalive">
-					<img src="<%=request.getContextPath() %>/img/logo.png" width="100px" height="60px">
-					<!-- <svg class=" ms-3 offset-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-google-play" viewBox="0 0 16 16">
-						<path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
-					</svg> -->
+				<a class="navbar-brand ms-3 offset-2" href="<%=request.getContextPath() %>/" title="Arcalive" style="padding: 0px;">
+					<img src="<%=request.getContextPath() %>/img/logo.png" width="80px" height="40px">
 				</a>
 			</div>
 			<!-- 검색기능 -->
-<!-- 			<div class="header-search">
+			<!-- 		
+			<div class="header-search">
 			<form class="d-flex">
 				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			</div> -->
-			<!-- 로그인 폼 -->
-			<!-- <div class="mainlogin">
-			<form name="login" id="login" >
-				<div>
-				ID : <input type="text" id="uId"  name="uId" ><br>
-				PW : <input type="text" id="uPw"  name="uPw" >
-				<button type="button" id="loginbtn" onclick="loginFn();">로그인</button>
-				</div>
-			</form>
-			</div> -->
+			</div> 
+			-->
 			<!-- drop down bar -->
 			<div class="header-dropdown">
-			<div class="dropdown-center" >
-			<c:if test=""></c:if>
-				<button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static"  data-bs-auto-close="outside" aria-expanded="false">
-				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" style="color: white;" class="bi bi-person-circle" viewBox="0 0 16 16">
-					  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-					  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-				</svg>
-				</button>
-					<c:if test="${empty login}">
-				<ul id="dropdownbox" class="dropdown-menu" >
-					<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a></li>
-					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a></li>
-					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/joinCheck.do">개인정보동의</a></li>
-				</ul>
-					</c:if>
-					<c:if test="${not empty login}">
-				<ul id="dropdownbox" class="dropdown-menu" >
-					<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/mypage.do">마이페이지</a></li>
-					<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userLogoutAction.do">로그아웃</a></li>
-				</ul>
-			</c:if>
-			</div>
+				<div class="dropdown-center" >
+				<c:if test=""></c:if>
+					<button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static"  data-bs-auto-close="outside" aria-expanded="false">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style="color: white;" class="bi bi-person-circle" viewBox="0 0 16 16">
+						  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+						  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+					</svg>
+					</button>
+						<c:if test="${empty login}">
+					<ul id="dropdownbox" class="dropdown-menu" >
+						<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/userLogin.do">로그인</a></li>
+						<%-- <li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userJoin.do">회원가입</a></li> --%>
+						<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/joinCheck.do">회원가입</a></li>
+					</ul>
+						</c:if>
+						<c:if test="${not empty login}">
+					<ul id="dropdownbox" class="dropdown-menu" >
+						<li><a class="btn btn-primary" href="<%= request.getContextPath()%>/User/mypage.do">마이페이지</a></li>
+						<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userLogoutAction.do">로그아웃</a></li>
+					</ul>
+				</c:if>
+				</div>
 			</div> <!-- dropdown 영역 끝  -->
 		</nav>	<!-- 헤더 상단 바 끝  -->
-	</div>
+	</div>	<!-- header-container -->
+	
 				<!-- 검색 기능 표시 영역  -->
 				<!--<div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 offset-2" >
 					<form class="form-inline search-form mb-0 offset-3" id="siteSearchForm" method="get" action="#">
@@ -289,30 +363,40 @@
 					<a class="nav-link " style="color: black; text-align: center;" 
 						href="<%=request.getContextPath()%>/Community/CommunityMain.do"> 커뮤니티 </a>
 				</div>	 --%>	
-		<div class="container">
-			<img>
-		</div>	
-		<!-- 카테고리 -->			
-		<div class="container">
+<%-- 		<div class="resp natural_wind">
+			<img src="<%=request.getContextPath()%>/img/aaaa.png" width="100%" height="300px" style="object-fit:cover;">
+				<div class="overlay splittext">
+						<div class="contents">
+							<div class="mainimg" id="mainimg">
+							<h1> WELCOME!!</h1>
+							<p style="text-align: center;"> 좋은 여행이 되시길</p>
+						</div>
+					</div>
+				</div>	
+		</div> --%>
+		<!-- 카테고리 -->		
+	<div class="headertop">
+		<div id="category" class="container">
 			<div class="row">
-				<div class="col">
+				<div id="cate" class="col rounded border ">
 					<a class="nav-link" aria-current="page" style="color: black; text-align:center;" 
 						href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do">숙박</a>
 				</div>
-				<div class="col">
+				<div id="cate" class="col rounded border ">
 					<a class="nav-link" style="color: black; text-align:center;" 
 						href="<%=request.getContextPath()%>/food/foodMain.do">맛집</a>
 				</div>
-				<div class="col">
+				<div id="cate" class="col rounded border ">
 					<a class="nav-link" style="color: black; text-align:center;" 
 						href="<%=request.getContextPath()%>/event/eventMain.do">축제</a>
 				</div>
-				<div class="col">
+				<div id="cate" class="col rounded border ">
 					<a class="nav-link " style="color: black; text-align: center;" 
 						href="<%=request.getContextPath()%>/Community/CommunityMain.do?boardType=0"> 커뮤니티 </a>
 				</div>
 			</div>
 		</div>
-	
+	</div>
+
 <!-- </header> -->
 <!-- 헤더영역 끝 -->

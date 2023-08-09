@@ -56,7 +56,7 @@ function DoRewrite()
   bottom: 0;
   right: 10px;
   margin: auto ;
-  height: 1px;
+  height: 40px;
   font-size: 25px;
   cursor: pointer;
 }
@@ -119,11 +119,11 @@ function DoRewrite()
 					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
 						<span id="msg_id"></span>
 						<span id="msg_email"></span>
+						<label for="password" class="form-label">비밀번호 </label>
 					<div class="col-12">
 						<div class="input password">
-						<label for="password" class="form-label">비밀번호 </label>
 						<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
-							<div class="eyes pt-5 mt-5"><i class="fas fa-eye"></i></div>
+							<div class="eyes"><i class="fas fa-eye"></i></div>
 						<div class="invalid-feedback eyes">
 							비밀번호를 입력해 주세요
 						</div>
@@ -132,7 +132,7 @@ function DoRewrite()
 					<div class="col-12">
 						<div class="input password">
 						<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
-						<input type="password" class="form-control" id="uPwc" name="uPwc" placeholder="비밀번호확인">
+						<input class="form-control" type="password"  id="uPwc" name="uPwc" placeholder="비밀번호확인">
 							<div class="eyes2"><i class="fas fa-eye"></i></div>
 						<div class="invalid-feedback eyes">
 						비밀번호와 일치하지 않습니다

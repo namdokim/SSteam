@@ -2,16 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 	<style>
-	body{
-		background-color: #CEECF5;
-	}
+
 	#slide {
 		/* width: 400px; */
-		height: 600px;
+		height: 500px;
 	}
 	#carouselExampleCaptions {
-		margin-left: 5%;
-		margin-right: 5%;
+		/* margin-left: 5%;
+		margin-right: 5%; */
 	}
 	</style>
 	<!-- 전광판 점보트론 -->
@@ -22,7 +20,7 @@
 		}
 		.notice {
 		/* background-image : url('img/jumbotronBackground.jpg'); */
-		background-color: black;
+		background-color: write;
 		background-position: center;
 		background-size: 1em;
 		background-repeat: no-repeat;
@@ -33,14 +31,10 @@
 			margin-left: 5%;
 			margin-right: 5%;
 		}
-		
 		.notice-text-center{
 		animation: blink-effect 1s step-end infinite;
 		}
 	</style>
-	
-	<!-- ======================================= main page ============================-->
-	
 	
 	<!-- 전광판 점보 트론  -->
 <div class="jumbotroncontainer"> <!--어떤 내용이 담기는 하나의 공간, 그릇-->
@@ -67,21 +61,21 @@
 	</div>
 	<div class="carousel-inner">
 		<div class="carousel-item active" data-bs-interval="3000">
-			<img id="slide" src="./img/main2.jpg" class="d-block w-100" alt="...">
+			<img id="slide" src="./img/natural_wind.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 				<h5>First slide label</h5>
 				<p>Some representative placeholder content for the first slide.</p>
 				</div>
 		</div>
 		<div class="carousel-item" data-bs-interval="3000">
-			<img id="slide" src="./img/main3.jpg" class="d-block w-100" alt="...">
+			<img id="slide" src="./img/Jamaica.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 				<h5>Second slide label</h5>
 				<p>Some representative placeholder content for the second slide.</p>
 				</div>
 		</div>
 		<div class="carousel-item" data-bs-interval="3000">
-			<img id="slide" src="./img/main4.jpg" class="d-block w-100" alt="...">
+			<img id="slide" src="./img/hotel.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 				<h5>Third slide label</h5>
 				<p>Some representative placeholder content for the third slide.</p>
@@ -99,80 +93,38 @@
 	</button>
 </div> <!-- 슬라이드 쇼 div 끝  -->
 	<!-- 지도앱  margin-left: 5%; margin-right: 5%; -->
-	<div style="float: left; width: 40%; margin-left: 5%; margin-right: 5%;">
+<!-- 	<div style="float: left; width: 40%; margin-left: 5%; margin-right: 5%;">
 		<img alt="지도 구현" src="./img/map.jpg">
-		<!-- <textarea rows="20" style="width:100%; margin-left: 5%;">MAP 구현 </textarea> -->
-	</div>
+		<textarea rows="20" style="width:100%; margin-left: 5%;">MAP 구현 </textarea>
+	</div> -->
+	<!-- 슬라이더 밑 보여주기  -->
+	<!-- fill이 인식이 안됨  -->
+	<hr class="featurette-divider">
+	<div class="container marketing">
+		<div class="row featurette">
+			<div class="col-md-7 order-md-2">
+				<h2 class="featurette-heading fw-normal lh-1">
+				"OH Yeay, it'that Good"
+				<span class="text-body-secondary"> see you next time</span>
+				</h2>
+				<p class="lead">
+				쏼라쏼라,헤에이 쏼라쏼라,헤에이 쏼라쏼라,헤에이 쏼라쏼라,헤에이 쏼라쏼라,헤에이 쏼라쏼라,헤에이 쏼라쏼라,헤에이 
+				</p>
+			</div>
+			<div class="col-md-5 order-md-1">
+				<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
+				<%-- <img src="<%=request.getContextPath() %>/img/ss1.jpg" width="500" height="500"> --%>
+					<title>Placeholder</title>
+					<rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
+					<text x="50%" y="50%" fill="var(--bs-secondary-color)">500x500</text>
+				</svg>
+				
+			</div>
+		</div>
+	</div> <!-- container marketing -->
+	<hr class="featurette-divider">
 	<!-- 베스트글 보여주기  -->
-	<div style="float: left; width: 40%; margin-left: 5%; margin-right: 5%; ">
-		<table border="1" style=" width: 90%; height: 100%;  margin-right: 5%; ">
-			<tr>
-				<td>1
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>2
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>3
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>4
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>1
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>2
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>3
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-			<tr>
-				<td>4
-				</td>
-				<td>1-1
-				</td>
-				<td>1-2
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div>
+	<div>	
 	</div>
 <br>
 <br>
