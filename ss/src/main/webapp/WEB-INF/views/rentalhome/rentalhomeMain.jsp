@@ -62,9 +62,6 @@
 		background-position: center;
 	}
 	.like {
-		width: 300px;
-		height: 300px;
-		background-image: url(../img/love_full.png);
 		background-size: contain;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -379,7 +376,6 @@ maxPriceInput.addEventListener("blur", function() {
 							<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
 						</c:otherwise>
 					</c:choose>
-					
 					<div style="width:550px; height:180px; display:inline-block; position:absolute; top:10px; left:220px; text-align:left;">
 						<div style="width:100%; text-align:left; display:inline-block; margin:5px;">
 							<a style="text-decoration:none; color:black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}">
@@ -398,8 +394,7 @@ maxPriceInput.addEventListener("blur", function() {
 					<div style="width:100px; text-align:center; display:inline-block; position:absolute; top:60px; left:775px;">
 					<span style="color:#0f294d; font-weight:bold;">62</span>
 					</div>
-					<div class="like" style="width:50px; height:50px; text-align:center; display:inline-block; position:absolute; top:15px; left:800px;">
-					</div>
+					<img class="like" src="../img/love_full.png" style="width:50px; height:50px; position:absolute; top:15px; left:800px;">
 					<div style="width:150px; height:80px; text-align:right; display:inline-block; position:absolute; top:100px; left:700px;">
 						<span style="font-size:15pt; color:#666666; text-decoration:line-through;">21,000원</span><br>
 						<span style="font-size:12pt; font-weight:bold;"><span style="color:#f51818;">6,000원</span> 할인</span><br>
@@ -408,6 +403,7 @@ maxPriceInput.addEventListener("blur", function() {
 					</div>
 				</div>
 			</c:forEach>
+		</div>
 			<%
 				//}
 			%>

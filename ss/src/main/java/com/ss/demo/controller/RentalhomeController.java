@@ -15,12 +15,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
-import com.ss.demo.domain.RoomVO;
+import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_RoomVO;
+import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.RentalhomeService;
 
 @Controller
@@ -52,18 +55,32 @@ public class RentalhomeController {
 	}
 	
 	@RequestMapping(value="/rentalhomeView.do")
-	public String rentalhomeView(Model model, int rentalhome_idx){
+	public String rentalhomeView(Model model, int rentalhome_idx, Rentalhome_LikeVO likeVO, HttpServletRequest req){
+		System.out.println(likeVO.getRentalhome_idx());
+		
 		RentalhomeVO rentalhomeVO = rentalhomeService.selectOneByIdx(rentalhome_idx);
 		model.addAttribute("rentalhomeVO", rentalhomeVO);
 		
 		List<RentalhomeVO> list_rentalhome_attach = rentalhomeService.selectAll_rentalhome_attach(rentalhome_idx);
 		model.addAttribute("attach", list_rentalhome_attach);
 
-		List<RoomVO> list_rentalhome_room_attach = rentalhomeService.selectAll_room_attach();
+		List<Rentalhome_RoomVO> list_rentalhome_room_attach = rentalhomeService.selectAll_room_attach();
 		model.addAttribute("attach_room", list_rentalhome_room_attach);
 		
-		List<RoomVO> list = rentalhomeService.selectAll_room(rentalhome_idx);
+		List<Rentalhome_RoomVO> list = rentalhomeService.selectAll_room(rentalhome_idx);
 		model.addAttribute("list", list);
+		
+		int like_count = rentalhomeService.select_like(rentalhome_idx);
+		System.out.println("like_count: "+like_count);
+		model.addAttribute("like_count", like_count);
+		
+		if (req.getSession().getAttribute("login") != null) {
+	        UserVO loginVO = (UserVO) req.getSession().getAttribute("login");
+	        likeVO.setUno(loginVO.getuNo());
+	        int like_dupl = rentalhomeService.dupl_like(likeVO);
+	        model.addAttribute("like_dupl", like_dupl);
+		}
+		
 		return "rentalhome/rentalhomeView";
 	}
 
@@ -83,8 +100,10 @@ public class RentalhomeController {
 		rentalhomeVO.setuNo(1);
 		int value = rentalhomeService.insert(rentalhomeVO);
 		
-		// 받아온것 출력 확인
-		System.out.println("multiFileList : " + multiFileList);
+		if( multiFileList.get(0).isEmpty() )
+		{
+			return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+rentalhomeVO.getRentalhome_idx();
+		}
 		
 		// path 가져오기
 		String path = request.getSession().getServletContext().getRealPath("resources/upload");
@@ -163,11 +182,13 @@ public class RentalhomeController {
 			RentalhomeVO rentalhomeVO,
 			@RequestParam("multiFile") List<MultipartFile> multiFileList,
 			HttpServletRequest request){
-		
 		int value = rentalhomeService.update(rentalhomeVO);
+		System.out.println("multiFileList:" + multiFileList);
 		
-		// 받아온것 출력 확인
-		System.out.println("multiFileList : " + multiFileList);
+		if( multiFileList.get(0).isEmpty() )
+		{
+			return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+rentalhomeVO.getRentalhome_idx();
+		}
 		
 		// path 가져오기
 		String path = request.getSession().getServletContext().getRealPath("resources/upload");
@@ -179,7 +200,6 @@ public class RentalhomeController {
 		}
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
-		
 		for(int i = 0; i < multiFileList.size(); i++) {
 			String originFile = multiFileList.get(i).getOriginalFilename();
 			String etc = originFile.substring(originFile.lastIndexOf("."));
@@ -236,14 +256,15 @@ public class RentalhomeController {
 
 	@RequestMapping(value="/rentalhomeWrite_room.do", method=RequestMethod.POST)
 	public String rentalhomeWrite_room(
-			RoomVO roomVO,
+			Rentalhome_RoomVO roomVO,
 			@RequestParam("multiFile") List<MultipartFile> multiFileList,
 			HttpServletRequest request){
 		int value = rentalhomeService.insert_room(roomVO);
 		
-		// 받아온것 출력 확인
-		System.out.println("multiFileList : " + multiFileList);
-		
+		if( multiFileList.get(0).isEmpty() )
+		{
+			return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+roomVO.getRentalhome_idx();
+		}
 		// path 가져오기
 		String path = request.getSession().getServletContext().getRealPath("resources/upload");
 		
@@ -304,17 +325,17 @@ public class RentalhomeController {
 	}
 
 	@RequestMapping(value="/rentalhomeModify_room.do", method=RequestMethod.GET)
-	public String rentalhomeModify_room(RoomVO roomVO, Model model){
+	public String rentalhomeModify_room(Rentalhome_RoomVO roomVO, Model model){
 		RentalhomeVO rentalhomeVO = rentalhomeService.selectOneByIdx(roomVO.getRentalhome_idx());
 		model.addAttribute("rentalhomeVO", rentalhomeVO);
 		
-		RoomVO roomVO_ = rentalhomeService.selectOneByIdx_room(roomVO.getRoom_idx());
+		Rentalhome_RoomVO roomVO_ = rentalhomeService.selectOneByIdx_room(roomVO.getRoom_idx());
 		model.addAttribute("roomVO", roomVO_);
 		return "rentalhome/rentalhomeModify_room";
 	}
 	
 	@RequestMapping(value="/rentalhomeModify_room.do", method=RequestMethod.POST)
-	public String rentalhomeModify_room(RoomVO roomVO){
+	public String rentalhomeModify_room(Rentalhome_RoomVO roomVO){
 		System.out.println(roomVO.toString());
 		int value = rentalhomeService.update_room(roomVO);
 		
@@ -322,7 +343,7 @@ public class RentalhomeController {
 	}
 
 	@RequestMapping(value="/rentalhomeDelete_room.do", method=RequestMethod.POST)
-	public String rentalhomeDelete_room(RoomVO roomVO){
+	public String rentalhomeDelete_room(Rentalhome_RoomVO roomVO){
 		int value = rentalhomeService.delete_room(roomVO.getRoom_idx());
 		
 		return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+roomVO.getRentalhome_idx();
@@ -345,6 +366,41 @@ public class RentalhomeController {
 		int value = rentalhomeService.delete_attach(attach_idx);
 		
 		return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+rentalhome_idx;
+	}
+	
+	@RequestMapping(value="/insert_review.do")
+	@ResponseBody
+	public void insert_review(Rentalhome_RoomVO roomVO) {
+		System.out.println("ajax 호출");
+		System.out.println(roomVO.toString());
+		rentalhomeService.insert_review(roomVO);
+	}
+
+	@RequestMapping(value="/insert_like.do")
+	@ResponseBody
+	public int insert_like(Rentalhome_LikeVO likeVO) {
+		if(rentalhomeService.dupl_like(likeVO) == 0) {
+			rentalhomeService.insert_like(likeVO);
+			System.out.println("좋아요 등록 성공");
+			
+			return rentalhomeService.select_like(likeVO.getRentalhome_idx());
+		}else {
+			System.out.println("좋아요 중복");
+			return 0;
+		}
+	}
+
+	@RequestMapping(value="/delete_like.do")
+	@ResponseBody
+	public int delete_like(Rentalhome_LikeVO likeVO) {
+		if(rentalhomeService.dupl_like(likeVO) > 0) {
+			rentalhomeService.delete_like(likeVO);
+			System.out.println("좋아요 취소");
+			return rentalhomeService.select_like(likeVO.getRentalhome_idx());
+		}else {
+			System.out.println("좋아요를 누르지 않았습니다.");
+			return 0;
+		}
 	}
 	
 	@RequestMapping(value="/rentalhomeReserve.do", method=RequestMethod.GET)

@@ -231,7 +231,7 @@ window.onload = function(){
 					</div>
 				</div>
 				<div style="margin:30px 0px; text-align:right; width:1050px;">
-					<button style="width:100px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</button>
+					<button style="width:100px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 수정</button>
 				</div>
 			</form>
 		</div>
