@@ -79,14 +79,15 @@ function DoRewrite()
 	<div class="py-5 text-center">
 		<!-- <div class="row g-5"> -->
 			<!-- <div class="col-md-7 col-lg-8"> -->
-				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;"></div>
+				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;">
+				</div>
 				<!-- 회원가입 폼  -->
 				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
-					<input type="hidden" id="uType" name="uType" value="normal">
+					<input type="hidden" id="uType" name="uType" value="business">
 					<div class="col-12">
 					<div class="g-3">
 						<div class="grid text-center">
-							<label for="ID" class="form-label">아이디</label>
+							<label for="ID" class="form-label">사업용 아이디</label>
 							<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
 							<div class="invalid-feedback">
 							이메일 이름을 써주세요
@@ -199,8 +200,8 @@ function DoRewrite()
 							</a>
 						</div>
 				</form>
-					</div>
-			</div>
+	</div>
+</div>
 		<!-- </div> col-md-7 col-lg-8 -->
 	<!-- </div> row g-5 끝  -->
 	<%-- 
@@ -311,8 +312,10 @@ function DoRewrite()
 		</table>
 	</form> 
 	--%>
-</div> <!-- container 끝 -->
 <!-- api 연동 -->
+<div>
+	<input value="사업자 회원가입 ">
+</div>
 <script type="text/javascript">
 //coolsms
 //비바톤

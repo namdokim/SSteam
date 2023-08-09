@@ -47,15 +47,26 @@ public class UserController
 	{
 		return "index";
 	}
-
-	// 회원가입 페이지 이동 
+	
+	// 회원가입 페이지 이동 (노멀)
 	@RequestMapping(value="/userJoin.do" )
-	public String userJoin(
+	public String userJoin(@RequestParam("uType") String uType
 			
 			)
 	{
+		System.out.println("uType: " +uType);
 		System.out.println("실행여부");
 		return "User/userJoin";
+	}
+	// 회원가입 페이지 이동 (비지니스)
+	@RequestMapping(value="/userJoin_business.do" )
+	public String userJoin_business(@RequestParam("uType") String uType
+			
+			)
+	{
+		System.out.println("uType: " +uType);
+		System.out.println("실행여부");
+		return "User/userJoin_business";
 	}
 	// 회원가입시 개인정보및 타입 지정 페이지
 	@RequestMapping(value="/joinCheck.do" )
@@ -70,7 +81,8 @@ public class UserController
 	@RequestMapping(value="/userJoinAction.do")
 	public String userJoinAction( UserVO uv,
 			HttpServletRequest requset,
-			@RequestParam("uId_email") String uId_email
+			@RequestParam("uId_email") String uId_email,
+			@RequestParam("uType") String uType
 			)
 	{
 		//서블릿 퀘스트에 담긴 session 가져 오기 
@@ -79,17 +91,19 @@ public class UserController
 		//선택된 이메일 도메인을 가져와서 id text와 합체 시키기 
 		String id = uv.getuId() + uv.getuId_email();
 		System.out.println("id : " + id);
+		System.out.println("uType: " +uType);
 		System.out.println(uv.getuId());
 		if(uv.getuId() == null || uv.getuId().equals(""))
 		{
 			System.out.println("회원가입 오류 ");
 			return "index";
 		}
-		
+		uType.replace(",", "").trim();
 		String uPw = rbcryptPasswordEncoder.encode(uv.getuPw());
 		uv.setuId(id);
 		uv.setuPw(uPw);
-		
+		uv.setuType(uType);
+		System.out.println("uType: " +uType);
 		int value = us.userInsert(uv);
 		return "redirect:/";
 	}

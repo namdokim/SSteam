@@ -24,11 +24,11 @@
 		<!-- summernote -->
 		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-		
+		<%-- 
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,500,500i">
 		<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/animate.css">
 		<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/style.css">
-		
+		 --%>
 		<!-- 스크롤 바 스크립트 -->
 	<script type="text/javascript">
 	window.onscroll = function(){navigo ()};
