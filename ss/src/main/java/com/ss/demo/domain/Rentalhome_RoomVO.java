@@ -1,6 +1,6 @@
 package com.ss.demo.domain;
 
-public class RoomVO {
+public class Rentalhome_RoomVO {
 	
 	
 	private int room_idx;			// 객실 번호
@@ -19,7 +19,49 @@ public class RoomVO {
 	private String physical_name;	// 로컬에 저장된 파일 이름
 	private String thumbnail;		// 썸네일 Y, N	
 	
+	private int uNo;			// 유저 번호
+	private String contents;	// 내용
+	private int service;		// 서비스
+	private int facility;		// 시설
+	private int clean;			// 청결
+	private int price;			// 가격
 	
+	public int getuNo() {
+		return uNo;
+	}
+	public void setuNo(int uNo) {
+		this.uNo = uNo;
+	}
+	public String getContents() {
+		return contents;
+	}
+	public void setContents(String contents) {
+		this.contents = contents;
+	}
+	public int getService() {
+		return service;
+	}
+	public void setService(int service) {
+		this.service = service;
+	}
+	public int getFacility() {
+		return facility;
+	}
+	public void setFacility(int facility) {
+		this.facility = facility;
+	}
+	public int getClean() {
+		return clean;
+	}
+	public void setClean(int clean) {
+		this.clean = clean;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	public int getRoom_idx() {
 		return room_idx;
 	}
@@ -101,11 +143,12 @@ public class RoomVO {
 	
 	@Override
 	public String toString() {
-		return "RoomVO [room_idx=" + room_idx + ", rentalhome_idx=" + rentalhome_idx
-				+ ", name=" + name + ", min_person=" + min_person + ", max_person=" + max_person + ", weekday_price="
-				+ weekday_price + ", weekend_price=" + weekend_price + ", smoking=" + smoking + ", wifi=" + wifi
-				+ ", bed_info=" + bed_info + ", logical_name=" + logical_name + ", physical_name=" + physical_name
-				+ ", thumbnail=" + thumbnail + "]";
+		return "RoomVO [room_idx=" + room_idx + ", rentalhome_idx=" + rentalhome_idx + ", name=" + name
+				+ ", min_person=" + min_person + ", max_person=" + max_person + ", weekday_price=" + weekday_price
+				+ ", weekend_price=" + weekend_price + ", smoking=" + smoking + ", wifi=" + wifi + ", bed_info="
+				+ bed_info + ", logical_name=" + logical_name + ", physical_name=" + physical_name + ", thumbnail="
+				+ thumbnail + ", uNo=" + uNo + ", contents=" + contents + ", service=" + service + ", facility="
+				+ facility + ", clean=" + clean + ", price=" + price + "]";
 	}
 	
 	

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import com.ss.demo.dao.RentalhomeDAO;
 import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
-import com.ss.demo.domain.RoomVO;
+import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_RoomVO;
 
 @Service
 public class RentalhomeServiceImpl implements RentalhomeService{
@@ -52,31 +53,31 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	}
 
 	@Override
-	public int insert_room(RoomVO roomVO) {
+	public int insert_room(Rentalhome_RoomVO roomVO) {
 		
 		return rentalhomeDAO.insert_room(roomVO);
 	}
 
 	@Override
-	public int insert_room_file(RoomVO roomVO) {
+	public int insert_room_file(Rentalhome_RoomVO roomVO) {
 		
 		return rentalhomeDAO.insert_room_file(roomVO);
 	}
 
 	@Override
-	public List<RoomVO> selectAll_room(int rentalhome_idx) {
+	public List<Rentalhome_RoomVO> selectAll_room(int rentalhome_idx) {
 		
 		return rentalhomeDAO.selectAll_room(rentalhome_idx);
 	}
 
 	@Override
-	public RoomVO selectOneByIdx_room(int room_idx) {
+	public Rentalhome_RoomVO selectOneByIdx_room(int room_idx) {
 		
 		return rentalhomeDAO.selectOneByIdx_room(room_idx);
 	}
 
 	@Override
-	public int update_room(RoomVO roomVO) {
+	public int update_room(Rentalhome_RoomVO roomVO) {
 		
 		return rentalhomeDAO.update_room(roomVO);
 	}
@@ -106,7 +107,7 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	}
 
 	@Override
-	public List<RoomVO> selectAll_room_attach() {
+	public List<Rentalhome_RoomVO> selectAll_room_attach() {
 		
 		return rentalhomeDAO.selectAll_room_attach();
 	}
@@ -121,6 +122,36 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	public int select_rentalhome_count() {
 		
 		return rentalhomeDAO.select_rentalhome_count();
+	}
+
+	@Override
+	public int insert_review(Rentalhome_RoomVO roomVO) {
+		
+		return rentalhomeDAO.insert_review(roomVO);
+	}
+
+	@Override
+	public int insert_like(Rentalhome_LikeVO likeVO) {
+		
+		return rentalhomeDAO.insert_like(likeVO);
+	}
+
+	@Override
+	public int select_like(int rentalhome_idx) {
+		
+		return rentalhomeDAO.select_like(rentalhome_idx);
+	}
+
+	@Override
+	public int dupl_like(Rentalhome_LikeVO likeVO) {
+		
+		return rentalhomeDAO.dupl_like(likeVO);
+	}
+
+	@Override
+	public int delete_like(Rentalhome_LikeVO likeVO) {
+		
+		return rentalhomeDAO.delete_like(likeVO);
 	}
 	
 }

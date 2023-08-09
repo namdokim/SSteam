@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
-import com.ss.demo.domain.RoomVO;
+import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_RoomVO;
 
 public interface RentalhomeService {
 	
@@ -25,15 +26,17 @@ public interface RentalhomeService {
 
 	public int insert_file(RentalhomeVO rentalhomeVO);
 
-	public int insert_room(RoomVO roomVO);
-	
-	public int insert_room_file(RoomVO roomVO);
-	
-	public List<RoomVO>selectAll_room(int rentalhome_idx);
+	public int insert_room(Rentalhome_RoomVO roomVO);
 
-	public RoomVO selectOneByIdx_room(int room_idx);
+	public int insert_review(Rentalhome_RoomVO roomVO);
 	
-	public int update_room(RoomVO roomVO);
+	public int insert_room_file(Rentalhome_RoomVO roomVO);
+	
+	public List<Rentalhome_RoomVO>selectAll_room(int rentalhome_idx);
+
+	public Rentalhome_RoomVO selectOneByIdx_room(int room_idx);
+	
+	public int update_room(Rentalhome_RoomVO roomVO);
 
 	public int delete_room(int room_idx);
 
@@ -41,7 +44,15 @@ public interface RentalhomeService {
 	
 	public int attach_thumbmail(int attach_idx);
 
-	public List<RoomVO> selectAll_room_attach();
+	public List<Rentalhome_RoomVO> selectAll_room_attach();
 
 	public int delete_attach(int attach_idx);
+
+	public int insert_like(Rentalhome_LikeVO likeVO);
+	
+	public int select_like(int rentalhome_idx);
+
+	public int dupl_like(Rentalhome_LikeVO likeVO);
+
+	public int delete_like(Rentalhome_LikeVO likeVO);
 }

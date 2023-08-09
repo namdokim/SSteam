@@ -23,47 +23,163 @@
 	  $('.datepicker').datepicker();
 	});
 window.onload = function(){
-	const openButton = document.getElementById("open-gallery-button");
-	const modal = document.getElementById("gallery-modal");
-	const closeButton = document.getElementById("close-button");
+	if(${login.uNo} != null && ${like_dupl > 0}){
+		document.getElementById("love_full").style.display="block";
+		document.getElementById("love_empty").style.display="none";
+	}
+ 	// 숙소 이미지 모달
+	if(document.getElementById("open-gallery-button") != null){
+	 	const openButton = document.getElementById("open-gallery-button");
+		const modal = document.getElementById("gallery-modal");
+		const closeButton = document.getElementById("close-button");
+	
+		openButton.addEventListener("click", () => {
+		  modal.style.display = "block";
+		  document.body.style.overflow = "hidden";
+		});
+	
+		closeButton.addEventListener("click", () => {
+		  modal.style.display = "none";
+		  document.body.style.overflow = "auto";
+		});
+		window.addEventListener("click", (event) => {
+		  if(event.target == modal) {
+		    modal.style.display = "none";
+		    document.body.style.overflow = "auto";
+		  }
+		});
+	}
 
-	openButton.addEventListener("click", () => {
-	  modal.style.display = "block";
-	  document.body.style.overflow = "hidden";
-	});
+	// 객실 이미지 모달
+	if( document.getElementsByClassName("open-gallery-button-room") != null ){
+	 	const openButton_room = document.getElementsByClassName("open-gallery-button-room");
+		const modal_room = document.getElementById("gallery-modal-room");
+		const closeButton_room = document.getElementById("close-button-room");
+	
+	 	for(var openBtn of openButton_room){
+	 		openBtn.addEventListener("click", (event) => {
+	 			document.getElementById("gallery-modal-room").style.display = "block";
+	 			document.body.style.overflow = "hidden";
+	 		});
+	 	}
+		closeButton_room.addEventListener("click", () => {
+		  modal_room.style.display = "none";
+		  document.body.style.overflow = "auto";
+		});
+		window.addEventListener("click", (event) => {
+		  if(event.target == modal_room) {
+		    modal_room.style.display = "none";
+		    document.body.style.overflow = "auto";
+		  }
+		});
+	}
+	
+	// 리뷰 작성 모달
+	if( document.getElementById("open-gallery-button-review") != null){
+	 	const openButton_review = document.getElementById("open-gallery-button-review");
+		const modal_review = document.getElementById("gallery-modal-review");
+		const closeButton_review = document.getElementById("close-button-review");
+	
+		openButton_review.addEventListener("click", (event) => {
+			modal_review.style.display = "block";
+			document.body.style.overflow = "hidden";
+		});
+		closeButton_review.addEventListener("click", () => {
+		  modal_review.style.display = "none";
+		  document.body.style.overflow = "auto";
+		});
+		window.addEventListener("click", (event) => {
+		  if(event.target == modal_review) {
+			modal_review.style.display = "none";
+		    document.body.style.overflow = "auto";
+		  }
+		});
+	}
+}
+function insert_review(){
+	const contents = document.getElementById("contents").value;
+	const service = document.getElementById("service").value;
+	const facility = document.getElementById("facility").value;
+	const clean = document.getElementById("clean").value;
+	const price = document.getElementById("price").value;
+	const uNo = document.getElementById("uNo").value;
+	const stay_date = document.getElementById("stay_date").value;
+	const room_idx = document.getElementById("room_idx").value;
+	$.ajax({
+			url:"insert_review.do",
+			type:"post",
+			data:{
+				  contents: contents,
+		            service: service,
+		            facility: facility,
+		            clean: clean,
+		            price: price,
+		            room_idx: room_idx,
+		            uNo: uNo
+			},
+			success:function(){
+					alert("성공");
+			},
+			error:function(){
+				alert("예외발생");
+			}
+		});
+}
 
-	closeButton.addEventListener("click", () => {
-	  modal.style.display = "none";
-	  document.body.style.overflow = "auto";
-	});
-	window.addEventListener("click", (event) => {
-	  if(event.target == modal) {
-	    modal.style.display = "none";
-	    document.body.style.overflow = "auto";
-	  }
-	});
-
- 	const openButton_room = document.getElementsByClassName("open-gallery-button-room");
-	const modal_room = document.getElementById("gallery-modal-room");
-	const closeButton_room = document.getElementById("close-button-room");
-
- 	for(var openBtn of openButton_room){
- 		openBtn.addEventListener("click", (event) => {
- 			document.getElementById("gallery-modal-room").style.display = "block";
- 			document.body.style.overflow = "hidden";
- 		});
- 	}
-	closeButton_room.addEventListener("click", () => {
-	  modal_room.style.display = "none";
-	  document.body.style.overflow = "auto";
-	});
-	window.addEventListener("click", (event) => {
-	  if(event.target == modal_room) {
-	    modal_room.style.display = "none";
-	    document.body.style.overflow = "auto";
-	  }
+function insert_like(){
+	alert("숙소를 \"좋아요\" 하셨습니다");
+	const uno = ${login.uNo};
+	const rentalhome_idx = ${rentalhomeVO.rentalhome_idx};
+	const insert_ = document.getElementById("love_empty");			// <img> 
+	const delete_ = document.getElementById("love_full");			// <img> 
+	const like_count = document.getElementById("like_count"); 		// <span>
+	
+	$.ajax({
+		url: 'insert_like.do', 						// 요청을 보낼 서버의 URL 주소
+		method: 'post', 							// HTTP 요청 방식 (GET, POST 등)
+		data: { 									// 요청에 포함될 데이터 (옵션)
+			uno: uno,
+			rentalhome_idx: rentalhome_idx
+		},											
+		success: function(data) {
+			alert("ajax통신 성공");
+			insert_.style.display="none";
+			delete_.style.display="block";
+			like_count.innerHTML = data;
+			
+		},
+		error: function(xhr, status, error) {
+			console.log('Error:', error);
+		}
 	});
 }
+function delete_like(){
+	alert("\"좋아요\"를 취소 하셨습니다");
+	const uno = ${login.uNo};
+	const rentalhome_idx = ${rentalhomeVO.rentalhome_idx};
+	const delete_ = document.getElementById("love_full");		// <img> 
+	const insert_ = document.getElementById("love_empty");		// <img> 
+	const like_count = document.getElementById("like_count"); 	// <span>
+	
+	$.ajax({
+		url: 'delete_like.do', 						// 요청을 보낼 서버의 URL 주소
+		method: 'post', 							// HTTP 요청 방식 (GET, POST 등)
+		data: { 									// 요청에 포함될 데이터 (옵션)
+			uno: uno,
+			rentalhome_idx: rentalhome_idx
+		},											
+		success: function(data) {
+			alert("ajax통신 성공");
+			delete_.style.display="none";
+			insert_.style.display="block";
+			like_count.innerHTML = data;
+		},
+		error: function(xhr, status, error) {
+			console.log('Error:', error);
+		}
+	});
+}
+
 </script>
 <style type="text/css">
 	a {
@@ -74,9 +190,6 @@ window.onload = function(){
 		color:black;
 	}
 	.like {
-		width: 300px;
-		height: 300px;
-		background-image: url(../img/love_full.png);
 		background-size: contain;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -148,7 +261,32 @@ window.onload = function(){
 	  top: 10px;
 	  right: 20px;
 	  cursor: pointer;
-	}	
+	}
+	.modal-center{
+		position:absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%,-50%);
+	}
+    .review-num input[type="radio"] {
+       display: none;
+    }
+ 
+    .review-num input[type="radio"] + span {
+        display: inline-block;
+        padding:5px 15px;
+        border: 0px;
+        border-radius: 5px;
+        background-color: #eff0f5;
+        text-align: center;
+        cursor: pointer;
+        font-size:10pt;
+    }
+ 
+    .review-num input[type="radio"]:checked + span {
+        background-color: #0863ec;
+        color: #ffffff;
+    }
 </style>
 <div style="width:1920px; text-align:center; background-color:#dfecfb; padding-bottom:50px;">
 	<div class="gallery-modal" id="gallery-modal" style="padding:50px;">
@@ -173,11 +311,83 @@ window.onload = function(){
 		    </div>
 		    <div style="margin:20px; width:1144px; height:1px; background-color:lightgray;"></div>
 		    <div style="margin:20px; text-align:left;">
-			    <c:forEach items="${attach_room}" var="attach">
-				   		<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="margin:2px 0px;width:377px; height:250px; border-radius:5px; display:inline-block;">
-			    </c:forEach>
+<%-- 			    <c:forEach items="${attach_room}" var="attach"> --%>
+<%-- 				   		<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="margin:2px 0px;width:377px; height:250px; border-radius:5px; display:inline-block;"> --%>
+<%-- 			    </c:forEach> --%>
 		    </div>
 	    </div>
+	</div>	
+	<div class="gallery-modal" id="gallery-modal-review"  style="padding:50px;">
+    	<div class="close-button" id="close-button-review" style="display:inline-block;">&times;</div>
+	    <div class="view modal-center" id="modal-review" style="width:1224px;padding:20px; display:inline-block; vertical-align:middle;">
+		    <div style="text-align:left; margin:20px;">
+			    <span style="font-weight:bold; font-size:15pt;">리뷰 작성</span>
+		    </div>
+			<!-- 로그인 할 경우 표시 -->
+		    <input type="hidden" name="uNo" id="uNo" value="1">
+<!-- 		    <input type="hidden" name="room_idx" id="room_idx" value=""> -->
+		    <div style="margin:10px; width:1144px; height:1px; background-color:lightgray;"></div>
+		    <div style="margin:10px; text-align:center; display:inline-block;">
+		    	<div style="text-align:left; width:1000px; margin:10px 30px;">
+		    		<span style="font-weight:bold;">${rentalhomeVO.name}</span>
+		    	</div>
+		    	<div style="text-align:left; width:1000px; margin:10px 30px;">
+		    		<span style="font-weight:bold;">투숙일</span><input type="date" id="stay_date" name="stay_date" style="margin:0px 20px; border-radius:3px;">
+		    	</div>
+		    	<div style="text-align:left; width:1000px; display:inline-block; margin:10px 20px;">
+			    	<textarea name="contents" id="contents" style="width:100%; height:200px; resize:none; padding:20px; border-radius:10px;"placeholder="리뷰 내용을 작성해주세요."></textarea>
+		    	</div>
+		    	<div style="text-align:center; width:1000px; margin:10px; display:inline-block;">
+		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
+			    		<span style="font-weight:bold;">청결</span>
+			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
+			    		<%for(int i = 1; i <= 10; i++){%>
+				    		<label class="review-num">
+    							<input type="radio" id="clean" name="clean" value="<%=i%>">
+    							<span><%=i %></span>
+							</label>
+			    		<%}%>
+			    		</div>
+		    		</div>
+		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
+			    		<span style="font-weight:bold;">시설</span>
+			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
+			    		<%for(int i = 1; i <= 10; i++){%>
+				    		<label class="review-num">
+    							<input type="radio" id="facility" name="facility" value="<%=i%>">
+    							<span><%=i %></span>
+							</label>
+			    		<%}%>
+			    		</div>
+		    		</div>
+		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
+			    		<span style="font-weight:bold;">서비스</span>
+			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
+			    		<%for(int i = 1; i <= 10; i++){%>
+				    		<label class="review-num">
+    							<input type="radio" id="service" name="service" value="<%=i%>">
+    							<span><%=i %></span>
+							</label>
+			    		<%}%>
+			    		</div>
+		    		</div>
+		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
+			    		<span style="font-weight:bold;">가격</span>
+			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
+			    		<%for(int i = 1; i <= 10; i++){%>
+				    		<label class="review-num">
+    							<input type="radio" id="price" name="price" value="<%=i%>">
+    							<span><%=i %></span>
+							</label>
+			    		<%}%>
+			    		</div>
+			    	</div>
+		    	</div>
+		    	<div style="text-align:right; width:1000px; margin:10px; display:inline-block;">
+		    		<button onclick="insert_review()" style="background-color:#0863ec; color:white; padding:15px 20px; border-radius:10px; border:0px; font-weight:bold;">리뷰 등록</button>
+		    	</div>		    	
+		    </div>
+   	 	</div>
 	</div>	
 	<div style="position:sticky; top:0px; background-color:#0863ec;z-index:100; border-radius:0px 0px 50px 50px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
@@ -218,16 +428,24 @@ window.onload = function(){
 	</div>
 	<div class="view" style="width:1224px; text-align:left;margin:30px auto; padding:10px; position:relative;">
 		<div style="width:1000px; margin:0 auto; padding:10px; display:inline-block;"> 
+		<div style="width:900px;">
 			<span style="font-size:20pt; font-weight:bold;">${rentalhomeVO.name}</span><br>
+		</div>
 			<span style="color:#545454;">${rentalhomeVO.address}</span><br>
 			<div style="width:700px; margin:5px 0px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all">
 				<span style="font-size:10pt; color:#545454;">${rentalhomeVO.info}</span><br>
 			</div>
 		</div>
-		<div class="like" style="width:50px; height:50px; margin:0 auto; display:inline-block; position:absolute; top:37px; left:820px;">
-		</div>
-		<div style="width:100px; text-align:center; height:80px; margin:0 auto; display:inline-block; position:absolute; top:30px; left:850px;">
-			<span style="font-size:30pt; color:#FA5858; font-weight:bold;">30</span>
+<%-- 		<c:choose> --%>
+<%-- 			<c:when test="${not empty login && like_dupl > 0}"> --%>
+				<img id="love_full" src="../img/love_full.png" onclick="delete_like()" class="like" style="display:none; width:50px; height:50px; position:absolute; top:30px; right:210px;">
+<%-- 			</c:when> --%>
+<%-- 			<c:otherwise> --%>
+				<img id="love_empty" onclick="insert_like()" src="../img/love_empty.png" class="like" style="width:50px; height:50px; position:absolute; top:30px; right:210px;">
+<%-- 			</c:otherwise> --%>
+<%-- 		</c:choose> --%>
+		<div style="width:100px; text-align:center; position:absolute; top:70px; right:185px;">
+			<span id="like_count" style="font-size:25pt; color:#FA5858; font-weight:bold; ">${like_count}</span>
 		</div>
 		<a href="#room" style="color:white;"><span style="text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:30px; left:1040px; background-color:#0863ec; border-radius:20px; font-size:20pt; font-weight:bold;">객실선택</span></a>
 		<div style="width:100%; border-radius:5px; display:inline-block; margin-left:10px;">
@@ -252,7 +470,7 @@ window.onload = function(){
 					<div style="border-radius:10px; background-color:#1c77f6; margin:5px 0px; padding:1px; height:10px; width:80px; position:absolute; top:25px; left:0px; z-index:5;"></div>
 					<div style="border-radius:10px; background-color:#d1d1d1; margin:5px 0px; padding:1px; height:10px; width:100px; position:absolute; top:25px; left:0px;"></div>
 				</div>
-				<div style="text-align:left; width:120px; height:50px;display:inline-block; margin:5px; position:relative;"><span style="font-weight:bold;">위치</span>&nbsp;&nbsp;6<br>
+				<div style="text-align:left; width:120px; height:50px;display:inline-block; margin:5px; position:relative;"><span style="font-weight:bold;">가격</span>&nbsp;&nbsp;6<br>
 					<div style="border-radius:10px; background-color:#1c77f6; margin:5px 0px; padding:1px; height:10px; width:60px; position:absolute; top:25px; left:0px; z-index:5;"></div>
 					<div style="border-radius:10px; background-color:#d1d1d1; margin:5px 0px; padding:1px; height:10px; width:100px; position:absolute; top:25px; left:0px;"></div>
 				</div>
@@ -273,37 +491,37 @@ window.onload = function(){
 						<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.parking_yn}">
+				<c:if test="${rentalhomeVO.parking_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.pickup_yn}">
+				<c:if test="${rentalhomeVO.pickup_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.wifi_yn}">
+				<c:if test="${rentalhomeVO.wifi_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.beach_yn}">
+				<c:if test="${rentalhomeVO.beach_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
 					</div>	
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.bbq_yn}">
+				<c:if test="${rentalhomeVO.bbq_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.breakfast_yn}">
+				<c:if test="${rentalhomeVO.breakfast_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.animal_yn}">
+				<c:if test="${rentalhomeVO.animal_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
 					</div>
@@ -332,7 +550,7 @@ window.onload = function(){
 				<c:choose>
 					<c:when test="${not empty list.physical_name}">
 						<div class="open-gallery-button-room" style="display:inline-block; position:absolute; top:0px; left:20px;">
-							<img src="<%=request.getContextPath()%>/resources/upload/${list.physical_name}" style="border-radius:20px; width:240px; height:200px; display:inline-block;">
+							<img src="<%=request.getContextPath()%>/resources/upload/${list.physical_name}" style="cursor:pointer;border-radius:20px; width:240px; height:200px; display:inline-block;">
 						</div>
 					</c:when>
 					<c:otherwise>
@@ -446,9 +664,9 @@ window.onload = function(){
 			영등포역과 아주 가깝고 바로앞에 버스 정류장도 있어서 위치는 아주 좋아요. 오픈한지 얼마 안되어 그런지 시설은 아주 깨끗하고 깔끔하고 무엇보다 침구류가 너무 좋더라구요. 
 			</div>
 		</div>
-<!-- 		<div style="text-align:right; height:50px; line-height:50px; margin:20px;"> -->
-<%-- 			<span onclick="location.href='rentalhomeModify.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'"  style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">리뷰 작성</span> --%>
-<!-- 		</div> -->
+		<div style="text-align:right; height:50px; line-height:50px; margin:10px 20px;">
+			<span id="open-gallery-button-review" style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">리뷰 작성</span>
+		</div>
 	</div>
 	<div class="view" id="rentalhome_rule" style="width:1224px; text-align:left; padding:20px; margin:10px auto;">
 		<span style="font-weight:bold; font-size:15pt;">숙소 규정</span><br>
@@ -500,37 +718,37 @@ window.onload = function(){
 						<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.parking_yn}">
+				<c:if test="${rentalhomeVO.parking_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.pickup_yn}">
+				<c:if test="${rentalhomeVO.pickup_yn  =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.wifi_yn}">
+				<c:if test="${rentalhomeVO.wifi_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.beach_yn}">
+				<c:if test="${rentalhomeVO.beach_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
 					</div>	
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.bbq_yn}">
+				<c:if test="${rentalhomeVO.bbq_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.breakfast_yn}">
+				<c:if test="${rentalhomeVO.breakfast_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
 					</div>
 				</c:if>
-				<c:if test="${not empty rentalhomeVO.animal_yn}">
+				<c:if test="${rentalhomeVO.animal_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
 						<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
 					</div>

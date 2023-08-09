@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
-import com.ss.demo.domain.RoomVO;
+import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_RoomVO;
 
 @Repository
 public class RentalhomeDAO {
@@ -58,26 +59,26 @@ public class RentalhomeDAO {
 	}
 	
 	// 객실 등록하기
-	public int insert_room(RoomVO roomVO) {
+	public int insert_room(Rentalhome_RoomVO roomVO) {
 		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_room", roomVO);
 	}
 
 	// 객실 이미지 등록하기
-	public int insert_room_file(RoomVO roomVO) {
+	public int insert_room_file(Rentalhome_RoomVO roomVO) {
 		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_room_file", roomVO);
 	}
 	
 	// 객실 리스트 불러오기
-	public List<RoomVO> selectAll_room(int rentalhome_idx) {
+	public List<Rentalhome_RoomVO> selectAll_room(int rentalhome_idx) {
 		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room", rentalhome_idx);
 	}
 
 	// 객실 정보 불러오기
-	public RoomVO selectOneByIdx_room(int room_idx) {
+	public Rentalhome_RoomVO selectOneByIdx_room(int room_idx) {
 		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.selectOneByIdx_room", room_idx);
 	}
 	// 객실 정보 업데이트
-	public int update_room(RoomVO roomVO) {
+	public int update_room(Rentalhome_RoomVO roomVO) {
 		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_room", roomVO);
 	}
 	
@@ -102,7 +103,7 @@ public class RentalhomeDAO {
 	}
 
 	// 객실 등록 이미지 불러오기
-	public List<RoomVO> selectAll_room_attach() {
+	public List<Rentalhome_RoomVO> selectAll_room_attach() {
 		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room_attach");
 	}
 
@@ -110,4 +111,30 @@ public class RentalhomeDAO {
 	public int delete_attach(int attach_idx) {
 		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_attach", attach_idx);
 	}
+	
+	// 리뷰 등록하기
+	public int insert_review(Rentalhome_RoomVO roomVO) {
+		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_review", roomVO);
+	}
+
+	// 좋아요 등록하기
+	public int insert_like(Rentalhome_LikeVO likeVO) {
+		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_like", likeVO);
+	}
+	
+	// 좋아요 개수 카운트
+	public int select_like(int rentalhome_idx) {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.select_like", rentalhome_idx);
+	}
+	
+	// 좋아요 중복체크
+	public int dupl_like(Rentalhome_LikeVO likeVO) {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.dupl_like", likeVO);
+	}
+
+	// 좋아요 취소
+	public int delete_like(Rentalhome_LikeVO likeVO) {
+		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_like", likeVO);
+	}
+	
 }
