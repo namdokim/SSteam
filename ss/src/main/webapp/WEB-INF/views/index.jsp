@@ -16,7 +16,7 @@
 	<style type="text/css">
 		/* 깜빡임 효과를 위해서  */
 		@keyframes blink-effect {
-		50% { opacity: 0; }
+		50% { opacity: 0.1; }
 		}
 		.notice {
 		/* background-image : url('img/jumbotronBackground.jpg'); */
@@ -126,28 +126,7 @@
 	<!-- 베스트글 보여주기  -->
 	<div>	
 	</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
 
 <!-- 채팅 테스트 개발 중 (혁수) -->
 <a href = "<%=request.getContextPath() %>/Community/ChattingTest.do"> 채팅 테스트 </a>

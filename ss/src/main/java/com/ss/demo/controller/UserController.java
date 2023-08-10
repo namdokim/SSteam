@@ -281,12 +281,92 @@ public class UserController
 		} else if (pwdcheck == true) {
 			session = req.getSession();
 			session.setAttribute("login", login);
+			// defalut 1800
+			session.setMaxInactiveInterval(3600);
 			return "Y";
 		} else {
 			return "FAIL";
 		}
 	} //로그인 끝
 	
-	
-	
+	//마이페이지 이동 
+	@RequestMapping(value="/mypage.do")
+	public String mypage(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		System.out.println("mypage="+login);
+		if(login !=null)
+		{
+			return "User/mypage";
+		}else
+		{
+			
+			return "redirect:/";
+		}
+	}
+	// 회원 프로필 이동 
+	@RequestMapping(value="/profile.do")
+	public String profile(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		if(login !=null)
+		{
+			System.out.println("profile="+login);
+			return "User/userProfile";
+		}else
+		{
+			
+			return "redirect:/";
+		}
+	}
+	// 회원 좋아요 이동
+	@RequestMapping(value="/great.do")
+	public String great(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		System.out.println("great="+login);
+		if(login !=null)
+		{
+			return "User/userGreat";
+		}else
+		{
+			
+			return "redirect:/";
+		}
+	}
+	//회원 리뷰 이동 
+	@RequestMapping(value="/review.do")
+	public String review(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		System.out.println("review="+login);
+		if(login !=null)
+		{
+			return "User/userReview";
+		}else
+		{
+			
+			return "redirect:/";
+		}
+	}
+	// 회원 결제 현황 이동 
+	@RequestMapping(value="/payment.do")
+	public String Payment(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		System.out.println("Payment"+login);
+		if(login !=null)
+		{
+			return "User/userPayment";
+		}else
+		{
+			
+			return "redirect:/";
+		}
+	}
 }

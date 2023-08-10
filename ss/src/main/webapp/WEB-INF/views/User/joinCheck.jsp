@@ -107,7 +107,7 @@
 		<!-- 메인화면 상단 로고 이미지 -->
 			<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:320px; height: 130px;"></div>
 		<div class="row justify-content-md-center" >
-			<div id="content" class="col-8 mh-80" >
+			<div id="content" class="col-8 mh-80" style="cursor:pointer";>
 				개인 정보 처리 방침<span>▼</span>
 			</div>
 				<div id="contentshow" class="col-8">
@@ -119,7 +119,7 @@
 				<input id="Checkbox1" type="checkbox" value=""> 네, 동의합니다
 			</div>
 			
-			<div id="content2" class="col-8 mh-80" >
+			<div id="content2" class="col-8 mh-80" style="cursor:pointer";>
 				전자상거래 표준약관<span>▼</span>
 			</div>
 				<div id="contentshow2" class="col-8">

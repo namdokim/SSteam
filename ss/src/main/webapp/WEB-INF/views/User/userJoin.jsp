@@ -178,11 +178,9 @@ function DoRewrite()
 						<div class="col-12">
 						<input  class="form-control" type="text" id="uJibunAddress"  placeholder="지번주소">            
 						</div>
-						
 						<div class="col-12">
 						<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
 						</div>	
-						
 						<label for="address" class="form-label">참고항목</label>
 						<div class="col-md-5">
 						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">

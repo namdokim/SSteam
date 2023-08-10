@@ -123,7 +123,7 @@
 	} */
 	/* 스크롤 다운시 고정되는 바 스타일  및 네비 바 고정  */
 	a:hover{
-		background: yellowgreen;
+		/* background: yellowgreen; */
 	}
 	/* .fix {
 	position:fixed;
@@ -140,7 +140,7 @@
 	.navbar{
 	/* #A9E2F3 */
 	background-color: write;
-	opacity: 0.7;
+	opacity: 0.8;
 	box-shadow: 0 2px 0px 0px gray;
 	width:100%; 
 	color:white; 
@@ -174,8 +174,10 @@
 		--bs-dropdown-min-width: 7rem;
 	}
 	#dropdownbox{
+		
 		border:none;
 		background-color:transparent;
+		z-index: 100;
 	}
 	#dropdownbox li .btn{
 		width: 100%;
@@ -183,6 +185,9 @@
 	.resp {
 	position: relative;
 	width: 100%;
+	}
+	.header-dropdown{
+	opacity: 1;
 	}
 	/* 메인 상단 이미지 햇던거  */
 /* 	.overlay {
@@ -221,7 +226,11 @@
 	} */
 	rect{
 		color: #e9ecef; !important;
-		
+	}
+	#bottomClick{
+		opacity: 0.7;
+		z-index: 999;
+		margin-bottom: 12px;
 	}
 </style>
 	<!-- 화면 상위 단 -->
@@ -247,7 +256,7 @@
 			</div> 
 			-->
 			<!-- drop down bar -->
-			<div class="header-dropdown">
+			<div id="header-dropdown" class="header-dropdown">
 				<div class="dropdown-center" >
 				<c:if test=""></c:if>
 					<button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static"  data-bs-auto-close="outside" aria-expanded="false">
@@ -397,6 +406,6 @@
 			</div>
 		</div>
 	</div>
-
+	
 <!-- </header> -->
 <!-- 헤더영역 끝 -->

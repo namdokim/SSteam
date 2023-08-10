@@ -188,6 +188,13 @@ function DoRewrite()
 						<div class="col-md-5">
 						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
 						</div>
+						<div class="col-12">
+						<label for="Phone" class="form-label">사업자 확인 절차</label>
+						<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="사업자 확인 절차 " required value="">
+						<div class="invalid-feedback">
+							사업자 확인 절차
+						</div>
+					</div>
 					<!-- 회원가입 입력란 끝 -->
 						<hr class="my-4">
 						<div class="d-flex justify-content-center my-4">
@@ -313,9 +320,7 @@ function DoRewrite()
 	</form> 
 	--%>
 <!-- api 연동 -->
-<div>
-	<input value="사업자 회원가입 ">
-</div>
+
 <script type="text/javascript">
 //coolsms
 //비바톤
@@ -572,7 +577,7 @@ $(function(){
 					}
 				},
 				error : function(){
-					alert("요청실패");
+					alert("요청 실패");
 				}
 				}); //ajax 끝 
 			uIdDup = false;

@@ -105,11 +105,11 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 		<!--  -->	
 			<form name="login" id="login">
 				<div class="form-floating">
-					<input type="text" class="form-control" id="uId" placeholder="uId" name="uId">
+					<input type="text" onkeyup="enterkey()" class="form-control" id="uId" placeholder="uId" name="uId" value="(Email형식으로 써주세요)">
 					<label for="floatingInput" class="text-muted">ID</label>
 				</div>			
 				<div class="form-floating">
-					<input type="password" class="form-control" id="uPw" placeholder="uPw" name="uPw">
+					<input type="password" onkeyup="enterkey()" class="form-control" id="uPw" placeholder="uPw" name="uPw">
 					<label for="floatingPassword" class="text-muted">Password </label>								
 				</div>
 				<!-- <i class=" input password eyes fas fa-eye"></i> -->
@@ -119,7 +119,7 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 						<input type="checkbox" value="remember-me" class="text-muted"> Remember me
 					</label>
 				</div>
-				<button class="btn btn-lg btn-primary" type="button" id="loginbtn" onclick="loginFn();">
+				<button class="btn btn-lg btn-primary"  type="button" id="loginbtn"  onclick="loginFn();">
 					log in
 				</button>
 			</form>
@@ -159,6 +159,17 @@ $(function(){
 </script>
 <!-- 로그인 유효성 검사  -->
 <script>
+$("#uId").click(function(){
+	$("#uId").val("").focus();
+});
+function enterkey() {
+	if (window.event.keyCode == 13) {
+    	// 엔터키가 눌렸을 때
+    	
+    	loginFn();
+    }
+}
+
 /* 버튼에 타입 버튼  안주면은 무조건 submit타입으로 인식해서 서브밋이 되는건가  */
 //async: false,     //값을 리턴시 해당코드를 추가하여 동기로 변경 ajax에서 return 값 얻을떄 
 function loginFn(){
