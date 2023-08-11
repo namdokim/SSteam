@@ -6,11 +6,7 @@
 	if (LType == null) {  LType = "TT"; }
 %>
 
-<!DOCTYPE html>
-<html>
-<head>
 <!-- CSS ================================================================= -->
-	<meta charset="UTF-8">
 	<title>식당 등록 페이지</title>
 	<style>
 		table {
@@ -41,11 +37,13 @@
 	</style>
 </head>
 
-<body>
+<!-- <body> -->
 <!-- 테이블(DB name) ================================================================= -->
 <h1 style="text-align: center; font-size: 2em;">식당 등록</h1>
 	<form action="foodMainWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validateForm()" >
+		<input type="hidden" name="uNo" value="${login.uNo}">
 		<table>
+			
 			<tr>
 				<th>가게 이름</th>
 				<td><input type="text" id="food_name" name="food_name" ></td>
@@ -280,6 +278,4 @@
             });
           }
 	</script>
-</body>
-</html>
 <%@ include file="../include/footer.jsp" %> 

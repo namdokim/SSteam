@@ -16,6 +16,7 @@
 	<!-- food -->
 	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
 	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
+	<typeAlias alias="foodreviewVO" type="com.ss.demo.domain.FoodReviewVO"/>
 <!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
 </typeAliases>
 <!-- 

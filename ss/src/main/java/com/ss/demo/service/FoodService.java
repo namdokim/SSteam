@@ -3,16 +3,18 @@ package com.ss.demo.service;
 import java.util.List;
 
 
+import com.ss.demo.domain.Criteria;
+import com.ss.demo.domain.FoodReviewVO;
 import com.ss.demo.domain.FoodVO;
+import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.SearchVO;
-
 
 //================================================
 public interface FoodService {
 
+
 	
-	List<FoodVO> list(SearchVO searchVO);
-	
+	//=================================================
 	FoodVO selectOneByFno(int fNo);
 	
 	int insert(FoodVO vo);
@@ -33,7 +35,38 @@ public interface FoodService {
 	int delete(int fNo);
 	
 	// list MenuAttach()
-		List<FoodVO> selectListByFno(int fNo);
+	List<FoodVO> selectListByFno(int fNo);
+
 	
+	//=================================================
+	// + 페이징 
+	List<FoodVO> list(SearchVO searchVO);
+	
+	List<FoodVO> selectAll_food_attach(int fNo);
+	
+	int select_food_count();
+	
+	//================================================== 첨부파일 수정 
+	public int init_attach_thumbmail(int fNo);
+	
+	public int attach_thumbmail(int food_attach_number);
+
+	int delete_attach(int food_attach_number);
+	
+	
+	//=================================================
+	// 모달창 리뷰 내용넣음 
+	int insert(FoodReviewVO vo);
+	
+	List<FoodReviewVO> list();
+	
+	//=================== ajax 리뷰 
+	FoodReviewVO selectOneByFRno(int food_review_number);
+	
+	// delete_foodreview
+	int delete_foodreview(int food_review_number);
+	
+	// modify_foodreview
+	int modify_foodreview(FoodReviewVO foodreviewVO);
 	
 }

@@ -1,8 +1,8 @@
+<%@page import="com.ss.demo.domain.PageMaker"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List" %>
-
 <!-- 게시판 타입 선택 ========================================================================= -->
 <%
 	// 게시판 타입이 선택되었는지 확인후, 기본값 셋팅
@@ -13,19 +13,17 @@
 		type = "TT"; 			// 전체게시판으로 셋팅
 	}
 %>
-
+<%
+	if(session.getAttribute("login") != null)
+	{
+		System.out.println("로그인 됨");
+	}
+	PageMaker pageMaker = (PageMaker)request.getAttribute("pageMaker");
+%>
 <!-- ======================================================================================= -->
-<!DOCTYPE html>
-<html lang="en">
 
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>맛집 메인</title>
 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.3.min.js"></script>
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -193,7 +191,7 @@
 
 <!-- ============================================================================== -->
 	
-<body>
+<!-- <body> -->
 
     
 	<div class="header">
@@ -413,20 +411,24 @@
 								<p class="restaurant-address" style="color: silver; text-align:right;">
 								<a href="<%=request.getContextPath()%>/food/foodView.do?fNo=${food.fNo}">${food.food_name} 더보기></a></p>
 								
-<!--  글 수정, 삭제 버튼  (로그인시에만 보임) --> 
+<!--  글 수정, 삭제 버튼  (로그인시에만 보임/ 글쓴사람만 보임) --> 
 					
 								<div style="float:right;">
 									<form name="frm" action="delete.do" method="post" style="display: inline;">
 								        <input type="hidden" name="fNo" value="${food.fNo}">
-								        <% if(session.getAttribute("login") != null) { %>
+								       <%--  <% if(session.getAttribute("login") != null) { %> --%>
+								       <c:if test="${login.uNo eq food.uNo}">
 								        	<button onclick="delFn()">삭제하기</button> 
-								        <% } %>
+								       <%--  <% } %> --%>
+								       </c:if>
 								    </form>
 								</div>
 								<div style="float:right; margin-right: 10px;">
-										<% if(session.getAttribute("login") != null) { %>
-											<button onclick="location.href='<%=request.getContextPath()%>/food/foodMainModify.do?fNo=${food.fNo}'">수정하기</button>
-										<% } %> 
+									<c:if test="${login.uNo eq food.uNo}">
+									<%-- <% if(session.getAttribute("login") != null) { %> --%>
+										<button onclick="location.href='<%=request.getContextPath()%>/food/foodMainModify.do?fNo=${food.fNo}'">수정하기</button>
+									<%-- <% } %>  --%>
+									</c:if>
 										
 <!-- 해당 글을 작성한 유저에게만 삭제하기 수정하기 버튼이 보이게 함 -->		
 								<%-- <% if(session.getAttribute("login") != null && session.getAttribute("login").equals(String.valueOf(food.uNo))) { %>
@@ -449,15 +451,15 @@
 								
 <!-- 페이징S ----------------------------------------------------------------------- -->
 
-	 			<nav aria-label="Page navigation example">
+	 			<%-- <nav aria-label="Page navigation example">
 					<ul class="pagination justify-content-center">
 					
-				        <%-- 이전 페이지 링크 생성 --%>
+				        이전 페이지 링크 생성
 				        <li class="page-item">
 				            <a class="page-link" href="foodMain.do?type=<%= type %>&page=1">Previous</a>
 				        </li>
 				
-				        <%-- 숫자 버튼 생성 --%>
+				        숫자 버튼 생성
 				        <% int totalPages = 5; // 총 페이지 수 (예시로 5로 설정) %>
 				        <% for (int i = 1; i <= totalPages; i++) 
 				        { 
@@ -469,13 +471,31 @@
 				        } 
 				        %>
 				
-				        <%-- 다음 페이지 링크 생성 --%>
+				        다음 페이지 링크 생성
 				        <li class="page-item">
 				            <a class="page-link" href="foodMain.do?type=<%= type %>&page=<%= totalPages %>">Next</a>
 				        </li>
 					</ul>
 					<br>
-				</nav>
+				</nav> --%>
+<!-- 페이징 디자인 NEW -->				
+				<div style="width:100%; text-align:center; margin:20px 0px;">
+					<% if (pageMaker.isPrev()){ %>
+					<a href="<%=request.getContextPath()%>/food/foodMain.do?page=<%=pageMaker.getStartPage()-1%>"><span style="padding:0px 10px;">◀</span></a>
+					<%} %>
+					<% 
+					for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
+					%>
+					<a href="<%=request.getContextPath()%>/food/foodMain.do?page=<%=i%>">
+						<span style="padding:0px 10px;"><%=i %></span>
+					</a>
+					<%	
+					}
+					%>
+					<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %>
+					<a href="<%=request.getContextPath()%>/food/foodMain.do?page=<%=pageMaker.getEndPage()+1%>"><span style="padding:0px 10px;"></span>▶</a>
+					<% } %>
+				</div>
 			</div>
 <!-- 지도 표시되는 부분  ===============================================================================-->	
 
@@ -488,8 +508,6 @@
 			<div id="map" style="width:100%;height:400px; margin:0 auto;"></div>
 		</div>
 	</div>
-	
-	
 	
 <!-- ========================  카카오지도api (8080포트설정하기) ==========================================-->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57"></script>
@@ -523,11 +541,4 @@
 		}
 	</script>
 <!-- =========================================================================================== -->
-	
-</body>
-</html><br>
 <%@ include file="../include/footer.jsp" %>
-
-
-
-
