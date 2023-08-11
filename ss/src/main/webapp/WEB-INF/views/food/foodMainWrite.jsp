@@ -1,11 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
-
 <%	
 	String LType = request.getParameter("LType");
 	if (LType == null) {  LType = "TT"; }
 %>
-
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+// 주소 찾기 창 
+	window.onload = function()
+	{
+	   document.getElementById("search_address").addEventListener("click", function(){
+	      new daum.Postcode({
+	         oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+	            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+	            document.getElementById("food_address").value = data.address; // 주소 넣기
+	         }
+	      }).open();
+	   });
+	}
+</script>
 <!-- CSS ================================================================= -->
 	<title>식당 등록 페이지</title>
 	<style>
@@ -50,7 +64,9 @@
 			</tr>
 			<tr>
 				<th>주소</th>
-				<td><input type="text" id="food_address" name="food_address" ></td>
+				<td><input type="text" id="food_address" name="food_address" readonly>
+				<span id="search_address" style="cursor:pointer;">주소 찾기</span>
+				</td>
 			</tr>
 			<tr>
 				<th>전화번호</th>
@@ -110,13 +126,6 @@
 					</select>
 				</td>
 			</tr>
-			<!-- <tr>
-				<th>지역 및 위치</th>
-				<td>
-					<input type="text" id="food_map" name="food_map" required>
-					<button type="button" onclick="showMap()">위치 찾기</button>
-				</td>
-			</tr> -->
 		</table>
 		
 		<!-- <div id="map"></div>
@@ -277,5 +286,6 @@
               }
             });
           }
+          
 	</script>
 <%@ include file="../include/footer.jsp" %> 
