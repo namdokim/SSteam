@@ -45,13 +45,13 @@ public class CommunityController
 		List<Community_BoardVO> nowPageBoardList;
 		if (boardType == 0)
 		{
-			System.out.println("전체 게시글");
+			// System.out.println("전체 게시글");
 			boardCount = communityService.getBoardCount();
 			nowPageBoardList = communityService.getBoardPage(nowPage);
 		}
 		else
 		{
-			System.out.println("특정 게시글");
+			// System.out.println("특정 게시글");
 			boardCount = communityService.getBoardCount_TypeChoice(boardType);
 			nowPageBoardList = communityService.getBoardPage_TypeChoice(boardType, nowPage);
 		}
@@ -74,12 +74,12 @@ public class CommunityController
 			pageEnd = maxPage;
 		}
 		
-		System.out.println("boardType: " + boardType);
-		System.out.println("nowPage: " + nowPage);
-		System.out.println("boardCount: " + boardCount);
-		System.out.println("maxPage: " + maxPage);
-		System.out.println("pageStart: " + pageStart);		
-		System.out.println("pageEnd: " + pageEnd);
+		// System.out.println("boardType: " + boardType);
+		// System.out.println("nowPage: " + nowPage);
+		// System.out.println("boardCount: " + boardCount);
+		// System.out.println("maxPage: " + maxPage);
+		// System.out.println("pageStart: " + pageStart);		
+		// System.out.println("pageEnd: " + pageEnd);
 
 		// 모델에 파라미터 전달
 		model.addAttribute("unitPage", unitPage);
@@ -107,13 +107,75 @@ public class CommunityController
 	public String communityWriteCheck(Community_BoardVO communityBoardVO, HttpServletRequest req)
 	{
 		HttpSession session = req.getSession();
-		System.out.println("user_number: " + req.getParameter("user_number"));
-		System.out.println("board_title: " + req.getParameter("board_title"));
-		System.out.println("board_type: " + req.getParameter("board_type"));
-		System.out.println("board_content: " + req.getParameter("board_content"));
+		// System.out.println("user_number: " + req.getParameter("user_number"));
+		// System.out.println("board_title: " + req.getParameter("board_title"));
+		// System.out.println("board_type: " + req.getParameter("board_type"));
+		// System.out.println("board_content: " + req.getParameter("board_content"));
 		
-		communityService.insertBoard(communityBoardVO);
+		UserVO userVO = (UserVO)session.getAttribute("login");
+		
+		if(userVO == null)
+		{
+			return "redirect:CommunityMain.do";
+		}
+		else
+		{
+			communityService.insertBoard(communityBoardVO);
+			return "redirect:CommunityMain.do";
+		}
+	}
+	
+	@RequestMapping (value = "/CommunityView.do")
+	public String toCommunityView(@RequestParam(name = "boardNumber") int boardNumber,
+								  @RequestParam(name = "isHit") boolean isHit,
+								   Model model)
+	{		
+		// 게시글 정보 얻기
+		Community_BoardVO communityBoardVO = communityService.readBoard(boardNumber, isHit);
+		model.addAttribute("communityBoardVO", communityBoardVO);
+		
+		return "Community/CommunityView";
+	}
+	
+	@RequestMapping (value = "/CommunityDelete.do")
+	public String communityDelete(@RequestParam(name = "boardNumber") int boardNumber)
+	{		
+		// 게시글 삭제
+		communityService.deleteBoard(boardNumber);
 		
 		return "redirect:CommunityMain.do";
+	}
+	
+	@RequestMapping (value = "/CommunityModify.do")
+	public String toCommunityModify(@RequestParam(name = "boardNumber") int boardNumber,
+									Model model)
+	{
+		// 게시글 정보 얻기
+		Community_BoardVO communityBoardVO = communityService.readBoard(boardNumber, false);
+		model.addAttribute("communityBoardVO", communityBoardVO);
+		
+		return "Community/CommunityModify";
+	}
+	
+	@RequestMapping (value = "/CommunityModifyCheck.do", method = RequestMethod.POST)
+	public String communityModifyCheck(Community_BoardVO communityBoardVO, HttpServletRequest req)
+	{
+		HttpSession session = req.getSession();
+		// System.out.println("user_number: " + req.getParameter("user_number"));
+		// System.out.println("board_title: " + req.getParameter("board_title"));
+		// System.out.println("board_type: " + req.getParameter("board_type"));
+		// System.out.println("board_content: " + req.getParameter("board_content"));
+		
+		UserVO userVO = (UserVO)session.getAttribute("login");
+		
+		if(userVO == null)
+		{
+			return "redirect:CommunityMain.do";
+		}
+		else
+		{
+			communityService.updateBoard(communityBoardVO);
+			return "redirect:CommunityMain.do";
+		}
 	}
 }

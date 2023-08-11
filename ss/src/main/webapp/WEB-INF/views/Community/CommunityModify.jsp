@@ -2,14 +2,6 @@
 <%@ include file="../include/header.jsp" %>
 
 <%
-	String boardType = "";
-	
-	// url 에서 현재 선택 된 게시판 종류 얻기
-	boardType = request.getParameter("boardType");
-	System.out.println("boardType: " + boardType);
-%>
-
-<%
 	// 로그인 정보가 없으면 진입 불가
 	UserVO userVO = (UserVO)session.getAttribute("login");
 
@@ -27,7 +19,7 @@
 	<head>
 		<meta charset = "UTF-8">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
-		<title> 커뮤니티 글쓰기 </title>	
+		<title> 커뮤니티 글 수정 </title>	
 	</head>
 
 	<body>
@@ -35,32 +27,32 @@
 			<div class = "row flex-nowrap" >
 				<main class = "col-6 offset-3 py-md-1 pl-md-5 bd-content board-article border-end border-start" style = "height: 100vh;" role = "main">
 					<article class = "container-fluid">
-						<form name = "write" method = "post" action = "<%= request.getContextPath() %>/Community/CommunityWriteCheck.do" >	
+						<form name = "write" method = "post" action = "<%= request.getContextPath() %>/Community/CommunityModifyCheck.do" >	
 							<input type = "hidden" name = "contentType" value = "html">
 							<div class = "write-head border-top border-bottom py-md-1">
-								작성자:　<%= userVO.getuName() %> <input type = "hidden" name = "uNo" id = "uNo" value = <%= userVO.getuNo() %>>
+								작성자:　${communityBoardVO.user_name} <input type = "hidden" name = "uNo" id = "uNo" value = "${communityBoardVO.uNo}">
 							</div>
 							<div class = "sub-row py-md-1">
 							<span> 게시판 구분:　</span>
 							<span>
-								<input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-1" autocomplete = "off" value = "1" <%= boardType.equals("1") ? "checked" : "" %> >								
-								<label class = "btn btn-light" for = "success-outlined-1"> 공지사항 </label>								
+							    <input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-1" autocomplete = "off" value = "1" ${communityBoardVO.board_type == 1 ? "checked" : ""}>								
+							    <label class = "btn btn-light" for = "success-outlined-1"> 공지사항 </label>								
 							</span>
 							<span>
-								<input  type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-2" autocomplete = "off" value = "2" <%= boardType.equals("2") ? "checked" : "checked" %> >
-								<label class = "btn btn-light" for = "success-outlined-2"> 정보 게시판 </label>
+							    <input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-2" autocomplete = "off" value = "2" ${communityBoardVO.board_type == 2 ? "checked" : ""}>
+							    <label class = "btn btn-light" for = "success-outlined-2"> 정보 게시판 </label>
 							</span>
 							<span>
-								<input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-3" autocomplete = "off" value = "3" <%= boardType.equals("3") ? "checked" : "" %> >
-								<label class = "btn btn-light" for = "success-outlined-3"> 후기 게시판 </label>
+							    <input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-3" autocomplete = "off" value = "3" ${communityBoardVO.board_type == 3 ? "checked" : ""}>
+							    <label class = "btn btn-light" for = "success-outlined-3"> 후기 게시판 </label>
 							</span>
 							<span>
-								<input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-4" autocomplete = "off" value = "4" <%= boardType.equals("4") ? "checked" : "" %> >
-								<label class = "btn btn-light" for = "success-outlined-4"> 질문 게시판 </label>
+							    <input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-4" autocomplete = "off" value = "4" ${communityBoardVO.board_type == 4 ? "checked" : ""}>
+							    <label class = "btn btn-light" for = "success-outlined-4"> 질문 게시판 </label>
 							</span>
 							<span>
-								<input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-99" autocomplete = "off" value = "99" <%= boardType.equals("99") ? "checked" : "" %> >
-								<label class = "btn btn-light" for = "success-outlined-99"> 자유 게시판 </label>
+							    <input type = "radio" class = "btn-check" name = "board_type" id = "success-outlined-99" autocomplete = "off" value = "99" ${communityBoardVO.board_type == 99 ? "checked" : ""}>
+							    <label class = "btn btn-light" for = "success-outlined-99"> 자유 게시판 </label>
 							</span>
 							
 							</div>
@@ -76,11 +68,11 @@
 										<div class = "input-group-prepend">
 											<span class = "input-group-text"> 제목 </span>
 										</div> &nbsp;
-										<input type = "text" name = "board_title" class = "form-control form-control-sm " id = "communityTitle" maxlength = "256" required>
+										<input type = "text" name = "board_title" class = "form-control form-control-sm " id = "communityTitle" maxlength = "256" required value = "${communityBoardVO.board_title}">
 									</div>
 								</div>
 								<div class = "pt-1">
-									<textarea id = "summernote" name = "board_content" style = "width: 100%; height: 45rem"></textarea>
+									<textarea id = "summernote" name = "board_content" style = "width: 100%; height: 45rem">${communityBoardVO.board_content}</textarea>
 								</div>    
 							</div>						
 			        		<div class = "pt-1 d-flex justify-content-end">

@@ -329,7 +329,7 @@
 						<c:forEach items = "${nowPageBoardList}" var = "element">
 							<tr class = "vrow-inner">
 								<td class = "vcol col-id" style = "text-align: center"> ${element.board_number} </td>
-								<td class = "vcol col-title"> <a href="view.do?bidx=${element.board_number}"> ${element.board_title} </a> </td>
+								<td class = "vcol col-title"> <a href = "CommunityView.do?boardNumber=${element.board_number}&isHit=true"> ${element.board_title} </a> </td>
 								<td class = "vcol col-author" style = "text-align: center"> ${element.user_name} </td>
 								<td class = "vcol col-time" style = "text-align: center"> ${element.write_date} </td>
 								<td class = "vcol col-view" style = "text-align: center"> ${element.hit_count} </td>
