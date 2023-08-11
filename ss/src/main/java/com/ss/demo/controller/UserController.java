@@ -1,6 +1,8 @@
 package com.ss.demo.controller;
 
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.MailSendService;
@@ -368,5 +373,53 @@ public class UserController
 			
 			return "redirect:/";
 		}
+	}
+	// 회원 프로필 사진 수정 
+	// 억까로 되네. 파일 관련은 공부 좀 해야 겟다 너 말이야 너!!! 너!!!! 너,임마!
+	@RequestMapping(value="/profileimg.do")
+	public String profile_modify(UserVO uv, 
+			@RequestParam("myprofileimg") MultipartFile myprofileimg,
+			@RequestParam Map<String, Object> map,
+			MultipartHttpServletRequest multireq,
+			HttpServletRequest req, 
+			RedirectAttributes ra,
+			HttpSession session, Model model
+			)
+	{
+		
+		System.out.println("filefirst="+myprofileimg);
+		UserVO login = (UserVO)session.getAttribute("login");
+		// 웹 접근경로 (프로젝트 경로로 시작해서)
+		String webPath="/resources/images/userprofile/";
+		// 서버 저장 폴더경로
+		// 프로젝트 절대경로뒤 웹 접근경로가 합쳐짐 
+		String folderPath = req.getSession().getServletContext().getRealPath(webPath);
+		
+		
+		System.out.println("folderPath="+folderPath);
+ 		// 파일 이름 
+		//map에 경로2개 이미지 del 회원번호 담기
+		map.put("standfile", login.getuImg());
+		map.put("webPath", webPath);
+		map.put("folderPath", folderPath);
+		map.put("myprofileimg", myprofileimg);
+		map.put("uNo", login.getuNo());
+		//쿼리문 실행
+		System.out.println("map="+map.get(myprofileimg));
+		System.out.println("login=="+login.getuImg());
+		
+		int result = us.profileimg(map);
+		
+		String message = null;
+		if( result > 0)
+		{
+			message = "프로필 이미지 변경 완료 ";
+			uv.setuImg( (String)map.get("myprofileimg"));
+		}else {
+			message = "변경 실패";
+		}
+		ra.addFlashAttribute("message",message);
+		return "redirect:profile.do";
+		
 	}
 }

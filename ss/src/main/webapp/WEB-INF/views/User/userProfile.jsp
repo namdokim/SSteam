@@ -22,26 +22,38 @@
 			<!-- <div class="col-md-7 col-lg-8"> -->
 				
 				<!-- 프로필 사진 ~ -->
-				<form method="post" action="" enctype="multipart/form-data">
-					<div>
-						<div class="mb-3">프로필 사진 넣을거임 건들지마셈</div>
-						<img src="../img/Profilepoto/.." style="max-width: 50%;  height: auto;">
+				<form method="post" action="<%= request.getContextPath()%>/User/profileimg.do" enctype="multipart/form-data">
+					<div class="profile-btn-area">
+						<label for="input-image">이미지 </label>
+						<div class="mb-3">
+							<img src='<c:url value="${login.uImg} "></c:url>' width="200px" height="200px">
+						</div>
+						<input type="file" name="myprofileimg">
+						<input type="hidden" id="uId">
+						<button type="submit">변경하기</button>
 					</div>
+					<input type="hidden" name="delete" id="delete" value="0">
+						<label for="input-image">이미지 미리보기</label>
+						<div id="preview" class="mb-3">
+							<img src='<c:url value="${login.uImg} "></c:url>' width="200px" height="200px">
+						</div>
 				</form>
 				<!-- 회원수정 폼  -->
 				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
 					<input type="hidden" id="uType" name="uType" value="<%= login.getuType()%>">
 					<div class="col-12">
 					<div class="g-3">
+					<!-- 
 						<div class="grid text-center">
 							<label for="ID" class="form-label">아이디</label>
 							<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
 							<div class="invalid-feedback">
 							이메일 이름을 써주세요
 							</div>
-							<!-- <div class="invalid-feedback">
+							
+							 <div class="invalid-feedback">
 							도메인을 선택해주세요.
-							</div> -->
+							</div>
 							<select class="form-select" id="uId_email" name="uId_email" onchange="email();">	
 								<option value="">도메인을 선택해주세요</option>
 								<option value="@naver.com">naver.com</option>
@@ -53,17 +65,18 @@
 								<option value="@outlook.com">outlook.com</option>
 								<option value="@hotmail.com">hotmail.com</option>
 							</select>
-							<!-- float-end py-1 -->
-							<!-- d-flex justify-content -->
-							<!-- class="float-end btn btn-secondary mb-1" -->
+							float-end py-1
+							d-flex justify-content
+							class="float-end btn btn-secondary mb-1"
 							<div id="idbutton" class="d-flex justify-content align-items-right">
 								<div class="col-md-12">
 								<input type="button" class="btn btn-secondary mb-1" value="인증하기" id="emailCheck" onclick="emailAuth();">
 								<input type="button" class="btn btn-primary mb-1" value="중복확인 " id="emaildomain" onclick="emailcheck();">
 								</div>
-								<!-- <input type="hidden" name="idchecked" id=""value="checkednot"> -->
+								<input type="hidden" name="idchecked" id=""value="checkednot">
 							</div>
 						</div>
+						 -->
 					</div> <!-- g-3 -->
 					</div> <!-- col-12 -->
 					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
