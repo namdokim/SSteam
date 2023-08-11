@@ -49,4 +49,32 @@ public class CommunityServiceImpl implements CommunityService
 	{
 		return communityDAO.getBoardPage_TypeChoice(boardType, nowPage);
 	}
+	
+	// 게시글 보기
+	@Override
+	public Community_BoardVO readBoard(int boardNumber, boolean isHit)
+	{
+		return communityDAO.readBoard(boardNumber, isHit);
+	}
+	
+	// 조회수 증가
+	@Override
+	public void hitCountIncrease(int boardNumber)
+	{
+		
+	}
+	
+	// 게시글 삭제
+	@Override
+	public void deleteBoard(int boardNumber)
+	{
+		communityDAO.deleteBoard(boardNumber);
+	}
+	
+	// 게시글 수정
+	@Override
+	public void updateBoard(Community_BoardVO communityBoardVO)
+	{
+		communityDAO.updateBoard(communityBoardVO);
+	}
 }

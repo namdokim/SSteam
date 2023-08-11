@@ -4,7 +4,7 @@ public class Community_BoardVO
 {
 	// board 테이블
 	private int board_number;								// 글 번호
-	private int user_number;								// 글 작성자 유저 번호
+	private int uNo;										// 글 작성자 유저 번호
 	private String board_title;								// 글 제목
 	private int board_type;									// 글 종류
 	private String board_content;							// 글 내용
@@ -18,9 +18,9 @@ public class Community_BoardVO
 	{
 		return board_number;
 	}
-	public int getUser_number()
+	public int getuNo()
 	{
-		return user_number;
+		return uNo;
 	}
 	public String getBoard_title()
 	{
@@ -54,10 +54,10 @@ public class Community_BoardVO
 	public void setBoard_number(int board_number)
 	{
 		this.board_number = board_number;
-	}
-	public void setUser_number(int user_number)
+	}	
+	public void setuNo(int uNo)
 	{
-		this.user_number = user_number;
+		this.uNo = uNo;
 	}
 	public void setBoard_title(String board_title)
 	{

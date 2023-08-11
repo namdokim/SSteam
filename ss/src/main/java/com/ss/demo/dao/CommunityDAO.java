@@ -84,4 +84,38 @@ public class CommunityDAO
 		// 게시글 목록 반환
 		return communityBoardList;
 	}
+	
+	// 게시글 보기
+	public Community_BoardVO readBoard(int boardNumber, boolean isHit)
+	{    
+	    // SQL 실행
+		if (isHit == true)
+		{
+			hitCountIncrease(boardNumber);
+		}
+	    Community_BoardVO communityBoard = sqlSession.selectOne("com.ss.demo.mapper.CommunityMapper.readBoard", boardNumber);
+ 		
+ 		// 게시글 정보 반환
+ 		return communityBoard;
+	}
+	
+	// 조회수 증가
+	public void hitCountIncrease(int boardNumber)
+	{
+		// SQL 실행
+	    sqlSession.update("com.ss.demo.mapper.CommunityMapper.hitCountIncrease", boardNumber);
+	}
+	
+	// 게시글 삭제
+	public void deleteBoard(int boardNumber)
+	{
+		// SQL 실행
+		sqlSession.delete("com.ss.demo.mapper.CommunityMapper.deleteBoard", boardNumber);
+	}
+	
+	// 게시글 수정
+	public void updateBoard(Community_BoardVO communityBoardVO)
+	{
+		sqlSession.update("com.ss.demo.mapper.CommunityMapper.updateBoard", communityBoardVO);
+	}
 }
