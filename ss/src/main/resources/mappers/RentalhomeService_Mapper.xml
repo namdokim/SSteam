@@ -96,6 +96,10 @@
 		SELECT * FROM rentalhome_room_attach
 	</select>
 
+	<select id="selectAll_room_attach_ByIdx" resultType="rentalhome_roomVO" parameterType="int">
+		SELECT * FROM rentalhome_room_attach WHERE room_idx = #{room_idx}
+	</select>
+
 	<update id="delete_rentalhome" parameterType="int">
 		UPDATE rentalhome SET status = 'N' WHERE rentalhome_idx = #{rentalhome_idx}
 	</update>
@@ -187,5 +191,21 @@
 		FROM rentalhome_like 
 		WHERE rentalhome_idx = #{rentalhome_idx}
 				and uno = #{uno}
+	</delete>
+	
+	<update id="init_attach_room_thumbnail" parameterType="int">
+		UPDATE rentalhome_room_attach SET
+			thumbnail = 'N'
+		WHERE room_idx = #{room_idx}
+	</update>
+
+	<update id="room_attach_thumbnail" parameterType="int">
+		UPDATE rentalhome_room_attach SET
+			thumbnail = 'Y'
+		WHERE attach_idx = #{attach_idx}
+	</update>
+
+	<delete id="room_attach_delete" parameterType="int">
+		DELETE FROM rentalhome_room_attach WHERE attach_idx = #{attach_idx}
 	</delete>
 </mapper>

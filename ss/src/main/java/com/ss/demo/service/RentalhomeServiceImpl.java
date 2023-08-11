@@ -153,5 +153,29 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 		
 		return rentalhomeDAO.delete_like(likeVO);
 	}
+
+	@Override
+	public int init_attach_room_thumbmail(int room_idx) {
+		
+		return rentalhomeDAO.init_attach_room_thumbnail(room_idx);
+	}
+
+	@Override
+	public int room_attach_thumbmail(int attach_idx) {
+		
+		return rentalhomeDAO.room_attach_thumbnail(attach_idx);
+	}
+
+	@Override
+	public int room_attach_delete(int attach_idx) {
+		
+		return rentalhomeDAO.room_attach_delete(attach_idx);
+	}
+
+	@Override
+	public List<Rentalhome_RoomVO> selectAll_room_attach_ByIdx(int room_idx) {
+		
+		return rentalhomeDAO.selectAll_room_attach_ByIdx(room_idx);
+	}
 	
 }

@@ -37,12 +37,21 @@
     color: silver;
 	}
 	*/
+	
 </style>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 window.onload = function(){
-	
+	  document.getElementById("search_address").addEventListener("click", function(){
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+	            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+	            document.getElementById("address").value = data.address; // 주소 넣기
+	        }
+	    }).open();
+	  });
 }
-
 </script>
 <div style="width:1920px; text-align:center; background-color:#dfecfb; padding:20px 0px;">
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;  line-height:50px; ">
@@ -57,7 +66,8 @@ window.onload = function(){
 						<input type="file" name="multiFile" multiple required>
 						<div id="preview" style="width:800px;"></div>
 					</div>
-					<br>
+				</div>
+				<div style="margin:30px 0px;">
 					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
 						<span style="font-weight:bold;">숙박 시설 이름</span>
 					</div>
@@ -66,11 +76,14 @@ window.onload = function(){
 					</div>
 				</div>
 				<div style="margin:10px 0px 30px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
+					<div style="display:inline-block; width:200px; height:110px; vertical-align:top;text-align:right; margin-right:30px;">
 						<span style="font-weight:bold;">주소</span>
 					</div>
-					<div style="display:inline-block; width:800px;">
-						<input type="text" name="address" placeholder="숙박 시설의 주소를 입력해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
+					<div style="display:inline-block; width:800px; height:110px;">
+						<div style="display:inline-block; width:800px;">
+							<span id="search_address" class="btn btn-secondary mb-1" style="cursor:pointer; padding:10px 20px;">주소 찾기</span>
+						</div>
+						<input type="text" name="address" id="address" readonly placeholder="주소 찾기를 눌러 숙박시설의 주소를 검색해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
 					</div>
 				</div>
 				<div style="margin:10px 0px;">

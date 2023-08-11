@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 window.onload = function(){
 	const openButton = document.getElementById("open-gallery-button");
@@ -23,7 +24,54 @@ window.onload = function(){
 	    document.body.style.overflow = "auto";
 	  }
 	});
+	
+	document.getElementById("search_address").addEventListener("click", function(){
+		new daum.Postcode({
+			oncomplete: function(data) {
+				// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+				// 예제를 참고하여 다양한 활용법을 확인해 보세요.
+				document.getElementById("address").value = data.address; // 주소 넣기
+			}
+		}).open();
+	});
 }
+function thumbnail(index){
+	var attach_idx = document.getElementsByName("attach_idx")[index].value;
+	var rentalhome_idx = document.getElementsByName("rentalhome_idx")[index].value;
+	$.ajax({
+		url:"rentalhomeThumbnail.do",
+		type:"post",
+		data:{
+			attach_idx:attach_idx,
+			rentalhome_idx:rentalhome_idx
+		},
+		success:function(){
+			alert("썸네일을 등록하셨습니다.");
+		},
+		error:function(error){
+			console.log('ERROR: ', error);
+		}
+	});
+}	
+
+function attach_delete(index){
+	var attach_idx = document.getElementsByName("attach_idx")[index];
+	var attach_img = document.getElementsByName("attach_img")[index];
+	$.ajax({
+		url:"rentalhomeDelete_attach.do",
+		type:"post",
+		data:{
+			attach_idx:attach_idx.value
+		},
+		success:function(){
+			alert("등록된 이미지를 삭제하셨습니다.");
+			attach_img.style.display = "none";
+		},
+		error:function(error){
+			console.log('ERROR: ', error);
+		}
+	});
+}	
 </script>
 <style>
 	.view{
@@ -78,19 +126,13 @@ window.onload = function(){
 				    </div>
 				    <div style="margin:20px; width:1144px; height:1px; background-color:lightgray;"></div>
 				    <div style="margin:20px; text-align:left;">
-					    <c:forEach items="${attach}" var="attach">
-						    <div style="display:inline-block; margin:20px 0px;">
+					    <c:forEach items="${attach}" var="attach"  varStatus="status">
+						    <div name="attach_img" style="display:inline-block; margin:20px 0px;">
 						   		<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="width:370px; height:250px; border-radius:5px; display:inline-block;"><br>
-							    <form action="rentalhomeThumbnail.do" method="post" style="display:inline-block;">
 							    	<input type="hidden" name="attach_idx" value="${attach.attach_idx}">
 							    	<input type="hidden" name="rentalhome_idx" value="${attach.rentalhome_idx}">
-							   		<button style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">썸네일 등록</button>
-							    </form>
-							    <form action="rentalhomeDelete_attach.do" method="post" style="display:inline-block;">
-							    	<input type="hidden" name="attach_idx" value="${attach.attach_idx}">
-							    	<input type="hidden" name="rentalhome_idx" value="${attach.rentalhome_idx}">
-							   		<button style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">등록 이미지 삭제</button>
-							    </form>
+							   		<button onclick="thumbnail(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">썸네일 등록</button>
+							   		<button onclick="attach_delete(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">등록 이미지 삭제</button>
 						    </div>
 					    </c:forEach>
 				    </div>
@@ -128,8 +170,11 @@ window.onload = function(){
 					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
 						<span style="font-weight:bold;">주소</span>
 					</div>
-					<div style="display:inline-block; width:800px;">
-						<input type="text" name="address" value="${rentalhomeVO.address}" placeholder="숙박 시설의 주소를 입력해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
+					<div style="display:inline-block; width:800px; height:110px;">
+						<div style="display:inline-block; width:800px;">
+							<span id="search_address" class="btn btn-secondary mb-1" style="cursor:pointer; padding:10px 20px;">주소 찾기</span>
+						</div>
+						<input type="text" id="address" name="address" readonly value="${rentalhomeVO.address}" placeholder="숙박 시설의 주소를 입력해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
 					</div>
 				</div>
 				<div style="margin:10px 0px;">
@@ -231,6 +276,7 @@ window.onload = function(){
 					</div>
 				</div>
 				<div style="margin:30px 0px; text-align:right; width:1050px;">
+					<input type="button" onclick="location.href='rentalhomeView.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" style="width:120px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;" value="이전 페이지로">
 					<button style="width:100px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 수정</button>
 				</div>
 			</form>
