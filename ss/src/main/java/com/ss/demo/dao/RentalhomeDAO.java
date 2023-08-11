@@ -137,4 +137,23 @@ public class RentalhomeDAO {
 		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_like", likeVO);
 	}
 	
+	// 객실  썸네일 제거 
+	public int init_attach_room_thumbnail(int room_idx) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.init_attach_room_thumbnail", room_idx);
+	}
+
+	// 객실  썸네일 등록
+	public int room_attach_thumbnail(int attach_idx) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.room_attach_thumbnail", attach_idx);
+	}
+
+	// 객실 등록 이미지 삭제
+	public int room_attach_delete(int attach_idx) {
+		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.room_attach_delete", attach_idx);
+	}
+	
+	// 객실 이미지 불러오기
+	public List<Rentalhome_RoomVO> selectAll_room_attach_ByIdx(int room_idx) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room_attach_ByIdx", room_idx);
+	}
 }

@@ -15,6 +15,7 @@ public interface RentalhomeService {
 
 	public List<RentalhomeVO> selectAll_rentalhome_attach(int rentalhome_idx);
 
+	public List<Rentalhome_RoomVO> selectAll_room_attach_ByIdx(int room_idx);
 
 	public RentalhomeVO selectOneByIdx(int rentalhome_idx);
 
@@ -44,9 +45,15 @@ public interface RentalhomeService {
 	
 	public int attach_thumbmail(int attach_idx);
 
+	public int init_attach_room_thumbmail(int room_idx);
+	
+	public int room_attach_thumbmail(int attach_idx);
+
 	public List<Rentalhome_RoomVO> selectAll_room_attach();
 
 	public int delete_attach(int attach_idx);
+
+	public int room_attach_delete(int attach_idx);
 
 	public int insert_like(Rentalhome_LikeVO likeVO);
 	

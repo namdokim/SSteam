@@ -5,6 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="../css/datepicker.css">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services"></script>
 <script>
 	$.datepicker.setDefaults({
 	  dateFormat: 'yy-mm-dd',
@@ -23,7 +24,45 @@
 	  $('.datepicker').datepicker();
 	});
 window.onload = function(){
-	if(${login.uNo} != null && ${like_dupl > 0}){
+	var isLogin = sessionStorage.getItem("login");
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
+    };  
+	
+	// 지도를 생성합니다    
+	var map = new kakao.maps.Map(mapContainer, mapOption); 
+	
+	// 주소-좌표 변환 객체를 생성합니다
+	var geocoder = new kakao.maps.services.Geocoder();
+	
+	// 주소로 좌표를 검색합니다
+	geocoder.addressSearch('${rentalhomeVO.address}', function(result, status) {
+	
+	    // 정상적으로 검색이 완료됐으면 
+	     if (status === kakao.maps.services.Status.OK) {
+	
+	        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+	
+	        // 결과값으로 받은 위치를 마커로 표시합니다
+	        var marker = new kakao.maps.Marker({
+	            map: map,
+	            position: coords
+	        });
+	
+	        // 인포윈도우로 장소에 대한 설명을 표시합니다
+// 	        var infowindow = new kakao.maps.InfoWindow({
+// 	            content: '<div style="width:150px;text-align:center;padding:5px 0;">위치</div>'
+// 	        });
+// 	        infowindow.open(map, marker);
+	
+	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	        map.setCenter(coords);
+	    } 
+});    
+	
+	if( isLogin == true && ${like_dupl > 0}){
 		document.getElementById("love_full").style.display="block";
 		document.getElementById("love_empty").style.display="none";
 	}
@@ -51,17 +90,34 @@ window.onload = function(){
 	}
 
 	// 객실 이미지 모달
-	if( document.getElementsByClassName("open-gallery-button-room") != null ){
-	 	const openButton_room = document.getElementsByClassName("open-gallery-button-room");
+// 	 	const openButton_room = document.getElementById("open-gallery-button-room");
 		const modal_room = document.getElementById("gallery-modal-room");
 		const closeButton_room = document.getElementById("close-button-room");
-	
-	 	for(var openBtn of openButton_room){
-	 		openBtn.addEventListener("click", (event) => {
-	 			document.getElementById("gallery-modal-room").style.display = "block";
-	 			document.body.style.overflow = "hidden";
-	 		});
-	 	}
+		
+		
+ 		<%-- openBtn.addEventListener("click", (event) => {
+ 			document.getElementById("gallery-modal-room").style.display = "block";
+ 			document.body.style.overflow = "hidden";
+ 			$.ajax({
+					url:"rentalhome_room_attach_ByIdx.do",
+					type:"get",
+					data:{
+						  room_idx:room_idx.value
+					},
+					success:function(list){
+						alert("");
+						var html = "";
+						for (var i = 0; i < list.length; i++) {
+							var room = list[i];
+							html = html + '<img src="<%=request.getContextPath()%>/resources/upload/${room.physical_name}" style="margin:2px 0px;width:377px; height:250px; border-radius:5px; display:inline-block;">';
+						}
+						console.log(html);
+					},
+					error:function(xhr, status, error){
+						console.log("ERROR: ", error);
+					}
+				});
+ 		}); --%>
 		closeButton_room.addEventListener("click", () => {
 		  modal_room.style.display = "none";
 		  document.body.style.overflow = "auto";
@@ -72,14 +128,13 @@ window.onload = function(){
 		    document.body.style.overflow = "auto";
 		  }
 		});
-	}
 	
 	// 리뷰 작성 모달
 	if( document.getElementById("open-gallery-button-review") != null){
 	 	const openButton_review = document.getElementById("open-gallery-button-review");
 		const modal_review = document.getElementById("gallery-modal-review");
 		const closeButton_review = document.getElementById("close-button-review");
-	
+
 		openButton_review.addEventListener("click", (event) => {
 			modal_review.style.display = "block";
 			document.body.style.overflow = "hidden";
@@ -96,13 +151,41 @@ window.onload = function(){
 		});
 	}
 }
+function select_img(index){
+	const room_idx = document.getElementsByName("ajax_room_idx")[index];
+	
+	document.getElementById("gallery-modal-room").style.display = "block";
+	document.body.style.overflow = "hidden";
+	
+	$.ajax({
+		url:"rentalhome_room_attach_ByIdx.do",
+		type:"get",
+		data:{
+			  room_idx:room_idx.value
+		},
+		success:function(list){
+			var html = "";
+			for (var i = 0; i < list.length; i++) {
+				var room = list[i];
+				console.log(${room.physical_name});
+				html = html + '<img src="<%=request.getContextPath()%>/resources/upload/'+room.physical_name+'" style="margin:2px 2px;width:377px; height:250px; border-radius:5px; display:inline-block;">';
+			}
+			console.log(html);
+			document.getElementById("insert_img").innerHTML = html;
+		},
+		error:function(xhr, status, error){
+			console.log("ERROR: ", error);
+		}
+	});
+}
+
+
 function insert_review(){
 	const contents = document.getElementById("contents").value;
 	const service = document.getElementById("service").value;
 	const facility = document.getElementById("facility").value;
 	const clean = document.getElementById("clean").value;
 	const price = document.getElementById("price").value;
-	const uNo = document.getElementById("uNo").value;
 	const stay_date = document.getElementById("stay_date").value;
 	const room_idx = document.getElementById("room_idx").value;
 	$.ajax({
@@ -114,8 +197,7 @@ function insert_review(){
 		            facility: facility,
 		            clean: clean,
 		            price: price,
-		            room_idx: room_idx,
-		            uNo: uNo
+		            room_idx: room_idx
 			},
 			success:function(){
 					alert("성공");
@@ -127,8 +209,7 @@ function insert_review(){
 }
 
 function insert_like(){
-	alert("숙소를 \"좋아요\" 하셨습니다");
-	const uno = ${login.uNo};
+
 	const rentalhome_idx = ${rentalhomeVO.rentalhome_idx};
 	const insert_ = document.getElementById("love_empty");			// <img> 
 	const delete_ = document.getElementById("love_full");			// <img> 
@@ -138,11 +219,9 @@ function insert_like(){
 		url: 'insert_like.do', 						// 요청을 보낼 서버의 URL 주소
 		method: 'post', 							// HTTP 요청 방식 (GET, POST 등)
 		data: { 									// 요청에 포함될 데이터 (옵션)
-			uno: uno,
 			rentalhome_idx: rentalhome_idx
 		},											
 		success: function(data) {
-			alert("ajax통신 성공");
 			insert_.style.display="none";
 			delete_.style.display="block";
 			like_count.innerHTML = data;
@@ -154,8 +233,6 @@ function insert_like(){
 	});
 }
 function delete_like(){
-	alert("\"좋아요\"를 취소 하셨습니다");
-	const uno = ${login.uNo};
 	const rentalhome_idx = ${rentalhomeVO.rentalhome_idx};
 	const delete_ = document.getElementById("love_full");		// <img> 
 	const insert_ = document.getElementById("love_empty");		// <img> 
@@ -165,14 +242,13 @@ function delete_like(){
 		url: 'delete_like.do', 						// 요청을 보낼 서버의 URL 주소
 		method: 'post', 							// HTTP 요청 방식 (GET, POST 등)
 		data: { 									// 요청에 포함될 데이터 (옵션)
-			uno: uno,
 			rentalhome_idx: rentalhome_idx
 		},											
 		success: function(data) {
-			alert("ajax통신 성공");
 			delete_.style.display="none";
 			insert_.style.display="block";
 			like_count.innerHTML = data;
+			
 		},
 		error: function(xhr, status, error) {
 			console.log('Error:', error);
@@ -212,12 +288,6 @@ function delete_like(){
 		border-radius:10px;
 		background-color:white;
 		box-shadow:1px 1px 1px 1px #ddd;
-	}
-	.map{
-		background-image: url(../img/map2.jpg);
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
 	}
 	.search{
 		border:none;
@@ -310,13 +380,10 @@ function delete_like(){
 			    <span style="font-weight:bold; font-size:15pt;">숙소 제공 객실 이미지</span>
 		    </div>
 		    <div style="margin:20px; width:1144px; height:1px; background-color:lightgray;"></div>
-		    <div style="margin:20px; text-align:left;">
-<%-- 			    <c:forEach items="${attach_room}" var="attach"> --%>
-<%-- 				   		<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="margin:2px 0px;width:377px; height:250px; border-radius:5px; display:inline-block;"> --%>
-<%-- 			    </c:forEach> --%>
-		    </div>
+		    <div id="insert_img" style="margin:20px; text-align:left;"></div>
 	    </div>
 	</div>	
+	<%--
 	<div class="gallery-modal" id="gallery-modal-review"  style="padding:50px;">
     	<div class="close-button" id="close-button-review" style="display:inline-block;">&times;</div>
 	    <div class="view modal-center" id="modal-review" style="width:1224px;padding:20px; display:inline-block; vertical-align:middle;">
@@ -324,7 +391,6 @@ function delete_like(){
 			    <span style="font-weight:bold; font-size:15pt;">리뷰 작성</span>
 		    </div>
 			<!-- 로그인 할 경우 표시 -->
-		    <input type="hidden" name="uNo" id="uNo" value="1">
 <!-- 		    <input type="hidden" name="room_idx" id="room_idx" value=""> -->
 		    <div style="margin:10px; width:1144px; height:1px; background-color:lightgray;"></div>
 		    <div style="margin:10px; text-align:center; display:inline-block;">
@@ -389,6 +455,7 @@ function delete_like(){
 		    </div>
    	 	</div>
 	</div>	
+	 --%>
 	<div style="position:sticky; top:0px; background-color:#0863ec;z-index:100; border-radius:0px 0px 50px 50px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
@@ -436,14 +503,8 @@ function delete_like(){
 				<span style="font-size:10pt; color:#545454;">${rentalhomeVO.info}</span><br>
 			</div>
 		</div>
-<%-- 		<c:choose> --%>
-<%-- 			<c:when test="${not empty login && like_dupl > 0}"> --%>
-				<img id="love_full" src="../img/love_full.png" onclick="delete_like()" class="like" style="display:none; width:50px; height:50px; position:absolute; top:30px; right:210px;">
-<%-- 			</c:when> --%>
-<%-- 			<c:otherwise> --%>
+				<img id="love_full" onclick="delete_like()" src="../img/love_full.png" class="like" style="display:none; width:50px; height:50px; position:absolute; top:30px; right:210px;">
 				<img id="love_empty" onclick="insert_like()" src="../img/love_empty.png" class="like" style="width:50px; height:50px; position:absolute; top:30px; right:210px;">
-<%-- 			</c:otherwise> --%>
-<%-- 		</c:choose> --%>
 		<div style="width:100px; text-align:center; position:absolute; top:70px; right:185px;">
 			<span id="like_count" style="font-size:25pt; color:#FA5858; font-weight:bold; ">${like_count}</span>
 		</div>
@@ -527,7 +588,7 @@ function delete_like(){
 					</div>
 				</c:if>
 			</div>
-		<div class="map" style="vertical-align:top;display:inline-block; text-align:center;border:1px solid #ddd; border-radius:5px; width:490px; height:210px; margin:10px 0px 10px 10px;" >
+		<div id="map" style="vertical-align:top;display:inline-block; text-align:center;border:1px solid #ddd; border-radius:5px; width:490px; height:210px; margin:10px 0px 10px 10px;" >
 		</div>
 	</div>
 	<div class="view" style="width:1224px; margin:20px auto;position:sticky; top:72px;z-index:100;text-align:center; padding:0px 20px; border-bottom:1px solid #d5d9e0;">
@@ -545,11 +606,12 @@ function delete_like(){
 			</div>
 		</div>
 		<div style="height:1px; background-color:lightgray;"></div>
-		<c:forEach items="${list}" var="list">
+		<c:forEach items="${list}" var="list" varStatus="status">
 			<div style="width:100%; height:200px; margin:20px 10px;  text-align:center; position:relative; ">
 				<c:choose>
 					<c:when test="${not empty list.physical_name}">
-						<div class="open-gallery-button-room" style="display:inline-block; position:absolute; top:0px; left:20px;">
+						<div onclick="select_img(${status.index})" style="display:inline-block; position:absolute; top:0px; left:20px;">
+						<input type="hidden" name="ajax_room_idx" value="${list.room_idx}">
 							<img src="<%=request.getContextPath()%>/resources/upload/${list.physical_name}" style="cursor:pointer;border-radius:20px; width:240px; height:200px; display:inline-block;">
 						</div>
 					</c:when>
@@ -664,9 +726,9 @@ function delete_like(){
 			영등포역과 아주 가깝고 바로앞에 버스 정류장도 있어서 위치는 아주 좋아요. 오픈한지 얼마 안되어 그런지 시설은 아주 깨끗하고 깔끔하고 무엇보다 침구류가 너무 좋더라구요. 
 			</div>
 		</div>
-		<div style="text-align:right; height:50px; line-height:50px; margin:10px 20px;">
-			<span id="open-gallery-button-review" style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">리뷰 작성</span>
-		</div>
+<!-- 		<div style="text-align:right; height:50px; line-height:50px; margin:10px 20px;"> -->
+<!-- 			<span id="open-gallery-button-review" style="padding:15px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">리뷰 작성</span> -->
+<!-- 		</div> -->
 	</div>
 	<div class="view" id="rentalhome_rule" style="width:1224px; text-align:left; padding:20px; margin:10px auto;">
 		<span style="font-weight:bold; font-size:15pt;">숙소 규정</span><br>
