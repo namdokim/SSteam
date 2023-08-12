@@ -286,7 +286,7 @@ CREATE TABLE food
         food_website varchar(255),
         food_content varchar(255), 
         ltype char(2), 
-        status char default 'Y',
+        status char default 'Y', 
         food_write_date date,
         FOREIGN KEY (uNo) REFERENCES User (uNo),
         PRIMARY KEY (fNo) 
