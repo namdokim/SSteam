@@ -286,6 +286,7 @@ CREATE TABLE food
         food_website varchar(255),
         food_content varchar(255), 
         ltype char(2), 
+        status char default 'Y',
         food_write_date date,
         FOREIGN KEY (uNo) REFERENCES User (uNo),
         PRIMARY KEY (fNo) 
@@ -298,7 +299,7 @@ CREATE TABLE food_attach
 	food_attach_logical_name varchar(255),
 	food_attach_physical_name varchar(255),
 	thumbnail char(1),
-        FOREIGN KEY (fNo) REFERENCES food (fNo),
+    FOREIGN KEY (fNo) REFERENCES food (fNo),
 	PRIMARY KEY (food_attach_number)
 );
 
