@@ -7,6 +7,21 @@
 	List<String> nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
 %>
 
+<%
+	// 로그인 정보에 따라서 채팅 닉네임 설정
+	UserVO userVO = (UserVO)session.getAttribute("login");
+	String name = "";
+
+	if (userVO == null)
+	{
+		name = "게스트";
+	}
+	else
+	{
+		name = userVO.getuName();
+	}
+%>
+
 <!DOCTYPE html>
 <html lang = "en">
 	<head>
@@ -224,6 +239,14 @@
 				padding: 1rem;
 				background: #ddd;
 			}
+			#messages
+			{
+				/* 크기 고정 */
+				min-height: 300px;
+		        max-height: 300px;
+		        /* 스크롤 */
+		        overflow-y: auto;
+    		}
 		</style>
 	</head>
 	
@@ -243,10 +266,10 @@
 			</div>
 		</div>	
 		<div class = "container-fluid offset-2" style = "max-width: 1280px">
-			<div class="row" >
+			<div class = "row" >
 			<!-- 사이드바 -->
 				<div class = "bd-sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" style = "width: 280px">
-					<a href = "/" class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
+					<a class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
 						<span class = "fs-4"> 게시판 구분 </span>
 					</a>
 					<hr>
@@ -311,7 +334,98 @@
 						        </c:otherwise>
 						    </c:choose>
 						</li>
-					</ul>								
+					</ul>
+					<a class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-5">
+						<span class = "fs-4"> 채팅 </span>
+					</a>
+					<hr>
+					<div class = "nav nav-pills flex-column mb-auto">
+			        	<!-- 메시지 표시 공간 -->
+				        <div id = "messages">
+				        
+			    		</div> <br>
+				  		<div style = "display: flex; align-items: center">
+				  			<input type = "text" id = "sender" value = "${name}" style = "display: none">
+			  				<input type = "text" id = "messageInput"> &nbsp;
+				        	<button type = "button" class = "btn btn-outline-secondary" style = "white-space: nowrap" onclick = "send()"> 전송 </button>
+				  		</div>
+			    	</div>
+					<script>
+				        var ws;
+				        var messages = document.getElementById("messages");
+				        
+				        window.onload = function()
+				        {
+				        	openSocket();
+				        }
+			
+				        // 웹 소켓 열기
+				        function openSocket()
+				        {
+				        	// 웹 소켓 연결에 오류가 없다면
+				            if (ws !== undefined && ws.readyState !== WebSocket.CLOSED)
+				            {
+				                writeResponse("WebSocket is already opened.");
+				                return;
+				            }
+				        	
+				            // 웹 소켓 객체 생성
+				            ws = new WebSocket("ws://localhost:8090/<%= request.getContextPath() %>/echo.do");
+				            
+				            /* 웹 소켓 요청 대기 */
+				            // 웹 소켓 열기를 요청 받았을 때
+				            ws.onopen = function(event)
+				            {
+				                if(event.data === undefined)
+				                {
+				              		return;
+				                }
+				                writeResponse(event.data);
+				            };
+				            // 메시지 보내기를 요청 받았을 때
+				            ws.onmessage = function(event)
+				            {
+				                console.log('writeResponse');
+				                console.log(event.data)
+				                writeResponse(event.data);
+				            };
+				            // 웹 소켓 닫기를 요청 받았을 때
+				            ws.onclose = function(event)
+				            {
+				                writeResponse("대화 종료");
+				            }
+				        }
+				        
+				        // 메시지 전송
+				        function send()
+				        {
+				            var text = document.getElementById("messageInput").value + ", " + document.getElementById("sender").value;
+				            ws.send(text);
+				            text = "";
+				        }
+				         
+				        // 웹 소켓 닫기
+				        function closeSocket()
+				        {
+				            ws.close();
+				        }
+				         
+				        // 메시지 표시
+				        function writeResponse(text)
+				        {
+				            messages.innerHTML += "<br>" + text;
+				            
+				         	// 스크롤을 가장 아래로 이동
+				            messages.scrollTop = messages.scrollHeight;
+				        }
+				
+				        // 메시지 초기화
+				        function clearText()
+				        {
+				            console.log(messages.parentNode);
+				            messages.parentNode.removeChild(messages)
+				       	}
+			        </script>
 				</div>
 				<!-- 사이드바 -->
 				

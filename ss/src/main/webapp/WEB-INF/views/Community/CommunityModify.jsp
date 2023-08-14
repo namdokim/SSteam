@@ -27,7 +27,8 @@
 			<div class = "row flex-nowrap" >
 				<main class = "col-6 offset-3 py-md-1 pl-md-5 bd-content board-article border-end border-start" style = "height: 100vh;" role = "main">
 					<article class = "container-fluid">
-						<form name = "write" method = "post" action = "<%= request.getContextPath() %>/Community/CommunityModifyCheck.do" >	
+						<form name = "write" method = "post" action = "<%= request.getContextPath() %>/Community/CommunityModifyCheck.do" >
+							<input type = "hidden" name = "board_number" id = "board_number" value = "${communityBoardVO.board_number}">	
 							<input type = "hidden" name = "contentType" value = "html">
 							<div class = "write-head border-top border-bottom py-md-1">
 								작성자:　${communityBoardVO.user_name} <input type = "hidden" name = "uNo" id = "uNo" value = "${communityBoardVO.uNo}">

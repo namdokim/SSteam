@@ -127,8 +127,4 @@
 	<div>	
 	</div>
 
-
-<!-- 채팅 테스트 개발 중 (혁수) -->
-<a href = "<%=request.getContextPath() %>/Community/ChattingTest.do"> 채팅 테스트 </a>
-
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>
