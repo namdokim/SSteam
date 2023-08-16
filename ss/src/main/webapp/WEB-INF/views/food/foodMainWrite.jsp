@@ -114,7 +114,7 @@
 				<td>
 					<select id="LType" name="LType">
 						<option value="TT" <%= LType.equals("TT") ? "checked" : "" %> >전체 </option>
-						<option value="GG" <%= LType.equals("GG") ? "checked" : "" %> >경기 </option>
+						<option value="GG" <%= LType.equals("GG") ? "checked" : "" %> >서울 / 경기 </option>
 						<option value="GW" <%= LType.equals("GW") ? "checked" : "" %> >강원 </option>
 						<option value="CB" <%= LType.equals("CB") ? "checked" : "" %> >충북 </option>
 						<option value="CN" <%= LType.equals("CN") ? "checked" : "" %> >충남 </option>

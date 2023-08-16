@@ -12,7 +12,12 @@ import com.ss.demo.domain.SearchVO;
 //================================================
 public interface FoodService {
 
+<<<<<<< HEAD
 
+=======
+	
+	List<FoodVO> list(SearchVO searchVO);
+>>>>>>> main
 	
 	//=================================================
 	FoodVO selectOneByFno(int fNo);

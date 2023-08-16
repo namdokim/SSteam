@@ -4,8 +4,13 @@ import java.util.Arrays;
 
 public class FoodVO 
 { 
+<<<<<<< HEAD
 	private int fNo;	//맛집 고유번호 
 	private int uNo;	//회원번호 					
+=======
+	
+	private int    fNo;
+>>>>>>> main
 	
 	private String food_name;					// 식당 이름 
 	private String food_address;				// 식당 주소  

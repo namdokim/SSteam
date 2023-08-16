@@ -1,6 +1,8 @@
 
 package com.ss.demo.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.ss.demo.domain.UserVO;
@@ -18,6 +20,9 @@ public interface UserService {
 	public UserVO uPwCheck(String uId);
 	//유저 조회
 	public UserVO userONE(UserVO uv);
+	// 이미지 수정 
+	public int profileimg(Map<String, Object> map);
+
 	/*
 	 * public int memberIdCheckcnt(String uId); public userVO login(String uId);
 	 * 

@@ -1,6 +1,11 @@
 package com.ss.demo.domain;
 
+<<<<<<< HEAD
 public class SearchVO extends Criteria{
+=======
+public class SearchVO {
+	
+>>>>>>> main
 	private String searchType;
 	private String searchValue;
 	private String type;

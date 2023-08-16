@@ -30,6 +30,10 @@
 	<!-- 유저 조회 메소드  -->
 	<select id="userONE" parameterType="uv" resultType="uv">
 		select * from user where uDely="N" and uId=#{uId};
-
 	</select>
+	<!-- 이미지 수정 -->
+	<update id="profileimg" parameterType="hashMap">
+		UPDATE user SET
+		uImg =#{myprofileimg} where uNo = #{uNo}
+	</update>
 </mapper>

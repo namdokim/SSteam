@@ -1,4 +1,4 @@
-﻿SET SESSION FOREIGN_KEY_CHECKS=0;
+SET SESSION FOREIGN_KEY_CHECKS=0; 
 
 /* Drop Tables */
 
@@ -248,11 +248,7 @@ CREATE TABLE event_review_list
 	comment_number int NOT NULL AUTO_INCREMENT COMMENT '댓글 작성 시 기존에 있는 마지막 댓글 번호 +1 의 값으로 자동생성',
 	-- 글 작성 시 기존에 있는 마지막 글 번호 + 1 의 값으로 자동생성
 	event_number int NOT NULL COMMENT '글 작성 시 기존에 있는 마지막 글 번호 + 1 의 값으로 자동생성',
-<<<<<<< HEAD
 	-- 값이 존재하지 않거나, 공백문자만 존재할 수 없음
-=======
-	-- 값이 존재하지 않거나, 공백문자만 존재할 수 없음
->>>>>>> main
 	comment_title VARCHAR(30),
 	comment_content text COMMENT '값이 존재하지 않거나, 공백문자만 존재할 수 없음',
 	-- 댓글 작성 시 그 때의 날짜로 저장, 댓글 수정 시에는 동기화 하지 않음
@@ -276,61 +272,35 @@ CREATE TABLE event_review_report
 
 ) COMMENT = '글 좋아요 클릭 여부를 관리하는 테이블';
 
-<<<<<<< HEAD
 CREATE TABLE food
-(
-  	fNo int NOT NULL AUTO_INCREMENT, -- 맛집 고유 번호 (자동증가)
-  	uNo int not null,
-    food_name varchar(255) NOT NULL, -- 맛집 가게 이름 (필수 입력)
-    food_address varchar(255) NOT NULL, -- 맛집 주소 (필수 입력)
-    food_phone varchar(255), -- 맛집 전화번호
-    food_food_kind varchar(255), -- 맛집 대표 음식 종류
-    food_avg_price varchar(255), -- 맛집 음식 평균 가격대
-    food_write_date date, -- 맛집 등록 날짜 (달력이 나와서 datetime으로 안하고, date로 함)
-    food_working_hours varchar(255), -- 맛집 영업시간
-    food_holiday varchar(255), -- 맛집 휴일
-    food_website varchar(255), -- 맛집 웹사이트 연결
-        food_content varchar(255), -- 맛집 내용
-         ltype char(2), -- 지역선택
-    PRIMARY KEY (fNo) -- 맛집 ID를 기본키로 설정
-);
+    (
+        fNo int NOT NULL AUTO_INCREMENT, 
+        uNo int NOT NULL,
+        food_name varchar(255) NOT NULL, 
+        food_address varchar(255) NOT NULL, 
+        food_phone varchar(255), 
+        food_food_kind varchar(255), 
+        food_avg_price varchar(255),
+        food_working_hours varchar(255), 
+        food_holiday varchar(255), 
+        food_website varchar(255),
+        food_content varchar(255), 
+        ltype char(2), 
+        status char default 'Y', 
+        food_write_date date,
+        FOREIGN KEY (uNo) REFERENCES User (uNo),
+        PRIMARY KEY (fNo) 
+    );
 
-CREATE TABLE food_attach
+CREATE TABLE food_attach 
 (
 	food_attach_number int NOT NULL AUTO_INCREMENT,
 	fNo int NOT NULL,
 	food_attach_logical_name varchar(255),
 	food_attach_physical_name varchar(255),
 	thumbnail char(1),
+    FOREIGN KEY (fNo) REFERENCES food (fNo),
 	PRIMARY KEY (food_attach_number)
-=======
-CREATE TABLE food
-(
-  	fNo int NOT NULL AUTO_INCREMENT, -- 맛집 고유 번호 (자동증가)
-  	uNo int not null,
-    food_name varchar(255) NOT NULL, -- 맛집 가게 이름 (필수 입력)
-    food_address varchar(255) NOT NULL, -- 맛집 주소 (필수 입력)
-    food_phone varchar(255), -- 맛집 전화번호
-    food_food_kind varchar(255), -- 맛집 대표 음식 종류
-    food_avg_price varchar(255), -- 맛집 음식 평균 가격대
-    food_write_date date, -- 맛집 등록 날짜 (달력이 나와서 datetime으로 안하고, date로 함)
-    food_working_hours varchar(255), -- 맛집 영업시간
-    food_holiday varchar(255), -- 맛집 휴일
-    food_website varchar(255), -- 맛집 웹사이트 연결
-        food_content varchar(255), -- 맛집 내용
-         ltype char(2), -- 지역선택
-    PRIMARY KEY (fNo) -- 맛집 ID를 기본키로 설정
-);
-
-CREATE TABLE food_attach
-(
-	food_attach_number int NOT NULL AUTO_INCREMENT,
-	fNo int NOT NULL,
-	food_attach_logical_name varchar(255),
-	food_attach_physical_name varchar(255),
-	thumbnail char(1),
-	PRIMARY KEY (food_attach_number)
->>>>>>> main
 );
 
 
@@ -339,6 +309,8 @@ CREATE TABLE food_like
 	food_like_number int NOT NULL AUTO_INCREMENT,
 	fNo int NOT NULL,
 	uNo int NOT NULL,
+	FOREIGN KEY (fNo) REFERENCES food(fNo),
+	FOREIGN KEY (uNo) REFERENCES User(uNo),
 	PRIMARY KEY (food_like_number)
 );
 
@@ -351,25 +323,14 @@ CREATE TABLE food_local
 );
 
 
-<<<<<<< HEAD
-CREATE TABLE food_menu
+CREATE TABLE food_menu 
 (
     food_menu_number int NOT NULL AUTO_INCREMENT,
     fNo int NOT NULL,
     food_menu_name varchar(255),
     food_menu_price varchar(255),
-    PRIMARY KEY (food_menu_number)
-
-=======
-CREATE TABLE food_menu
-(
-    food_menu_number int NOT NULL AUTO_INCREMENT,
-    fNo int NOT NULL,
-    food_menu_name varchar(255),
-    food_menu_price varchar(255),
-    PRIMARY KEY (food_menu_number)
-
->>>>>>> main
+    PRIMARY KEY (food_menu_number),
+    FOREIGN KEY (fNo) REFERENCES food(fNo)
 );
 
 
@@ -392,6 +353,8 @@ CREATE TABLE food_review
 	food_review_writedate datetime DEFAULT NOW(),
 	fNo int NOT NULL,
 	uNo int NOT NULL,
+	FOREIGN KEY (fNo) REFERENCES food (fNo),
+	FOREIGN KEY (uNo) REFERENCES User (uNo),
 	PRIMARY KEY (food_review_number)
 );
 
@@ -446,7 +409,6 @@ CREATE TABLE Local
 );
 
 
-<<<<<<< HEAD
 CREATE TABLE rentalhome_pay
 (
 	pay_idx int NOT NULL AUTO_INCREMENT,
@@ -463,24 +425,6 @@ CREATE TABLE rentalhome_pay
 	end_date datetime,
 	uNo int NOT NULL,
 	PRIMARY KEY (pay_idx)
-=======
-CREATE TABLE rentalhome_pay
-(
-	pay_idx int NOT NULL AUTO_INCREMENT,
-	room_idx int NOT NULL,
-	kind varchar(10),
-	bank varchar(20),
-	price int,
-	pay_date datetime DEFAULT now(),
-	pay_stauts varchar(10),
-	refund_request_date datetime,
-	refund_complete_date datetime,
-	accountholder varchar(20),
-	start_date datetime,
-	end_date datetime,
-	uNo int NOT NULL,
-	PRIMARY KEY (pay_idx)
->>>>>>> main
 );
 
 
@@ -494,7 +438,6 @@ CREATE TABLE Point
 );
 
 
-<<<<<<< HEAD
 CREATE TABLE rentalhome_price
 (
 	price_idx int NOT NULL AUTO_INCREMENT,
@@ -505,18 +448,6 @@ CREATE TABLE rentalhome_price
 	rate int,
 	fix int,
 	PRIMARY KEY (price_idx)
-=======
-CREATE TABLE rentalhome_price
-(
-	price_idx int NOT NULL AUTO_INCREMENT,
-	change_yn char DEFAULT 'N' NOT NULL,
-	reason varchar(20),
-	start_date datetime,
-	end_date datetime,
-	rate int,
-	fix int,
-	PRIMARY KEY (price_idx)
->>>>>>> main
 );
 
 
@@ -528,7 +459,6 @@ CREATE TABLE region
 );
 
 
-<<<<<<< HEAD
 CREATE TABLE rentalhome
 (
 	rentalhome_idx int NOT NULL AUTO_INCREMENT,
@@ -642,121 +572,6 @@ CREATE TABLE room_attach
 	physical_name varchar(255),
 	thumbnail char DEFAULT 'N',
 	PRIMARY KEY (attach_idx)
-=======
-CREATE TABLE rentalhome
-(
-	rentalhome_idx int NOT NULL AUTO_INCREMENT,
-	name varchar(100),
-    address varchar(100),
-	info text,
-   	type varchar(20),
-	inPool_yn char default 'N',
-    outPool_yn char default 'N',
-	parking_yn char default 'N',
-	pickup_yn char default 'N',
-	wifi_yn char default 'N',
-	beach_yn char default 'N',
-	bbq_yn char default 'N',
-	breakfast_yn char default 'N',
-	animal_yn char default 'N',
-   	checkIn char(5) NOT NULL,
-   	checkOut char(5) NOT NULL,
-	checkIn_info varchar(100) NOT NULL,
-    breakfast_price int,
-    breakfast_open char(5),
-    breakfast_close char(5),
-    breakfast_day varchar(100),
-	uNo int NOT NULL,
-	PRIMARY KEY (rentalhome_idx)
-);
-
-
-CREATE TABLE rentalhome_attach
-(
-	attach_idx int NOT NULL AUTO_INCREMENT,
-	rentalhome_idx int NOT NULL,
-	logical_name varchar(100),
-	physical_name varchar(100),
-	thumbnail char DEFAULT 'N',
-	PRIMARY KEY (attach_idx)
-);
-
-
-CREATE TABLE rentalhome_report
-(
-	report_idx int NOT NULL AUTO_INCREMENT,
-	rentalhome_idx int NOT NULL,
-	report_contents varchar(255),
-	report_date datetime DEFAULT NOW(),
-	report_process varchar(10),
-	uNo int NOT NULL,
-	PRIMARY KEY (report_idx)
-);
-
-CREATE TABLE review
-(
-	review_idx int NOT NULL AUTO_INCREMENT,
-    	room_idx int NOT NULL,
-	rentalhome_idx int NOT NULL,
-	contents text,
-	kind int,
-	facility int,
-	clean int,
-	price int,
-    	wdate datetime DEFAULT now(),
-	uNo int NOT NULL,
-	PRIMARY KEY (review_idx)
-);
-
-
-CREATE TABLE review_attach
-(
-	attach_idx int NOT NULL AUTO_INCREMENT,
-	review_idx int NOT NULL,
-	logical_name varchar(255),
-	physical_name varchar(255),
-	PRIMARY KEY (attach_idx)
-);
-
-
-CREATE TABLE review_report
-(
-	report_idx int NOT NULL AUTO_INCREMENT,
-	review_idx int NOT NULL,
-	report_date datetime DEFAULT NOW(),
-	report_contents varchar(255),
-	report_process varchar(10),
-	uNo int NOT NULL,
-	PRIMARY KEY (report_idx)
-);
-
-
-CREATE TABLE room
-(
-	room_idx int NOT NULL auto_increment,
-	rentalhome_idx int NOT NULL,
-	price_idx int NOT NULL,
-	name varchar(30) NOT NULL,
-	min_person int NOT NULL,
-	max_person int NOT NULL,
-	weekday_price int,
-	weekend_price int,
-	smoking char DEFAULT 'N',
-    	wifi char DEFAULT 'N',
-	bed_info varchar(50),
-	PRIMARY KEY (room_idx)
-);
-
-
-CREATE TABLE room_attach
-(
-	attach_idx int NOT NULL AUTO_INCREMENT,
-	room_idx int NOT NULL,
-	logical_name varchar(255),
-	physical_name varchar(255),
-	thumbnail char DEFAULT 'N',
-	PRIMARY KEY (attach_idx)
->>>>>>> main
 );
 
 
@@ -767,26 +582,15 @@ CREATE TABLE User
 	uPw text,
 	uName varchar(50),
 	uNick varchar(50),
-<<<<<<< HEAD
 	uPhone varchar(50),
 	uAddsPostCode VARCHAR(20) comment "우편번호",
 	uRoadAddress text comment "도로명주소",
 	uJibunAddress text comment "지번주소",
-=======
-	uPhone varchar(50),
-	uAddsPostCode VARCHAR(20) comment "우편번호",
-	uRoadAddress text comment "도로명주소",
-	uJibunAddress text comment "지번주소",
->>>>>>> main
 	uDetailAddress text comment "상세주소",
 	uDate datetime DEFAULT NOW(),
 	uImg text,
 	uPoint int DEFAULT 0,
-<<<<<<< HEAD
 	uType char(10) ,
-=======
-	uType char(10) ,
->>>>>>> main
 	uSocialType char(10) DEFAULT 'N',
 	uDely char(2) DEFAULT 'N',
 	PRIMARY KEY (uNo)
@@ -981,7 +785,6 @@ ALTER TABLE food_review_report
 ;
 
 
-<<<<<<< HEAD
 ALTER TABLE rentalhome_price
 	ADD FOREIGN KEY (price_idx)
 	REFERENCES rentalhome_room (price_idx)
@@ -1095,121 +898,6 @@ ALTER TABLE rentalhome_review_report
 	REFERENCES User (uNo)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
-=======
-ALTER TABLE rentalhome_price
-	ADD FOREIGN KEY (price_idx)
-	REFERENCES rentalhome_room (price_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_like
-	ADD FOREIGN KEY (rentalhome_idx)
-	REFERENCES rentalhome (rentalhome_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_attach
-	ADD FOREIGN KEY (rentalhome_idx)
-	REFERENCES rentalhome (rentalhome_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_report
-	ADD FOREIGN KEY (rentalhome_idx)
-	REFERENCES rentalhome (rentalhome_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review
-	ADD FOREIGN KEY (rentalhome_idx)
-	REFERENCES rentalhome (rentalhome_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_room
-	ADD FOREIGN KEY (rentalhome_idx)
-	REFERENCES rentalhome (rentalhome_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review_attach
-	ADD FOREIGN KEY (review_idx)
-	REFERENCES rentalhome_review (review_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review_report
-	ADD FOREIGN KEY (review_idx)
-	REFERENCES rentalhome_review (review_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE rentalhome_pay
-	ADD FOREIGN KEY (room_idx)
-	REFERENCES rentalhome_room (room_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_room_attach
-	ADD FOREIGN KEY (room_idx)
-	REFERENCES rentalhome_room (room_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_like
-	ADD FOREIGN KEY (uNo)
-	REFERENCES User (uNo)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE rentalhome
-	ADD FOREIGN KEY (uNo)
-	REFERENCES User (uNo)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE rentalhome_report
-	ADD FOREIGN KEY (uNo)
-	REFERENCES User (uNo)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review
-	ADD FOREIGN KEY (uNo)
-	REFERENCES User (uNo)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review
-	ADD FOREIGN KEY (room_idx)
-	REFERENCES rentalhome_room (room_idx)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-;
-
-ALTER TABLE rentalhome_review_report
-	ADD FOREIGN KEY (uNo)
-	REFERENCES User (uNo)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
->>>>>>> main
 ;
 
 
@@ -1420,8 +1108,4 @@ ALTER TABLE review_report
 
 -- 추가 수정 삭제
 
-<<<<<<< HEAD
 
-=======
-
->>>>>>> main

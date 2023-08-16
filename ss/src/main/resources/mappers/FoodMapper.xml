@@ -81,6 +81,7 @@
 		)
 	</insert>
 	
+<<<<<<< HEAD
 	<!-- 글 수정  (사진 수정에 대해서 추가 수정할 것)-->
 	<update id="update" parameterType="foodVO">
 		UPDATE food
@@ -101,6 +102,11 @@
 	<!-- 글 삭제1  -->
 <!-- 	<delete id="delete" parameterType="int">
 		DELETE
+=======
+	
+	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
+		SELECT *
+>>>>>>> main
 		  FROM food
 		 WHERE fNo = #{fNo}
 	</delete>	 -->
@@ -153,6 +159,7 @@
 	
 	
 	
+<<<<<<< HEAD
 <!-- =================================================================== -->
 	<!-- 첨부파일 사진 등록  -->
 	<insert id="insert_file_attach" parameterType="foodVO">
@@ -168,6 +175,27 @@
 			#{thumbnail}
 		)
 	</insert>
+=======
+	
+	
+<!-- @사진 등록@  --> 
+<!-- 	<insert id="insertImg" parameterType="attachVO"> -->
+<!-- 		INSERT INTO -->
+<!-- 		food( -->
+<!-- 			food_attach_number  -->
+<!-- 			,food_attach_logical_name  -->
+<!-- 			,food_attach_physical_name  -->
+<!-- 		)VALUES( -->
+<!-- 			#{food_attach_number } -->
+<!-- 			,#{food_attach_logical_name} -->
+<!-- 			,#{food_attach_physical_name} -->
+<!-- 		) -->
+<!-- 		<selectKey order="AFTER" keyProperty="fNo" resultType="int"> -->
+<!-- 			SELECT MAX(fNo) -->
+<!-- 		  	   FROM food -->
+<!-- 		</selectKey> -->
+<!-- 	</insert> -->
+>>>>>>> main
 	
 	<!-- 첨부파일 수정  -->
 	<update id="init_attach_thumbnail" parameterType="int">
