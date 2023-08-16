@@ -1,16 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
-
 <%	
 	String LType = request.getParameter("LType");
 	if (LType == null) {  LType = "TT"; }
 %>
-
-<!DOCTYPE html>
-<html>
-<head>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+// 주소 찾기 창 
+	window.onload = function()
+	{
+	   document.getElementById("search_address").addEventListener("click", function(){
+	      new daum.Postcode({
+	         oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+	            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+	            document.getElementById("food_address").value = data.address; // 주소 넣기
+	         }
+	      }).open();
+	   });
+	}
+</script>
 <!-- CSS ================================================================= -->
-	<meta charset="UTF-8">
 	<title>식당 등록 페이지</title>
 	<style>
 		table {
@@ -41,18 +51,22 @@
 	</style>
 </head>
 
-<body>
+<!-- <body> -->
 <!-- 테이블(DB name) ================================================================= -->
 <h1 style="text-align: center; font-size: 2em;">식당 등록</h1>
 	<form action="foodMainWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validateForm()" >
+		<input type="hidden" name="uNo" value="${login.uNo}">
 		<table>
+			
 			<tr>
 				<th>가게 이름</th>
 				<td><input type="text" id="food_name" name="food_name" ></td>
 			</tr>
 			<tr>
 				<th>주소</th>
-				<td><input type="text" id="food_address" name="food_address" ></td>
+				<td><input type="text" id="food_address" name="food_address" readonly>
+				<span id="search_address" style="cursor:pointer;">주소 찾기</span>
+				</td>
 			</tr>
 			<tr>
 				<th>전화번호</th>
@@ -100,7 +114,7 @@
 				<td>
 					<select id="LType" name="LType">
 						<option value="TT" <%= LType.equals("TT") ? "checked" : "" %> >전체 </option>
-						<option value="GG" <%= LType.equals("GG") ? "checked" : "" %> >경기 </option>
+						<option value="GG" <%= LType.equals("GG") ? "checked" : "" %> >서울 / 경기 </option>
 						<option value="GW" <%= LType.equals("GW") ? "checked" : "" %> >강원 </option>
 						<option value="CB" <%= LType.equals("CB") ? "checked" : "" %> >충북 </option>
 						<option value="CN" <%= LType.equals("CN") ? "checked" : "" %> >충남 </option>
@@ -112,20 +126,15 @@
 					</select>
 				</td>
 			</tr>
-			<!-- <tr>
-				<th>지역 및 위치</th>
-				<td>
-					<input type="text" id="food_map" name="food_map" required>
-					<button type="button" onclick="showMap()">위치 찾기</button>
-				</td>
-			</tr> -->
 		</table>
 		
 		<!-- <div id="map"></div>
 		<br> -->
 		
 		<!--첨부파일 -->
-			file : <input type="file" name="uploadFile">
+			<!-- <input type="file" name="uploadFile"> -->
+			<input type="file" name="multiFile" multiple>
+			<div id="preview"></div>
 			<br>
 		<button>등록</button>
 	</form>
@@ -213,7 +222,70 @@
         // 모든 필수 입력란이 작성된 경우 true를 반환하여 폼 제출을 허용합니다.
         return true;
     }
+    
+    // ============================================================ 미리보기 
+    $(document).ready(function (e){
+        $("input[type='file']").change(function(e){
+
+          //div 내용 비워주기
+          $('#preview').empty();
+
+          var files = e.target.files;
+          var arr =Array.prototype.slice.call(files);
+          
+          //업로드 가능 파일인지 체크
+          for(var i=0;i<files.length;i++){
+            if(!checkExtension(files[i].name,files[i].size)){
+              return false;
+            }
+          }
+          
+          preview(arr);
+          
+          
+        });//file change
+        
+        function checkExtension(fileName,fileSize){
+
+          var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+          var maxSize = 20971520;  //20MB
+          
+          if(fileSize >= maxSize){
+            alert('파일 사이즈 초과');
+            $("input[type='file']").val("");  //파일 초기화
+            return false;
+          }
+          
+          if(regex.test(fileName)){
+            alert('업로드 불가능한 파일이 있습니다.');
+            $("input[type='file']").val("");  //파일 초기화
+            return false;
+          }
+          return true;
+        }
+// 수정 (이미지파일 하나만 뜨게)        
+        function preview(arr) {
+            arr.forEach(function (f) {
+              // 파일명이 길면 파일명...으로 처리
+              var fileName = f.name;
+              if (fileName.length > 10) {
+                fileName = fileName.substring(0, 7) + "...";
+              }
+
+              // 이미지 파일인 경우에만 미리보기를 생성
+              if (f.type.match('image.*')) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                  var str = '<div style="display: inline-flex; padding: 10px;"><li>';
+                  str += '<span>' + fileName + '</span><br>';
+                  str += '<img src="' + e.target.result + '" title="' + f.name + '" width=100 height=100 />';
+                  str += '</li></div>';
+                  $(str).appendTo('#preview');
+                };
+                reader.readAsDataURL(f);
+              }
+            });
+          }
+          
 	</script>
-</body>
-</html>
 <%@ include file="../include/footer.jsp" %> 

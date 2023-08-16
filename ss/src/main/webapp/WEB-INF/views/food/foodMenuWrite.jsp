@@ -1,12 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
 
-<!DOCTYPE html>
-<html>
-<head>
 <!-- CSS ================================================================= -->
-	<meta charset="UTF-8">
-	<title>메뉴등록 페이지</title>
 	<style>
 		table {
 		border-collapse: collapse;
@@ -36,7 +31,7 @@
 	</style>
 </head>
 
-<body>
+<!-- <body> -->
 <!-- 테이블(DB name) ================================================================= -->
 <br><br>
 <h1 style="text-align: center; font-size: 2em;">메뉴 등록</h1>
@@ -55,8 +50,8 @@
 			</tr>
 		</table>
 		<!--첨부파일 -->
-		<input type="file" name="uploadFile">
-		<br><br>
+		<!-- <input type="file" name="uploadFile">
+		<br><br> -->
 		<button>등록</button>
 	</form>
 
@@ -98,10 +93,4 @@
 			return true;
 		}
 	</script>	
-</body>
-</html>
-
-
-
-
 <%@ include file="../include/footer.jsp" %>

@@ -3,20 +3,22 @@
 <%@ include file="../include/header.jsp" %>
 
 <%
-	int boardType = 0;
-	List<String> nowPageBoardList;
-	
-	try
+	// url 에서 현재 선택 된 게시판의 게시글 얻기
+	List<String> nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
+%>
+
+<%
+	// 로그인 정보에 따라서 채팅 닉네임 설정
+	UserVO userVO = (UserVO)session.getAttribute("login");
+	String name = "";
+
+	if (userVO == null)
 	{
-		// url 에서 현재 선택 된 게시판 종류 얻기
-		// boardType = request.getParameter("boardType");
-		boardType = 0;	// TEMP
-		// url 에서 현재 선택 된 게시판의 게시글 얻기
-		nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
+		name = "게스트";
 	}
-	catch (Exception e)
+	else
 	{
-		System.out.println("게시판 최초 선택");
+		name = userVO.getuName();
 	}
 %>
 
@@ -237,6 +239,14 @@
 				padding: 1rem;
 				background: #ddd;
 			}
+			#messages
+			{
+				/* 크기 고정 */
+				min-height: 300px;
+		        max-height: 300px;
+		        /* 스크롤 */
+		        overflow-y: auto;
+    		}
 		</style>
 	</head>
 	
@@ -251,92 +261,171 @@
 			</a>
 			<div class = "float-right">
 				<button type = "button" class = "btn btn-outline-secondary" style = "--bs-btn-padding-y: auto; --bs-btn-padding-x: auto; --bs-btn-font-size: 15rem">
-				<a href = "CommunityWrite.do?type=<%= boardType %>" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
-				<%--
-				<%
-					if( loginVo != null )
-					{
-						%><a href="write.jsp?type=<%= type %>" class="btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-						%><a href="write.jsp?type=<%= type %>" class=" float-right btn btn-sm btn-arca btn-arca-article-write" title="글쓰기"><span class="ion-compose"></span>&nbsp;글쓰기</a><%
-					}
-				%>
-				--%>
+					<a href = "CommunityWrite.do?boardType=${boardType}" class = " float-right btn btn-sm btn-arca btn-arca-article-write" title = "글쓰기"> <span class = "ion-compose"> </span> 글쓰기 </a>
 				</button>
 			</div>
 		</div>	
 		<div class = "container-fluid offset-2" style = "max-width: 1280px">
-			<div class="row" >
+			<div class = "row" >
 			<!-- 사이드바 -->
 				<div class = "bd-sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" style = "width: 280px">
-					<a href = "/" class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
+					<a class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-3">
 						<span class = "fs-4"> 게시판 구분 </span>
 					</a>
 					<hr>
 					<ul class = "nav nav-pills flex-column mb-auto">
-						<%--
-						<% String activeTab = type != null && !type.equals("") ? type : "TT"; %>
-						<%
-							String boardTitle = "";
-							switch (type)
-							{
-								case "T":
-							        boardTitle = "전체글";
-							        activeTab = "T";
-							        break;
-							    case "N":
-							        boardTitle = "공지사항";
-							        activeTab = "N";
-							        break;
-							    case "I":
-							        boardTitle = "정보 게시판";
-							        activeTab = "I";
-							        break;
-							    case "R":
-							        boardTitle = "후기 게시판";
-							        activeTab = "R";
-							        break;
-							    case "Q":
-							        boardTitle = "질문 게시판 ";
-							        activeTab = "Q";
-							        break;
-							    case "F":
-							        boardTitle = "자유 게시판";
-							        activeTab = "F";
-							        break;
-							}
-						%>
-						--%>
-						<li class = "nav-item" >
-							<a href = "CommunityMain.do?type=TT" class = "nav-link link-dark  <%-- <%= activeTab.equals("T") ? "active" : "" %> --%>"  style = "text-align:center">						
-								전체글
-							</a>
+						<li class="nav-item">
+						    <c:choose>
+						        <c:when test = "${boardType == 0}">
+						            <a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 전체글 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=0&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 전체글 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href = "CommunityMain.do?type=GG" class = "nav-link link-dark <%-- <%= activeTab.equals("N") ? "active" : "" %> --%>" style = "text-align:center;">			
-								공지사항
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 1}">
+						            <a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 공지사항 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=1&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 공지사항 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=GW" class = "nav-link link-dark <%-- <%= activeTab.equals("I") ? "active" : "" %> --%>" style = "text-align:center;">								
-								정보 게시판
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 2}">
+						            <a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 정보 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=2&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 정보 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=CB" class = "nav-link link-dark <%-- <%= activeTab.equals("R") ? "active" : "" %> --%>" style = "text-align:center;">							
-								후기 게시판
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 3}">
+						            <a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 후기 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=3&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 후기 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=CN" class = "nav-link link-dark <%-- <%= activeTab.equals("Q") ? "active" : "" %> --%>" style = "text-align:center;">							
-								질문 게시판 
-							</a>
+							<c:choose>
+						        <c:when test = "${boardType == 4}">
+						            <a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 질문 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=4&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 질문 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
 						</li>
 						<li>
-							<a href="CommunityMain.do?type=GB" class = "nav-link link-dark <%-- <%= activeTab.equals("F") ? "active" : "" %> --%>" style = "text-align:center;">							
-								자유 게시판
-							</a>
-						</li>					
-					</ul>								
+							<c:choose>
+						        <c:when test = "${boardType == 99}">
+						            <a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center; font-weight: bold"> 자유 게시판 </a>
+						        </c:when>
+						        <c:otherwise>
+						            <a href = "CommunityMain.do?boardType=99&nowPage=1" class = "nav-link link-dark" style = "text-align:center"> 자유 게시판 </a>
+						        </c:otherwise>
+						    </c:choose>
+						</li>
+					</ul>
+					<a class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-5">
+						<span class = "fs-4"> 채팅 </span>
+					</a>
+					<hr>
+					<div class = "nav nav-pills flex-column mb-auto">
+			        	<!-- 메시지 표시 공간 -->
+				        <div id = "messages">
+				        
+			    		</div> <br>
+				  		<div style = "display: flex; align-items: center">
+				  			<input type = "text" id = "sender" value = "${name}" style = "display: none">
+			  				<input type = "text" id = "messageInput"> &nbsp;
+				        	<button type = "button" class = "btn btn-outline-secondary" style = "white-space: nowrap" onclick = "send()"> 전송 </button>
+				  		</div>
+			    	</div>
+					<script>
+				        var ws;
+				        var messages = document.getElementById("messages");
+				        
+				        window.onload = function()
+				        {
+				        	openSocket();
+				        }
+			
+				        // 웹 소켓 열기
+				        function openSocket()
+				        {
+				        	// 웹 소켓 연결에 오류가 없다면
+				            if (ws !== undefined && ws.readyState !== WebSocket.CLOSED)
+				            {
+				                writeResponse("WebSocket is already opened.");
+				                return;
+				            }
+				        	
+				            // 웹 소켓 객체 생성
+				            ws = new WebSocket("ws://localhost:8090/<%= request.getContextPath() %>/echo.do");
+				            
+				            /* 웹 소켓 요청 대기 */
+				            // 웹 소켓 열기를 요청 받았을 때
+				            ws.onopen = function(event)
+				            {
+				                if(event.data === undefined)
+				                {
+				              		return;
+				                }
+				                writeResponse(event.data);
+				            };
+				            // 메시지 보내기를 요청 받았을 때
+				            ws.onmessage = function(event)
+				            {
+				                console.log('writeResponse');
+				                console.log(event.data)
+				                writeResponse(event.data);
+				            };
+				            // 웹 소켓 닫기를 요청 받았을 때
+				            ws.onclose = function(event)
+				            {
+				                writeResponse("대화 종료");
+				            }
+				        }
+				        
+				        // 메시지 전송
+				        function send()
+				        {
+				            var text = document.getElementById("messageInput").value + ", " + document.getElementById("sender").value;
+				            ws.send(text);
+				            text = "";
+				        }
+				         
+				        // 웹 소켓 닫기
+				        function closeSocket()
+				        {
+				            ws.close();
+				        }
+				         
+				        // 메시지 표시
+				        function writeResponse(text)
+				        {
+				            messages.innerHTML += "<br>" + text;
+				            
+				         	// 스크롤을 가장 아래로 이동
+				            messages.scrollTop = messages.scrollHeight;
+				        }
+				
+				        // 메시지 초기화
+				        function clearText()
+				        {
+				            console.log(messages.parentNode);
+				            messages.parentNode.removeChild(messages)
+				       	}
+			        </script>
 				</div>
 				<!-- 사이드바 -->
 				
@@ -344,42 +433,68 @@
 				<div class = "tab-content container-fluid ml-1 col-md-9" >		
 					<table class = "table table-striped">
 							<tr class = "vrow-inner" style = "background-color: lightgrey">
-								<th class = "vcol col-id" style = "text-align: center"> 번호 </th>
-								<th class = "vcol col-title" style = "text-align: center"> 제목 </th>
-								<th class = "vcol col-author" style = "text-align: center"> 작성자 </th>
-								<th class = "vcol col-time" style = "text-align: center"> 작성일 </th>
-								<th class = "vcol col-view" style = "text-align: center"> 조회수 </th>
-								<th class = "vcol col-recom" style = "text-align: center"> 추천 </th>
+								<th class = "vcol col-id" style = "text-align: center; width: 10%"> 번호 </th>
+								<th class = "vcol col-title" style = "text-align: center; width: 40%"> 제목 </th>
+								<th class = "vcol col-author" style = "text-align: center; width: 15%"> 작성자 </th>
+								<th class = "vcol col-time" style = "text-align: center; width: 15%"> 작성일 </th>
+								<th class = "vcol col-view" style = "text-align: center; width: 10%"> 조회수 </th>
+								<th class = "vcol col-recom" style = "text-align: center; width: 10%"> 추천 </th>
 							</tr>
 						<c:forEach items = "${nowPageBoardList}" var = "element">
 							<tr class = "vrow-inner">
 								<td class = "vcol col-id" style = "text-align: center"> ${element.board_number} </td>
-								<td class = "vcol col-title"> <a href="view.do?bidx=${element.board_number}"> ${element.board_title} </a> </td>
+								<td class = "vcol col-title"> <a href = "CommunityView.do?boardNumber=${element.board_number}&isHit=true"> ${element.board_title} </a> </td>
+								<td class = "vcol col-author" style = "text-align: center"> ${element.user_name} </td>
 								<td class = "vcol col-time" style = "text-align: center"> ${element.write_date} </td>
-								<td class = "vcol col-recom" style = "text-align: center"> ${element.hit_count} </td>
+								<td class = "vcol col-view" style = "text-align: center"> ${element.hit_count} </td>
+								<td class = "vcol col-recom" style = "text-align: center"> 추천추천 </td>
 							</tr>
 						</c:forEach>
-							<!-- <tr class = "vrow-inner">					
-								<td class = "vcol col-id" style = "text-align: center"> 1 </td>
-								<td class = "vcol col-title">
-									커뮤니티 게시판 이용 안내
-								</td>
-								<td class = "vcol col-author" style = "text-align: center"> 포포몬 </td>
-								<td class = "vcol col-time" style = "text-align: center">
-									2023. 07. 28
-								</td>
-								<td class = "vcol col-view" style = "text-align: center"> 18734526 </td>
-								<td class = "vcol col-recom" style = "text-align: center"> 20 </td>
-							</tr> -->
 					</table>
 					
+					<!-- 페이징 블럭 처리 -->
 					<nav aria-label = "Page navigation example">
-						 <ul class = "pagination justify-content-center">
-							<li class = "page-item">
-								<!-- <a href = "첫번째 페이지로 이동하는 주소"> |◀ </a> &nbsp; -->
-							<a class = "page-link" href = "index.jsp?type=<%= boardType %>&page=1">
-								Previous
-							</a> &nbsp;				
+						<ul class = "pagination justify-content-center">
+							<script>
+								// 사용할 변수 초기화
+								var nowPage = ${nowPage};
+								var pagingBlockSize = ${pagingBlockSize};
+								var boardType = ${boardType};
+								var pageStart = ${pageStart};
+								var pageEnd = ${pageEnd};
+								var boardCount = ${boardCount};
+								
+								// console.log("nowPage: " + nowPage);
+								// console.log("pagingBlockSize: " + pagingBlockSize);
+								// console.log("boardType: " + boardType);
+								// console.log("pageStart: " + pageStart);
+								// console.log("pageEnd: " + pageEnd);
+								// console.log("boardCount: " + boardCount);
+								
+								// 현재 페이지 번호가 페이징 블럭 크기를 넘는다면
+								if (nowPage > pagingBlockSize)
+								{
+									// 이전 페이지로 이동 기능 추가
+									document.write('<li class = "page-item">');
+					            	document.write('	<a class = "page-link" href = "CommunityMain.do?boardType=' + boardType + '&nowPage=' + (pageStart - 1) + '"> Previous </a>');
+					            	document.write('</li>');
+								}
+								// 숫자 페이징 블럭 생성
+								for (var i = pageStart; i <= pageEnd; i++)
+								{
+							        document.write('<li class="page-item">');
+							        document.write('	<a class = "page-link" href="CommunityMain.do?boardType=' + boardType + '&nowPage=' + i + '">' + i + '</a>');
+							        document.write('</li>');
+							    }
+								// 선택된 게시판의 총 게시글 개수가 100개가 넘고, 마지막 페이징 블럭이 아니라면
+							    if (boardCount > 100 && pageEnd !== maxPage)
+							    {
+							        // 다음 페이지로 이동 기능 추가
+							        document.write('<li class = "page-item">');
+							        document.write('	<a class = "page-link" href = "CommunityMain.do?boardType=' + boardType + '&nowPage=' + (pageEnd + 1) + '"> Next </a>');
+							        document.write('</li>');
+							    }
+							</script>
 						</ul>
 					</nav>
 				</div>	

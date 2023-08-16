@@ -8,7 +8,6 @@ public class UserVO {
 	private String uName;
 	private String uNick;
 	private String uPhone;
-	private String uAdds;
 	private String uDate;
 	private String uImg;
 	private String uType;
@@ -18,11 +17,37 @@ public class UserVO {
 	private String uZipcode;
 	private String uId_email;
 	//추가된 값
-	private String uAdds_sub;
-	private String uAddsId; //우편번호인데 문자열로 받을거임 
-	//비밀번호 일치 확인 
+	// 주소 관련 
+	private String uAddsPostCode;	//우편번호인데 문자열로 받을거임 
+	private String uRoadAddress;	// 도로명 주소
+	private String uJibunAddress;	// 지번 주소
+	private String uDetailAddress;	// 상세주소
 	
-	
+	// 주소 get set
+	public String getuAddsPostCode() {
+		return uAddsPostCode;
+	}
+	public void setuAddsPostCode(String uAddsPostCode) {
+		this.uAddsPostCode = uAddsPostCode;
+	}
+	public String getuRoadAddress() {
+		return uRoadAddress;
+	}
+	public void setuRoadAddress(String uRoadAddress) {
+		this.uRoadAddress = uRoadAddress;
+	}
+	public String getuJibunAddress() {
+		return uJibunAddress;
+	}
+	public void setuJibunAddress(String uJibunAddress) {
+		this.uJibunAddress = uJibunAddress;
+	}
+	public String getuDetailAddress() {
+		return uDetailAddress;
+	}
+	public void setuDetailAddress(String uDetailAddress) {
+		this.uDetailAddress = uDetailAddress;
+	}
 	
 	
 	//추가 된 get set 
@@ -38,18 +63,7 @@ public class UserVO {
 	public void setuId_email(String uId_email) {
 		this.uId_email = uId_email;
 	}
-	public String getuAdds_sub() {
-		return uAdds_sub;
-	}
-	public void setuAdds_sub(String uAdds_sub) {
-		this.uAdds_sub = uAdds_sub;
-	}
-	public String getuAddsId() {
-		return uAddsId;
-	}
-	public void setuAddsId(String uAddsId) {
-		this.uAddsId = uAddsId;
-	}
+	
 	
 	
 	public int getuNo() {
@@ -88,12 +102,7 @@ public class UserVO {
 	public void setuPhone(String uPhone) {
 		this.uPhone = uPhone;
 	}
-	public String getuAdds() {
-		return uAdds;
-	}
-	public void setuAdds(String uAdds) {
-		this.uAdds = uAdds;
-	}
+
 	public String getuDate() {
 		return uDate;
 	}
@@ -128,7 +137,7 @@ public class UserVO {
 	@Override
 	public String toString() {
 		return "userVO [uNo=" + uNo + ", uId=" + uId + ", uPw=" + uPw + ", uName=" + uName + ", uNick=" + uNick
-				+ ", uPhone=" + uPhone + ", uAdds=" + uAdds + ", uDate=" + uDate + ", uImg=" + uImg + ", uType=" + uType
+				+ ", uPhone=" + uPhone + ", uDate=" + uDate + ", uImg=" + uImg + ", uType=" + uType
 				+ ", uDely=" + uDely + ", uPoint=" + uPoint + "]";
 	}
 	

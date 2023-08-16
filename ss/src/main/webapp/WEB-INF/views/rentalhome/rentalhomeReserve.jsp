@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
 	$.datepicker.setDefaults({
 	  dateFormat: 'yy-mm-dd',
@@ -26,7 +27,7 @@
 		box-shadow:1px 1px 1px 1px #ddd;
 	}
 </style>
-<div style="width:1920px; text-align:left; background-color:#f0f7fe; padding:20px 0px;">
+<div style="width:1920px; text-align:left; background-color:#dfecfb; padding:50px 0px;">
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px; margin:20px auto; line-height:50px;">
 		<div style="width:100%; position:relative;">
 			<span style="font-size:15pt; font-weight:bold; background-color:#0863ec; color:white; padding:10px 20px; border-radius:10px;">예약 정보</span><br>
@@ -87,7 +88,7 @@
 		<span style="font-size:14pt; font-weight:bold; padding:0px 20px;">요청사항</span><br>
 		<span style="font-size:10pt; padding:0px 20px;">숙소 관리자에게 필요한 요청사항을 전달해 주세요.</span><br>
 		<span style="font-size:10pt; padding:0px 20px;">사정에 따라 요청사항에 대한 제공이 불가능할 수 있습니다.</span><br>
-		<textarea placeholder="숙소의 소개글을 입력해주세요." style="width:97%; margin:20px 20px; padding:10px 20px; height:200px; resize:none; border-radius:10px;border:1px solid lightgray;"></textarea>
+		<textarea placeholder="숙소 관리자에게 요청사항을 적어주세요." style="width:97%; margin:20px 20px; padding:10px 20px; height:200px; resize:none; border-radius:10px;border:1px solid lightgray;"></textarea>
 	</div>
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
 		<span style="font-size:14pt; font-weight:bold; padding:0px 20px;">결제 정보</span><br>
@@ -114,8 +115,10 @@
 		</div>
 	</div>
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
-		<input type="checkbox" value="parking" style="width:15px; height:15px;">
-		<span style="font-size:10pt; padding:0px 10px;">예약 내용이 정확한지 확인하였고, 예약할 숙소 정책에 동의합니다.</span><br>
+		<div style="height:30px; line-height:30px; margin:10px;">
+			<input type="checkbox" value="parking" style="vertical-align:-2px;width:15px; height:15px;">
+			<span style="font-size:10pt; padding:0px 10px;">예약 내용에 대하여 확인하였으며, 예약할 숙소의 숙박 규정에 동의합니다.</span><br>
+		</div>
 		<input type="button" value="결제하기" style="width:100%; height:50px; background-color:#0863ec; border:0px; border-radius:10px; font-size:18pt; color:white;">
 	</div>
 </div>

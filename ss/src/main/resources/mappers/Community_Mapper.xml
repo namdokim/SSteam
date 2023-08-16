@@ -5,12 +5,45 @@
  
 <mapper namespace = "com.ss.demo.mapper.CommunityMapper">
 
-	<!-- 페이지에 대한 게시글 정보 얻기 -->   
+	<!-- 글 쓰기 -->
+	<insert id = "insertBoard" parameterType = "Community_BoardVO">
+		INSERT INTO community_board
+					(
+						uNo,
+						board_title,
+						board_type,
+						board_content
+					)
+			 VALUES
+			 		(
+			 			#{uNo},
+						#{board_title},
+						#{board_type},
+						#{board_content}
+			 		)
+	</insert>
+	
+	<!-- 전체 게시글 개수 얻기 -->
+	<select id = "getBoardCount" resultType = "int">
+		SELECT COUNT(*)
+			AS count
+		  FROM community_board
+	</select>
+	
+	<!-- 특정 게시글 개수 얻기 -->
+	<select id = "getBoardCount_TypeChoice" parameterType = "int" resultType = "int">
+		SELECT COUNT(*)
+			AS count
+		  FROM community_board
+		 WHERE board_type = #{boardType}
+	</select>
+	
+	<!-- 전체 게시글의 페이지에 대한 게시글 정보 얻기 -->   
 	<select id = "getBoardPage" parameterType = "java.util.Map" resultType = "Community_BoardVO">
 		SELECT *,
-				 (SELECT user_name
-				    FROM test_user_info
-				   WHERE user_number = community_board.user_number)
+				 (SELECT uName
+				    FROM User
+				   WHERE uNo = community_board.uNo)
 				      AS user_name
 				 <!--
 				 (SELECT count(comment_number)
@@ -19,29 +52,77 @@
 				 	  AS comment_count,
 				 -->
 		  FROM community_board
-		 WHERE board_type = #{selectBoardType}
 	  ORDER BY board_number
-	      DESC limit #{startBoardNumber}, #{unitPage}
+	      DESC limit #{offset}, #{unitPage}
 	</select>
 	
-	<!-- 글 쓰기 -->
-	<insert id = "insertBoard" parameterType = "Community_BoardVO">
-		INSERT INTO community_board
-					(
-						user_number,
-						board_title,
-						board_type,
-						board_content
-					)
-			 VALUES
-			 		(
-			 			#{user_number},
-						#{board_title},
-						#{board_type},
-						#{board_content}
-			 		)
-	</insert>
-	 
+	<!-- 특정 게시글의 페이지에 대한 게시글 정보 얻기 -->   
+	<select id = "getBoardPage_TypeChoice" parameterType = "java.util.Map" resultType = "Community_BoardVO">
+		SELECT *,
+				  (SELECT uName
+				     FROM User
+				    WHERE uNo = community_board.uNo)
+				       AS user_name
+				  <!--
+				  (SELECT count(comment_number)
+				 	 FROM comment_list
+				    WHERE board_number = community_board.user_number)
+				 	   AS comment_count,
+				  -->
+		  FROM community_board
+		 WHERE board_type = #{boardType}
+	  ORDER BY board_number
+	      DESC limit #{offset}, #{unitPage}
+	</select>
+	
+	<!-- 게시글 보기 -->
+	<select id = "readBoard" parameterType = "int" resultType = "Community_BoardVO">
+		SELECT *,
+				  (SELECT uName
+				     FROM User
+				    WHERE uNo = community_board.uNo)
+				       AS user_name
+		  FROM community_board
+		 WHERE board_number = #{boardNumber}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id = "hitCountIncrease" parameterType = "int">
+		UPDATE community_board
+		   SET hit_count = hit_count + 1
+		 WHERE board_number = #{boardNumber}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id = "deleteBoard" parameterType = "int">
+		<!--
+		댓글 삭제
+		sql = "delete from comment_list where board_number = " + board_number;
+		System.out.println("댓글 삭제 SQL: " + sql);
+		runSQL(sql);		
+		
+		첨부파일 삭제
+		sql = "delete from attach where board_number = " + board_number;
+		System.out.println("첨부파일 삭제 SQL: " + sql);
+		runSQL(sql);
+		-->
+		
+		<!-- 게시글 삭제 -->
+		DELETE
+		  FROM community_board
+		 WHERE board_number = #{boardNumber}
+	</delete>
+	
+	<!-- 글 수정 -->
+	<update id = "updateBoard" parameterType = "Community_BoardVO">
+		UPDATE community_board
+		   SET
+		       board_title = #{board_title},
+		       board_type = #{board_type},
+		       board_content = #{board_content}
+		 WHERE board_number = #{board_number}
+	</update>
+
 </mapper>
 
 

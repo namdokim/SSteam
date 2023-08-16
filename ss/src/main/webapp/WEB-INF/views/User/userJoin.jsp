@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
+<% %>
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
   />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 function DoRewrite()
 {
@@ -14,6 +16,11 @@ function DoRewrite()
 </script>
 
 <style>
+	.container
+	{
+		text-align: center;
+		align-content: center;
+	}
 	tr{
 		text-align: center;
 		padding: auto;
@@ -21,15 +28,30 @@ function DoRewrite()
 	}
 	input::placeholder
 	{
-		text-align: center;
-		color: 
+		text-align: left;
 	}
+	#idbutton{
+		text-align: right;
+		align-content: right;
+	}
+	.form-label
+	{
+		padding-top: 1%;
+		padding-bottom: 1%;
+		color: #2E2E2E;
+		background-color:#F2F2F2;
+		width:100%;
+		font-family: monospace;
+		font-size: 20px ;
+		font-weight: bolder;
+	}
+	
 /* 비밀번호 감추기 보여주기  */
 .input {
   position: relative;
 }
 
-.input .eyes {
+ .input .eyes {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -49,16 +71,137 @@ function DoRewrite()
   font-size: 25px;
   cursor: pointer;
 }
-}
+
+
 </style>
 <!-- 회원가입 입력 란  -->
-	<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
-		<table border="1" style="align-content: center; width:50%; padding : auto; margin: auto">
-			<tr id="loginid" name="loginid">
-				<td style="width:45%;">
-					<input type="text" id="uId" name="uId" style="width:100%" placeholder="Email로 써주세요" required value="">
-					
-				</td>
+<div class="container">
+	<div class="py-5 text-center">
+		<!-- <div class="row g-5"> -->
+			<!-- <div class="col-md-7 col-lg-8"> -->
+				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;"></div>
+				<!-- 회원가입 폼  -->
+				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+					<input type="hidden" id="uType" name="uType" value="normal">
+					<div class="col-12">
+					<div class="g-3">
+						<div class="grid text-center">
+							<label for="ID" class="form-label">아이디</label>
+							<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
+							<div class="invalid-feedback">
+							이메일 이름을 써주세요
+							</div>
+<!-- 							<div class="invalid-feedback">
+							도메인을 선택해주세요.
+							</div> -->
+							<select class="form-select" id="uId_email" name="uId_email" onchange="email();">	
+								<option value="">도메인을 선택해주세요</option>
+								<option value="@naver.com">naver.com</option>
+								<option value="@daum.net">daum.net</option>
+								<option value="@hanmail.net">hanmail.net</option>
+								<option value="@gmail.com">gmail.com</option>
+								<option value="@kakao.com">kakao.com</option>
+								<option value="@nate.com">nate.com</option>
+								<option value="@outlook.com">outlook.com</option>
+								<option value="@hotmail.com">hotmail.com</option>
+							</select>
+							<!-- float-end py-1 -->
+							<!-- d-flex justify-content -->
+							<!-- class="float-end btn btn-secondary mb-1" -->
+							<div id="idbutton" class="d-flex justify-content align-items-right">
+								<div class="col-md-12">
+								<input type="button" class="btn btn-secondary mb-1" value="인증하기" id="emailCheck" onclick="emailAuth();">
+								<input type="button" class="btn btn-primary mb-1" value="중복확인 " id="emaildomain" onclick="emailcheck();">
+								</div>
+								<!-- <input type="hidden" name="idchecked" id=""value="checkednot"> -->
+							</div>
+						</div>
+					</div> <!-- g-3 -->
+					</div> <!-- col-12 -->
+					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
+						<span id="msg_id"></span>
+						<span id="msg_email"></span>
+						<label for="password" class="form-label">비밀번호 </label>
+					<div class="col-12">
+						<div class="input password">
+						<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
+							<div class="eyes"><i class="fas fa-eye"></i></div>
+						<div class="invalid-feedback eyes">
+							비밀번호를 입력해 주세요
+						</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="input password">
+						<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
+						<input class="form-control" type="password"  id="uPwc" name="uPwc" placeholder="비밀번호확인">
+							<div class="eyes2"><i class="fas fa-eye"></i></div>
+						<div class="invalid-feedback eyes">
+						비밀번호와 일치하지 않습니다
+						</div>
+						</div>
+					</div>
+						<span id="msg_pw"></span>
+					<div class="col-12">
+						<label for="Name" class="form-label">이름</label>
+						<input  class="form-control" type="text" id="uName" name="uName" placeholder="이름" required value="">
+						<div class="invalid-feedback">
+							이름을 입력하세요
+						</div>
+					</div>
+					<div class="col-12">
+						<label for="Nick" class="form-label">닉네임</label>
+						<input  class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
+						<div class="invalid-feedback">
+							닉네임을 입력하세요
+						</div>
+					</div>
+						<span id="msg_nick"></span>
+					<div class="col-12">
+						<label for="Phone" class="form-label">전화번호</label>
+						<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
+						<div class="invalid-feedback">
+							전화번호 입력하세요
+						</div>
+					</div>
+					<!-- 우편번호 주소 -->
+						<label for="address" class="form-label">우편번호</label>
+					<div class="col-12 d-flex justify-content-between align-items-center">
+						<div class="col-md-6">
+						<input  class="form-control" type="text" id="uAddsPostCode"  placeholder="우편번호">
+						</div>
+						<input class="float-end btn btn-secondary mb-1" onclick="DaumPostcode();" type="button" value="우편번호찾기">
+					</div>
+						<div class="col-12">
+						<input class="form-control" type="text" id="uRoadAddress"  placeholder="도로명주소">
+						</div>
+						<div class="col-12">
+						<input  class="form-control" type="text" id="uJibunAddress"  placeholder="지번주소">            
+						</div>
+						<div class="col-12">
+						<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
+						</div>	
+						<label for="address" class="form-label">참고항목</label>
+						<div class="col-md-5">
+						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
+						</div>
+					<!-- 회원가입 입력란 끝 -->
+						<hr class="my-4">
+						<div class="d-flex justify-content-center my-4">
+							<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
+							<a href="javascript:DoRewrite()">
+							<input class="w-33 btn btn-primary btn-lg mx-2" type="button" value="다시쓰기">
+							</a>
+							<a href="<%=request.getContextPath() %>/">
+							<input class="w-33 btn btn-primary btn-lg" type="button" value="취소">
+							</a>
+						</div>
+				</form>
+					</div>
+			</div>
+		<!-- </div> col-md-7 col-lg-8 -->
+	<!-- </div> row g-5 끝  -->
+	<%-- 
 				<td>	
 					<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
 						<option value="">도메인을 선택해주세요</option>
@@ -140,20 +283,18 @@ function DoRewrite()
 			</tr>
 			<tr>
 				<td colspan="2">
-					<div>
-						<input type="text" id="" name="" style="width:100%;" placeholder="우편번호">
+					<div style="text-align: left; width: 100%; display: inline-block;">
+						<input type="text" id="uAddsPostCode"  placeholder="우편번호">
+						<br>
+						<input type="text" id="uRoadAddress" style="width: 100%;" placeholder="도로명주소">
+						<input type="text" id="uJibunAddress" style="width: 100%;" placeholder="지번주소"><br>
+						<!-- <span id="guide" style="color:#999;display:none"></span> -->
+						<input type="text" id="uDetailAddress" style="width: 60%;" placeholder="상세주소">
+						<input type="text" id="sample4_extraAddress" placeholder="참고항목">
 					</div>
 				</td>
 				<td>
-						<input type="button" value="우편번호찾기">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div>
-						<input type="text" id="uAdds" name="uAdds" style="width:100%;" placeholder="주소입력 란">
-						<input type="text" id="uAdds_sub" name="uAdds_sub" style="width:100%;" placeholder="우편번호를 찾아주세요">
-					</div>
+						<input type="button"  onclick="DaumPostcode()" value="우편번호 찾기">
 				</td>
 			</tr>
 			<tr >
@@ -166,13 +307,76 @@ function DoRewrite()
 				</td>
 			</tr>
 		</table>
-	</form>
+	</form> 
+	--%>
+</div> <!-- container 끝 -->
 <!-- api 연동 -->
 <script type="text/javascript">
 //coolsms
 //비바톤
 //나이스아이디
 //facebook account kit
+</script>
+
+<!-- 주소 다음 api http://postcode.map.daum.net/guide -->
+<script>
+    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+    function DaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('uAddsPostCode').value = data.zonecode;
+                document.getElementById("uRoadAddress").value = roadAddr;
+                document.getElementById("uJibunAddress").value = data.jibunAddress;
+                
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                if(roadAddr !== ''){
+                    document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                } else {
+                    document.getElementById("sample4_extraAddress").value = '';
+                }
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else if(data.autoJibunAddress) {
+                    var expJibunAddr = data.autoJibunAddress;
+                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                    guideTextBox.style.display = 'block';
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'none';
+                }
+            }
+        }).open({
+        	 popupTitle: '우편번호 주소 검색'
+        });
+    }
 </script>
 <!-- 셀렉트 태그 값 바꿀시 브라우저 로그에 보여주기  -->
 <script type="text/javascript">
@@ -482,7 +686,7 @@ $(function(){
 			console.log("uIdemailDup = "+uIdemailDup);
 			$("#uId").val("").focus();
 			return false;
-		}else if( uIdDup == false){
+		} else if( uIdDup == false){
 			
 			alert("아이디가 중복됩니다");
 			console.log("uIdDup="+uIdDup);
@@ -512,16 +716,12 @@ $(function(){
 			console.log(uNickDup);
 			$("#uNcik").val("").focus();
 			return false;
-		}else if( uAdds == null || $("#uAdds").val() == "")
-		{
-			alert("주소를 써주세요");
-			$("#uAdds").val("").focus();
-			return false;
 		}else
 		{
 			if( uIdDup == true && uNickDup == true && uPwDup == true)
 				{
 					$("form").submit();
+					alert("회원가입이 완료 되였습니다");
 				}
 			else
 				{

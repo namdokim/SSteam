@@ -22,7 +22,7 @@
     bottom: 0;
     width: 100%;
     margin-top: auto;
-    z-index: 999; /* 푸터가 다른 요소 위에 표시되도록 z-index 설정 */
+   /*  z-index: 999; */ /* 푸터가 다른 요소 위에 표시되도록 z-index 설정 */
   }
    .bd-placeholder-img {
         font-size: 1.125rem;
@@ -59,7 +59,7 @@
 
       .nav-scroller {
         /* position: relative; */
-        z-index: 2;
+        z-index: 1;
         height: 2.75rem;
         overflow-y: hidden;
       }
@@ -75,7 +75,15 @@
         -webkit-overflow-scrolling: touch;
       }
 </style>
-		<footer class="footer mt-auto py-3 bg-light sticky-bottom navbar-wrapper root-container" style="position: relative; z-index: 999;">
+	<!-- 하단 우측  스크롤 위로 올리기  -->
+	<div id="bottomClick" class="position-fixed bottom-0 end-0 md-3 me-2 bd-mode-toggle">
+		<button class="btn btn-bd-primary py-2 d-flex align-items-center" type="button" onclick="topClick();">
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+			</svg>
+		</button>
+	</div>
+		<footer class="footer mt-auto py-3 bg-light navbar-wrapper root-container" style="position: relative;">
 			<div class="container">
 				<p class="text-center text-muted">Live v0.011&nbsp;<small class="text-muted">(000000)</small>
 					<span class="sep"></span>
@@ -93,6 +101,16 @@
 				</p>
 			</div>
 		</footer>
+<!-- 스크롤 이벤트 보여주기 안 보여주기  -->
+<script type="text/javascript">
+	
+</script>
+<script type="text/javascript">
+	function topClick()
+	{
+		window.scrollTo(0,0);
+	}
+</script>
 	</body>
 </html>
 <%
