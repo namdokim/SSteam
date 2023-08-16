@@ -23,6 +23,6 @@ public class Food_LikeVO {
 	public void setuNo(int uNo) {
 		this.uNo = uNo;
 	}
-	
+	 
 	
 }

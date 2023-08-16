@@ -1,4 +1,3 @@
-
 package com.ss.demo.domain;
 
 import java.io.UnsupportedEncodingException;
@@ -106,4 +105,3 @@ public class PageMaker {
 	
 
 }
-

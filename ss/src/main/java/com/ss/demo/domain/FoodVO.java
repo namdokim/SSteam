@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class FoodVO 
 { 
-
 	private int fNo;	//맛집 고유번호 
 	private int uNo;	//회원번호 					
+	private int count;	//회원번호 					
 	
 	private String food_name;					// 식당 이름 
 	private String food_address;				// 식당 주소  
@@ -163,20 +163,27 @@ public class FoodVO
 		this.food_attach_number = food_attach_number;
 	}
 	
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	//======================================================== toString
 	@Override
 	public String toString() {
-		return "FoodVO [fNo=" + fNo + ", uNo=" + uNo + ", food_name=" + food_name + ", food_address=" + food_address
-				+ ", food_phone=" + food_phone + ", food_food_kind=" + food_food_kind + ", food_avg_price="
-				+ food_avg_price + ", food_write_date=" + food_write_date + ", food_working_hours=" + food_working_hours
-				+ ", food_holiday=" + food_holiday + ", food_website=" + food_website + ", food_content=" + food_content
-				+ ", food_menu_number=" + food_menu_number + ", food_menu_name=" + food_menu_name + ", food_menu_price="
-				+ food_menu_price + ", LType=" + LType + ", food_attach_number=" + food_attach_number
-				+ ", food_attach_logical_name=" + food_attach_logical_name + ", food_attach_physical_name="
-				+ food_attach_physical_name + ", thumbnail=" + thumbnail + "]";
+		return "FoodVO [fNo=" + fNo + ", uNo=" + uNo + ", count=" + count + ", food_name=" + food_name
+				+ ", food_address=" + food_address + ", food_phone=" + food_phone + ", food_food_kind=" + food_food_kind
+				+ ", food_avg_price=" + food_avg_price + ", food_write_date=" + food_write_date
+				+ ", food_working_hours=" + food_working_hours + ", food_holiday=" + food_holiday + ", food_website="
+				+ food_website + ", food_content=" + food_content + ", food_menu_number=" + food_menu_number
+				+ ", food_menu_name=" + food_menu_name + ", food_menu_price=" + food_menu_price + ", LType=" + LType
+				+ ", food_attach_number=" + food_attach_number + ", food_attach_logical_name="
+				+ food_attach_logical_name + ", food_attach_physical_name=" + food_attach_physical_name + ", thumbnail="
+				+ thumbnail + "]";
 	}
-	
-	
+
 	
 	
 }
