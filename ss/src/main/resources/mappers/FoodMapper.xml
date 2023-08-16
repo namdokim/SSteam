@@ -81,7 +81,6 @@
 		)
 	</insert>
 	
-<<<<<<< HEAD
 	<!-- 글 수정  (사진 수정에 대해서 추가 수정할 것)-->
 	<update id="update" parameterType="foodVO">
 		UPDATE food
@@ -159,7 +158,7 @@
 	
 	
 	
-<<<<<<< HEAD
+
 <!-- =================================================================== -->
 	<!-- 첨부파일 사진 등록  -->
 	<insert id="insert_file_attach" parameterType="foodVO">
@@ -175,7 +174,7 @@
 			#{thumbnail}
 		)
 	</insert>
-=======
+
 	
 	
 <!-- @사진 등록@  --> 
@@ -195,7 +194,7 @@
 <!-- 		  	   FROM food -->
 <!-- 		</selectKey> -->
 <!-- 	</insert> -->
->>>>>>> main
+
 	
 	<!-- 첨부파일 수정  -->
 	<update id="init_attach_thumbnail" parameterType="int">

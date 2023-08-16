@@ -44,15 +44,6 @@ public class FoodController
 	@Autowired
 	private PageMaker pageMaker;
 	
-	
-<<<<<<< HEAD
-	// ===================================================================== food Main <List> (메인페이지) //페이징 추가  
-=======
-	
-	
-	
-	// ===================================================================== food Main <List> (메인페이지) 
->>>>>>> main
 	@RequestMapping(value="/foodMain.do")
 	public String foodMain(Model model ,SearchVO searchVO, Criteria cri){
 		

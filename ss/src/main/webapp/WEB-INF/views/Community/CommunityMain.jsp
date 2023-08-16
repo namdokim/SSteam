@@ -5,8 +5,6 @@
 <%
 	// url 에서 현재 선택 된 게시판의 게시글 얻기
 	List<String> nowPageBoardList = (List<String>)request.getAttribute("nowPageBoardList");
-<<<<<<< HEAD
-=======
 %>
 
 <%
@@ -22,7 +20,7 @@
 	{
 		name = userVO.getuName();
 	}
->>>>>>> main
+
 %>
 
 <!DOCTYPE html>
@@ -337,9 +335,6 @@
 						        </c:otherwise>
 						    </c:choose>
 						</li>
-<<<<<<< HEAD
-					</ul>								
-=======
 					</ul>
 					<a class = "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none offset-5">
 						<span class = "fs-4"> 채팅 </span>
@@ -432,7 +427,6 @@
 				            messages.parentNode.removeChild(messages)
 				       	}
 			        </script>
->>>>>>> main
 				</div>
 				<!-- 사이드바 -->
 				

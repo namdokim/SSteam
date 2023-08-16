@@ -374,8 +374,7 @@ public class UserController
 			return "redirect:/";
 		}
 	}
-<<<<<<< HEAD
-=======
+
 	// 회원 프로필 사진 수정 
 	// 억까로 되네. 파일 관련은 공부 좀 해야 겟다 너 말이야 너!!! 너!!!! 너,임마!
 	@RequestMapping(value="/profileimg.do")
@@ -424,5 +423,5 @@ public class UserController
 		return "redirect:profile.do";
 		
 	}
->>>>>>> main
+
 }

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -87,7 +87,7 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.ss.demo.domain.UserVO" %>
 <%
-	UserVO login = (UserVO)session.getAttribute("login");
+	/* UserVO login = (UserVO)session.getAttribute("login"); */
 %>
 <!DOCTYPE html>
 <html>
@@ -164,4 +164,4 @@
         <script src="assets/js/wow.min.js"></script>
         <script src="assets/js/waypoints.min.js"></script>
         <script src="assets/js/scripts.js"></script>
->>>>>>> main
+

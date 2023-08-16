@@ -294,10 +294,9 @@
 			    <script>
 				  function showLoginAlert() {
 				    alert("로그인을 해주세요.");
-<<<<<<< HEAD
-=======
-				    location.href = "<%=request.getContextPath()%>/User/userLogin.do";
->>>>>>> main
+
+				   <%--  location.href = "<%=request.getContextPath()%>/User/userLogin.do"; --%>
+
 				  }
 				</script>
 
@@ -455,12 +454,9 @@
 			<div class="tab-content container-fluid ml-2 col-md-8" >
 <!-- 메인 부문S ======================================================================= -->
 				<%-- <c:forEach items="${list}" var="food" begin="0" end="9"> --%>
-<<<<<<< HEAD
-				<c:forEach items="${list}" var="food">
-				
-=======
+
 				<c:forEach items="${list}" var="food" varStatus="status">
->>>>>>> main
+
 					<div class="container tab-pane fade show p-0 active" style="margin-right: 18rem;">
 						<div class="restaurant-item" >
 							<!-- 이미지 -->
@@ -469,12 +465,11 @@
 								
 								<c:choose>
 									<c:when test="${empty food.food_attach_logical_name}">
-<<<<<<< HEAD
+
 										<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
-=======
+
 									<%-- 	<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일"> --%>
 										<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="<%=request.getContextPath() %>/img/x.png" alt="맛집 썸네일">
->>>>>>> main
 									</c:when>
 									<c:otherwise>
 										<img src="<%=request.getContextPath() %>/resources/upload/${food.food_attach_physical_name}" onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'">           
