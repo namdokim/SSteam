@@ -17,10 +17,8 @@
 	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
 	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
 	<typeAlias alias="foodreviewVO" type="com.ss.demo.domain.FoodReviewVO"/>
+	<typeAlias alias="food_likeVO" type="com.ss.demo.domain.Food_LikeVO"/>
 <!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
-
-<!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
-
 </typeAliases>
 <!-- 
 <mappers>

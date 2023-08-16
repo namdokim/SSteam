@@ -329,4 +329,4 @@ window.onload = function(){
         return true;
     }
 	</script>
-<%@ include file="../include/footer.jsp" %> 
+<%@ include file="../include/footer.jsp" %>  

@@ -22,11 +22,7 @@
 %>
 <!-- ======================================================================================= -->
 
-<<<<<<< HEAD
-	<script src="<%=request.getContextPath()%>/js/jquery-3.6.3.min.js"></script>
-=======
 <%-- 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.3.min.js"></script> --%>
->>>>>>> main
 <!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -220,15 +216,6 @@
 	    align-items: center;
 	    cursor: pointer;
 	  	}
-<<<<<<< HEAD
-	  	.header {
-    	background-color: whitesmoke;
-    	color: #000;
-    	padding: 20px;
-    	text-align: center;
-  		}
-=======
->>>>>>> main
 
      	.container1_CancleButton {
 	    padding: 12px 24px;
@@ -294,9 +281,7 @@
 			    <script>
 				  function showLoginAlert() {
 				    alert("로그인을 해주세요.");
-
-				   <%--  location.href = "<%=request.getContextPath()%>/User/userLogin.do"; --%>
-
+				    location.href = "<%=request.getContextPath()%>/User/userLogin.do";
 				  }
 				</script>
 
@@ -454,9 +439,7 @@
 			<div class="tab-content container-fluid ml-2 col-md-8" >
 <!-- 메인 부문S ======================================================================= -->
 				<%-- <c:forEach items="${list}" var="food" begin="0" end="9"> --%>
-
 				<c:forEach items="${list}" var="food" varStatus="status">
-
 					<div class="container tab-pane fade show p-0 active" style="margin-right: 18rem;">
 						<div class="restaurant-item" >
 							<!-- 이미지 -->
@@ -465,9 +448,6 @@
 								
 								<c:choose>
 									<c:when test="${empty food.food_attach_logical_name}">
-
-										<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일">
-
 									<%-- 	<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="https://mp-seoul-image-production-s3.mangoplate.com/406312/1763517_1635134765363_16478?fit=around|738:738&crop=738:738;*,*&output-format=jpg&output-quality=80" alt="맛집 썸네일"> --%>
 										<img onclick="location.href ='<%=request.getContextPath() %>/food/foodView.do?fNo=${food.fNo}'" src="<%=request.getContextPath() %>/img/x.png" alt="맛집 썸네일">
 									</c:when>
@@ -523,10 +503,6 @@
 								<a href="<%=request.getContextPath()%>/food/foodView.do?fNo=${food.fNo}">${food.food_name} 더보기></a></p>
 								
 <!--  글 수정, 삭제 버튼  (로그인시에만 보임/ 글쓴사람만 보임) --> 
-<<<<<<< HEAD
-					
-=======
->>>>>>> main
 								<div style="float:right;">
 									<form name="frm" action="delete.do" method="post" style="display: inline;">
 								        <input type="hidden" name="fNo" value="${food.fNo}">
@@ -543,62 +519,11 @@
 										<button onclick="location.href='<%=request.getContextPath()%>/food/foodMainModify.do?fNo=${food.fNo}'">수정하기</button>
 									<%-- <% } %>  --%>
 									</c:if>
-<<<<<<< HEAD
-										
-<!-- 해당 글을 작성한 유저에게만 삭제하기 수정하기 버튼이 보이게 함 -->		
-								<%-- <% if(session.getAttribute("login") != null && session.getAttribute("login").equals(String.valueOf(food.uNo))) { %>
-						        <div style="float:right;">
-						            <form name="frm" action="delete.do" method="post" style="display: inline;">
-						                <input type="hidden" name="fNo" value="${food.fNo}">
-						                <button onclick="delFn()">삭제하기</button> 
-						            </form>
-						        </div>
-						        <div style="float:right; margin-right: 10px;">
-						            <button onclick="location.href='<%=request.getContextPath()%>/food/foodMainModify.do?fNo=${food.fNo}'">수정하기</button>
-						        </div>
-						    <% } %> --%>
 								</div>
-
-=======
-								</div>
->>>>>>> main
 							</div>
 						</div>
 					</div>
 				</c:forEach>			
-<<<<<<< HEAD
-								
-<!-- 페이징S ----------------------------------------------------------------------- -->
-
-	 			<%-- <nav aria-label="Page navigation example">
-					<ul class="pagination justify-content-center">
-					
-				        이전 페이지 링크 생성
-				        <li class="page-item">
-				            <a class="page-link" href="foodMain.do?type=<%= type %>&page=1">Previous</a>
-				        </li>
-				
-				        숫자 버튼 생성
-				        <% int totalPages = 5; // 총 페이지 수 (예시로 5로 설정) %>
-				        <% for (int i = 1; i <= totalPages; i++) 
-				        { 
-				        %>
-				            <li class="page-item">
-				                <a class="page-link" href="foodMain.do?type=<%= type %>&page=<%= i %>"><%= i %></a>
-				            </li>
-				        <%
-				        } 
-				        %>
-				
-				        다음 페이지 링크 생성
-				        <li class="page-item">
-				            <a class="page-link" href="foodMain.do?type=<%= type %>&page=<%= totalPages %>">Next</a>
-				        </li>
-					</ul>
-					<br>
-				</nav> --%>
-=======
->>>>>>> main
 <!-- 페이징 디자인 NEW -->				
 				<div style="width:100%; text-align:center; margin:20px 0px;">
 					<% if (pageMaker.isPrev()){ %>
@@ -618,51 +543,5 @@
 					<% } %>
 				</div>
 			</div>
-<<<<<<< HEAD
-<!-- 지도 표시되는 부분  ===============================================================================-->	
-
-
-
-			<div style="color:#ff7f00; height:80px; font-size:18pt; border-top: 1px solid #ddd; display: flex; align-items: center; /* justify-content: center; */">
-			  리스트 지도
-			</div>
-			
-			<div id="map" style="width:100%;height:400px; margin:0 auto;"></div>
-		</div>
-	</div>
-	
-<!-- ========================  카카오지도api (8080포트설정하기) ==========================================-->
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57"></script>
-	<script>
-		var container = document.getElementById('map');
-		var options = {
-			/* center: new kakao.maps.LatLng(33.450701, 126.570667), */
-			center: new kakao.maps.LatLng(37.521202058933774, 127.02618079647772),
-			level: 3
-		};
-
-		var map = new kakao.maps.Map(container, options);
-		
-		// 마커가 표시될 위치
-		var markerPosition  = new kakao.maps.LatLng(37.521202058933774, 127.02618079647772); 
-		
-		// 마커를 생성
-		var marker = new kakao.maps.Marker({
-		    position: markerPosition
-		});
-
-		// 마커가 지도 위에 표시되도록 설정
-		marker.setMap(map);
-
-		// 아래 코드는 지도 위의 마커를 제거하는 코드 
-		// marker.setMap(null);  
-		
-		// 글 삭제 
-		function delFn(){
-			document.frm.submit();
-		}
-	</script>
-=======
->>>>>>> main
 <!-- =========================================================================================== -->
 <%@ include file="../include/footer.jsp" %>

@@ -11,7 +11,7 @@ public class FoodReviewVO {
 	private String food_review_writedate;
 	
 	//==========================================
-	
+	 
 	public int getfNo() {
 		return fNo;
 	}
