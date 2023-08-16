@@ -16,6 +16,7 @@
     padding: 20px;
     text-align: center;
     }
+     /* 요소들을 flex 컨테이너의 위쪽에 정렬합니다. */
 	.container {
 	margin: 20px auto;
 	max-width: 960px;
@@ -153,7 +154,7 @@
     }
     
    /* 1. 가고싶다, 리뷰쓰기 버튼의 모양 제거 */
-    .restaurant-item2 button {
+    .restaurant-item2 .button1 {
     background: none;
     border: none;
     cursor: pointer;
@@ -162,7 +163,8 @@
     }
 
     /* 2. 리뷰쓰기 버튼에 hover 효과 추가 */
-    .restaurant-item2 button:hover {
+    
+    .restaurant-item2 .button1:hover {
     color: orange;
     }
 
@@ -341,7 +343,34 @@
     font-size: 32px;
     color: silver;
 	}
-	
+	  .custom-button {
+    display: inline-block;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+  .custom-button:hover {
+    background-color: darkorange;
+    transform: scale(1.05);
+  }
+    .container1_CancleButton {
+    padding: 12px 24px;
+ 	min-width:140px;
+ 	min-height:50px;
+    margin-right: 16px; 
+    border: 1px solid #FFA500;
+    border-radius: 50px;
+ 	font-size:16px;
+ 	color:black;
+ 	text-align:center;
+ 	background-color:#FFA500;
+ 	}
 </style>
 
 <!-- 스크립트 ================================================  -->
@@ -379,6 +408,70 @@
 <script>
 window.onload = function()
 {
+	const fNo = ${vo.fNo};
+	var like_empty = document.getElementsByClassName("like")[0];
+	var like_full = document.getElementsByClassName("like")[1];
+
+	// 로그인 한 유저가 이미 좋아요를 누른 상태 
+	if (${like_dupl} > 0){							// 처음 들어왔을 때, 유저가 이미 체크한 경우라면,꽉 찬 별을 보여 줌. 
+		like_empty.style.display="none";
+		like_full.style.display="block";
+	// 로그인 한 유저가 좋아요를 안 누른 상태 
+	}else if(${like_dupl} == 0){
+		like_full.style.display="none";
+		like_empty.style.display="block";
+	// 로그인 안 한 상태 
+	}else{
+		like_full.style.display="none";
+		like_empty.style.display="block";
+	}								// 체크하지 않은 경우라면 ,빈 별을 보여 줌.
+	
+
+	like_empty.onclick = function()
+	{
+    	$.ajax({
+    		url: 'insert_like.do', 
+    		method: 'post', 
+    		data:{ 
+    			fNo:fNo
+    		},											
+    		success: function(data){
+    			if(data == 1){
+	    			like_empty.style.display="none";
+	    			like_full.style.display="block";
+    			}else{
+    				alert("로그인을 해주세요. ")
+    				location.href = "<%=request.getContextPath()%>/User/userLogin.do";
+    				
+    			}
+    			/* like_count.innerHTML = data; */
+    		},
+    		error: function(xhr, status, error){
+    			console.log('Error:', error);
+    		}
+    	});  
+    	
+	}
+	like_full.onclick = function()
+	{
+    	$.ajax({
+    		url: 'delete_like.do', 
+    		method: 'post', 
+    		data:{ 
+    			fNo:fNo
+    		},											
+    		success: function(data){
+    			
+    			like_full.style.display="none";
+    			like_empty.style.display="block";
+    			/* like_count.innerHTML = data; */
+    		},
+    		error: function(xhr, status, error){
+    			console.log('Error:', error);
+    		}
+    	});  
+	}
+	   
 	// 지도 
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
@@ -420,10 +513,19 @@ window.onload = function()
 	const openButton = document.getElementById("open-gallery-button");
 	const modal = document.getElementById("gallery-modal");
 	const closeButton = document.getElementById("close-button");
+    var uid = '${sessionScope.login.uId}';
+    console.log("로그인했을때의 uid 값:" + uid);
 
 	openButton.addEventListener("click", () => {
-	  modal.style.display = "block";
-	  document.body.style.overflow = "hidden";
+		if(uid != ""){
+		  modal.style.display = "block";
+		  document.body.style.overflow = "hidden";
+		}else{
+			/* alert("로그인을 해주세요. "); */
+			if(confirm("로그인 하시겠습니까? ")){
+				location.href='<%=request.getContextPath()%>/User/userLogin.do';
+			}
+		}
 	});
 
 	closeButton.addEventListener("click", () => {
@@ -485,9 +587,16 @@ function foodReviewModify(obj,food_review_number)
 	/* const openButton1 = obj; */
 	const modal1 = document.getElementById("gallery-modal1");
 	const reviewmodify = document.getElementById("reviewmodify");
+	const review = document.getElementById("review2");
+	const array = document.getElementsByName("mobutton");
+	const index = Array.prototype.indexOf.call(array, obj);
 	
 	modal1.style.display = "block";
 	document.body.style.overflow = "hidden";
+	review.value = document.getElementsByName("review3")[index].innerHTML;
+	/* console.log(document.getElementsByName("review3")[index].textContent; */
+	console.log(index);
+		
 	// 기존에 등록된 이벤트 리스너 제거
 	/* reviewmodify.removeEventListener("click", reviewModifyHandler); */
 	reviewmodify.onclick = function(){
@@ -535,6 +644,7 @@ function foodReviewModify_ajax(obj,food_review_number){
 		}
 	});
 	
+	
 }
 
 </script>
@@ -564,7 +674,7 @@ function insert_foodreview(){
 			document.body.style.overflow = "auto";
 			$("#testDiv").prepend('<div id="insertDiv"></div>');
 			
-			alert("성공2");
+			alert("리뷰 등록이 완료 되었습니다. ");
 			 
 			var html ='<div style="border:0px solid red; display: flex;">'
 						+'<div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>'
@@ -607,36 +717,6 @@ function insert_foodreview(){
 		}
 	})
 }
-
-
-/* window.onload = function (){
-	var html ='<div style="border:0px solid red; display: flex;">'
-				+'<div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>'
-				+'<div class="user-thumbnail">'
-				+'<img src="https://slp-statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?width=580&format=webp" alt="사용자 썸네일">'
-				+'</div><br>'
-				+'<div class="user-nickname">세이콩</div>'
-				+'</div>'
-				
-				+'<div style="border:0px solid black;  width:70%;"><br>'
-				+'<span style="color:silver;">2023-06-23</span>'
-				+'<label for="review-content"></label><br>'
-				<!-- 리뷰내용들어갈 자리 -->
-				+'</div>'
-				
-				+'<div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>'
-				+'<svg xmlns="http://www.w3.org/2000/svg" style="color:orange" width="50" height="50" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">'
-				+'<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>'
-				+'<path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>'
-				+'</svg><br>'
-				+'<span style="font-size:18px; color:orange; ">별로</span>'
-				+'</div>'
-				+'</div>'
-				+'<br><br><hr>'
-	      console.log(html);
-} */
-
-
 </script>
 </head>
 
@@ -660,7 +740,7 @@ function insert_foodreview(){
 		<div class="restaurant-item">
 			<div class="restaurant-item2" style="float: left; width:70%;"> 
 				<div>
-					<div style="width: 100%;"><br><br>
+					<div style="width: 100%; position:relative;"><br><br>
 						
 						<h2>
 							<span>
@@ -669,10 +749,28 @@ function insert_foodreview(){
 								<span style="color: orange;">&nbsp;4.8</span>
 							</span>
 							
-							<button style="float: right;">★<br>가고싶다 </button>
+							<!--  빈 별  -->
+							<button class="button1" style="float: right;"><span class="like" style="color:silver; position:absolute; top:50px; right:0;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+							  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+							  
+							  
+							</svg>
+							<br>가고싶다</span></button>
+							
+							<button class="button1" style="float: right;"><span class="like" style="color:orange; position:absolute; top:50px; right:0;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+							  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+							</svg>
+							<br>가고싶다</span></button>
+							
 							<!-- <button style="float: right;">✎<br>리뷰쓰기 </button> -->
 							<%-- <button style="float: right;"><a href="<%=request.getContextPath()%>/food/foodReviewWrite.do">✎<br>리뷰쓰기</a></button> --%>
-							<button id="open-gallery-button" style="float: right; display:inline-block; cursor:pointer;">✎<br>리뷰쓰기</button>
+							<button class="button1" id="open-gallery-button" style="float: right; display:inline-block; cursor:pointer; position:absolute; top:50px; right:150px;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+							  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+							</svg>
+							<br>리뷰쓰기</button>
 						</h2>	
 							<!-- <div class="view" style="width:1224px; margin:0 auto; padding:30px;  line-height:50px; "> -->
 <!-- (모달창) 리뷰 페이지   -->
@@ -843,8 +941,9 @@ function insert_foodreview(){
 				<p><strong>휴일 </strong>${vo.food_holiday}</p>
 				<p><strong>웹사이트 </strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a></p><br><br>
 
-				<h3>메뉴</h3> 
-				<button><a href="<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}">메뉴등록버튼 </a></button>
+				<h3 style="display:inline-block;">메뉴</h3> 
+				<%-- <button class="custom-button"><a href="<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}">메뉴등록버튼 </a></button> --%>
+				<button class="container1_CancleButton" onclick = "location.href='<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}'">메뉴등록버튼 </button>
 				<ul>
 					<c:forEach items="${list}" var="vo">
 						<li>${vo.food_menu_name} - ${vo.food_menu_price}</li>
@@ -891,178 +990,61 @@ function insert_foodreview(){
 	        </h4>
 	      </div><br>
 <!-- ⚫️================================================= 첫 번째 댓글 S (html)=============================================================================================-->	
-	<div id="testDiv" > 
-		<div id="insertDiv"></div>
-	</div>
-	<c:forEach items="${listReview}" var="listReview" varStatus="status">
-	      <div style="border:0px solid red; display: flex;">
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          <div class="user-thumbnail">
-	            <img src="https://slp-statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?width=580&format=webp" alt="사용자 썸네일">
-	          </div><br>
-	          <div class="user-nickname">${listReview.uNick}</div>
-	        </div>
-	
-	        <div style="border:0px solid black;  width:70%;"><br>
-	          <div style="color:silver;">${listReview.food_review_writedate}</div><br>
-	         <!--  <label for="review-content"></label><br> -->
-	          <div name="review3"> ${listReview.food_review_content}</div><br>
-	          <!-- 합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          (이하 내용 생략)-->
-	          
-	          
-	        </div>
-	
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          	<svg xmlns="http://www.w3.org/2000/svg" style="color:orange" width="50" height="50" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
-	            	<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-	            	<path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
-	          	</svg><br> 
-	        	<span style="font-size:18px; color:orange; ">별로</span>
-	        	<div>
-	        	<%-- 
-	       			<button id="open-gallery-button" style="float: right; display:inline-block; cursor:pointer;">✎<br>리뷰쓰기</button>
-	       			<a href="<%=request.getContextPath()%>/food/foodView.do?food_review_number=${listReview.food_review_number}">수정</a> --%>
-	     			<!--🔴 뷰 페이지 수정 버튼  -->
-	     			<button name="mobutton" onclick="foodReviewModify(this,${listReview.food_review_number}) " >수정 </button>
-	     			
-	     			
-	     			<form action="foodReviewDelete.do" method="post">
-	     				<input type="hidden" name="food_review_number" value="${listReview.food_review_number}"> 
-	     				<input type="hidden" name="fNo" value="${listReview.fNo}"> 
-	     				<button>삭제</button>
-	     			</form>
-	      	  	</div>
-	        </div>
-	      </div><hr> 
-	</c:forEach><br><br>
-
+		<div id="testDiv" > 
+			<div id="insertDiv"></div>
+		</div>
+		<c:forEach items="${listReview}" var="listReview" varStatus="status">
+		      <div style="border:0px solid red; display: flex;">
+		        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
+		          <div class="user-thumbnail">
+		            <img src="https://slp-statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?width=580&format=webp" alt="사용자 썸네일">
+		          </div><br>
+		          <div class="user-nickname">${listReview.uNick}</div>
+		        </div>
+		
+		        <div style="border:0px solid black;  width:70%;"><br>
+		          <div style="color:silver;">${listReview.food_review_writedate}</div><br>
+		         <!--  <label for="review-content"></label><br> -->
+		          <div name="review3"> ${listReview.food_review_content}</div><br>
+		          <!-- 합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
+		          (이하 내용 생략)
+		          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
+		          (이하 내용 생략)
+		          (이하 내용 생략)-->
+		          
+		          
+		        </div>
+		
+		        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
+		          	<svg xmlns="http://www.w3.org/2000/svg" style="color:orange" width="50" height="50" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+		            	<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+		            	<path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+		          	</svg><br> 
+		        	<span style="font-size:18px; color:orange; ">별로</span>
+		        	<div>
+		        	<%-- 
+		       			<button id="open-gallery-button" style="float: right; display:inline-block; cursor:pointer;">✎<br>리뷰쓰기</button>
+		       			<a href="<%=request.getContextPath()%>/food/foodView.do?food_review_number=${listReview.food_review_number}">수정</a> --%>
+		     			<!--🔴 뷰 페이지 수정 버튼  -->
+		     			<button name="mobutton" onclick="foodReviewModify(this,${listReview.food_review_number}) " >수정 </button>
+		     			
+		     			
+		     			<form action="foodReviewDelete.do" method="post">
+		     				<input type="hidden" name="food_review_number" value="${listReview.food_review_number}"> 
+		     				<input type="hidden" name="fNo" value="${listReview.fNo}"> 
+		     				<button>삭제</button>
+		     			</form>
+		      	  	</div>
+		        </div>
+		      </div><hr> 
+		</c:forEach><br><br>
 
 <!-- ================================================= 첫 번째 댓글 E (html) =============================================================================================-->	
-<!-- ================================================= 첫 번째 댓글 S =============================================================================================-->	
-<!-- 
-	      <div style="border:0px solid red; display: flex;">
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          <div class="user-thumbnail">
-	            <img src="https://slp-statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?width=580&format=webp" alt="사용자 썸네일">
-	          </div><br>
-	          <div class="user-nickname">세이콩</div>
-	        </div>
-	
-	        <div style="border:0px solid black;  width:70%;"><br>
-	          <span style="color:silver;">2023-06-23</span>
-	          <label for="review-content"></label><br>
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음. 
-	          (이하 내용 생략)
-	        </div>
-	
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          <svg xmlns="http://www.w3.org/2000/svg" style="color:orange" width="50" height="50" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
-	            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-	            <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
-	          </svg><br> 
-	        <span style="font-size:18px; color:orange; ">별로</span>
-	        </div>
-	      </div>
-	      <br>
-	      <br>
-		  <hr> 
-================================================= 첫 번째 댓글 E =============================================================================================	
-
-2번째 댓글S 
-	      <div style="border:0px solid red; display: flex;">
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          <div class="user-thumbnail">
-	            <img src="https://slp-statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?width=580&format=webp" alt="사용자 썸네일">
-	          </div><br>
-	          <div class="user-nickname">세이콩</div>
-	        </div>
-	
-	        <div style="border:0px solid black;  width:70%;"><br>
-	          <span style="color:silver;">2023-06-23</span>
-	          <label for="review-content"></label><br>
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	          합정 쪽에서 우연히 고미태를 지나칠 때 보면 닫아있을 때가 많아 잠시 잊고 있었는데 언젠가부터 일본식 쑥국수로 오픈했다길래 들러보고 싶었는데 주아팍님의 리뷰에서 끝났다고 해서 순간 헐했었음.
-	          (이하 내용 생략)
-	        </div>
-	
-	        <div style="border:0px solid black; width:15%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;"><br><br>
-	          <svg xmlns="http://www.w3.org/2000/svg" style="color:orange" width="50" height="50" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
-	            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-	            <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
-	          </svg><br> 
-	           <span style="font-size:18px; color:orange; ">별로</span>
-	        </div>
-	      </div>
-	      <br>
-	      <br> 
-		  <hr> 	      
-2번째 댓글E -->
-	
 	    </div>
 	  </div>
 	</div>
 	
 <!-- ========================  카카오지도api (8080포트설정하기) 위치변경 하지 말것 (지도 api는 위치 그대로 써야함) ==========================================-->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services"></script>
-	<!-- <script>
-		var container = document.getElementById('map');
-		var options = {
-			/* center: new kakao.maps.LatLng(33.450701, 126.570667), */
-			center: new kakao.maps.LatLng(37.521202058933774, 127.02618079647772),
-			level: 3
-		};
-
-		var map = new kakao.maps.Map(container, options);
-		
-		// 마커가 표시될 위치 
-		var markerPosition  = new kakao.maps.LatLng(37.521202058933774, 127.02618079647772); 
-		
-		// 마커를 생성
-		var marker = new kakao.maps.Marker({
-		    position: markerPosition
-		});
-
-		// 마커가 지도 위에 표시되도록 설정
-		marker.setMap(map);
-
-		// 아래 코드는 지도 위의 마커를 제거하는 코드
-		// marker.setMap(null);    
-	</script> -->
-<!-- =========================================================================================== -->	
 
 <%@ include file="../include/footer.jsp" %>

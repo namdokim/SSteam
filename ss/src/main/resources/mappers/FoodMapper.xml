@@ -1,53 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ss.demo.mapper.foodMapper">
-	<!-- 파라미터 객체의 필드값을 쿼리에 대입할때는 $기호 말고 #기호를 반드시 써야 합니다. -->
 
-<!-- 페이징 ============================================================== -->
-	
-	<!-- selectAll(첨부파일까지) -->
-	 <select id="selectAll" resultType="foodVO" parameterType="searchVO">
-		SELECT *
-		  FROM food LEFT OUTER JOIN (select * from food_attach where thumbnail = 'Y') D 
-		  ON food.fNo = D.fNo
-	  	  WHERE food.status = 'Y' 
-	  	  
-		<!-- 글 검색 -->
-		<if test='searchType != null and searchType.equals("food_name")'>
-		   AND food_name like concat('%', #{searchValue}, '%')
-		</if>
-		<if test='searchType != null and searchType.equals("food_address")'>
-		   AND food_address like concat('%', #{searchValue}, '%')
-		</if>
-		
-		<!-- 지역 검색 -->
-		<if test='type != null and !type.equals("TT")'>
-			AND LType = #{type}
-		</if>
-			order by food.fNo desc
-			LIMIT #{sNum},#{perPageNum}
-	</select> 
-	<select id="select_food_count" resultType="int">
-		SELECT COUNT(*) FROM food WHERE status = 'Y'
-	</select>
-
-
-	<!-- selectAll Menu  -->
-	 <select id="selectAllMenu" resultType="foodVO">
-		SELECT *
-		  FROM food_menu
-		  WHERE fNo = #{fNo}
-	</select> 
-	
-		
-		
-<!-- ================================= 글쓰기 crud ========================================= -->	
+<!-- ============================================================ insert(추가) -->		
 	
 	<!-- 글 쓰기  -->
 	<insert id="insert" parameterType="foodVO">
+	<!-- 데이터베이스에서 마지막으로 삽입된 레코드의 자동 생성된 키 값을 가져오는 함수 -->
 	<selectKey resultType="int" keyProperty="fNo" order="AFTER">
 		SELECT LAST_INSERT_ID()
 	</selectKey>
@@ -81,80 +40,7 @@
 		)
 	</insert>
 	
-	<!-- 글 수정  (사진 수정에 대해서 추가 수정할 것)-->
-	<update id="update" parameterType="foodVO">
-		UPDATE food
-		   SET food_name = #{food_name} <!-- boardVO.getTitle() -->
-		     , food_address = #{food_address}
-		     , food_phone = #{food_phone}
-		     , food_food_kind = #{food_food_kind}
-		     , food_avg_price = #{food_avg_price}
-		     , food_write_date = #{food_write_date}
-		     , food_working_hours = #{food_working_hours}
-		     , food_holiday = #{food_holiday}
-		     , food_website = #{food_website}
-		     , food_content = #{food_content}
-		     , LType = #{LType}
-		 WHERE fNo = #{fNo}
-	</update>
-	
-	<!-- 글 삭제1  -->
-<!-- 	<delete id="delete" parameterType="int">
-		DELETE
-		  FROM food
-		 WHERE fNo = #{fNo}
-	</delete>	 -->
-	
-	<!-- 글 삭제2 (업데이트로 수정)  -->
-	<update id="delete" parameterType="int">
-		UPDATE food SET status = 'N' WHERE fNo = #{fNo}
-	</update>
-	
-	
-	
-<!-- =================================================================== -->
-	<!-- 선택 -->
-	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
-		SELECT * 
-		  FROM food
-		 WHERE fno = #{fno}
-	</select>
-	
-	<!-- =================================================================== -->
-	<!-- 선택(View페이지)  -->
-	<select id="selectListByFno" resultType="foodVO" parameterType="int" >
-		SELECT *
-		  FROM food_attach
-		 WHERE fno = #{fno}
-	</select>
-	
-	
-	
-<!-- =================================================================== -->
-	<!-- 메뉴 등록 -->
-	
-	<insert id="insertMenu" parameterType="foodVO">
-		INSERT INTO
-		food_menu(
-			fNo
-			,food_menu_name
-			,food_menu_price
-		)VALUES(
-			#{fNo}
-			,#{food_menu_name}
-			,#{food_menu_price}
-		)
-		<selectKey order="AFTER" keyProperty="food_menu_number" resultType="int">
-			SELECT MAX(food_menu_number)
-		  	   FROM food_menu
-		</selectKey> 
-	</insert>
-		
-	
-	
-	
-<!-- =================================================================== -->
-	<!-- 첨부파일 사진 등록  -->
+	<!-- 식당 첨부 파일 정보를 등록하는 쿼리 -->
 	<insert id="insert_file_attach" parameterType="foodVO">
 		INSERT INTO food_attach(
 			fNo,
@@ -169,70 +55,216 @@
 		)
 	</insert>
 	
-	<!-- 첨부파일 수정  -->
+	<!-- 식당 메뉴 정보를 등록하는 쿼리 -->
+	<insert id="insertMenu" parameterType="foodVO">
+		INSERT INTO
+		food_menu(
+			fNo
+			,food_menu_name
+			,food_menu_price
+		)VALUES(
+			#{fNo}
+			,#{food_menu_name}
+			,#{food_menu_price}
+		)
+		<!-- 등록한 메뉴의 번호를 자동 생성하여 반환 -->
+		<selectKey order="AFTER" keyProperty="food_menu_number" resultType="int">
+			SELECT MAX(food_menu_number)
+		  	FROM food_menu
+		</selectKey> 
+	</insert>
+	
+	<!-- 식당 리뷰를 등록하는 쿼리 -->
+	<insert id="insert_foodreview" parameterType="foodreviewVO">
+		<selectKey resultType="int" keyProperty="food_review_number" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>	
+		INSERT INTO food_review(
+			fNo
+			,uNo
+			,food_review_content
+		) VALUES (
+			#{fNo},
+			#{uNo},
+			#{food_review_content}
+		)
+	</insert>
+	
+	<!-- 좋아요 (가고싶다)  -->
+	<insert id="insert_like" parameterType="food_likeVO">
+		INSERT INTO food_like (fNo, uNo) 
+		VALUES (#{fNo}, #{uNo} )
+	</insert>
+<!-- ============================================================ select(조회)-->	
+	
+	<!-- 특정 조건에 따라 식당 목록을 조회하는 쿼리 -->
+	<select id="selectAll" resultType="foodVO" parameterType="searchVO">
+		SELECT *, (select count(*) from food_like where fNo = a.fNo 
+		<if test='uNo != null'>and uNo =#{uNo}</if>) count 
+		FROM (SELECT * FROM food LEFT OUTER JOIN (select food_attach_number,fNo as fNo2 ,food_attach_logical_name,food_attach_physical_name,thumbnail from food_attach where thumbnail = 'Y') D 
+		ON food.fNo = D.fNo2
+	  	WHERE food.status = 'Y' ) a
+
+		<!-- 글 검색 -->
+		<!-- 식당이름 -->
+		<if test='searchType != null and searchType.equals("food_name")'>
+			AND food_name like concat('%', #{searchValue}, '%')
+		</if>
+
+		<!-- 식당주소 -->
+		<if test='searchType != null and searchType.equals("food_address")'>
+			AND food_address like concat('%', #{searchValue}, '%')
+		</if>
+
+		<!-- 지역타입 -->
+		<if test='type != null and !type.equals("TT")'>
+			AND LType = #{type}
+		</if>
+			ORDER BY food.fNo desc
+			LIMIT #{sNum},#{perPageNum}
+	</select> 
+	
+	<!-- 식당 데이터의 총 개수를 조회하는 쿼리 -->
+	<select id="select_food_count" resultType="int">
+		SELECT COUNT(*) 
+		FROM food 
+		WHERE status = 'Y'
+	</select>
+
+	<!-- 특정 fNo 값을 가진 식당의 메뉴 목록을 조회하는 쿼리 -->
+	 <select id="selectAllMenu" resultType="foodVO">
+		SELECT *
+		FROM food_menu
+		WHERE fNo = #{fNo}
+	</select> 
+	
+	<!-- 특정 fNo 값을 가진 FoodVO를 조회하는 쿼리 -->
+	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
+		SELECT * 
+		FROM food
+		WHERE fno = #{fno}
+	</select>
+	
+	<!-- 특정 fNo 값을 가진 식당의 첨부 파일 목록을 조회하는 쿼리 -->
+	<select id="selectListByFno" resultType="foodVO" parameterType="int" >
+		SELECT *
+		FROM food_attach
+		WHERE fno = #{fno}
+	</select>	
+	
+	<!-- 특정 식당의 모든 첨부 파일 정보를 조회하는 쿼리 -->
+	<select id="selectAll_food_attach" parameterType="int" resultType="foodVO">
+		SELECT * 
+		FROM food_attach 
+		WHERE fNo = #{fNo}
+	</select>
+	
+	<!-- 모든 식당 리뷰 정보를 조회하는 쿼리 -->
+	<select id="selectAll_foodreview" resultType="foodreviewVO" >
+		SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo,(select uNick from User WHERE uNo = food_review.uNo) as uNick
+		FROM food_review
+		WHERE fNo = #{fNo}
+		order by food_review_number desc
+	</select> 
+	
+	<!-- 특정 리뷰 선택 -->
+	<select id="selectOneByFRno" resultType="foodreviewVO" parameterType="int" >
+		SELECT * ,(select uNick from User WHERE uNo = food_review.uNo) as uNick
+		FROM food_review
+		WHERE food_review_number = #{food_review_number}
+	</select>
+	
+	<!-- 좋아요 조회 -->
+	<select id="select_like" parameterType="int" resultType="int">
+		SELECT count(*) 
+		FROM food_like 
+		WHERE fNo = #{fNo}
+<!-- 		<if test="uno != null"> -->
+<!-- 			and uno = #{uno} -->
+<!-- 		</if> -->
+	</select>
+	
+	<!--  -->
+	<select id="dupl_like" parameterType="food_likeVO" resultType="int">
+		SELECT count(*) 
+		FROM food_like 
+		WHERE fNo = #{fNo}
+				and uNo = #{uNo}
+	</select>
+<!-- ============================================================ update(수정) -->	
+	
+	<!-- 글 수정 -->
+	<update id="update" parameterType="foodVO">
+		UPDATE food
+		   SET food_name = #{food_name} 
+		     , food_address = #{food_address}
+		     , food_phone = #{food_phone}
+		     , food_food_kind = #{food_food_kind}
+		     , food_avg_price = #{food_avg_price}
+		     , food_write_date = #{food_write_date}
+		     , food_working_hours = #{food_working_hours}
+		     , food_holiday = #{food_holiday}
+		     , food_website = #{food_website}
+		     , food_content = #{food_content}
+		     , LType = #{LType}
+		 WHERE fNo = #{fNo}
+	</update>
+	
+	<!-- 식당 첨부 파일의 썸네일 정보를 초기화하는 쿼리 -->
 	<update id="init_attach_thumbnail" parameterType="int">
-		UPDATE food_attach SET
-			thumbnail = 'N'
+		UPDATE food_attach 
+		SET thumbnail = 'N'
 		WHERE fNo = #{fNo}
 	</update>
 	
+	<!-- 특정 첨부 파일의 썸네일 정보를 설정하는 쿼리 -->
 	<update id="attach_thumbnail" parameterType="int">
-		UPDATE food_attach SET
-			thumbnail = 'Y'
+		UPDATE food_attach 
+		SET thumbnail = 'Y'
 		WHERE food_attach_number = #{food_attach_number}
 	</update>
-	
-	<delete id="delete_attach" parameterType="int">
-		DELETE FROM food_attach WHERE food_attach_number = #{food_attach_number}
-	</delete>
-	
-	<select id="selectAll_food_attach" parameterType="int" resultType="foodVO">
-		SELECT * FROM food_attach WHERE fNo = #{fNo}
-	</select>
-	
-<!-- =================================================================== 리뷰 -->
-<insert id="insert_foodreview" parameterType="foodreviewVO">
-	<selectKey resultType="int" keyProperty="food_review_number" order="AFTER">
-		SELECT LAST_INSERT_ID()
-	</selectKey>	
-	INSERT INTO food_review(
-		fNo
-		,uNo
-		,food_review_content
-	) VALUES (
-		#{fNo},
-		#{uNo},
-		#{food_review_content}
-	)
-</insert>
-<!-- F5 했을 때 댓글보임  -->
-<select id="selectAll_foodreview" resultType="foodreviewVO" >
-	SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo,(select uNick from User WHERE uNo = food_review.uNo) as uNick
-		FROM food_review
-		order by food_review_number desc
-</select> 
-	
-<!-- 리뷸 글 하나 선택 -->
-<select id="selectOneByFRno" resultType="foodreviewVO" parameterType="int" >
-	SELECT * ,(select uNick from User WHERE uNo = food_review.uNo) as uNick
-	FROM food_review
-	 WHERE food_review_number = #{food_review_number}
-</select>
 
-<!-- foodreview 삭제 -->
-<delete id="delete_foodreview" parameterType="int">
-	DELETE
-		FROM food_review
-		WHERE food_review_number = #{food_review_number}
-	</delete>
-
-<!-- foodreview 수정 -->
-<update id="modify_foodreview" parameterType="foodreviewVO">
-	UPDATE food_review
+	<!-- 특정 식당 리뷰를 수정하는 쿼리 -->
+	<update id="modify_foodreview" parameterType="foodreviewVO">
+		UPDATE food_review
 		SET food_review_content = #{food_review_content}
 		WHERE food_review_number = #{food_review_number}
 	</update>
+	
+<!-- ============================================================ delete(삭제) -->	
+	<!-- 글 삭제- 
+	<delete id="delete" parameterType="int">
+		DELETE 
+		FROM food 
+		WHERE fNo = #{fNo}
+	</delete> -->
+	
+	<!-- 글 삭제 (업데이트로 수정 - DB에 내용을 남겨두기 위해서)  -->
+	<update id="delete" parameterType="int">
+		UPDATE food 
+		SET status = 'N' 
+		WHERE fNo = #{fNo}
+	</update>
+	
+	<!-- 특정 첨부 파일을 삭제하는 쿼리 -->
+	<delete id="delete_attach" parameterType="int">
+		DELETE 
+		FROM food_attach 
+		WHERE food_attach_number = #{food_attach_number}
+	</delete>
+	
+	<!-- 특정 식당 리뷰를 삭제하는 쿼리 -->
+	<delete id="delete_foodreview" parameterType="int">
+		DELETE
+		FROM food_review
+		WHERE food_review_number = #{food_review_number}
+	</delete>	
 
-
-
+	<!-- 좋아요 삭제 -->
+	<delete id="delete_like" parameterType="food_likeVO">
+		DELETE 
+		FROM food_like 
+		WHERE fNo = #{fNo}
+			and uNo = #{uNo}
+	</delete>
 </mapper>
