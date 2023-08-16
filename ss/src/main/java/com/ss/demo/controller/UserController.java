@@ -1,5 +1,6 @@
 package com.ss.demo.controller;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -396,7 +397,14 @@ public class UserController
 		// 프로젝트 절대경로뒤 웹 접근경로가 합쳐짐 
 		String folderPath = req.getSession().getServletContext().getRealPath(webPath);
 		
-		
+		File foldercre = new File(folderPath);
+		if(foldercre.mkdirs())
+		{
+			System.out.println("폴더 생성 성공 1"+foldercre);
+		}else
+		{
+			System.out.println("폴더 생성 실패1"+foldercre);
+		}
 		System.out.println("folderPath="+folderPath);
  		// 파일 이름 
 		//map에 경로2개 이미지 del 회원번호 담기

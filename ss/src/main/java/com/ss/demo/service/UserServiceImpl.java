@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService{
 		// 수정 쿼리문 
 		System.out.println();
 		
+		
 		int result = usm.profileimg(map);
 		
 		// 수정 성공시 메모리에 임시저장된 파일 서버에 저장 
@@ -123,7 +124,7 @@ public class UserServiceImpl implements UserService{
 				
 				if(!filepath.exists()){
 					
-					if(filepath.mkdir()) {
+					if(filepath.mkdirs()) {
 						System.out.println("폴더 생성 성공"+filepath);
 						System.out.println("폴더 생성 성공"+filepath);
 						
@@ -133,6 +134,7 @@ public class UserServiceImpl implements UserService{
 					}
 				}else{
 					System.out.println("폴더가 이미 존재 ");
+					System.out.println("폴더가 이미 존재 "+filepath);
 				}
 				profileimg.transferTo( new File (map.get("folderPath")+ renameImage) );
 				
