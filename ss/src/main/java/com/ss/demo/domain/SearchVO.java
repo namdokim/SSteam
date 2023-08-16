@@ -1,7 +1,11 @@
 package com.ss.demo.domain;
 
+<<<<<<< HEAD
+public class SearchVO extends Criteria{
+=======
 public class SearchVO {
 	
+>>>>>>> main
 	private String searchType;
 	private String searchValue;
 	private String type;
@@ -24,6 +28,9 @@ public class SearchVO {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	//================================================= 페이징 (맛집) 
+	
 	@Override
 	public String toString() {
 		return "SearchVO [searchType=" + searchType + ", searchValue=" + searchValue + ", type=" + type + "]";

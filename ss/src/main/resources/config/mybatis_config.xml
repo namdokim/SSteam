@@ -7,14 +7,22 @@
 	<!-- 회원 정보 -->
 	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
 	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
+	<typeAlias type="com.ss.demo.domain.Rentalhome_RoomVO" alias="rentalhome_roomVO" />
+	<typeAlias type="com.ss.demo.domain.Rentalhome_LikeVO" alias="rentalhome_likeVO" />
+	<typeAlias type="com.ss.demo.domain.Criteria" alias="cri" />
 	<!-- 게시글 -->
 	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
 	
 	<!-- food -->
 	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
 	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
+<<<<<<< HEAD
+	<typeAlias alias="foodreviewVO" type="com.ss.demo.domain.FoodReviewVO"/>
+<!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
+=======
 <!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
 
+>>>>>>> main
 </typeAliases>
 <!-- 
 <mappers>

@@ -6,20 +6,36 @@
 <mapper namespace="com.ss.demo.mapper.foodMapper">
 	<!-- 파라미터 객체의 필드값을 쿼리에 대입할때는 $기호 말고 #기호를 반드시 써야 합니다. -->
 
-	 <select id="selectAll" resultType="foodVO">
+<!-- 페이징 ============================================================== -->
+	
+	<!-- selectAll(첨부파일까지) -->
+	 <select id="selectAll" resultType="foodVO" parameterType="searchVO">
 		SELECT *
-		  FROM food 
-	  	 WHERE 1=1
+		  FROM food LEFT OUTER JOIN (select * from food_attach where thumbnail = 'Y') D 
+		  ON food.fNo = D.fNo
+	  	  WHERE food.status = 'Y' 
+	  	  
+		<!-- 글 검색 -->
 		<if test='searchType != null and searchType.equals("food_name")'>
-		   AND title like concat('%', #{searchValue}, '%')
+		   AND food_name like concat('%', #{searchValue}, '%')
+		</if>
+		<if test='searchType != null and searchType.equals("food_address")'>
+		   AND food_address like concat('%', #{searchValue}, '%')
 		</if>
 		
+		<!-- 지역 검색 -->
 		<if test='type != null and !type.equals("TT")'>
 			AND LType = #{type}
 		</if>
+			order by food.fNo desc
+			LIMIT #{sNum},#{perPageNum}
 	</select> 
+	<select id="select_food_count" resultType="int">
+		SELECT COUNT(*) FROM food WHERE status = 'Y'
+	</select>
 
 
+	<!-- selectAll Menu  -->
 	 <select id="selectAllMenu" resultType="foodVO">
 		SELECT *
 		  FROM food_menu
@@ -27,19 +43,18 @@
 	</select> 
 	
 		
-		<!--  WHERE 1=1
-		<if test='searchType != null and searchType.equals("food_name")'>
-		   AND title like concat('%', #{searchValue}, '%')
-		</if>
-		<if test='searchType != null and searchType.equals("food_address")'>
-		   AND id like concat('%', #{searchValue}, '%')
-		</if> -->
+		
+<!-- ================================= 글쓰기 crud ========================================= -->	
 	
-	<!-- @글 등록@  -->
+	<!-- 글 쓰기  -->
 	<insert id="insert" parameterType="foodVO">
+	<selectKey resultType="int" keyProperty="fNo" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
 		INSERT INTO
 		food(
-			food_name
+			uNo
+			,food_name
 			,food_address
 			,food_phone
 			,food_food_kind
@@ -51,7 +66,8 @@
 			,food_content
 			,LType
 		)VALUES(
-			#{food_name}
+			#{uNo}
+			,#{food_name}
 			,#{food_address}
 			,#{food_phone}
 			,#{food_food_kind}
@@ -63,23 +79,65 @@
 			,#{food_content}
 			,#{LType}
 		)
-		<selectKey order="AFTER" keyProperty="fNo" resultType="int">
-			SELECT MAX(fNo)
-		  	   FROM food
-		</selectKey>
 	</insert>
 	
+<<<<<<< HEAD
+	<!-- 글 수정  (사진 수정에 대해서 추가 수정할 것)-->
+	<update id="update" parameterType="foodVO">
+		UPDATE food
+		   SET food_name = #{food_name} <!-- boardVO.getTitle() -->
+		     , food_address = #{food_address}
+		     , food_phone = #{food_phone}
+		     , food_food_kind = #{food_food_kind}
+		     , food_avg_price = #{food_avg_price}
+		     , food_write_date = #{food_write_date}
+		     , food_working_hours = #{food_working_hours}
+		     , food_holiday = #{food_holiday}
+		     , food_website = #{food_website}
+		     , food_content = #{food_content}
+		     , LType = #{LType}
+		 WHERE fNo = #{fNo}
+	</update>
+	
+	<!-- 글 삭제1  -->
+<!-- 	<delete id="delete" parameterType="int">
+		DELETE
+=======
 	
 	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
 		SELECT *
+>>>>>>> main
 		  FROM food
+		 WHERE fNo = #{fNo}
+	</delete>	 -->
+	
+	<!-- 글 삭제2 (업데이트로 수정)  -->
+	<update id="delete" parameterType="int">
+		UPDATE food SET status = 'N' WHERE fNo = #{fNo}
+	</update>
+	
+	
+	
+<!-- =================================================================== -->
+	<!-- 선택 -->
+	<select id="selectOneByFno" resultType="foodVO" parameterType="int" >
+		SELECT * 
+		  FROM food
+		 WHERE fno = #{fno}
+	</select>
+	
+	<!-- =================================================================== -->
+	<!-- 선택(View페이지)  -->
+	<select id="selectListByFno" resultType="foodVO" parameterType="int" >
+		SELECT *
+		  FROM food_attach
 		 WHERE fno = #{fno}
 	</select>
 	
 	
 	
-	<!-- @메뉴 등록@ -->
-	<!-- =================================================================== -->
+<!-- =================================================================== -->
+	<!-- 메뉴 등록 -->
 	
 	<insert id="insertMenu" parameterType="foodVO">
 		INSERT INTO
@@ -97,17 +155,27 @@
 		  	   FROM food_menu
 		</selectKey> 
 	</insert>
-	
-	<!-- <select id="selectOneByFood_menu_number" resultType="foodVO" parameterType="int" >
-		SELECT *
-		  FROM food_menu
-		 WHERE food_menu_number = #{food_menu_number}
-	</select>  -->
-	
-	<!-- =================================================================== -->
+		
 	
 	
 	
+<<<<<<< HEAD
+<!-- =================================================================== -->
+	<!-- 첨부파일 사진 등록  -->
+	<insert id="insert_file_attach" parameterType="foodVO">
+		INSERT INTO food_attach(
+			fNo,
+			food_attach_logical_name,
+			food_attach_physical_name,
+			thumbnail
+		) VALUES (
+			#{fNo},
+			#{food_attach_logical_name},
+			#{food_attach_physical_name},
+			#{thumbnail}
+		)
+	</insert>
+=======
 	
 	
 <!-- @사진 등록@  --> 
@@ -127,5 +195,72 @@
 <!-- 		  	   FROM food -->
 <!-- 		</selectKey> -->
 <!-- 	</insert> -->
+>>>>>>> main
 	
+	<!-- 첨부파일 수정  -->
+	<update id="init_attach_thumbnail" parameterType="int">
+		UPDATE food_attach SET
+			thumbnail = 'N'
+		WHERE fNo = #{fNo}
+	</update>
+	
+	<update id="attach_thumbnail" parameterType="int">
+		UPDATE food_attach SET
+			thumbnail = 'Y'
+		WHERE food_attach_number = #{food_attach_number}
+	</update>
+	
+	<delete id="delete_attach" parameterType="int">
+		DELETE FROM food_attach WHERE food_attach_number = #{food_attach_number}
+	</delete>
+	
+	<select id="selectAll_food_attach" parameterType="int" resultType="foodVO">
+		SELECT * FROM food_attach WHERE fNo = #{fNo}
+	</select>
+	
+<!-- =================================================================== 리뷰 -->
+<insert id="insert_foodreview" parameterType="foodreviewVO">
+	<selectKey resultType="int" keyProperty="food_review_number" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>	
+	INSERT INTO food_review(
+		fNo
+		,uNo
+		,food_review_content
+	) VALUES (
+		#{fNo},
+		#{uNo},
+		#{food_review_content}
+	)
+</insert>
+<!-- F5 했을 때 댓글보임  -->
+<select id="selectAll_foodreview" resultType="foodreviewVO" >
+	SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo,(select uNick from User WHERE uNo = food_review.uNo) as uNick
+		FROM food_review
+		order by food_review_number desc
+</select> 
+	
+<!-- 리뷸 글 하나 선택 -->
+<select id="selectOneByFRno" resultType="foodreviewVO" parameterType="int" >
+	SELECT * ,(select uNick from User WHERE uNo = food_review.uNo) as uNick
+	FROM food_review
+	 WHERE food_review_number = #{food_review_number}
+</select>
+
+<!-- foodreview 삭제 -->
+<delete id="delete_foodreview" parameterType="int">
+	DELETE
+		FROM food_review
+		WHERE food_review_number = #{food_review_number}
+	</delete>
+
+<!-- foodreview 수정 -->
+<update id="modify_foodreview" parameterType="foodreviewVO">
+	UPDATE food_review
+		SET food_review_content = #{food_review_content}
+		WHERE food_review_number = #{food_review_number}
+	</update>
+
+
+
 </mapper>
