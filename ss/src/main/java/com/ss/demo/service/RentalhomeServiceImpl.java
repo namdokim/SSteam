@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ss.demo.dao.RentalhomeDAO;
-import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_PayVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
+import com.ss.demo.domain.Rentalhome_SearchVO;
 
 @Service
 public class RentalhomeServiceImpl implements RentalhomeService{
@@ -24,9 +25,8 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	}
 
 	@Override
-	public List<RentalhomeVO> selectAll(Criteria cri) {
-//		cri.setsNum((cri.getPage()-1)*cri.getPerPageNum());
-		return rentalhomeDAO.selectAll(cri);
+	public List<RentalhomeVO> selectAll(Rentalhome_SearchVO searchVO) {
+		return rentalhomeDAO.selectAll(searchVO);
 	}
 
 	@Override
@@ -176,6 +176,30 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 	public List<Rentalhome_RoomVO> selectAll_room_attach_ByIdx(int room_idx) {
 		
 		return rentalhomeDAO.selectAll_room_attach_ByIdx(room_idx);
+	}
+
+	@Override
+	public int insert_pay(Rentalhome_PayVO rentalhome_payVO) {
+			
+		return rentalhomeDAO.insert_pay(rentalhome_payVO);
+	}
+
+	@Override
+	public Rentalhome_PayVO selectOneByReserve_number(String reserve_number) {
+		
+		return rentalhomeDAO.selectOneByReserve_number(reserve_number);
+	}
+
+	@Override
+	public List<Rentalhome_PayVO> selectAll_reserve(int uNo) {
+		
+		return rentalhomeDAO.selectAll_reserve(uNo);
+	}
+
+	@Override
+	public int update_pay_refund(Rentalhome_PayVO rentalhome_payVO) {
+		
+		return rentalhomeDAO.update_pay_refund(rentalhome_payVO);
 	}
 	
 }

@@ -34,6 +34,25 @@ window.onload = function(){
 			}
 		}).open();
 	});
+	
+	// 주어진 문자열에서 요일 배열 만들기
+	const day = '${rentalhomeVO.breakfast_day}'.split(",");
+	console.log("111");
+	// 각 체크박스의 요일 값과 배열에 포함된 요일 비교하여 checked 속성 부여
+	const breakfast_day = document.getElementsByName("breakfast_day");
+	console.log("221");
+	for(var i=0; i <breakfast_day.length; i++){
+	console.log("331");
+		for(var j=0; j<day.length; j++){
+	console.log("332");
+	console.log(day[j]);
+			if(day[j] == breakfast_day[i].value){
+				console.log(breakfast_day[i].value);
+				breakfast_day[i].checked = true;
+			} 
+		}
+	}
+	
 }
 function thumbnail(index){
 	var attach_idx = document.getElementsByName("attach_idx")[index].value;

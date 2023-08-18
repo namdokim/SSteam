@@ -1,4 +1,3 @@
-
 package com.ss.demo.domain;
 
 public class Rentalhome_RoomVO {
@@ -14,6 +13,11 @@ public class Rentalhome_RoomVO {
 	private String smoking;			// 객실 내 흡연 가능 여부
 	private String wifi;			// 객실 내 와이파이 설치 여부
 	private String bed_info;		// 침대정보
+	private String discount_reason;
+	private String discount_type;
+	private int discount_money;
+	
+	
 	
 	private int uNo;			// 유저 번호
 	private String contents;	// 내용
@@ -30,6 +34,26 @@ public class Rentalhome_RoomVO {
 	
 
 	
+	
+	
+	public String getDiscount_reason() {
+		return discount_reason;
+	}
+	public void setDiscount_reason(String discount_reason) {
+		this.discount_reason = discount_reason;
+	}
+	public String getDiscount_type() {
+		return discount_type;
+	}
+	public void setDiscount_type(String discount_type) {
+		this.discount_type = discount_type;
+	}
+	public int getDiscount_money() {
+		return discount_money;
+	}
+	public void setDiscount_money(int discount_money) {
+		this.discount_money = discount_money;
+	}
 	public int getAttach_idx() {
 		return attach_idx;
 	}
@@ -152,4 +176,3 @@ public class Rentalhome_RoomVO {
 	}
 	
 }
-

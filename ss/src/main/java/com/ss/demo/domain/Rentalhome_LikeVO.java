@@ -1,4 +1,3 @@
-
 package com.ss.demo.domain;
 
 public class Rentalhome_LikeVO {

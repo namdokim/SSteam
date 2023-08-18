@@ -3,10 +3,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
 <%
-	if(session.getAttribute("login") != null)
-	{
-		System.out.println("로그인 됨");
-	}
 	PageMaker pageMaker = (PageMaker)request.getAttribute("pageMaker");
 %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -30,6 +26,97 @@
 	$(function () {
 	  $('.datepicker').datepicker();
 	});
+window.onload = function(){
+// 	// 오늘 날짜를 가져오기
+// 	var today = new Date();
+// 	var start_date = new Date(today);
+// 	start_date.setDate(start_date.getDate()+1);
+// 	var end_date = new Date(today);
+// 	end_date.setDate(end_date.getDate()+2);
+	
+// 	// to.ISOString() : YYYY-MM-DDTHH:mm:ss.sssZ 형식으로 설정
+// 	document.getElementById("start_date").value = start_date.toISOString().split('T')[0];
+// 	document.getElementById("end_date").value = end_date.toISOString().split('T')[0];
+// 	document.getElementById("person").value = '2'
+	
+	const inputLeft = document.getElementById("input-left");
+	const inputRight = document.getElementById("input-right");
+
+	const thumbLeft = document.querySelector(".slider > .thumb.left");
+	const thumbRight = document.querySelector(".slider > .thumb.right");
+	const range = document.querySelector(".slider > .range");
+
+	const minPriceInput = document.getElementById("min-price");
+	const maxPriceInput = document.getElementById("max-price");
+
+	const setLeftValue = () => {
+	  const _this = inputLeft;
+	  const [min, max] = [parseInt(_this.min), parseInt(_this.max)];
+	  // 교차되지 않게, 1을 빼준 건 완전히 겹치기보다는 어느 정도 간격을 남겨두기 위해.
+	  _this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
+	  // input, thumb 같이 움직이도록
+	  const percent = ((_this.value - min) / (max - min)) * 100;
+	  thumbLeft.style.left = percent + "%";
+	  range.style.left = percent + "%";
+	  document.getElementById("min-price").value = inputLeft.value*10000;
+	};
+
+	const setRightValue = () => {
+	  const _this = inputRight;
+	  const [min, max] = [parseInt(_this.min), parseInt(_this.max)];
+	  // 교차되지 않게, 1을 더해준 건 완전히 겹치기보다는 어느 정도 간격을 남겨두기 위해.
+	  _this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
+	  // input, thumb 같이 움직이도록
+	  const percent = ((_this.value - min) / (max - min)) * 100;
+	  thumbRight.style.right = 100 - percent + "%";
+	  range.style.right = 100 - percent + "%";
+	  document.getElementById("max-price").value = inputRight.value*10000;
+	};
+
+	const setLeft = () => {
+	  const _this = minPriceInput;
+	  const percent = parseInt(_this.value/10000);
+	  thumbLeft.style.left = percent + "%";
+	  range.style.left = percent + "%";
+	  inputLeft.value = percent;
+	};
+
+	const setRight = () => {
+	  const _this = maxPriceInput;
+	  const percent = parseInt(_this.value/10000);
+	  thumbRight.style.right = 100 - percent + "%";
+	  range.style.right = 100 - percent + "%";
+	  inputRight.value = percent;
+	  
+	};
+
+	inputLeft.addEventListener("input", setLeftValue);
+	inputRight.addEventListener("input", setRightValue);
+
+	minPriceInput.addEventListener("blur", function() {
+	    if ( parseInt(maxPriceInput.value) <= parseInt(this.value) ) {
+	      alert("최소 가격은 최대 가격보다 작아야합니다.");
+	      this.value = parseInt(maxPriceInput.value) - 10000;
+	    }
+	    setLeft();
+	  });
+	maxPriceInput.addEventListener("blur", function() {
+	    if ( parseInt(this.value) <= parseInt(minPriceInput.value) ) {
+	      alert("최대 가격은 최소 가격보다 커야합니다.");
+	      this.value = parseInt(minPriceInput.value) + 10000;
+	    }
+	    setRight();
+	  });
+	};
+	function search(){
+		const location_ = document.getElementById("location").value;
+		const start_date = document.getElementById("start_date").value;
+		const end_date = document.getElementById("end_date").value;
+		const person = document.getElementById("person").value;
+		
+		location.href = "rentalhomeMain.do?location="+location_+"&start_date="+start_date+"&end_date="+end_date+"&person="+person;
+		
+	}
 </script>
 <style type="text/css">
 
@@ -96,8 +183,8 @@
 .slider > .range {
   position: absolute;
   z-index: 2;
-  left: 25%;
-  right: 25%;
+  left: 0%;
+  right: 0%;
   top: 0;
   bottom: 0;
   border-radius: 5px;
@@ -113,11 +200,11 @@
   top:50%;
 }
 .slider > .thumb.left {
-  left: 25%;
+  left: 0%;
   transform: translate(-15px, -10px);
 }
 .slider > .thumb.right {
-  right: 25%;
+  right: 0%;
   transform: translate(15px, -10px);
 }
 
@@ -172,114 +259,42 @@ input[type="range"]::-webkit-slider-thumb {
 	height:15px;
 }
 </style>
-<script>
-window.onload = function(){
-	
-const inputLeft = document.getElementById("input-left");
-const inputRight = document.getElementById("input-right");
 
-const thumbLeft = document.querySelector(".slider > .thumb.left");
-const thumbRight = document.querySelector(".slider > .thumb.right");
-const range = document.querySelector(".slider > .range");
-
-const minPriceInput = document.getElementById("min-price");
-const maxPriceInput = document.getElementById("max-price");
-
-const setLeftValue = () => {
-  const _this = inputLeft;
-  const [min, max] = [parseInt(_this.min), parseInt(_this.max)];
-  // 교차되지 않게, 1을 빼준 건 완전히 겹치기보다는 어느 정도 간격을 남겨두기 위해.
-  _this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
-  // input, thumb 같이 움직이도록
-  const percent = ((_this.value - min) / (max - min)) * 100;
-  thumbLeft.style.left = percent + "%";
-  range.style.left = percent + "%";
-  document.getElementById("min-price").value = inputLeft.value*10000;
-};
-
-const setRightValue = () => {
-  const _this = inputRight;
-  const [min, max] = [parseInt(_this.min), parseInt(_this.max)];
-  // 교차되지 않게, 1을 더해준 건 완전히 겹치기보다는 어느 정도 간격을 남겨두기 위해.
-  _this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
-  // input, thumb 같이 움직이도록
-  const percent = ((_this.value - min) / (max - min)) * 100;
-  thumbRight.style.right = 100 - percent + "%";
-  range.style.right = 100 - percent + "%";
-  document.getElementById("max-price").value = inputRight.value*10000;
-};
-
-const setLeft = () => {
-  const _this = minPriceInput;
-  const percent = parseInt(_this.value/10000);
-  thumbLeft.style.left = percent + "%";
-  range.style.left = percent + "%";
-  inputLeft.value = percent;
-};
-
-const setRight = () => {
-  const _this = maxPriceInput;
-  const percent = parseInt(_this.value/10000);
-  thumbRight.style.right = 100 - percent + "%";
-  range.style.right = 100 - percent + "%";
-  inputRight.value = percent;
-  
-};
-
-inputLeft.addEventListener("input", setLeftValue);
-inputRight.addEventListener("input", setRightValue);
-
-minPriceInput.addEventListener("blur", function() {
-    if ( parseInt(maxPriceInput.value) <= parseInt(this.value) ) {
-      alert("최소 가격은 최대 가격보다 작아야합니다.");
-      this.value = parseInt(maxPriceInput.value) - 10000;
-    }
-    setLeft();
-  });
-maxPriceInput.addEventListener("blur", function() {
-    if ( parseInt(this.value) <= parseInt(minPriceInput.value) ) {
-      alert("최대 가격은 최소 가격보다 커야합니다.");
-      this.value = parseInt(minPriceInput.value) + 10000;
-    }
-    setRight();
-  });
-};
-</script>
 <div style="width:1920px; text-align:center; background-color:#dfecfb; padding-bottom:50px;">
 	<div style="position:sticky; top:0px; background-color:#0863ec; z-index:100; border-radius:0px 0px 50px 50px; width:100%; margin:0 auto; padding:10px;  line-height:50px; ">
 		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
-			<input type="text" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+			<input type="text" value="${searchVO.location}" id="location" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
 		</div>
 		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
-				<div class="row justify-content-center">
-					<div class="col-md-5">
-						<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
-						<input type="text" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+			<div class="row justify-content-center">
+				<div class="col-md-5">
+					<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
+					<input readonly type="text" value="${searchVO.start_date}" id="start_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
 				</div>
 				<div class="col-md-5">
-						<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:140px;">체크아웃</span><br>
-						<input type="text"  class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; outline:none;">
-					</div>
+					<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:140px;">체크아웃</span><br>
+					<input readonly type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; outline:none;">
 				</div>
+			</div>
 		</div>
 		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br>
-			<select class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
+			<select class="search" id="person" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
 				<option selected ></option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
+				<option value="1" <c:if test="${searchVO.person eq '1'}">selected</c:if>>1</option>
+				<option value="2" <c:if test="${searchVO.person eq '2'}">selected</c:if>>2</option>
+				<option value="3" <c:if test="${searchVO.person eq '3'}">selected</c:if>>3</option>
+				<option value="4" <c:if test="${searchVO.person eq '4'}">selected</c:if>>4</option>
+				<option value="5" <c:if test="${searchVO.person eq '5'}">selected</c:if>>5</option>
+				<option value="6" <c:if test="${searchVO.person eq '6'}">selected</c:if>>6</option>
+				<option value="7" <c:if test="${searchVO.person eq '7'}">selected</c:if>>7</option>
+				<option value="8" <c:if test="${searchVO.person eq '8'}">selected</c:if>>8</option>
+				<option value="9" <c:if test="${searchVO.person eq '9'}">selected</c:if>>9</option>
+				<option value="10" <c:if test="${searchVO.person eq '10'}">selected</c:if>>10</option>
 			</select>
 		</div>
-		<div style="background-color:#0863ec; width:80px; height:50px; display:inline-block; border-radius:5px; text-align:center; position:relative;" >
+		<div onclick="search()" style="cursor:pointer;background-color:#0863ec; width:80px; height:50px; display:inline-block; border-radius:5px; text-align:center; position:relative;" >
 			<span style="font-weight:bold;color:white; font-size:15pt;">검색</span><br>
 		</div>
 	</div>
@@ -306,8 +321,8 @@ maxPriceInput.addEventListener("blur", function() {
 		<div style="text-align:left;font-size:12pt; font-weight:bold;">가격</div>
 			<div class="middle" style="margin:20px 0px;">
 				<div class="multi-range-slider">
-					<input type="range" id="input-left" min="0" max="100" value="25" />
-					<input type="range" id="input-right" min="0" max="100" value="75" />
+					<input type="range" id="input-left" min="0" max="100" value="0" />
+					<input type="range" id="input-right" min="0" max="100" value="100" />
 					<div class="slider">
 						<div class="track"></div>
 						<div class="range"></div>
@@ -317,9 +332,9 @@ maxPriceInput.addEventListener("blur", function() {
 				</div>
 			</div>
 			<div style="width:100%; margin-top:10px;">
-				<input id="min-price" type="text" value="250000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
+				<input id="min-price" type="text" value="0" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 				<div style="display:inline-block;">-</div>
-				<input id="max-price" type="text" value="750000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
+				<input id="max-price" type="text" value="1000000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 			</div>
 			<div style="width:100%; margin:30px 0px; border-top:1px solid #f2f2f2;"></div>
 			<div style="width:100%;">
@@ -369,11 +384,11 @@ maxPriceInput.addEventListener("blur", function() {
 				<div class="view" style="width:100%; height:200px; display:inline-block; margin:10px 0px;vertical-align:top; position:relative;">
 					<c:choose>
 						<c:when test="${empty list.logical_name}">
-							<div class="hotel" style="cursor:pointer;width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+							<div class="hotel" style="cursor:pointer;width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location}&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}'">
 							</div>
 						</c:when>
 						<c:otherwise>
-							<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+							<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor:pointer; width:200px; height:180px; border-radius:10px; display:inline-block; position:absolute; top:10px; left:10px;" onclick="location.href ='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location}&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}'">
 						</c:otherwise>
 					</c:choose>
 					<div style="width:550px; height:180px; display:inline-block; position:absolute; top:10px; left:220px; text-align:left;">
@@ -404,29 +419,24 @@ maxPriceInput.addEventListener("blur", function() {
 				</div>
 			</c:forEach>
 		</div>
-			<%
-				//}
+		<div style="width:100%; text-align:right; margin:20px 0px;">
+			<span onclick="location.href='rentalhomeReserveList.do'" style="padding:12px 20px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">MY 예약 리스트</span>
+			<span onclick="location.href='rentalhomeWrite.do'" style="padding:12px 20px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
+		</div>
+		<div style="width:100%; text-align:right; margin:20px 0px;">
+			<% if (pageMaker.isPrev()){ %>
+			<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getStartPage()-1%>"><span style="padding:0px 10px;">◀</span></a>
+			<%}
+			for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
 			%>
-			<div style="width:100%; text-align:right; margin:20px 0px;">
-				<span onclick="location.href='rentalhomeWrite.do'" style="padding:12px 20px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 등록</span>
-			</div>
-			<div style="width:100%; text-align:right; margin:20px 0px;">
-				<% if (pageMaker.isPrev()){ %>
-				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getStartPage()-1%>"><span style="padding:0px 10px;">◀</span></a>
-				<%} %>
-				<% 
-				for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
-				%>
-				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
-					<span style="padding:0px 10px;"><%=i %></span>
-				</a>
-				<%	
-				}
-				%>
-				<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %>
-				<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>"><span style="padding:0px 10px;"></span>▶</a>
-				<% } %>
-			</div>
+			<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
+				<span style="padding:0px 10px;"><%=i %></span>
+			</a>
+			<%	
+			}
+			if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %>
+			<a href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>"><span style="padding:0px 10px;"></span>▶</a>
+			<% } %>
 		</div>
 	</div>
 </div>

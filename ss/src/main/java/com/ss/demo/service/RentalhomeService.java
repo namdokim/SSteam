@@ -2,16 +2,17 @@ package com.ss.demo.service;
 
 import java.util.List;
 
-import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_PayVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
+import com.ss.demo.domain.Rentalhome_SearchVO;
 
 public interface RentalhomeService {
 	
 	public int insert(RentalhomeVO rentalhomeVO);
 
-	public List<RentalhomeVO> selectAll(Criteria cri);
+	public List<RentalhomeVO> selectAll(Rentalhome_SearchVO searchVO);
 
 	public List<RentalhomeVO> selectAll_rentalhome_attach(int rentalhome_idx);
 
@@ -62,4 +63,12 @@ public interface RentalhomeService {
 	public int dupl_like(Rentalhome_LikeVO likeVO);
 
 	public int delete_like(Rentalhome_LikeVO likeVO);
+
+	public int insert_pay(Rentalhome_PayVO rentalhome_payVO);
+
+	public Rentalhome_PayVO selectOneByReserve_number(String reserver_number);
+
+	public List<Rentalhome_PayVO> selectAll_reserve(int uNo);
+
+	public int update_pay_refund(Rentalhome_PayVO rentalhome_payVO);
 }

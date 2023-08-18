@@ -111,6 +111,23 @@
 					</div>
 				</div>
 			</div>
+			<div style="margin:10px 0px;">
+				<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;  vertical-align:top;">
+					<span style="font-weight:bold;">할인</span>
+				</div>
+				<div style="display:inline-block; width:800px; text-align:left;">
+					<div style="margin-bottom:20px;">
+						<span style="font-size:11pt;font-weight:bold; margin-right:20px;">이유</span><input type="text" name="discount_reason" style="height:30px; width:600px;padding:0px 5px;border:0px; border-bottom:1px solid gray;"><br>
+						<span style="font-size:11pt;font-weight:bold; margin-right:20px;">할인 종류</span><br>
+						<select name="discount_type" style="border:0px; font-size:11pt; font-weight:bold; margin-right:20px; width:100px; height:30px; text-align:left;">
+							<option value="default">할인 없음</option>
+							<option value="rate">비율 할인</option>
+							<option value="fix">고정 할인</option>
+						</select>
+						<input type="number" name="discount_money" name="discount_money" value="0" style="height:30px; width:200px;padding:0px 5px; border:0px; border-bottom:1px solid gray;">
+					</div>
+				</div>
+			</div>
 			<div style="margin:30px 0px; text-align:right; width:1110px;">
 					<button style="width:100px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">객실 등록</button>
 			</div>
