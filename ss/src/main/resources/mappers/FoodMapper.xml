@@ -104,6 +104,7 @@
 		FROM (SELECT * FROM food LEFT OUTER JOIN (select food_attach_number,fNo as fNo2 ,food_attach_logical_name,food_attach_physical_name,thumbnail from food_attach where thumbnail = 'Y') D 
 		ON food.fNo = D.fNo2
 	  	WHERE food.status = 'Y' ) a
+	  	WHERE 1=1
 
 		<!-- 글 검색 -->
 		<!-- 식당이름 -->
@@ -160,10 +161,10 @@
 	</select>
 	
 	<!-- 모든 식당 리뷰 정보를 조회하는 쿼리 -->
-	<select id="selectAll_foodreview" resultType="foodreviewVO" >
+	<select id="selectAll_foodreview" resultType="foodreviewVO" parameterType="int">
 		SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo,(select uNick from User WHERE uNo = food_review.uNo) as uNick
 		FROM food_review
-		WHERE fNo, = #{fNo}
+		WHERE fNo = #{fNo}
 		order by food_review_number desc
 	</select> 
 	

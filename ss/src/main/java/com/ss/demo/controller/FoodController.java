@@ -46,7 +46,6 @@ public class FoodController
 	// ======================================================================================== [1] 맛집 메인 페이지 
 	
 	
-	
 	// [1] 메인 페이지 -> 맛집 List, 페이징
 	@RequestMapping(value="/foodMain.do")
 	public String foodMain(Model model ,SearchVO searchVO, HttpServletRequest request)
@@ -262,7 +261,7 @@ public class FoodController
 		List<FoodVO> listAttach = foodService.selectListByFno(fNo);
 		model.addAttribute("listAttach", listAttach);
 
-		List<FoodReviewVO> listReview = foodService.list();
+		List<FoodReviewVO> listReview = foodService.list(fNo);
 		model.addAttribute("listReview", listReview);
 		
 //		int like_count = foodService.select_like(fNo);
@@ -293,11 +292,33 @@ public class FoodController
 	
 	// [2] 뷰 페이지 -> [POST] 메뉴 등록
 	@RequestMapping(value="/foodMenuWrite.do",method=RequestMethod.POST)
-	public String foodMenuWrite(FoodVO foodVO,HttpServletRequest req) 
+	public String foodMenuWrite(FoodVO foodVO) 
 	{
-		HttpSession session = req.getSession();
-		int result = foodService.insertMenu(foodVO);
 		System.out.println(foodVO.toString());
+		
+		foodVO.getFood_menu_name();
+		foodVO.getFood_menu_price();
+		System.out.println(foodVO.getFood_menu_name());
+		System.out.println(foodVO.getFood_menu_price());
+		
+		String[] nameSplit = foodVO.getFood_menu_name().split(",");
+		String[] priceSplit = foodVO.getFood_menu_price().split(",");
+		for(int i =0; i<nameSplit.length; i++) {
+			System.out.println(nameSplit[i]);
+			System.out.println(priceSplit[i]);
+			
+			foodVO.setFood_menu_name(nameSplit[i]);
+			foodVO.setFood_menu_price(priceSplit[i]);
+		
+			int value = foodService.insertMenu(foodVO);
+		}
+		
+
+		
+//		String str = foodVO.toString();
+//		System.out.println(str);
+//		String[] strSplit = str.split(",");
+		
 		return "redirect:foodView.do?fNo="+foodVO.getfNo();
 	}
 	
@@ -391,4 +412,5 @@ public class FoodController
 		System.out.println(foodreviewVO.toString());
 		int value = foodService.modify_foodreview(foodreviewVO);
 	}
+	
 }
