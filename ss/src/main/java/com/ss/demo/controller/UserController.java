@@ -51,9 +51,10 @@ public class UserController
 	@Autowired
 	BCryptPasswordEncoder rbcryptPasswordEncoder;
 	
-	/*
-	 * @Autowired public kakaologin kakaoS;
-	 */
+	
+	@Autowired 
+	public kakaologin kakaoS;
+	
 	
 
 	
@@ -445,9 +446,9 @@ public class UserController
 		
 	}
 	//
-	/*
+	
 	@RequestMapping(value = "/kakaologin")
-	public String kakaologinform(String code) {
+	public String kakaologinform(String code,UserVO uv, HttpServletRequest req,HttpSession session, Model model) {
 		System.out.println("code="+code);
 		String access_Token = null;
 		try {
@@ -464,9 +465,15 @@ public class UserController
 		HashMap<String, Object> userInfo = ( kakaoS).getUserInfo(access_Token);
 		System.out.println("###nickname#### : " + userInfo.get("nickname"));
 		System.out.println("###email#### : " + userInfo.get("email"));
+		UserVO login = new UserVO();
+		login.setuId((String) userInfo.get("email"));
+		login.setuNick((String) userInfo.get("nickname"));
+		
+		session = req.getSession();
+		session.setAttribute("login", login);
 		return "redirect:/";
 	}
-	*/
+	
 	
 	/*
 	 * @GetMapping("/kakao/login") public String kakaocallback(String code) {
