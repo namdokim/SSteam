@@ -51,8 +51,9 @@ public class UserController
 	@Autowired
 	BCryptPasswordEncoder rbcryptPasswordEncoder;
 	
-	@Autowired
-	public kakaologin kakaoS;
+	/*
+	 * @Autowired public kakaologin kakaoS;
+	 */
 	
 
 	
@@ -444,6 +445,7 @@ public class UserController
 		
 	}
 	//
+	/*
 	@RequestMapping(value = "/kakaologin")
 	public String kakaologinform(String code) {
 		System.out.println("code="+code);
@@ -464,6 +466,7 @@ public class UserController
 		System.out.println("###email#### : " + userInfo.get("email"));
 		return "redirect:/";
 	}
+	*/
 	
 	/*
 	 * @GetMapping("/kakao/login") public String kakaocallback(String code) {
