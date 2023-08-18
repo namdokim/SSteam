@@ -24,7 +24,12 @@
 	  $('.datepicker').datepicker();
 	});
 window.onload = function(){
-	var isLogin = sessionStorage.getItem("login");
+	var price_ = document.getElementsByName("price");
+	for (var i = 0; i < price_.length; i++) {
+		var price = document.getElementsByName("price")[i];
+		console.log(price.innerText);
+		document.getElementsByName("price")[i].innerText = parseInt(price.innerText)+"원";
+	}
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -51,18 +56,17 @@ window.onload = function(){
 	            position: coords
 	        });
 	
-	        // 인포윈도우로 장소에 대한 설명을 표시합니다
+// 	        인포윈도우로 장소에 대한 설명을 표시합니다
 // 	        var infowindow = new kakao.maps.InfoWindow({
 // 	            content: '<div style="width:150px;text-align:center;padding:5px 0;">위치</div>'
 // 	        });
 // 	        infowindow.open(map, marker);
 	
-	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-	        map.setCenter(coords);
-	    } 
-});    
-	
-	if( isLogin == true && ${like_dupl > 0}){
+// 	        지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+// 	        map.setCenter(coords);
+	    }
+	});    
+	if(${like_dupl > 0}){
 		document.getElementById("love_full").style.display="block";
 		document.getElementById("love_empty").style.display="none";
 	}
@@ -128,28 +132,6 @@ window.onload = function(){
 		    document.body.style.overflow = "auto";
 		  }
 		});
-	
-	// 리뷰 작성 모달
-	if( document.getElementById("open-gallery-button-review") != null){
-	 	const openButton_review = document.getElementById("open-gallery-button-review");
-		const modal_review = document.getElementById("gallery-modal-review");
-		const closeButton_review = document.getElementById("close-button-review");
-
-		openButton_review.addEventListener("click", (event) => {
-			modal_review.style.display = "block";
-			document.body.style.overflow = "hidden";
-		});
-		closeButton_review.addEventListener("click", () => {
-		  modal_review.style.display = "none";
-		  document.body.style.overflow = "auto";
-		});
-		window.addEventListener("click", (event) => {
-		  if(event.target == modal_review) {
-			modal_review.style.display = "none";
-		    document.body.style.overflow = "auto";
-		  }
-		});
-	}
 }
 function select_img(index){
 	const room_idx = document.getElementsByName("ajax_room_idx")[index];
@@ -179,35 +161,6 @@ function select_img(index){
 	});
 }
 
-
-function insert_review(){
-	const contents = document.getElementById("contents").value;
-	const service = document.getElementById("service").value;
-	const facility = document.getElementById("facility").value;
-	const clean = document.getElementById("clean").value;
-	const price = document.getElementById("price").value;
-	const stay_date = document.getElementById("stay_date").value;
-	const room_idx = document.getElementById("room_idx").value;
-	$.ajax({
-			url:"insert_review.do",
-			type:"post",
-			data:{
-				  contents: contents,
-		            service: service,
-		            facility: facility,
-		            clean: clean,
-		            price: price,
-		            room_idx: room_idx
-			},
-			success:function(){
-					alert("성공");
-			},
-			error:function(){
-				alert("예외발생");
-			}
-		});
-}
-
 function insert_like(){
 
 	const rentalhome_idx = ${rentalhomeVO.rentalhome_idx};
@@ -222,9 +175,11 @@ function insert_like(){
 			rentalhome_idx: rentalhome_idx
 		},											
 		success: function(data) {
-			insert_.style.display="none";
-			delete_.style.display="block";
-			like_count.innerHTML = data;
+			if(data > 0){
+				insert_.style.display="none";
+				delete_.style.display="block";
+				like_count.innerHTML = data;
+			}
 			
 		},
 		error: function(xhr, status, error) {
@@ -255,7 +210,18 @@ function delete_like(){
 		}
 	});
 }
-
+function search_view(){
+	const location_ = document.getElementById("location").value;
+	const start_date = document.getElementById("start_date").value;
+	const end_date = document.getElementById("end_date").value;
+	const person = document.getElementById("person").value;
+	
+	location.href = "rentalhomeView.do?rentalhome_idx="+${rentalhomeVO.rentalhome_idx}+"&location="+location_+"&start_date="+start_date+"&end_date="+end_date+"&person="+person;
+	
+}
+function need_search(){
+	alert("날짜, 인원수와 함께 검색해주세요");
+}
 </script>
 <style type="text/css">
 	a {
@@ -287,7 +253,7 @@ function delete_like(){
 	.view{
 		border-radius:10px;
 		background-color:white;
-		box-shadow:1px 1px 1px 1px #ddd;
+/* 		box-shadow:1px 1px 1px 1px #ddd; */
 	}
 	.search{
 		border:none;
@@ -383,113 +349,40 @@ function delete_like(){
 		    <div id="insert_img" style="margin:20px; text-align:left;"></div>
 	    </div>
 	</div>	
-	<%--
-	<div class="gallery-modal" id="gallery-modal-review"  style="padding:50px;">
-    	<div class="close-button" id="close-button-review" style="display:inline-block;">&times;</div>
-	    <div class="view modal-center" id="modal-review" style="width:1224px;padding:20px; display:inline-block; vertical-align:middle;">
-		    <div style="text-align:left; margin:20px;">
-			    <span style="font-weight:bold; font-size:15pt;">리뷰 작성</span>
-		    </div>
-			<!-- 로그인 할 경우 표시 -->
-<!-- 		    <input type="hidden" name="room_idx" id="room_idx" value=""> -->
-		    <div style="margin:10px; width:1144px; height:1px; background-color:lightgray;"></div>
-		    <div style="margin:10px; text-align:center; display:inline-block;">
-		    	<div style="text-align:left; width:1000px; margin:10px 30px;">
-		    		<span style="font-weight:bold;">${rentalhomeVO.name}</span>
-		    	</div>
-		    	<div style="text-align:left; width:1000px; margin:10px 30px;">
-		    		<span style="font-weight:bold;">투숙일</span><input type="date" id="stay_date" name="stay_date" style="margin:0px 20px; border-radius:3px;">
-		    	</div>
-		    	<div style="text-align:left; width:1000px; display:inline-block; margin:10px 20px;">
-			    	<textarea name="contents" id="contents" style="width:100%; height:200px; resize:none; padding:20px; border-radius:10px;"placeholder="리뷰 내용을 작성해주세요."></textarea>
-		    	</div>
-		    	<div style="text-align:center; width:1000px; margin:10px; display:inline-block;">
-		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
-			    		<span style="font-weight:bold;">청결</span>
-			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
-			    		<%for(int i = 1; i <= 10; i++){%>
-				    		<label class="review-num">
-    							<input type="radio" id="clean" name="clean" value="<%=i%>">
-    							<span><%=i %></span>
-							</label>
-			    		<%}%>
-			    		</div>
-		    		</div>
-		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
-			    		<span style="font-weight:bold;">시설</span>
-			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
-			    		<%for(int i = 1; i <= 10; i++){%>
-				    		<label class="review-num">
-    							<input type="radio" id="facility" name="facility" value="<%=i%>">
-    							<span><%=i %></span>
-							</label>
-			    		<%}%>
-			    		</div>
-		    		</div>
-		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
-			    		<span style="font-weight:bold;">서비스</span>
-			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
-			    		<%for(int i = 1; i <= 10; i++){%>
-				    		<label class="review-num">
-    							<input type="radio" id="service" name="service" value="<%=i%>">
-    							<span><%=i %></span>
-							</label>
-			    		<%}%>
-			    		</div>
-		    		</div>
-		    		<div style="display:inline-block; width:48%; text-align:left; padding:0px 20px;">
-			    		<span style="font-weight:bold;">가격</span>
-			    		<div style="text-align:center;padding:5px 0px; margin-bottom:10px;">
-			    		<%for(int i = 1; i <= 10; i++){%>
-				    		<label class="review-num">
-    							<input type="radio" id="price" name="price" value="<%=i%>">
-    							<span><%=i %></span>
-							</label>
-			    		<%}%>
-			    		</div>
-			    	</div>
-		    	</div>
-		    	<div style="text-align:right; width:1000px; margin:10px; display:inline-block;">
-		    		<button onclick="insert_review()" style="background-color:#0863ec; color:white; padding:15px 20px; border-radius:10px; border:0px; font-weight:bold;">리뷰 등록</button>
-		    	</div>		    	
-		    </div>
-   	 	</div>
-	</div>	
-	 --%>
 	<div style="position:sticky; top:0px; background-color:#0863ec;z-index:100; border-radius:0px 0px 50px 50px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
-			<input type="text" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+			<input type="text" value="${searchVO.location}" id="location" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
 		</div>
 		<div style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 				<div class="row justify-content-center">
 					<div class="col-md-5">
 						<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
-						<input type="text" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+						<input readonly type="text" value="${searchVO.start_date}" id="start_date"  class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; z-index:120; outline:none;">
 				</div>
 				<div class="col-md-5">
 						<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:140px;">체크아웃</span><br>
-						<input type="text"  class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; outline:none;">
+						<input readonly type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold;font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; z-index:120; outline:none;">
 					</div>
 				</div>
 		</div>
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#777777; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br>
-			<select class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
+			<select id="person" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
 				<option selected ></option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
+				<option value="1" <c:if test="${searchVO.person eq '1'}">selected</c:if>>1</option>
+				<option value="2" <c:if test="${searchVO.person eq '2'}">selected</c:if>>2</option>
+				<option value="3" <c:if test="${searchVO.person eq '3'}">selected</c:if>>3</option>
+				<option value="4" <c:if test="${searchVO.person eq '4'}">selected</c:if>>4</option>
+				<option value="5" <c:if test="${searchVO.person eq '5'}">selected</c:if>>5</option>
+				<option value="6" <c:if test="${searchVO.person eq '6'}">selected</c:if>>6</option>
+				<option value="7" <c:if test="${searchVO.person eq '7'}">selected</c:if>>7</option>
+				<option value="8" <c:if test="${searchVO.person eq '8'}">selected</c:if>>8</option>
+				<option value="9" <c:if test="${searchVO.person eq '9'}">selected</c:if>>9</option>
+				<option value="10" <c:if test="${searchVO.person eq '10'}">selected</c:if>>10</option>
 			</select>
 		</div>
-		<div style="background-color:#0863ec; width:80px; height:50px; display:inline-block; border-radius:5px; text-align:center; cursor:pointer;" >
+		<div onclick="search_view()" style="background-color:#0863ec; width:80px; height:50px; display:inline-block; border-radius:5px; text-align:center; cursor:pointer;" >
 			<span style="font-weight:bold;color:white; font-size:15pt;">검색</span><br>
 		</div>
 	</div>
@@ -612,7 +505,7 @@ function delete_like(){
 					<c:when test="${not empty list.physical_name}">
 						<div onclick="select_img(${status.index})" style="display:inline-block; position:absolute; top:0px; left:20px;">
 						<input type="hidden" name="ajax_room_idx" value="${list.room_idx}">
-							<img src="<%=request.getContextPath()%>/resources/upload/${list.physical_name}" style="cursor:pointer;border-radius:20px; width:240px; height:200px; display:inline-block;">
+							<img src="<%=request.getContextPath()%>/resources/upload/${list.physical_name}" style="cursor:pointer;border-radius:5px; width:240px; height:200px; display:inline-block;">
 						</div>
 					</c:when>
 					<c:otherwise>
@@ -640,17 +533,43 @@ function delete_like(){
 						</div>
 					</c:if>
 					<br>
-					<div style="width:98%; text-align:right; padding-top:20px;">
-						<span style="font-size:20pt; color:#666666; text-decoration:line-through;">${list.weekday_price}원</span>
-						<span style="font-size:25pt; font-weight:bold; ">15,000원</span>
+					<div style="width:100%; text-align:right; margin:20px 0px 10px 0px;">
+						<c:if test="${list.discount_type eq 'fix' }">
+							<span style="background-color:#fe8d48; color:white; font-weight:bold; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}원 할인</span><br>
+								<div style="margin:10px 0px;">
+								<span style="font-size:20pt; color:#666666; text-decoration:line-through;">${list.weekday_price}원</span>
+								<span name="price" style="font-size:25pt; font-weight:bold; ">${list.weekday_price - list.discount_money}</span>
+							</div>
+						</c:if>
+						<c:if test="${list.discount_type eq 'rate' }">
+							<span style="background-color:#fe8d48; color:white; font-weight:bold; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}% 할인</span><br>
+							<div style="margin:10px 0px;">
+								<span style="font-size:20pt; color:#666666; text-decoration:line-through;">${list.weekday_price}원</span>
+								<span name="price" style="font-size:25pt; font-weight:bold; ">${list.weekday_price - (list.discount_money * list.weekday_price / 100)}</span>
+							</div>
+						</c:if>
+						<c:if test="${list.discount_type eq 'default' }">
+							<div style="margin:10px 0px;">
+								<br>
+								<span name="price" style="font-size:25pt; font-weight:bold; ">${list.weekday_price}</span>
+						</div>
+						</c:if>
+						
 					</div>
 				</div>
-				<span onclick="location.href='rentalhomeReserve.do'"style="cursor:pointer; text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:80px; margin:10px; left:1010px; background-color:#0863ec; border-radius:20px; font-size:20pt; color:white; font-weight:bold;">예약</span>
+				<c:choose>
+					<c:when test="${not empty login and not empty searchVO.end_date and not empty searchVO.start_date and not empty searchVO.person}">
+						<span onclick="location.href='rentalhomeReserve.do?room_idx=${list.room_idx}&name=${rentalhomeVO.name }&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}'"style="cursor:pointer; text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:120px; left:1030px; background-color:#0863ec; border-radius:20px; font-size:20pt; color:white; font-weight:bold;">예약</span>				
+					</c:when>
+					<c:otherwise>
+						<span onclick="need_search()" style="cursor:pointer; text-align:center; width:160px; height:80px; padding:20px 20px; position:absolute; top:120px; left:1030px; background-color:#0863ec; border-radius:20px; font-size:20pt; color:white; font-weight:bold;">검색</span>				
+					</c:otherwise>
+				</c:choose>
 				<button onclick="location.href='rentalhomeModify_room.do?room_idx=${list.room_idx}&rentalhome_idx=${list.rentalhome_idx }'" style="width:150px; border:0px; background-color:transparent; text-align:center; height:20px;  position:absolute; top:0px; margin:10px; left:1035px; font-size:12pt; color:gray; text-decoration:underline;">객실 정보 수정</button>
 				<form action="rentalhomeDelete_room.do" method="post">
 					<input type="hidden" name="room_idx" value="${list.room_idx}">
 					<input type="hidden" name="rentalhome_idx" value="${list.rentalhome_idx}">
-					<button style="border:0px; background-color:transparent; text-align:center; width:150px; height:20px;  position:absolute; top:40px; margin:10px; left:1055px; font-size:12pt; color:gray; text-decoration:underline;">객실 삭제</button>
+					<button style="border:0px; background-color:transparent; text-align:center; width:150px; height:20px;  position:absolute; top:0px; margin:10px; left:905px; font-size:12pt; color:gray; text-decoration:underline;">객실 삭제</button>
 				</form>
 			</div>
 			<div style="height:1px; background-color:lightgray;"></div>

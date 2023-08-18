@@ -61,11 +61,14 @@
 			rentalhome_idx = #{rentalhome_idx}
 	</update>
 	
-	<select id="selectAll" resultType="rentalhomeVO" parameterType="cri">
+	<select id="selectAll" resultType="rentalhomeVO" parameterType="rentalhome_searchVO">
 		SELECT * 
 		FROM rentalhome S LEFT OUTER JOIN (select * from rentalhome_attach where thumbnail = 'Y') D
 		ON S.rentalhome_idx = D.rentalhome_idx
 		WHERE s.status = 'Y' 
+		<if test="location != null and location != ''">
+			AND s.name like concat('%', #{location}, '%')
+		</if>
 		ORDER BY s.rentalhome_idx desc
 		LIMIT #{sNum},#{perPageNum}
 	</select>
@@ -85,7 +88,7 @@
 	</select>
 
 	<select id="selectOneByIdx_room" resultType="rentalhome_roomVO" parameterType="int">
-		SELECT* FROM rentalhome_room WHERE room_idx = #{room_idx}
+		SELECT* , (select physical_name from rentalhome_room_attach where thumbnail = 'Y' and room_idx = #{room_idx}) physical_name FROM rentalhome_room WHERE room_idx = #{room_idx}
 	</select>
 	
 	<select id="selectAll_rentalhome_attach" parameterType="int" resultType="rentalhomeVO">
@@ -118,10 +121,10 @@
 		</selectKey>
 		INSERT INTO rentalhome_room(
 			rentalhome_idx, name, min_person, max_person, weekday_price, weekend_price,
-			smoking, wifi, bed_info
+			smoking, wifi, bed_info, discount_reason, discount_type, discount_money
 		) VALUES (
 			#{rentalhome_idx}, #{name}, #{min_person}, #{max_person}, #{weekday_price}, #{weekend_price},
-			#{smoking}, #{wifi}, #{bed_info}
+			#{smoking}, #{wifi}, #{bed_info}, #{discount_reason}, #{discount_type}, #{discount_money}
 		)
 	</insert>
 	
@@ -130,10 +133,14 @@
 			name = #{name},
 			min_person = #{min_person},
 			max_person = #{max_person},
-			weekday_price = #{weekend_price},
+			weekday_price = #{weekday_price},
+			weekend_price = #{weekend_price},
 			smoking = #{smoking},
 			wifi = #{wifi},
-			bed_info = #{bed_info}
+			bed_info = #{bed_info},
+			discount_reason = #{discount_reason},
+			discount_type = #{discount_type},
+			discount_money = #{discount_money}
 		WHERE room_idx = #{room_idx}
 	</update>
 	
@@ -208,4 +215,24 @@
 	<delete id="room_attach_delete" parameterType="int">
 		DELETE FROM rentalhome_room_attach WHERE attach_idx = #{attach_idx}
 	</delete>
+	
+	<insert id="insert_pay" parameterType="rentalhome_payVO">
+		INSERT INTO rentalhome_pay(
+			pay_idx, room_idx, kind, bank, price, pay_status, uNo, guest_name, guest_tel, guest_email,request, reserve_number, start_date, end_date, product, product_name, point, discount
+		)VALUES(
+			#{pay_idx}, #{room_idx}, #{kind}, #{bank}, #{price}, #{pay_status}, #{uno}, #{guest_name}, #{guest_tel}, #{guest_email}, #{request}, #{reserve_number}, #{start_date}, #{end_date},#{product}, #{product_name},#{point}, #{discount}
+		)
+	</insert>
+	
+	<select id="selectOneByReserve_number" parameterType="String" resultType="rentalhome_payVO">
+		SELECT * FROM rentalhome_pay WHERE reserve_number = #{reserve_number}
+	</select>
+
+	<select id="selectAll_reserve" resultType="rentalhome_payVO" parameterType="int">
+		SELECT * FROM rentalhome_pay WHERE uNo = #{uNo} ORDER BY pay_date DESC
+	</select>
+	
+	<update id="update_pay_refund" parameterType="rentalhome_payVO">
+		UPDATE rentalhome_pay SET refund_date = #{refund_date}, pay_status = #{pay_status} WHERE pay_idx = #{pay_idx}
+	</update>
 </mapper>

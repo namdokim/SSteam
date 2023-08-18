@@ -6,10 +6,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_PayVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
+import com.ss.demo.domain.Rentalhome_SearchVO;
 
 @Repository
 public class RentalhomeDAO {
@@ -24,8 +25,8 @@ public class RentalhomeDAO {
 	}
 
 	// 숙소 리스트 불러오기
-	public List<RentalhomeVO> selectAll(Criteria cri) {
-		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll", cri);
+	public List<RentalhomeVO> selectAll(Rentalhome_SearchVO searchVO) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll", searchVO);
 	}
 
 	// 등록된 숙소카운트 (rentalhome.status = 'Y')
@@ -155,5 +156,25 @@ public class RentalhomeDAO {
 	// 객실 이미지 불러오기
 	public List<Rentalhome_RoomVO> selectAll_room_attach_ByIdx(int room_idx) {
 		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room_attach_ByIdx", room_idx);
+	}
+	
+	// 리뷰 등록하기
+	public int insert_pay(Rentalhome_PayVO rentalhome_payVO) {
+		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_pay", rentalhome_payVO);
+	}
+
+	// 예약번호로 예약 조회하기
+	public Rentalhome_PayVO selectOneByReserve_number(String reserve_number) {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.selectOneByReserve_number", reserve_number);
+	}
+
+	// 예약 리스트 조회하기
+	public List<Rentalhome_PayVO> selectAll_reserve(int uNo) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_reserve", uNo);
+	}
+
+	// 환불
+	public int update_pay_refund(Rentalhome_PayVO rentalhome_payVO) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_pay_refund", rentalhome_payVO);
 	}
 }

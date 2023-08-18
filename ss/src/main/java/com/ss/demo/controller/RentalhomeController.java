@@ -1,6 +1,10 @@
 package com.ss.demo.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,23 +12,33 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ss.demo.domain.Criteria;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_PayVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
+import com.ss.demo.domain.Rentalhome_SearchVO;
 import com.ss.demo.domain.UserVO;
+import com.ss.demo.service.PayService;
 import com.ss.demo.service.RentalhomeService;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @Controller
 @RequestMapping(value="/rentalhome")
@@ -34,30 +48,36 @@ public class RentalhomeController {
 	private RentalhomeService rentalhomeService;
 
 	@Autowired
+	private PayService payService;
+
+	@Autowired
 	private PageMaker pageMaker;
 	
+	private String api_key = "0830272243640038";
+	private String api_secret = "BMWpjpF1BImo7FTOambSUusQAq8JjK2jWTLw5Q0JMNGSfD14w4mOcP88KRN9bAGnzLzeTb1kbENSTpi8";
+	private IamportClient client = new IamportClient(api_key, api_secret);
+	
 	@RequestMapping(value="/rentalhomeMain.do")
-	public String rentalhomeMain(Model model, Criteria cri){
-		
-		List<RentalhomeVO> list = rentalhomeService.selectAll(cri);
+	public String rentalhomeMain(Model model, Rentalhome_SearchVO searchVO){
+		System.out.println(searchVO.toString());
+		List<RentalhomeVO> list = rentalhomeService.selectAll(searchVO);
 		model.addAttribute("list", list);
 		
 		int totalCount = rentalhomeService.select_rentalhome_count();
 		
-		pageMaker.setCri(cri);
+		pageMaker.setCri(searchVO);
 		pageMaker.setTotalCount(totalCount);
 		System.out.println(pageMaker.toString());
 		model.addAttribute("pageMaker", pageMaker);
 		
-		
+		model.addAttribute("searchVO", searchVO);
 //		System.out.println(list.get(list.size()-1).getLogical_name());
 		return "rentalhome/rentalhomeMain";
 	}
 	
 	@RequestMapping(value="/rentalhomeView.do")
-	public String rentalhomeView(Model model, int rentalhome_idx, Rentalhome_LikeVO likeVO, HttpServletRequest req){
-		System.out.println(likeVO.getRentalhome_idx());
-		
+	public String rentalhomeView(Model model, int rentalhome_idx, Rentalhome_LikeVO likeVO, Rentalhome_SearchVO searchVO, HttpServletRequest req){
+		System.out.println(searchVO.toString());
 		RentalhomeVO rentalhomeVO = rentalhomeService.selectOneByIdx(rentalhome_idx);
 		model.addAttribute("rentalhomeVO", rentalhomeVO);
 		
@@ -71,16 +91,18 @@ public class RentalhomeController {
 		model.addAttribute("list", list);
 		
 		int like_count = rentalhomeService.select_like(rentalhome_idx);
-		System.out.println("like_count: "+like_count);
 		model.addAttribute("like_count", like_count);
+
+		model.addAttribute("searchVO", searchVO);
 		
 		if (req.getSession().getAttribute("login") != null) {
 	        UserVO loginVO = (UserVO) req.getSession().getAttribute("login");
 	        likeVO.setUno(loginVO.getuNo());
 	        int like_dupl = rentalhomeService.dupl_like(likeVO);
 	        model.addAttribute("like_dupl", like_dupl);
+		}else {
+			model.addAttribute("like_dupl", 0);
 		}
-		
 		return "rentalhome/rentalhomeView";
 	}
 
@@ -436,6 +458,10 @@ public class RentalhomeController {
 	@RequestMapping(value="/insert_like.do")
 	@ResponseBody
 	public int insert_like(Rentalhome_LikeVO likeVO, HttpServletRequest req) {
+		if(req.getSession().getAttribute("login") == null) {
+			return 0;
+		}
+		
 		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
 		likeVO.setUno(loginVO.getuNo());
 		if(rentalhomeService.dupl_like(likeVO) == 0) {
@@ -486,9 +512,127 @@ public class RentalhomeController {
 	}
 	
 	@RequestMapping(value="/rentalhomeReserve.do", method=RequestMethod.GET)
-	public String rentalhomeReserve(){
+	public String rentalhomeReserve(int room_idx, String name, Rentalhome_SearchVO searchVO, Model model){
+		System.out.println(searchVO.toString());
+		Rentalhome_RoomVO roomVO = rentalhomeService.selectOneByIdx_room(room_idx);
+		model.addAttribute("roomVO", roomVO);
+		// 숙소 이름
+		model.addAttribute("name", name);
+		model.addAttribute("searchVO", searchVO);
 		
 		return "rentalhome/rentalhomeReserve";
+	}
+	
+	@RequestMapping(value="/iamport.do", method=RequestMethod.POST)
+	@ResponseBody
+	public void iamport(
+			@RequestParam("imp_uid") String imp_uid,
+			@RequestParam("merchant_uid") String merchant_uid
+			) {
+		System.out.println("imp_uid:" + imp_uid);
+		System.out.println("merchant_uid:" + merchant_uid);
+		System.out.println("컨트롤러 진입");
+	}
+	
+	@RequestMapping(value = "iamport_verify/{imp_uid}.do", method = RequestMethod.POST)
+	@ResponseBody
+	public IamportResponse<Payment> verifyIamportPOST(@PathVariable(value = "imp_uid") String imp_uid) throws IamportResponseException, IOException {
+		System.out.println("imp_uid: " + imp_uid);
+		return client.paymentByImpUid(imp_uid);
+	}
+	
+	@RequestMapping(value ="complete.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int paymentComplete(
+		HttpSession session
+		// @RequestBody JSON으로 전송된 데이터를	 JAVA객체로 변환
+		,@RequestBody Rentalhome_PayVO rentalhome_payVO) throws Exception {
+		System.out.println(rentalhome_payVO.toString());
+		String token = payService.getToken();
+	
+		// 결제 완료된 금액
+		String amount = payService.paymentInfo(rentalhome_payVO.getPay_idx(), token);
+	
+		int res = 1;
+	
+		System.out.println("rentalhome_payVO.getPrice(): "+rentalhome_payVO.getPrice());
+		System.out.println("Long.parseLong(amount): "+Long.parseLong(amount));
+		if (rentalhome_payVO.getPrice() != Long.parseLong(amount)) {
+			res = 0;
+			// 결제 취소
+			payService.paymentCancel(token, rentalhome_payVO.getPay_idx(), amount);
+			return res;
+		}
+		try{
+			UserVO loginVO = (UserVO)session.getAttribute("login");
+			rentalhome_payVO.setUno(loginVO.getuNo());
+			rentalhomeService.insert_pay(rentalhome_payVO);
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("결제 실패");
+			res = 0;
+		}
+		return res;
+		 
+	}
+	
+	@RequestMapping(value="/rentalhomeReserveInfo.do", method=RequestMethod.GET)
+	public String rentalhomeReserveInfo(String reserve_number, Model model){
+		System.out.println("reserve_number: "+reserve_number);
+		Rentalhome_PayVO payVO = rentalhomeService.selectOneByReserve_number(reserve_number);
+		System.out.println(payVO.toString());
+		model.addAttribute("payVO", payVO);
+		
+		Rentalhome_RoomVO roomVO = rentalhomeService.selectOneByIdx_room(payVO.getRoom_idx());
+		model.addAttribute("roomVO", roomVO);
+		return "rentalhome/rentalhomeReserveInfo";
+	}
+
+	@RequestMapping(value="/rentalhomeReserveList.do", method=RequestMethod.GET)
+	public String rentalhomeReserveList(Model model, HttpServletRequest req){
+		if(req.getSession().getAttribute("login") == null){
+			 return "redirect:/User/userLogin.do";
+		}
+		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
+		List<Rentalhome_PayVO> list = rentalhomeService.selectAll_reserve(loginVO.getuNo());
+		model.addAttribute("list", list);
+		return "rentalhome/rentalhomeReserveList";
+	}
+
+	@RequestMapping(value="/rentalhome_pay_cancel.do", method=RequestMethod.POST)
+	@ResponseBody
+	public boolean rentalhome_pay_cancel(@RequestParam("merchant_uid")String reserve_number) throws ParseException, IOException, Exception{
+		
+		Rentalhome_PayVO payVO = rentalhomeService.selectOneByReserve_number(reserve_number);
+		
+		// 현재 날짜 얻기
+		LocalDateTime currentDate = LocalDateTime.now();
+		// 원하는 형식으로 날짜 포맷팅
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formattedDate = currentDate.format(formatter);
+		System.out.println("formattedDate: "+ formattedDate);
+		System.out.println("payVO.getPay_status(): "+ payVO.getPay_status());
+		// ㅑ오늘 날짜가 예약 시작일을 지났을 경우 또는 이미 환불을 받은 경우
+		if( formattedDate.compareTo(payVO.getStart_date()) >= 0 || payVO.getPay_status() == "paid") {
+			return false;
+		}
+
+		String token = payService.getToken();
+		String amount = payService.paymentInfo(payVO.getPay_idx(), token);
+		System.out.println("reserve_number: "+ reserve_number);
+		
+		payService.paymentCancel(token, payVO.getPay_idx(), amount);
+		
+		// LocalDateTime을 java.sql.Timestamp로 변환
+		Timestamp timestamp = Timestamp.valueOf(currentDate);
+		System.out.println("currentDate: " + currentDate);
+		System.out.println("Timestamp: " + timestamp);
+		
+		payVO.setRefund_date(timestamp);
+		payVO.setPay_status("refund");
+		rentalhomeService.update_pay_refund(payVO);
+
+		return true;
 	}
 	
 }
