@@ -1,38 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
 
-<!-- CSS ================================================================= -->
+<!-- CSS  -->
 	<style>
-		table {
-		border-collapse: collapse;
-		width: fit-content;
-		margin: 20px auto;
-		}
-		
-		th {
-		border: 1px solid black;
-		padding: 8px;
-		text-align: center;
-		background-color: orange;
-		}
-		
-		td {
-		border: 1px solid black;
-		padding: 8px;
-		text-align: left;
-		}
-		
-		#map {
-		width: 100%;
-		height: 400px;
-		display: none;
-		margin: 20px auto;
-		}
+		table { border-collapse: collapse; width: fit-content; margin: 20px auto; }
+		th { border: 1px solid black; padding: 8px; text-align: center; background-color: orange; }
+		td { border: 1px solid black; padding: 8px; text-align: left; }
+		#map { width: 100%; height: 400px; display: none; margin: 20px auto; }
 	</style>
-</head>
 
-<!-- <body> -->
-<!-- 테이블(DB name) ================================================================= -->
+<!-- 테이블 -->
 <br><br>
 <h1 style="text-align: center; font-size: 2em;">메뉴 등록</h1>
 	<form action="foodMenuWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validateForm()">

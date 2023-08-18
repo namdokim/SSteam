@@ -104,6 +104,7 @@
 		FROM (SELECT * FROM food LEFT OUTER JOIN (select food_attach_number,fNo as fNo2 ,food_attach_logical_name,food_attach_physical_name,thumbnail from food_attach where thumbnail = 'Y') D 
 		ON food.fNo = D.fNo2
 	  	WHERE food.status = 'Y' ) a
+	  	WHERE 1=1
 
 		<!-- 글 검색 -->
 		<!-- 식당이름 -->

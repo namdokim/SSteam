@@ -111,8 +111,8 @@ public class FoodDAO
 	{ return sqlSession.insert("com.ss.demo.mapper.foodMapper.insert_foodreview", vo); }
 	
 	// [list] 리뷰 -> 글 조회 
-	public List<FoodReviewVO> list() 
-	{ return sqlSession.selectList("com.ss.demo.mapper.foodMapper.selectAll_foodreview"); }
+	public List<FoodReviewVO> list(int fNo) 
+	{ return sqlSession.selectList("com.ss.demo.mapper.foodMapper.selectAll_foodreview",fNo); }
 	
 		// [selectOneByFRno] 리뷰 -> 리뷰 고유 번호 선택 (Ajax) 
 		public FoodReviewVO selectOneByFRno(int food_review_number) 

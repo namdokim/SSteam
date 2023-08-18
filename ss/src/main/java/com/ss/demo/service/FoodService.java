@@ -17,7 +17,7 @@ public interface FoodService
 	List<FoodVO> list(SearchVO searchVO);					// 조건에 따라 FoodVO 목록을 조회하는 메서드
 	List<FoodVO> selectAll_food_attach(int fNo);			// 특정 fNo 값을 가진 FoodVO의 첨부 파일 목록을 조회하는 메서드
 	FoodReviewVO selectOneByFRno(int food_review_number);	// 특정 fNo 값을 가진 FoodVO 목록을 조회하는 메서드	
-	List<FoodReviewVO> list();								// 모든 리뷰 목록을 조회하는 메서드 
+	List<FoodReviewVO> list(int fNo);								// 모든 리뷰 목록을 조회하는 메서드 
 	int select_food_count();								// 식당 데이터의 총 개수를 조회하는 메서드 
 	int select_like(int fNo);
 	int dupl_like(Food_LikeVO likeVO);

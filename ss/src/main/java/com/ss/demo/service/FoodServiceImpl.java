@@ -91,8 +91,8 @@ public class FoodServiceImpl implements FoodService
 	
 	// 모든 리뷰 목록을 조회하는 메서드 구현
 	@Override
-	public List<FoodReviewVO> list(){
-		return foodDAO.list(); 
+	public List<FoodReviewVO> list(int fNo){
+		return foodDAO.list(fNo); 
 	}
 
 	// 특정 food_review_number 값을 가진 FoodReviewVO를 조회하는 메서드 구현
