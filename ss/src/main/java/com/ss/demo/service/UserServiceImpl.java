@@ -120,24 +120,20 @@ public class UserServiceImpl implements UserService{
 			try {
 				System.out.println("folderPath="+map.get("folderPath"));
 				System.out.println("transferTo=");
-				filepath = new File((String) map.get("webPath"));
-				
-				if(!filepath.exists()){
-					
-					if(filepath.mkdirs()) {
-						System.out.println("폴더 생성 성공"+filepath);
-						System.out.println("폴더 생성 성공"+filepath);
-						
-					}else {
-						System.out.println("폴더 생성 실패"+filepath);
-						System.out.println("폴더 생성 실패"+filepath);
-					}
-				}else{
-					System.out.println("폴더가 이미 존재 ");
-					System.out.println("폴더가 이미 존재 "+filepath);
-				}
+				filepath = new File((String) map.get("folderPath"));
+				/*
+				 * if(!filepath.exists()){
+				 * 
+				 * if(filepath.mkdirs()) { System.out.println("폴더 생성 성공"+filepath);
+				 * System.out.println("폴더 생성 성공"+filepath);
+				 * 
+				 * }else { System.out.println("폴더 생성 실패"+filepath);
+				 * System.out.println("폴더 생성 실패"+filepath); } }else{
+				 * System.out.println("폴더가 이미 존재 "); System.out.println("폴더가 이미 존재 "+filepath);
+				 * }
+				 */
 				profileimg.transferTo( new File (map.get("folderPath")+ renameImage) );
-				
+				System.out.println("profileimg="+profileimg);
 			} catch (IllegalStateException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

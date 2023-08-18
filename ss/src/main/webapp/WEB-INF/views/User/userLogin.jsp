@@ -127,17 +127,27 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 			<button class="btn btn-lg btn-secondary" onclick="window.location.href='<%= request.getContextPath() %>/User/userJoin.do'">
 			    create account
 			</button>
+			<span class="h2 mb-3 fw-normal">other login</span>
+			<!-- <button class="btn btn-lg btn-secondary"> -->
+			<a href="https://kauth.kakao.com/oauth/authorize?client_id=5315428a54e0f5a6062ed76926689b70&redirect_uri=http://localhost:8085/ss/User/kakaologin.do&response_type=code">
+				<img src="<%=request.getContextPath() %>/img/kakao_login_medium_narrow.png">
+			</a>
+			<!-- </button> -->
+			<div> <button type="button" onclick="location.href= '<%=request.getContextPath() %>/User/emailfind.do' "> email find</button>
+			</div>
+			<div> <button>password find</button>
+			</div>
 			<p></p>
 			<p class="text-center text-muted">Live v0.011&nbsp;<small class="text-muted">(000000)</small>
-					<span class="sep"></span>
-					<a href="mailto:leghorn0897@gmail.com">contact</a>
-					<span class="sep"></span>
-					<a href="https://arca.live/policy?gt=1#googtrans(ko)">PRIVACY POLICY AND RULES OF USE</a>
-				</p>
-				<p class="text-center text-muted">operate for leghorn_
-					<span class="sep"></span>
-					make with &lt;3  jeonju, republic of korea
-				</p>
+				<span class="sep"></span>
+				<a href="mailto:leghorn0897@gmail.com">contact</a>
+				<span class="sep"></span>
+				<a href="https://arca.live/policy?gt=1#googtrans(ko)">PRIVACY POLICY AND RULES OF USE</a>
+			</p>
+			<p class="text-center text-muted">operate for leghorn_
+				<span class="sep"></span>
+				make with &lt;3  jeonju, republic of korea
+			</p>
 	</main>
 
 <script type="text/javascript">

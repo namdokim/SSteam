@@ -1,6 +1,8 @@
 package com.ss.demo.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -17,17 +19,21 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.MailSendService;
 import com.ss.demo.service.UserService;
+import com.ss.demo.service.kakaologin;
 
 @Controller
 @RequestMapping(value="/User")
@@ -44,6 +50,9 @@ public class UserController
 	// 암호화 
 	@Autowired
 	BCryptPasswordEncoder rbcryptPasswordEncoder;
+	
+	@Autowired
+	public kakaologin kakaoS;
 	
 
 	
@@ -422,14 +431,85 @@ public class UserController
 		String message = null;
 		if( result > 0)
 		{
+			System.out.println("여기 실행 됨?");
 			message = "프로필 이미지 변경 완료 ";
 			uv.setuImg( (String)map.get("myprofileimg"));
+			model.addAttribute(uv.getuImg());
 		}else {
+			System.out.println("여기 실행 됨? 실행 되는거여 ?");
 			message = "변경 실패";
 		}
 		ra.addFlashAttribute("message",message);
 		return "redirect:profile.do";
 		
 	}
+	//
+	@RequestMapping(value = "/kakaologin")
+	public String kakaologinform(String code) {
+		System.out.println("code="+code);
+		String access_Token = null;
+		try {
+			System.out.println("실행 현황");
+			access_Token = kakaoS.getAccessToken(code);
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("###access_Token#### : " + access_Token);
+		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
+		
+		// 3번
+		HashMap<String, Object> userInfo = ( kakaoS).getUserInfo(access_Token);
+		System.out.println("###nickname#### : " + userInfo.get("nickname"));
+		System.out.println("###email#### : " + userInfo.get("email"));
+		return "redirect:/";
+	}
+	
+	/*
+	 * @GetMapping("/kakao/login") public String kakaocallback(String code) {
+	 * //@ResponseBody :data 리턴해주는 함수 //post 방식으로 key=value데이터를 요청 RestTemplate rt =
+	 * new RestTemplate(); System.out.println("code="+code); return code; }
+	 */
 
+	// 1. 카카오톡에 사용자 코드 받기 (jsp의 a태그 href에 경로 잇다 )
+	// 2. code를 kakaoS.getAccessToken로 보냄
+	// 3. 받은 액세스 토큰을 유저 info로 보냄 userInfo받아옴, userInfo에 nickname, email정보가 담겨있음
+	// @RequestParam required 속성을 추가하면 해당 필드가 쿼리스트링에 존재하지 않아도 예외가 발생하지 않습니다.
+	// 사용 주의 다만 주의할 점은 Argument Resolver에 등록한 CustomArgument
+	
+	/*
+	 * //카카오 로그인
+	 * 
+	 * @RequestMapping(value = "/ss/User/kakaologin.do" ,method =RequestMethod.GET)
+	 * public String kakaoLoginplay( @RequestParam("code") String code) throws
+	 * IOException { // 1번 System.out.println("code2:" + code);
+	 * 
+	 * // 2번 String access_Token = null; try { System.out.println("실행 현황");
+	 * access_Token = kakaoS.getAccessToken(code); } catch (Throwable e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); }
+	 * System.out.println("###access_Token#### : " + access_Token); // 위의
+	 * access_Token 받는 걸 확인한 후에 밑에 진행
+	 * 
+	 * // 3번 HashMap<String, Object> userInfo = ( kakaoS).getUserInfo(access_Token);
+	 * System.out.println("###nickname#### : " + userInfo.get("nickname"));
+	 * System.out.println("###email#### : " + userInfo.get("email"));
+	 * 
+	 * return "/User/kakaologin"; }
+	 */
+	
+	//이메일 find 이동
+	@RequestMapping(value="/emailfind")
+	public String emailfind(
+			)
+	{
+		return "/User/emailfind";
+	}
+	//이메일 찾기 해버려
+	@RequestMapping(value="/emailfindplay")
+	public String emailfindplay(
+			)
+	{
+		return "/User/emailfind";
+	}
+	
 }

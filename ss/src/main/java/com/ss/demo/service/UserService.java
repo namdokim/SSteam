@@ -22,7 +22,8 @@ public interface UserService {
 	public UserVO userONE(UserVO uv);
 	// 이미지 수정 
 	public int profileimg(Map<String, Object> map);
-
+	// 카카오 로그인
+	
 	/*
 	 * public int memberIdCheckcnt(String uId); public userVO login(String uId);
 	 * 
