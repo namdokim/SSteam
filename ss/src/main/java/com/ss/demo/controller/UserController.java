@@ -3,6 +3,7 @@ package com.ss.demo.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -30,6 +31,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ss.demo.domain.FoodVO;
+import com.ss.demo.domain.RentalhomeVO;
+import com.ss.demo.domain.Rentalhome_LikeVO;
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.MailSendService;
 import com.ss.demo.service.UserService;
@@ -328,6 +332,8 @@ public class UserController
 			)
 	{
 		UserVO login = (UserVO)session.getAttribute("login");
+		
+		
 		if(login !=null)
 		{
 			System.out.println("profile="+login);
@@ -340,13 +346,23 @@ public class UserController
 	}
 	// 회원 좋아요 이동
 	@RequestMapping(value="/great.do")
-	public String great(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+	public String great(UserVO uv,
+			HttpServletRequest req, HttpSession session, Model model
 			)
 	{
 		UserVO login = (UserVO)session.getAttribute("login");
 		System.out.println("great="+login);
+		
 		if(login !=null)
 		{
+			int uNo = login.getuNo();
+			List<RentalhomeVO> rentalhome_userlike = us.selectAll_rentalhome_userlike(uNo);
+			List<FoodVO> food_userlike = us.selectAll_food_userlike(uNo);
+			// 유저가 클릭한 좋아요 총 갯수 
+			System.out.println("great=="+rentalhome_userlike);
+			model.addAttribute("rentalhome_userlike",rentalhome_userlike);
+			model.addAttribute("food_userlike",food_userlike);
+			
 			return "User/userGreat";
 		}else
 		{
@@ -520,6 +536,24 @@ public class UserController
 			)
 	{
 		return "/User/emailfind";
+	}
+	// 마이페이지 좋아요 리스트 전체갯수
+	@RequestMapping(value="/userlike")
+	public String userlike(
+						RentalhomeVO rv,
+						Rentalhome_LikeVO likeVO,
+						HttpServletRequest req,
+						HttpSession session,
+						Model model
+			)
+	{
+		UserVO login = (UserVO)session.getAttribute("login");
+		System.out.println("login=="+login);
+		int uNo = login.getuNo();
+		//String userlike = us.selectAll_userlike(uNo);
+		model.addAttribute(rv.getName());
+		
+		return "User/userGreat";
 	}
 	
 }

@@ -36,4 +36,17 @@
 		UPDATE user SET
 		uImg =#{myprofileimg} where uNo = #{uNo}
 	</update>
+	<!-- my clicked 숙박 like-->
+	<select id="selectAll_rentalhome_userlike" parameterType="int" resultType="rentalhomeVO">
+		select rl.rentalhome_idx, rh.name, rh.type, rh.info, rl.uNo 
+		from rentalhome_like rl, rentalhome rh
+		where rl.rentalhome_idx = rh.rentalhome_idx and rl.uNo = #{uNo};
+	</select>
+	<!-- my clicked 맛집 like -->
+		<select id="selectAll_food_userlike" parameterType="int" resultType="foodVO">
+		select fl.fNo, fo.food_name, fo.food_phone, fo.food_content, fl.uNo 
+		from food_like fl, food fo
+		where fl.fNo = fo.fNo and fl.uNo = #{uNo};
+	</select>
+	<!-- my writed review -->
 </mapper>

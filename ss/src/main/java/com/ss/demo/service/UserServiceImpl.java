@@ -2,6 +2,7 @@ package com.ss.demo.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.jdbc.Util;
+import com.ss.demo.domain.FoodVO;
+import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.persistence.UserService_Mapper;
 
@@ -142,6 +145,21 @@ public class UserServiceImpl implements UserService{
 		
 		return result;
 	}
+	// 마이페이지 좋아요 리스트 
+	@Override
+	public List<RentalhomeVO> selectAll_rentalhome_userlike(int uNo) {
+		
+		List<RentalhomeVO> result = usm.selectAll_rentalhome_userlike(uNo);
+		System.out.println("result=="+result);
+		return result;
+	}
+	@Override
+	public List<FoodVO> selectAll_food_userlike(int uNo) {
+		List<FoodVO> result = usm.selectAll_food_userlike(uNo);
+		System.out.println("result==="+result);
+		return result;
+	}
+	
 
 
 }
