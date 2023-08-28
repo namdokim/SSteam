@@ -30,4 +30,5 @@ public interface UserService_Mapper {
 	 * public userVO login(String uId); public int memberIdCheckcnt(String uId);
 	 * public userVO memberLogin(String uId);
 	 */
+	public int rentalhome_userlike(int uNo);
 }

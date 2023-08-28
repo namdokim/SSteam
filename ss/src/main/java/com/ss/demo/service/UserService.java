@@ -37,5 +37,6 @@ public interface UserService {
 	 * 
 	 * public userVO memberLogin(String uId);
 	 */
+	public int rentalhome_userlike(int uNo);
 	
 }

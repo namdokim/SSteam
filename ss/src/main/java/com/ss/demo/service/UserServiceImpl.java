@@ -153,6 +153,12 @@ public class UserServiceImpl implements UserService{
 		System.out.println("result=="+result);
 		return result;
 	}
+	// 전체 갯수
+		@Override
+		public int rentalhome_userlike(int uNo) {
+			int rentalhome_userlike_total = usm.rentalhome_userlike(uNo);
+			return rentalhome_userlike_total;
+		}
 	@Override
 	public List<FoodVO> selectAll_food_userlike(int uNo) {
 		List<FoodVO> result = usm.selectAll_food_userlike(uNo);

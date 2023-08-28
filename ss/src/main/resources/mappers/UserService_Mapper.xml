@@ -42,6 +42,10 @@
 		from rentalhome_like rl, rentalhome rh
 		where rl.rentalhome_idx = rh.rentalhome_idx and rl.uNo = #{uNo};
 	</select>
+	<!-- 숙박 like 전체 갯수 -->
+	<select id="rentalhome_userlike" parameterType="int" resultType="int">
+		select count(*) from rentalhome_like where uNo= #{uNo}
+	</select>
 	<!-- my clicked 맛집 like -->
 		<select id="selectAll_food_userlike" parameterType="int" resultType="foodVO">
 		select fl.fNo, fo.food_name, fo.food_phone, fo.food_content, fl.uNo 

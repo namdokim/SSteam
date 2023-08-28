@@ -31,9 +31,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ss.demo.domain.FoodVO;
+import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.SearchVO;
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.MailSendService;
 import com.ss.demo.service.UserService;
@@ -59,7 +62,8 @@ public class UserController
 	@Autowired 
 	public kakaologin kakaoS;
 	
-	
+	@Autowired
+	public PageMaker pageMaker;
 
 	
 	//메인 화면 
@@ -555,5 +559,36 @@ public class UserController
 		
 		return "User/userGreat";
 	}
+	
+	// 더보기 ajax
+		@ResponseBody
+		@RequestMapping(value="/rentalhomemore.do", method=RequestMethod.POST )
+		public PageMaker getMoreList(
+				
+				SearchVO searchVo,
+				HttpServletRequest req,
+				HttpServletResponse res,
+				HttpSession session
+				) throws JsonProcessingException
+		{
+			
+			PageMaker pageMaker = new PageMaker();
+			UserVO login = (UserVO)session.getAttribute("login");
+			//
+			int uNo = login.getuNo();
+			int rentalhome_userlike_total = us.rentalhome_userlike(uNo);
+			// 전체 데이터 가져오기 
+			List<RentalhomeVO> rentalhome_userlike = us.selectAll_rentalhome_userlike(uNo);
+			System.out.println("uNo="+uNo);
+			System.out.println("rentalhome_userlike_total="+rentalhome_userlike_total);
+			pageMaker.setCri(searchVo);
+			pageMaker.setTotalCount(rentalhome_userlike_total);
+			
+			
+			//String pageMake = pageMaker.toString();
+			//String pageMake = mapper.writeValueAsString(pageMaker);
+			System.out.println("pageMake"+pageMaker);
+			return pageMaker;
+		}
 	
 }
