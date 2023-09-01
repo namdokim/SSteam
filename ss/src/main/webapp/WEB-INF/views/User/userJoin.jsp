@@ -113,6 +113,7 @@ function DoRewrite()
 					</a>
 					<!-- 회원가입 폼  -->
 					<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+						<input type="hidden" id="uType" name="uType" value="normal">
 						<div class="col-12">
 						<div class="g-3">
 							<div class="grid text-center">

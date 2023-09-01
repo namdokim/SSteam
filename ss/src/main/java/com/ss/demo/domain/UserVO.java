@@ -16,6 +16,15 @@ public class UserVO {
 	//추가 변수
 	private String uZipcode;
 	private String uId_email;
+	private String uSocialType;
+	
+	public String getuSocialType() {
+		return uSocialType;
+	}
+	public void setuSocialType(String uSocialType) {
+		this.uSocialType = uSocialType;
+	}
+
 	//추가된 값
 	// 주소 관련 
 	private String uAddsPostCode;	//우편번호인데 문자열로 받을거임 
@@ -140,6 +149,7 @@ public class UserVO {
 				+ ", uPhone=" + uPhone + ", uDate=" + uDate + ", uImg=" + uImg + ", uType=" + uType
 				+ ", uDely=" + uDely + ", uPoint=" + uPoint + "]";
 	}
+	
 	
 	
 }

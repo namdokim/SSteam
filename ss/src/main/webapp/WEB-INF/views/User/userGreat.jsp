@@ -14,6 +14,9 @@
 	#star{
 	/* display: flex; */
 	}
+	#likedel{
+		font-size: 12px;
+	}
 </style>
 <h1 style="text-align: center;">Great</h1>
 <!-- 이미지 넣기  d-flex text-body-secondary 영역 안에 -->
@@ -32,21 +35,59 @@
 	<div class="d-flex align-items-center p-3 my-3 text-white bg-white bg-purple rounded shadow-sm">
 		<div id="rentalhome" class="1h-1">
 		<h1 class="h6 mb-0 text-white 1h-1"></h1>
-		<small style="color: #424242; font-size: 42px; font-family: monospace;">숙박</small>
+		<small style="color: #424242; font-size: 32px; font-family: monospace;">숙박</small>
 		</div>
 	</div>
 	<form id="searchTxtform">
 	<input type="hidden" name="viewCount" id="viewCount" value="0">
 	<input type="hidden" name="startCount" id="startCount" value="0">
-	<div id="morelist">
+	
+	<div id="morelist" style="display: block;">
+	<c:choose>
+		<c:when test="">
+			
+		</c:when>
+	</c:choose>
 	<c:choose>
 		<c:when test="${!empty rentalhome_userlike}">
-			<c:forEach var="like"  begin="1" end="5" step="1" items="${rentalhome_userlike }">
+			<c:forEach var="like"  items="${rentalhome_userlike }">
 				<div id="moreviewlist" class="my-1 p-3 row bg-body rounded shadow-sm">
 				<div class="d-flex col-10 text-body-secondary " style="cursor: pointer;" onclick="location.href='<%= request.getContextPath()%>/rentalhome/rentalhomeView.do?rentalhome_idx=${like.rentalhome_idx}';">
 					<p class=" pb-3 mb-0 small 1h-sm">
 						<!-- 제목  -->
-						<strong class="d-block text-gray-dark" style="font-size: 24px;"> ${like.name } <span style='color: #848484;'>숙박 타입: ${like.type } </span></strong>
+						<strong class="d-block text-gray-dark" style="font-size: 16px;"> ${like.name } <span style='color: #848484;'>숙박 타입: ${like.type } </span></strong>
+						<!-- 본문내용 -->
+						<span style="font-size: 12px; color: #848484;">${like.info }</span>
+					</p>
+				</div>
+					<div id="star" class="col-2 align-items-right text-end" onclick="location.href='https://www.naver.com/';" style="cursor:;color:orange; float: right;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="42" height="32" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+						  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+						</svg>
+						<br><span id="likedel">좋아요에서 뺴기</span>
+					</div>
+				</div>
+			</c:forEach>
+		</c:when>
+	</c:choose>
+	<!-- onclick="delete_(${status.index},${food.fNo})" -->
+	<!-- <div class="d-block text-end"><button>좋아요</button></div> -->
+		<small id="morelist_btn" class="d-block text-end mt-3">
+			<a id="more_btn_a" href="javascript:rentalhomemore('morelist',10);" style="font-size: 3em;">더 보기</a>
+		</small>
+	</div> <!-- morelist -->
+	</form>
+<!-- <hr class="my-4"> -->
+		<!-- 페이징 된 리스트 -->
+	<div id="morelist_paging" style="display: none;">
+		<c:if test="${!empty rentalhome_userlike}">
+			
+			<c:forEach var="like" items="${rentalhome_userlike }">
+				<div id="moreviewlist" class="my-1 p-3 row bg-body rounded shadow-sm">
+				<div class="d-flex col-10 text-body-secondary " style="cursor: pointer;" onclick="location.href='<%= request.getContextPath()%>/rentalhome/rentalhomeView.do?rentalhome_idx=${like.rentalhome_idx}';">
+					<p class=" pb-3 mb-0 small 1h-sm">
+						<!-- 제목  -->
+						<strong class="d-block text-gray-dark" style="font-size: 16px;"> ${like.name } <span style='color: #848484;'>숙박 타입: ${like.type } </span></strong>
 						<!-- 본문내용 -->
 						<span style="font-size: 12px; color: #848484;">${like.info }</span>
 					</p>
@@ -59,26 +100,23 @@
 					</div>
 				</div>
 			</c:forEach>
-		</c:when>
-	</c:choose>
-	<!-- onclick="delete_(${status.index},${food.fNo})" -->
-	<!-- <div class="d-block text-end"><button>좋아요</button></div> -->
+				<small id="morelist_btn" class="d-block text-end mt-3">
+					<a id="more_btn_a" href="javascript:rentalhomemore('morelist',10);" style="font-size: 3em;">더 보기</a>
+				</small>
+			
+		</c:if>
 	</div> <!-- morelist -->
-		<small id="morelist_btn" class="d-block text-end mt-3">
-			<a id="more_btn_a" href="javascript:rentalhomemore('morelist',10);" style="font-size: 3em;">더 보기</a>
-		</small>
-	</form>
-		<hr class="my-4">
+<hr class="my-4">
 <!-- 맛집 -->
 	<div class="d-flex align-items-center p-3 my-3 text-white bg-white bg-purple rounded shadow-sm">
 		<div id="food" class="1h-1" >
 		<h1 class="h6 mb-0 text-white 1h-1"></h1>
-		<small style="color: #424242; font-size: 42px; font-family: monospace;">맛집  </small>
+		<small style="color: #424242; font-size: 32px; font-family: monospace;">맛집  </small>
 		</div>
 	</div>
 	<c:choose>
 		<c:when test="${!empty food_userlike }">
-			<c:forEach var="like" begin="1" end="5" step="1" items="${food_userlike }" varStatus="status">
+			<c:forEach var="like" items="${food_userlike }" varStatus="status">
 				<div class="my-1 p-3 bg-body rounded shadow-sm">
 				<div class="d-flex text-body-secondary">
 					<p class="pb-3 mb-0 small 1h-sm border-bottom">
@@ -101,7 +139,7 @@
 	<div class="d-flex align-items-center p-3 my-3 text-white bg-white bg-purple rounded shadow-sm">
 		<div id="event" class="1h-1">
 		<h1 class="h6 mb-0 text-white 1h-1"></h1>
-		<small style="color: #424242; font-size: 42px; font-family: monospace;">축제 </small>
+		<small style="color: #424242; font-size: 32px; font-family: monospace;">축제 </small>
 		</div>
 	</div>
 		<div class="my-1 p-3 bg-body rounded shadow-sm">
@@ -128,9 +166,12 @@
 	
 	function rentalhomemore(id, cnt){
 		var list_length = $("#"+id+" #moreviewlist").length;
+		var name = $("#likename").val();
+		console.log("name="+name);
 		console.log("id="+id);
 		console.log("list_length="+list_length);
 		console.log("cnt="+cnt);
+		console.log("$('#searchTxtform').serialize()="+$('#searchTxtform').serialize());
 		var aname = id+"_btn";
 		var call_length = list_length;
 		
@@ -142,15 +183,18 @@
 			data	: $('#searchTxtform').serialize(),
 			dataType : "JSON",
 			success :function(data){
-				if(data.resultCnt > 0){
-					var list = data.resultCnt;
-						if(resultVo.title != ''){
-							$('#'+aname).attr('href',"javascript:rentalhomemore(getMoreList(list);)");
+				console.log(data);
+				console.log(data.totalCount);
+				if(data.totalCount > 0){
+					console.log("data.totalCount="+data.totalCount);
+					var list = data.totalCount;
+						if(name != ''){
+							$('#'+aname).attr('href',"javascript:rentalhomemore('"+id+"',"+cnt+");");
+							getMoreList(list);
 						}else{
 							/* 더보기 버튼 지우기  */
 							$("#"+id+"_div").remove();
 						}
-					}
 				}else{
 					alert("실패 하였습니다 ");
 				}
@@ -161,15 +205,43 @@
 		});	
 	}
 	function getMoreList(list){
+		console.log("이쪽 실행????");
+		console.log("list="+list)
+		var con = document.getElementById("morelist_paging");
+		var conlist = document.getElementById("morelist");
 		var content = "";
 		var length = list.length;
-		for(i=0; i<list.length;i++){
-			var resultVO = list[i];
-			if(resultVO.title !=''){
-				/* 전체 리스트 불러오는 html 작성 어마어마하게 많네  */
+		console.log("morelist_paging"+con);
+		if(con.style.display== "none"){
+			con.style.display = 'block';
+			conlist.style.display = 'none';
+			for(i=0; i<list;i++){
+				console.log("resultVO list="+list);
+				if(resultVO.name !=''){
+					/* 전체 리스트 불러오는 html 작성 어마어마하게 많네  */
+					content += "<h1>변경된 내용</h1>";
+				}
 			}
 		}
-		$("#morelist ").after(content);
+		$("#morelist_paging").after(content);
 	}
+	// 스크립트 페이징
+	/* 	var totaldata; // 전체 데이터 수
+		var dataPerPage; // 현 페이지에 몇개 보여주는지 
+		var pageCount = 10; // 나누어지는 페이지수
+		var globalCurrentPage=1; //현제 페이지
+		var dataList; //표시하는 페이터 리스트 
+		dataPerPage = 10;
+		//$("#dataPerPage").val(); 나중에 몇개 씩 보여주는지 할때 
+		window.onload(function(){
+			dataPerPage = 10;
+			$.ajax({
+				method:"GET",
+				url : ,
+			});
+		});
+	function getPaging(){
+			
+	}  */
 </script>
 <%@ include file="../include/footer.jsp" %>

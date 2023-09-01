@@ -9,23 +9,6 @@
 	cursor:pointer;
 	}
 </style>
-<script type="text/javascript">
-	window.onload(function(){
-		
-	});
-	function profile(){
-		location.href = '<%=request.getContextPath() %>/User/profile.do';
-	}
-	function Great(){
-		location.href = '<%=request.getContextPath() %>/User/great.do';
-	}
-	function review(){
-		location.href = '<%=request.getContextPath() %>/User/review.do';
-	}
-	function payment(){
-		location.href = '<%=request.getContextPath() %>/User/payment.do';
-	}
-</script>
 <!-- main -->
 <!-- <a xlink:href="<%=request.getContextPath() %>/User/profile.do" xlink:title="좋아요"> 
 	</a>-->
@@ -33,6 +16,7 @@
 	<div class="container marketing"> 
 		<div class="row">
 			<div class="col-lg-3" onclick="profile()">
+			<input type="hidden" id="social" value="<%= login.getuSocialType() %>">
 				<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
 				<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
 				<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
@@ -67,7 +51,7 @@
 					</svg>
 					<h3 class="fw-normal">UserList</h3>
 				</div>
-				<div class="col-lg-3" onclick="report()">
+				<div class="col-lg-3" onclick="UserReport()">
 					<svg fill="#000000" height="120px" width="120px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264 264" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 264 264">
 					  <g>
 					    <polygon points="98.805,40.486 95.941,51 101.668,51  "/>
@@ -123,5 +107,40 @@
 			</c:choose>
 		</div>
 	</div>
+<script type="text/javascript">
+
+	var uSocialType = $("#social").val();
+	console.log("social"+uSocialType);
+	console.log("social"+$("#social").val());
+	var searchType = '';
+	var searchValue = '';
+	function profile(){
+		if( uSocialType == "social")
+			{
+				alert("소셜 로그인 사용자는 이용이 제한됩니다");
+			}else{
+		var searchType = $("#searchType").val();
+		var searchValue = $("#searchValue").val();
+		location.href = '<%=request.getContextPath() %>/User/profile.do?searchType='+searchType+'&searchValue='+searchValue;
+				
+			}
+	}
+	function Great(){
+		location.href = '<%=request.getContextPath() %>/User/great.do';
+	}
+	function review(){
+		location.href = '<%=request.getContextPath() %>/User/review.do';
+	}
+	function payment(){
+		location.href = '<%=request.getContextPath() %>/User/payment.do';
+	}
+	function UserList(){
+		location.href = '<%=request.getContextPath() %>/User/UserList.do'
+	}
+	function UserReport(){
+		location.href = '<%=request.getContextPath() %>/User/UserReport.do'
+	}
+</script>
+
 
 <%@ include file="../include/footer.jsp" %>

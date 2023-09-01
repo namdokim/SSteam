@@ -101,14 +101,13 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 		<!--하단 마진 3px -->
 		<span id="toptitle" class="h3 mb-3 fw-normal"><img></span>
 		<!-- 로그인 폼 -->
-		<!--  -->	
 			<form name="login" id="login">
 				<div class="form-floating">
-					<input type="text" class="form-control" id="uId" placeholder="uId" name="uId">
+					<input type="text" onkeyup="enterkey()" class="form-control" id="uId" placeholder="uId" name="uId">
 					<label for="floatingInput" class="text-muted">ID</label>
 				</div>			
 				<div class="form-floating">
-					<input type="password" class="form-control" id="uPw" placeholder="uPw" name="uPw">
+					<input type="password" onkeyup="enterkey()" class="form-control" id="uPw" placeholder="uPw" name="uPw">
 					<label for="floatingPassword" class="text-muted">Password </label>								
 				</div>
 				<!-- <i class=" input password eyes fas fa-eye"></i> -->
@@ -122,11 +121,9 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 					로그인
 				</button>
 			</form>
-		
-				
 <!-- 					<span class="h4 fw-normal text-muted">계정이 없으신가요?</span> -->
 				
-				<button class="btn btn-lg btn-secondary my-3" onclick="window.location.href='<%= request.getContextPath() %>/User/userJoin.do'">
+				<button class="btn btn-lg btn-secondary my-3" onclick="window.location.href='<%= request.getContextPath() %>/User/userjoinCheck.do'">
 					회원가입
 				</button>
 			<p></p>
@@ -161,6 +158,19 @@ $(function(){
 </script>
 <!-- 로그인 유효성 검사  -->
 <script>
+window.onload = function(){
+	$("#uId").val("").focus();
+}
+$("#uId").click(function(){
+	$("#uId").val("").focus();
+});
+function enterkey() {
+	if (window.event.keyCode == 13) {
+	// 엔터키가 눌렸을 때
+	console.log("hhhh");
+	loginFn();
+	}
+}
 /* 버튼에 타입 버튼  안주면은 무조건 submit타입으로 인식해서 서브밋이 되는건가  */
 //async: false,     //값을 리턴시 해당코드를 추가하여 동기로 변경 ajax에서 return 값 얻을떄 
 function loginFn(){
@@ -204,14 +214,7 @@ function loginFn(){
 			}
 		}); //에이작스 끝 
 	}
-	<%-- 
-	var fm = document.frm;
-	//이 경로로 데이터를 감추어서 전송한다
-	 fm.action ="<%=request.getContextPath()%>/User/userLoginAction.do"; 
-	fm.method = "post";
-	fm.submit();   // 전송
-	return;
-	 --%>
+
 }
 
 </script>
