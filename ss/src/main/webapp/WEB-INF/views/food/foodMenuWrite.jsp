@@ -50,8 +50,8 @@
 						<label for="floatingInput" class="text-muted mb-2">메뉴 이름</label>
 					</div>
 					<div class="form-floating">
-						<input type="text" class="form-control" id="food_menu_price" placeholder="메뉴 가격" name="food_menu_price">
-						<label for="floatingInput" class="text-muted">메뉴 가격 (쉼표X)</label>
+						<input type="text" class="form-control" id="food_menu_price" placeholder="메뉴 가격" name="food_menu_price" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+						<label for="floatingInput" class="text-muted">메뉴 가격 (숫자만 기입)</label>
 					</div>
 				</div>
 				
@@ -76,8 +76,8 @@
 							+'<label for="floatingInput" class="text-muted mb-2">메뉴 이름</label>'
 							+'</div>';
 			cell2.innerHTML = '<div class="form-floating">'
-							+'<input type="text" class="form-control" id="food_menu_price" placeholder="메뉴 가격" name="food_menu_price">'
-							+'<label for="floatingInput" class="text-muted">메뉴 가격 (쉼표X)</label>'
+							+'<input type="text" class="form-control" id="food_menu_price" placeholder="메뉴 가격" name="food_menu_price" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');">'
+							+'<label for="floatingInput" class="text-muted">메뉴 가격 (숫자만 기입)</label>'
 							+'</div>';
 		}
 

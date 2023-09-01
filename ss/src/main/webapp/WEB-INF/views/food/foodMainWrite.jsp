@@ -92,7 +92,7 @@
 	</style>
 
 <!-- 테이블(DB name) ======================================================= -->
-	<div class="text-center pt-5" style="height:170%; background-color: #FFFCF5;">
+	<div class="text-center pt-5" style="height:150%; background-color: #FFFCF5;">
 		<div class="form-signin card shadow-sm w-100 m-auto">
 			<form action="foodMainWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validateForm()" >
 			<input type="hidden" name="uNo" value="${login.uNo}">
@@ -148,8 +148,20 @@
 				</div>
 				
 				<div class="form-floating">
-					<textarea type="text" class="form-control" id="food_content" placeholder="맛집 설명" name="food_content" value="${vo.food_content}" style="resize:none; height:200px;"></textarea>
+					<%-- <textarea type="text" class="form-control" id="food_content" placeholder="맛집 설명" name="food_content" value="${vo.food_content}" style="resize:none; height:200px;"></textarea> --%>
+					<textarea class="form-control" id="food_content" placeholder="맛집 설명" name="food_content" oninput="limitTextarea(this, 200)" style="resize:none; height:200px;"></textarea>
+					<div class="text-muted" style="text-align:right;"><span id="charCount">200</span> 자 남음</div>
 					<label for="floatingInput" class="text-muted">맛집 설명</label>
+					<script>
+						function limitTextarea(element, limit) {
+						    const text = element.value;
+						    if (text.length > limit) {
+						        element.value = text.substring(0, limit);
+						    }
+						    const charCount = limit - text.length;
+						    document.getElementById('charCount').textContent = charCount;
+						}
+					</script>						
 				</div>
 				<label for="floatingInput" class="text-muted">맛집 지역</label>
 				<div class="form-floating">
