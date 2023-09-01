@@ -136,6 +136,9 @@ function DoRewrite()
 									<option value="@outlook.com">outlook.com</option>
 									<option value="@hotmail.com">hotmail.com</option>
 								</select>
+									<div>
+										<span id="msg_check_email"></span>
+									</div>
 								<!-- float-end py-1 -->
 								<!-- d-flex justify-content -->
 								<!-- class="float-end btn btn-secondary mb-1" -->
@@ -149,8 +152,9 @@ function DoRewrite()
 							</div>
 						</div> <!-- g-3 -->
 						</div> <!-- col-12 -->
-						<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
-							<span id="msg_id"></span>
+						<input type="hidden" id="AuthCheck" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;" ><br>
+						<input type="hidden" id="AuthCheck2" >	
+							<span id="msg_id"></span><br>
 							<span id="msg_email"></span>
 						<div class="col-12">
 							<label for="password" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">비밀번호 </label>
@@ -237,114 +241,7 @@ function DoRewrite()
 	
  <!-- container 끝 -->
 </div>
-<%-- 
-				<td>	
-					<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
-						<option value="">도메인을 선택해주세요</option>
-						<option value="@naver.com">naver.com</option>
-						<option value="@daum.net">daum.net</option>
-						<option value="@hanmail.net">hanmail.net</option>
-						<option value="@gmail.com">gmail.com</option>
-						<option value="@kakao.com">kakao.com</option>
-						<option value="@nate.com">nate.com</option>
-						<option value="@outlook.com">outlook.com</option>
-						<option value="@hotmail.com">hotmail.com</option>
-					</select>
-				</td>
-				<td>
-					<!-- <input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();"> -->
-					<input type="button" value="인증하기" id="emailCheck" onclick="emailAuth();">
-					<input type="button" value="중복확인" id="emaildomain" onclick="emailcheck();">
-					<input type="hidden" name="idchecked" value="checkednot">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span id="msg_id"></span>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span id="msg_email"></span>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div class="input password">
-					<input type="password" id="uPw" name="uPw" style="width:100%;" placeholder="비밀번호" required value="">
-						<div class="eyes">
-							<i class="fas fa-eye"></i>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div class="input password">
-					<input type="password" id="uPwc" name="uPwc" style="width:100%;" placeholder="비밀번호 확인" required value="">
-						<div class="eyes2">
-							<i class="fas fa-eye"></i>
-						</div>
-					</div>
-					<span id="msg_pw"></span>
-				</td >
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="text" id="uName" name="uName" style="width:100%;" placeholder="이름" required value="">
-				</td>
-				<td >
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="text" id="uNick" name="uNick" style="width:100%;" placeholder="닉네임" required value="">
-					<div><input type="hidden" ></div>
-					<span id="msg_nick"></span>
-				</td>
-				<td>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="text" id="uPhone" name="uPhone" style="width:100%;" placeholder="전화번호(ex= 01012345678)" required value="">
-					<input type="button" id="Auth" name="Auth" onclick="Authentication();" value="Auth"> 
-				</td>
-				
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div style="text-align: left; width: 100%; display: inline-block;">
-						<input type="text" id="uAddsPostCode"  placeholder="우편번호">
-						<br>
-						<input type="text" id="uRoadAddress" style="width: 100%;" placeholder="도로명주소">
-						<input type="text" id="uJibunAddress" style="width: 100%;" placeholder="지번주소"><br>
-						<!-- <span id="guide" style="color:#999;display:none"></span> -->
-						<input type="text" id="uDetailAddress" style="width: 60%;" placeholder="상세주소">
-						<input type="text" id="sample4_extraAddress" placeholder="참고항목">
-					</div>
-				</td>
-				<td>
-						<input type="button"  onclick="DaumPostcode()" value="우편번호 찾기">
-				</td>
-			</tr>
-			<tr >
-				<td id="jbar" colspan="3" style="text-align:center;">
-					<!-- <a href="javascript:DoSubmit();" onclick="javascript:document.join.DoSubmit()" id="check" class="btn sfn">가입하기</a> -->
-					<!-- <input type="submit" value="가입하기" onclick="false DoSubmit();"> -->
-					<button type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
-					<a href="javascript:DoRewrite()"><input type="button" value="다시쓰기"></a>
-					<a href="<%=request.getContextPath() %>/index.jsp"><input type="button" value="취소"></a> 
-				</td>
-			</tr>
-		</table>
-	</form> 
-	--%>
+
 <!-- api 연동 -->
 <script type="text/javascript">
 //coolsms
@@ -460,6 +357,7 @@ $(function(){
 		var frontuId = $("#uId").val();
 		var uId_email =$("#uId_email").val();
 		var	checkinput = $(".mail-check-input") //인증번호 입력 창 
+		$("#AuthCheck").focus();
 		if( frontuId.trim() == "")
 		{
 			$("#msg_id").text("이메일 이름을 써주세요");
@@ -482,6 +380,7 @@ $(function(){
 					//히든 값 변경으로 인증번호 쓰기 
 					console.log("emailAuth="+data);
 					code = data;
+					
 				},
 				error : function(){
 					alert("요청실패");
@@ -493,11 +392,15 @@ $(function(){
 	$('.mail-check-input').blur(function () {
 		var inputCode = $(this).val();
 		const $resultMsg = $('#msg_email');
-		
+		var flagemail = false;
+		console.log("inputCode=="+inputCode);
+		console.log("inputCode=="+code);
 		if(inputCode === code){
 			$resultMsg.html('인증번호가 일치합니다.');
 			$resultMsg.css('color','green');
 			$('#mail-Check-Btn').attr('disabled',true);
+			falgemail = true;
+			console.log("falgemail1="+falgemail);
 			$('#userEamil1').attr('readonly',true);
 			$('#userEamil2').attr('readonly',true);
 			$('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
@@ -505,6 +408,8 @@ $(function(){
 		}else{
 			$resultMsg.html('인증번호가 불일치 합니다. 다시 확인해주세요!.');
 			$resultMsg.css('color','red');
+			falgemail = false;
+			console.log("falgemail2="+falgemail);
 		}
 	});
 	
@@ -700,6 +605,7 @@ $(function(){
 		var uPwc	= $("#uPwc").val();
 		var uName	= $("#uName").val();
 		var uId_email = $("#uId_email").val();
+		var AuthCheck = $("#AuthCheck").val();
 		if(join.uId.value.length == 0 || $("#uId").val() == "")
 		{
 			alert("아이디를 써주세요");
@@ -721,7 +627,13 @@ $(function(){
 			console.log("uIdemailDup = "+uIdemailDup);
 			$("#uId").val("").focus();
 			return false;
-		} else if( uIdDup == false){
+		} else if( falgemail == false){
+			alert("인증번호가 일치 하지 않습니다");
+			$("#msg_check_email").text("메일 요청을 다시 보내고 혹은 잘못된 이메일이 아닌지 확인해주세요");
+			$("#msg_check_email").css("color","#FE642E");
+			$("#uId_email").focus();
+			return false;
+		}else if( uIdDup == false){
 			
 			alert("아이디가 중복됩니다");
 			console.log("uIdDup="+uIdDup);

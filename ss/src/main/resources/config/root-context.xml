@@ -23,7 +23,7 @@
 	<!-- 스프링과 DB연결 06-16 -->
 	<bean id="db" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ssf?useSSL=false&amp;serverTimezone=UTC" />
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ss?useSSL=false&amp;serverTimezone=UTC" />
 		<property name="username" value="root" />
 		<property name="password" value="1234" />
 	</bean>
@@ -52,7 +52,7 @@
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
 		<property name="username" value="comfoop007@gmail.com" />
-		<property name="password" value="${email.password}" />
+		<property name="password" value="uubp vjim atlt ercx" />
 		<property name="javaMailProperties">
 		<props>
 			<prop key="mail.transport.protocol">smtp</prop>
