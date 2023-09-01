@@ -370,14 +370,19 @@ public class EventController {
 			return "event/eventReviewWrite";
 		}
 		@RequestMapping(value="/eventReviewWrite.do", method=RequestMethod.POST)
-		public String eventReviewWrite(int event_number, EventVO ev, EventReviewVO erv){
+		public String eventReviewWrite(int event_number, EventVO ev, EventReviewVO erv, HttpSession session){
+			if(session.getAttribute("login") == null) {
+				return "event/eventReviewWrite";
+			}
+			UserVO loginVO = (UserVO)session.getAttribute("login");
+			erv.setuNo(loginVO.getuNo());
+			System.out.println("loginUno: "+ loginVO.getuNo());
+			int value = es.insert_review(erv);
+			System.out.println("Comment_title : " + erv.getComment_title());
+			System.out.println("Comment_content : " + erv.getComment_content());
+			System.out.println("grade : " + erv.getEvent_review_grade());
 		
-		int value = es.insert_review(erv);
-		System.out.println("Comment_title : " + erv.getComment_title());
-		System.out.println("Comment_content : " + erv.getComment_content());
-		System.out.println("grade : " + erv.getEvent_review_grade());
-	
-		return "redirect:/event/eventView.do?event_number="+ev.getEvent_number();
+			return "redirect:/event/eventView.do?event_number="+ev.getEvent_number();
 		}
 		
 

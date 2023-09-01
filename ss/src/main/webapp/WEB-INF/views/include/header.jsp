@@ -142,7 +142,7 @@
 								<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
 							</svg>
 						</button>
-						<ul class="dropdown-menu text-small shadow show text-center" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 34px);" data-popper-placement="bottom-end">
+						<ul class="dropdown-menu text-small shadow text-center" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 34px);" data-popper-placement="bottom-end">
 							<li><a class="btn btn-primary ms-2" href="<%= request.getContextPath()%>/User/mypage.do">마이페이지</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="btn btn-warning" href="<%= request.getContextPath()%>/User/userLogoutAction.do">로그아웃</a></li>
