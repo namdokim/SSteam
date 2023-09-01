@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 	<style>
@@ -30,7 +30,7 @@
 	
 	<!-- 전광판 점보 트론  -->
 <!-- 	style="background: linear-gradient( to top right, #32AAFF, #BEEFFF);" -->
-<main style="font-family:'jua';" >
+<main style="font-family:'TheJamsil5Bold';" >
 	
 	<!-- 이미지 슬라이드 캐러셀 -->
 	<!-- data-bs-interval="3000" 지연시간 설정 -->
@@ -86,7 +86,7 @@
 			</div>
 			<div class="col-md-5 order-md-1">
 				<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
-				<img src="<%=request.getContextPath() %>/img/ss1.jpg" width="500" height="500">
+				<%-- <img src="<%=request.getContextPath() %>/img/ss1.jpg" width="500" height="500"> --%>
 					<title>Placeholder</title>
 					<rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
 					<text x="50%" y="50%" fill="var(--bs-secondary-color)">500x500</text>
@@ -106,4 +106,4 @@
 <!-- 채팅 테스트 개발 중 (혁수) -->
 <a href = "<%=request.getContextPath() %>/Community/ChattingTest.do"> 채팅 테스트 </a>
 
-<%@ include file="/WEB-INF/views/include/footer.jsp" %> --%>
+<%@ include file="/WEB-INF/views/include/footer.jsp" %>

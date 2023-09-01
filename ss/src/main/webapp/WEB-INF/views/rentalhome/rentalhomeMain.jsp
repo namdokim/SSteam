@@ -36,7 +36,6 @@ window.onload = function(){
 		}else{
 			yn_[index].value = "N";
 		}
-		console.log(yn_[index].value);
 		yn.onchange = function(){
 			if(yn_[index].value == "Y"){
 				yn_[index].value = "N"
@@ -45,6 +44,45 @@ window.onload = function(){
 			}
 		}
 	});
+	
+	let avg_ = document.getElementsByName("avg");
+	avg_.forEach(function(avg, index) {
+		avg.onclick = function(){
+			if(document.getElementById("score").value != avg_[index].innerText){
+				for(var i=0; i < avg_.length; i++){
+					avg_[i].style.backgroundColor = "#f5f9fe";
+				}
+				avg_[index].style.backgroundColor = "#aed2fe";
+				document.getElementById("score").value = avg_[index].innerText;
+			}else{
+				avg_[index].style.backgroundColor = "#f5f9fe";
+				document.getElementById("score").value = 0;
+			}
+		}
+	});
+	
+	let sort_value = document.getElementById("sort").value;
+	if(sort_value == 'price'){
+		document.getElementById("sort_price").style.backgroundColor = "lightgray";
+	}else if(sort_value == 'review'){
+		document.getElementById("sort_review").style.backgroundColor = "lightgray";
+	}else{
+		document.getElementById("sort_like").style.backgroundColor = "lightgray";
+	}
+	
+	document.getElementById("sort_price").onclick = function(){
+		document.getElementById("sort").value = "price";
+		searchMain();
+	}
+	document.getElementById("sort_review").onclick = function(){
+		document.getElementById("sort").value = "review";
+		searchMain();
+	}
+	document.getElementById("sort_like").onclick = function(){
+		document.getElementById("sort").value = "like";
+		searchMain();
+	}
+	
 	
 	const empty_star_ = document.getElementsByName("empty_star");
 	const fill_star_ = document.getElementsByName("fill_star");
@@ -113,7 +151,9 @@ window.onload = function(){
 
 	inputLeft.addEventListener("input", setLeftValue);
 	inputRight.addEventListener("input", setRightValue);
-
+	setLeft();
+	setRight();
+	
 	minPriceInput.addEventListener("blur", function() {
 		if ( parseInt(maxPriceInput.value) <= parseInt(this.value) ) {
 			alert("최소 가격은 최대 가격보다 작아야합니다.");
@@ -224,7 +264,7 @@ window.onload = function(){
 		window.location.href = "rentalhomeMain.do?location="+location+"&start_date="+start_date+"&end_date="+end_date+
 						"&person="+person+"&min_price="+min_price+"&max_price="+max_price+"&score="+score+"&inPool_yn="+inPool_yn+
 						"&outPool_yn="+outPool_yn+"&parking_yn="+parking_yn+"&pickup_yn="+pickup_yn+"&wifi_yn="+wifi_yn+"&beach_yn="+beach_yn+
-						"&bbq_yn="+bbq_yn+"&breakfast_yn="+breakfast_yn+"&animal_yn="+animal_yn+"&sort="+sort+"&type="+type_value;
+						"&bbq_yn="+bbq_yn+"&breakfast_yn="+breakfast_yn+"&animal_yn="+animal_yn+"&sort="+sort+"&type="+type_value+"&page="+page;
 	}
 </script>
 <style type="text/css">
@@ -342,14 +382,18 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .avg{
 	display:inline-block;
-	width:40px;
+	width:50px;
 	font-weight:bold;
 	font-size:10pt;
-	background-color:#f7f7f7;
-	border-radius:3px;
+	background-color:#f5f9fe;
+	border:1px solid lightgray;
+	border-radius:5px;
 	margin:20px 0px;
-	padding:3px 0px;
+	padding:5px 0px;
 	cursor:pointer;
+}
+.avg:hover{
+	border:1px solid gray;
 }
 .check{
 	margin:20px 0px;
@@ -384,10 +428,22 @@ input[type="range"]::-webkit-slider-thumb {
 }	
 .masthead {
 	position: relative;
-	background: url(../img/houses2.jpg) no-repeat center center;
+	background: url(../img/houses.jpg) no-repeat center center;
 	background-size: cover;
 	height:400px
 }	
+
+.btn{
+	border:none;
+	color:black;
+	background-color:transparent;
+}
+
+.btn-check:checked+.btn{
+	color:black;
+	background-color:#f5f9fe;
+	border:1px solid lightgray; 
+}
 </style>
 <div class="container-fluid " style="background-color:#FBFDFF; font-family: 'TheJamsil5Bold';">
 	<div class="masthead py-5">
@@ -456,22 +512,22 @@ input[type="range"]::-webkit-slider-thumb {
 					<div class="carousel-item d-flex active" style="text-align:center; padding:0px;">
 						<div class="col">
 							<div class="card ">
-								<div class="card-body">
-									<span onclick="searchMain()" class="cursor-pointer fw-semibold">최저가  정렬</span>
+								<div class="card-body" id="sort_price" style="cursor:pointer;">
+									<span class="cursor-pointer fw-semibold">최저가  정렬</span>
 								</div>
 							</div>
 						</div>	
 						<div class="col  px-1">
 							<div class="card ">
-								<div class="card-body">
-									<span onclick="searchMain()" class="cursor-pointer fw-semibold">리뷰 많은 순 정렬</span>
+								<div class="card-body" id="sort_review" style="cursor:pointer;">
+									<span class="cursor-pointer fw-semibold">리뷰 많은 순 정렬</span>
 								</div>
 							</div>
 						</div>	
 						<div class="col">	
 							<div class="card ">
-								<div class="card-body">
-									<span onclick="searchMain()" class="cursor-pointer fw-semibold">좋아요 많은 순 정렬</span>
+								<div class="card-body"  id="sort_like" style="cursor:pointer;">
+									<span class="cursor-pointer fw-semibold">좋아요 많은 순 정렬</span>
 								</div>
 							</div>
 						</div>
@@ -480,7 +536,7 @@ input[type="range"]::-webkit-slider-thumb {
 			</div>
 			<div class="container" style=" margin: 20px 18px 0px 0px; vertical-align: top;">
 				<div class="row">
-					<div class="card shadow-sm col-md-3 mt-3 text-center" style="height:1000px; padding:10px; display:block;">
+					<div class="card shadow-sm col-md-3 mt-3 text-center" style="padding:10px; display:block;">
 						<div class="fw-semibold ms-3" style="font-size: 12pt; text-align: left;">가격</div>
 						<div class="middle" style="margin:20px 0px; text-align:center;">
 							<div class="multi-range-slider" style="position: relative; width:80%; display:inline-block;">
@@ -489,50 +545,77 @@ input[type="range"]::-webkit-slider-thumb {
 								<div class="slider">
 									<div class="track"></div>
 									<div class="range"></div>
-									<div class="thumb left" ></div>
+									<div class="thumb left"></div>
 									<div class="thumb right"></div>
 								</div>
 							</div>
 						</div>
 						<div style="width:100%; margin-top:10px;">
-							<input id="min_price" type="text" value="0" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
+							<input id="min_price" type="text" value="${searchVO.min_price}" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 							<div style="display:inline-block;">-</div>
-							<input id="max_price" type="text" value="1000000" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
+							<input id="max_price" type="text" value="${searchVO.max_price}" style="display:inline-block; text-align:center;font-size:10pt; width:100px; line-height:30px;height:30px; color:#0f294d; border-radius:4px; border:1px solid #ddd;"><span style="font-size:10pt; color:#0f294d;">원</span>
 						</div>
 						<div style="width: 100%; margin: 30px 0px; border-top: 1px solid #f2f2f2;"></div>
 						<div style="width: 100%;">
 							<div class="fw-semibold ms-3" style="font-size: 12pt; text-align: left;">평점</div>
-							<div class="avg">0↑</div>
-							<div class="avg">1↑</div>
-							<div class="avg">2↑</div>
-							<div class="avg">3↑</div>
-							<div class="avg">4↑</div>
+							<div class="avg" name="avg">0</div>
+							<div class="avg" name="avg">1</div>
+							<div class="avg" name="avg">2</div>
+							<div class="avg" name="avg">3</div>
+							<div class="avg" name="avg">4</div>
 						</div>
 						<div style="width: 100%; margin: 30px 0px; border-top: 1px solid #f2f2f2;"></div>
 						<div class="ms-3" style="width: 100%;">
 							<div class="fw-semibold" style="font-size: 12pt; text-align: left;">숙소 종류</div>
 							<div class="check" style="margin: 20px 0px; width: 100%; text-align: left;">
-								<input type="radio" name="type" value="motel" <c:if test="${searchVO.type eq 'motel'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">모텔</span><br>
-								<input type="radio" name="type" value="hotel" <c:if test="${searchVO.type eq 'hotel'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">호텔</span><br>
-								<input type="radio" name="type" value="resort" <c:if test="${searchVO.type eq 'resort'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">리조트</span><br>
-								<input type="radio" name="type" value="pension" <c:if test="${searchVO.type eq 'pension'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">펜션</span><br>
-								<input type="radio" name="type" value="guesthouse" <c:if test="${searchVO.type eq 'guesthouse'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">게스트 하우스</span><br>
-								<input type="radio" name="type" value="camping" <c:if test="${searchVO.type eq 'camping'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">캠핑  & 글램핑</span><br>
+								<input type="radio" class="btn-check" name="type" id="motel" value="motel" <c:if test="${searchVO.type eq 'motel'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="motel" style="width:80%;">모텔</label>
+								
+								<input type="radio" class="btn-check" name="type" id="hotel" value="hotel" <c:if test="${searchVO.type eq 'hotel'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="hotel" style="width:80%;">호텔</label>
+								
+								<input type="radio" class="btn-check" name="type" id="resort" value="resort" <c:if test="${searchVO.type eq 'resort'}">checked</c:if> autocomplete="off" >
+								<label class="btn mt-1" for="resort" style="width:80%;">리조트</label>
+								
+								<input type="radio" class="btn-check" name="type" id="pension" value="pension" <c:if test="${searchVO.type eq 'pension'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="pension" style="width:80%;">펜션</label>
+								
+								<input type="radio" class="btn-check" name="type" id="guesthouse" value="guesthouse" <c:if test="${searchVO.type eq 'guesthouse'}">checked</c:if> autocomplete="off" >
+								<label class="btn mt-1" for="guesthouse" style="width:80%;">게스트</label>
+								
+								<input type="radio" class="btn-check" name="type" id="camping" value="camping" <c:if test="${searchVO.type eq 'camping'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="camping" style="width:80%;">캠핑  & 글램핑</label>
+								
+<%-- 								<input type="radio" name="type" value="motel" <c:if test="${searchVO.type eq 'motel'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">모텔</span><br> --%>
+<%-- 								<input type="radio" name="type" value="hotel" <c:if test="${searchVO.type eq 'hotel'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">호텔</span><br> --%>
+<%-- 								<input type="radio" name="type" value="resort" <c:if test="${searchVO.type eq 'resort'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">리조트</span><br> --%>
+<%-- 								<input type="radio" name="type" value="pension" <c:if test="${searchVO.type eq 'pension'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">펜션</span><br> --%>
+<%-- 								<input type="radio" name="type" value="guesthouse" <c:if test="${searchVO.type eq 'guesthouse'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">게스트 하우스</span><br> --%>
+<%-- 								<input type="radio" name="type" value="camping" <c:if test="${searchVO.type eq 'camping'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">캠핑  & 글램핑</span><br> --%>
 							</div>
 						</div>
 						<div style="width: 100%; margin: 30px 0px; border-top: 1px solid #f2f2f2;"></div>
-						<div class="ms-3" style="width: 100%;">
-							<div class="fw-semibold" style="font-size: 12pt; text-align: left;">숙소 내 시설</div>
-							<div class="check" style="margin: 20px 0px; width: 100%; text-align: left;">
-								<input type="checkbox" name="yn" id="inPool_yn"  value="Y" <c:if test="${searchVO.inPool_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">내부 수영장</span><br>
-								<input type="checkbox" name="yn" id="outPool_yn" value="Y" <c:if test="${searchVO.outPool_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">야외 수영장</span><br>
-								<input type="checkbox" name="yn" id="parking_yn" value="Y" <c:if test="${searchVO.parking_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">주차장</span><br>
-								<input type="checkbox" name="yn" id="pickup_yn" value="Y" <c:if test="${searchVO.pickup_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">픽업</span><br>
-								<input type="checkbox" name="yn" id="wifi_yn" value="Y" <c:if test="${searchVO.wifi_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">와이파이</span><br>
-								<input type="checkbox" name="yn" id="beach_yn" value="Y" <c:if test="${searchVO.beach_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">인근해변</span><br>
-								<input type="checkbox" name="yn" id="bbq_yn" value="Y" <c:if test="${searchVO.bbq_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">바베큐</span><br>
-								<input type="checkbox" name="yn" id="breakfast_yn" value="Y" <c:if test="${searchVO.breakfast_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">조식</span><br>
-								<input type="checkbox" name="yn" id="animal_yn" value="Y" <c:if test="${searchVO.animal_yn eq 'Y'}">checked</c:if>><span style="font-size: 10pt; color: #0f294d;">반려동물</span><br>
+						<div style="width: 100%;">
+							<div class="fw-semibold ms-3" style="font-size: 12pt; text-align:left;">숙소 내 시설</div>
+							<div class="check" style="margin: 20px 0px; width: 100%; text-align:center;">
+								<input type="checkbox" class="btn-check" name="yn" id="inPool_yn"  value="Y" <c:if test="${searchVO.inPool_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="inPool_yn" style="display:inline-block; width:80%;">내부 수영장</label>
+								<input type="checkbox" class="btn-check" name="yn" id="outPool_yn" value="Y" <c:if test="${searchVO.outPool_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="outPool_yn" style="display:inline-block; width:80%;">야외 수영장</label>
+								<input type="checkbox" class="btn-check" name="yn" id="parking_yn" value="Y" <c:if test="${searchVO.parking_yn eq 'Y'}">checked</c:if> autocomplete="off" >
+								<label class="btn mt-1" for="parking_yn" style="display:inline-block; width:80%;">주차장</label>
+								<input type="checkbox" class="btn-check" name="yn" id="pickup_yn" value="Y" <c:if test="${searchVO.pickup_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="pickup_yn" style="display:inline-block; width:80%;">픽업</label>
+								<input type="checkbox" class="btn-check" name="yn" id="wifi_yn" value="Y" <c:if test="${searchVO.wifi_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="wifi_yn" style="display:inline-block; width:80%;">와이파이</label>
+								<input type="checkbox" class="btn-check" name="yn" id="beach_yn" value="Y" <c:if test="${searchVO.beach_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="beach_yn" style="display:inline-block; width:80%;">인근해변</label>
+								<input type="checkbox" class="btn-check" name="yn" id="bbq_yn" value="Y" <c:if test="${searchVO.bbq_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="bbq_yn" style="display:inline-block; width:80%;">바베큐</label>
+								<input type="checkbox" class="btn-check" name="yn" id="breakfast_yn" value="Y" <c:if test="${searchVO.breakfast_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="breakfast_yn" style="display:inline-block; width:80%;">조식</label>
+								<input type="checkbox" class="btn-check" name="yn" id="animal_yn" value="Y" <c:if test="${searchVO.animal_yn eq 'Y'}">checked</c:if> autocomplete="off">
+								<label class="btn mt-1" for="animal_yn" style="display:inline-block; width:80%;">반려동물</label>
 							</div>
 						</div>
 						<div class="mt-2" onclick="searchMain()" style="background-color:#0863ec; width:80%; padding:10px 0px; display:inline-block; border-radius:5px; cursor:pointer;">
@@ -633,16 +716,16 @@ input[type="range"]::-webkit-slider-thumb {
 							<%-- 이전 페이지 링크 생성 --%>
 							<li class="page-item">
 							<% if (pageMaker.isPrev()){ %>
-								<a class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getStartPage()-1%>">Previous</a>
+								<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=">Previous</span>
 							<%} %> 
 							</li>
 							<% 
 							for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
 							%>
 							<li class="page-item">
-							<a class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
+							<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
 								<%=i %>
-							</a>
+							</span>
 							</li>
 							<%
 							} 
@@ -650,7 +733,7 @@ input[type="range"]::-webkit-slider-thumb {
 							<%-- 다음 페이지 링크 생성 --%>
 							<li class="page-item">
 							<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %> 
-								<a class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>">Next</a>
+								<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>">Next</span>
 							<% } %> 
 							</li>
 						</ul>
