@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.FoodVO;
 import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
@@ -64,7 +65,6 @@ public class UserController
 	
 	@Autowired
 	public PageMaker pageMaker;
-
 	
 	//메인 화면 
 	@RequestMapping(value="index.do")
@@ -258,8 +258,6 @@ public class UserController
 	}
 	//유저 인증번호 확인 
 	
-	
-	
 	// 유저 로그인 시  비밀번호 체크
 	@ResponseBody
 	@RequestMapping(value="/uPwCheck.do")
@@ -313,7 +311,117 @@ public class UserController
 			return "FAIL";
 		}
 	} //로그인 끝
+	// 회원 프로필 사진 수정 
+	// 억까로 되네. 파일 관련은 공부 좀 해야 겟다 너 말이야 너!!! 너!!!! 너,임마!
+	@RequestMapping(value="/profileimg.do")
+	public String profile_modify(UserVO uv, 
+			@RequestParam("myprofileimg") MultipartFile myprofileimg, 
+			@RequestParam Map<String, Object> map,
+			MultipartHttpServletRequest multireq,
+			HttpServletRequest req, 
+			RedirectAttributes ra,
+			HttpSession session, Model model
+			)
+	{
+		
+		System.out.println("filefirst="+myprofileimg);
+		UserVO login = (UserVO)session.getAttribute("login");
+		// 웹 접근경로 (프로젝트 경로로 시작해서)
+		String webPath="/resources/images/userprofile/";
+		// 서버 저장 폴더경로
+		// 프로젝트 절대경로뒤 웹 접근경로가 합쳐짐 
+		String folderPath = req.getSession().getServletContext().getRealPath(webPath);
+		File foldercre = new File(folderPath);
+		// 파일 삭제 프로필 삭제시
+		if(login.getuImg() != null)
+		{
+			String standfile = login.getuImg();
+			String stand[] = standfile.split("/");
+			String standname = null;
+			for(int i =0; i<stand.length; i++)
+			{
+				standname = stand[4];
+			}
+			System.out.println("standname="+standname);
+			File remove = new File(folderPath+standname);
+			System.out.println("remove="+remove);
+			System.out.println("remove=="+remove.exists());
+			if(remove.exists())
+			{
+				remove.delete();				
+			}
+			map.put("standfile", login.getuImg());
+		}else {
+			String standfile = login.getuImg();
+			System.out.println("standfile="+standfile);
+			File remove = new File(standfile);
+			remove.delete();
+		}
+		
+		if(foldercre.mkdirs())
+		{
+			System.out.println("폴더 생성 성공 1"+foldercre);
+		}else
+		{
+			System.out.println("폴더 생성 실패1"+foldercre);
+		}
+		System.out.println("folderPath="+folderPath);
+ 		// 파일 이름 
+		//map에 경로2개 이미지 del 회원번호 담기
+		
+		map.put("webPath", webPath);
+		map.put("folderPath", folderPath);
+		map.put("myprofileimg", myprofileimg);
+		map.put("uNo", login.getuNo());
+		//쿼리문 실행
+		System.out.println("map="+map.get(myprofileimg));
+		System.out.println("login=="+login.getuImg());
+		
+		int result = us.profileimg(map);
+		
+		String message = null;
+		if( result > 0)
+		{
+			System.out.println("여기 실행 됨?");
+			message = "프로필 이미지 변경 완료 ";
+			uv.setuImg( (String)map.get("myprofileimg"));
+			model.addAttribute(uv.getuImg());
+		}else {
+			System.out.println("여기 실행 됨? 실행 되는거여 ?");
+			message = "변경 실패";
+		}
+		
+		ra.addFlashAttribute("message",message);
+		return "redirect:profile.do";
+		
+	}
 	
+	@RequestMapping(value = "/kakaologin")
+	public String kakaologinform(String code,UserVO uv, HttpServletRequest req,HttpSession session, Model model) {
+		System.out.println("code="+code);
+		String access_Token = null;
+		try {
+			System.out.println("실행 현황");
+			access_Token = kakaoS.getAccessToken(code);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		System.out.println("###access_Token#### : " + access_Token);
+		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
+		
+		// 3번
+		HashMap<String, Object> userInfo = ( kakaoS).getUserInfo(access_Token);
+		System.out.println("###nickname#### : " + userInfo.get("nickname"));
+		System.out.println("###email#### : " + userInfo.get("email"));
+		UserVO login = new UserVO();
+		login.setuId((String) userInfo.get("email"));
+		login.setuNick((String) userInfo.get("nickname"));
+		String uSocialType = "social";
+		login.setuSocialType(uSocialType);
+		session = req.getSession();
+		session.setAttribute("login", login);
+		return "redirect:/";
+	}
 	//마이페이지 이동 
 	@RequestMapping(value="/mypage.do")
 	public String mypage(UserVO uv, HttpServletRequest req, HttpSession session, Model model
@@ -326,9 +434,22 @@ public class UserController
 			return "User/mypage";
 		}else
 		{
-			
 			return "redirect:/";
 		}
+	}
+	//이메일 find 이동
+	@RequestMapping(value="/emailfind")
+	public String emailfind(
+			)
+	{
+		return "/User/emailfind";
+	}
+	//이메일 찾기 해버려
+	@RequestMapping(value="/emailfindplay")
+	public String emailfindplay(
+			)
+	{
+		return "/User/emailfind";
 	}
 	// 회원 프로필 이동 
 	@RequestMapping(value="/profile.do")
@@ -336,11 +457,35 @@ public class UserController
 			)
 	{
 		UserVO login = (UserVO)session.getAttribute("login");
-		
-		
+		 
 		if(login !=null)
 		{
 			System.out.println("profile="+login);
+			
+			if(login.getuImg() != null)
+			{
+				String webPath="/resources/images/userprofile/";
+				// 서버 저장 폴더경로
+				// 프로젝트 절대경로뒤 웹 접근경로가 합쳐짐 
+				String folderPath = req.getSession().getServletContext().getRealPath(webPath);
+				String standfile = login.getuImg();
+				String stand[] = standfile.split("/");
+				String standname = null;
+				for(int i =0; i<stand.length; i++)
+				{
+					standname = stand[4];
+				}
+				System.out.println("standname="+standname);
+				File remove = new File( (folderPath+standname).replace('\\', '/') );
+				System.out.println("remove="+remove);
+				System.out.println("remove=="+remove.exists());
+				if(remove.exists())
+				{
+					model.addAttribute("standname",standname);
+					model.addAttribute("remove",remove);				
+				}
+				
+			}
 			return "User/userProfile";
 		}else
 		{
@@ -348,12 +493,53 @@ public class UserController
 			return "redirect:/";
 		}
 	}
+	// 회원 정보 수정 페이지
+	@RequestMapping(value="/UserModify.do")
+	public String UserModify(UserVO uv, HttpServletRequest req, HttpSession session, Model model
+			) {
+		UserVO login = (UserVO)session.getAttribute("login");
+		if(login !=null) {
+			return "User/UserModify";
+		}else {
+			return "redirect:/";
+			
+		}
+	}
+	//회원 정보 수정 처리
+	@RequestMapping(value="/UserModifyAction")
+	public String UserModifyAction(	@RequestParam("uNo") int uNo,
+									@RequestParam("uType") String uType,
+									@RequestParam("uName") String uName,
+									@RequestParam("uNick") String uNick,
+									@RequestParam("uPhone") String uPhone,
+									UserVO uv, 
+									HttpServletRequest req, 
+									HttpSession session, 
+									Model model
+			) {
+		UserVO loginVO = (UserVO)session.getAttribute("login");
+		System.out.println("loginVO=="+loginVO);
+		if(loginVO != null){
+			uv.setuNo(uNo);
+			uv.setuType(uType);
+			uv.setuName(uName);
+			uv.setuNick(uNick);
+			uv.setuPhone(uPhone);
+			System.out.println("uv=="+uv);
+			
+			int value = us.UserModifyAction(uv);
+			
+			session.invalidate();
+			return "redirect:userLogin.do";
+		}else {
+			return "redirect:/";
+		}
+	}
 	// 회원 좋아요 이동
 	@RequestMapping(value="/great.do")
 	public String great(UserVO uv,
 			HttpServletRequest req, HttpSession session, Model model
-			)
-	{
+			) {
 		UserVO login = (UserVO)session.getAttribute("login");
 		System.out.println("great="+login);
 		
@@ -377,8 +563,7 @@ public class UserController
 	//회원 리뷰 이동 
 	@RequestMapping(value="/review.do")
 	public String review(UserVO uv, HttpServletRequest req, HttpSession session, Model model
-			)
-	{
+			) {
 		UserVO login = (UserVO)session.getAttribute("login");
 		System.out.println("review="+login);
 		if(login !=null)
@@ -392,9 +577,11 @@ public class UserController
 	}
 	// 회원 결제 현황 이동 
 	@RequestMapping(value="/payment.do")
-	public String Payment(UserVO uv, HttpServletRequest req, HttpSession session, Model model
-			)
-	{
+	public String Payment(	UserVO uv,
+							HttpServletRequest req, 
+							HttpSession session, 
+							Model model
+						) {
 		UserVO login = (UserVO)session.getAttribute("login");
 		System.out.println("Payment"+login);
 		if(login !=null)
@@ -406,100 +593,156 @@ public class UserController
 			return "redirect:/";
 		}
 	}
-
-	// 회원 프로필 사진 수정 
-	// 억까로 되네. 파일 관련은 공부 좀 해야 겟다 너 말이야 너!!! 너!!!! 너,임마!
-	@RequestMapping(value="/profileimg.do")
-	public String profile_modify(UserVO uv, 
-			@RequestParam("myprofileimg") MultipartFile myprofileimg,
-			@RequestParam Map<String, Object> map,
-			MultipartHttpServletRequest multireq,
+	// 유저 리스트 	
+	@RequestMapping(value="/UserList.do" , method=RequestMethod.GET)
+	public String UserList(UserVO uv,
+			
+			 String searchType,
+			 String searchValue,
 			HttpServletRequest req, 
-			RedirectAttributes ra,
-			HttpSession session, Model model
-			)
-	{
+			HttpSession session, 
+			
+			Model model) {
+		UserVO login = (UserVO) session.getAttribute("login");
 		
-		System.out.println("filefirst="+myprofileimg);
-		UserVO login = (UserVO)session.getAttribute("login");
-		// 웹 접근경로 (프로젝트 경로로 시작해서)
-		String webPath="/resources/images/userprofile/";
-		// 서버 저장 폴더경로
-		// 프로젝트 절대경로뒤 웹 접근경로가 합쳐짐 
-		String folderPath = req.getSession().getServletContext().getRealPath(webPath);
-		
-		File foldercre = new File(folderPath);
-		if(foldercre.mkdirs())
+		System.out.println("searchType@@"+searchType);
+		System.out.println("searchValue@@"+searchValue);
+		if(login.getuType().equals("admin"))
 		{
-			System.out.println("폴더 생성 성공 1"+foldercre);
-		}else
-		{
-			System.out.println("폴더 생성 실패1"+foldercre);
-		}
-		System.out.println("folderPath="+folderPath);
- 		// 파일 이름 
-		//map에 경로2개 이미지 del 회원번호 담기
-		map.put("standfile", login.getuImg());
-		map.put("webPath", webPath);
-		map.put("folderPath", folderPath);
-		map.put("myprofileimg", myprofileimg);
-		map.put("uNo", login.getuNo());
-		//쿼리문 실행
-		System.out.println("map="+map.get(myprofileimg));
-		System.out.println("login=="+login.getuImg());
-		
-		int result = us.profileimg(map);
-		
-		String message = null;
-		if( result > 0)
-		{
-			System.out.println("여기 실행 됨?");
-			message = "프로필 이미지 변경 완료 ";
-			uv.setuImg( (String)map.get("myprofileimg"));
-			model.addAttribute(uv.getuImg());
+			List<UserVO> UserList = us.UserList(uv);
+			System.out.println("UserList="+UserList);
+			model.addAttribute("UserList",UserList);
+			
+			return "User/UserList";
+			
 		}else {
-			System.out.println("여기 실행 됨? 실행 되는거여 ?");
-			message = "변경 실패";
+			
+			return "redirect:/";
 		}
-		ra.addFlashAttribute("message",message);
-		return "redirect:profile.do";
-		
 	}
+	// 유저 리스트 	
+	@RequestMapping(value="/searchUserList.do" , method=RequestMethod.POST)
+	public String searchUserList(UserVO uv,
+				@RequestParam("searchType") String searchType,
+				@RequestParam("searchValue") String searchValue,
+				HttpServletRequest req, 
+				HttpSession session, 
+				Model model) {
+			UserVO login = (UserVO) session.getAttribute("login");
+			SearchVO searchVO = new SearchVO();
+			System.out.println("searchType=="+searchType);
+			System.out.println("searchValue=="+searchValue);
+			if(login != null)
+			{
+				if(searchType != null || searchType != "" || searchValue != null || searchValue != "") {
+					searchVO.setSearchType(searchType);
+					searchVO.setSearchValue(searchValue);
+					
+					model.addAttribute("searchVO",searchVO);
+					System.out.println("searchVO"+searchVO);
+				}
+				
+				List<UserVO> UserList = us.searchList(searchVO);
+				System.out.println("UserList="+UserList);
+				model.addAttribute("UserList",UserList);
+				
+				return "User/UserList";
+				
+			}else {
+				
+				return "redirect:/";
+			}
+		}
 	//
-	
-	@RequestMapping(value = "/kakaologin")
-	public String kakaologinform(String code,UserVO uv, HttpServletRequest req,HttpSession session, Model model) {
-		System.out.println("code="+code);
-		String access_Token = null;
-		try {
-			System.out.println("실행 현황");
-			access_Token = kakaoS.getAccessToken(code);
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@ResponseBody
+	@RequestMapping(value="/seaUserList.do")
+	public Map<String,Object> seaUserList(String uType,
+			String searchValue,
+			String searchType,
+			Model model){
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserVO uv = new UserVO();
+		SearchVO searchVO = new SearchVO();
+		List<UserVO> seaList = null;
+		//UserVO uv = new UserVO();
+		//uv.setuNo(uType);
+		if(searchType != null || searchType != "" || searchValue != null || searchValue != "") {
+			searchVO.setSearchType(searchType);
+			searchVO.setSearchValue(searchValue);
+			
+			model.addAttribute("searchVO",searchVO);
+			System.out.println("searchVO ajax="+searchVO);
+			seaList = us.searchList(searchVO);
 		}
-		System.out.println("###access_Token#### : " + access_Token);
-		// 위의 access_Token 받는 걸 확인한 후에 밑에 진행
-		
-		// 3번
-		HashMap<String, Object> userInfo = ( kakaoS).getUserInfo(access_Token);
-		System.out.println("###nickname#### : " + userInfo.get("nickname"));
-		System.out.println("###email#### : " + userInfo.get("email"));
-		UserVO login = new UserVO();
-		login.setuId((String) userInfo.get("email"));
-		login.setuNick((String) userInfo.get("nickname"));
-		
-		session = req.getSession();
-		session.setAttribute("login", login);
-		return "redirect:/";
+		List<UserVO> userlist = us.seaUserList(uType);
+		List<UserVO> userlist2 = us.UserList(uv);
+		System.out.println("seaUserList ajax==="+userlist);
+		System.out.println("seaUserList2 ajax==="+userlist2);
+		if(seaList == null)
+		{
+			map.put("success",true);
+			map.put("result",userlist2);
+			model.addAttribute("sealist",userlist2);
+			
+		}else {
+			map.put("success",true);
+			map.put("result",seaList);
+			model.addAttribute("sealist",seaList);
+		}
+		map.put("searchType",searchType);
+		map.put("searchValue",searchValue);
+		return map;
 	}
-	
-	
-	/*
-	 * @GetMapping("/kakao/login") public String kakaocallback(String code) {
-	 * //@ResponseBody :data 리턴해주는 함수 //post 방식으로 key=value데이터를 요청 RestTemplate rt =
-	 * new RestTemplate(); System.out.println("code="+code); return code; }
-	 */
+	// 유저 리스트 에이작스
+	@ResponseBody
+	@RequestMapping(value="/searchList.do")
+	public List<UserVO> searchList(UserVO uv,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("searchValue") String searchValue,
+			HttpServletRequest req, 
+			HttpSession session, 
+			Model model) {
+		UserVO login = (UserVO) session.getAttribute("login");
+		SearchVO searchVO = new SearchVO();
+		System.out.println("searchType="+searchType);
+		System.out.println("searchValue="+searchValue);
+		if(login.getuType().equals("admin") || login.getuType() != null)
+		{
+			if(searchType != null || searchType != "" || searchValue != null || searchValue != "") {
+				searchVO.setSearchType(searchType);
+				searchVO.setSearchValue(searchValue);
+				
+				model.addAttribute("searchVO",searchVO);
+			}
+			
+			List<UserVO> UserList = us.searchList(searchVO);
+			System.out.println("UserList===="+UserList);
+			model.addAttribute("UserList",UserList);
+			
+			return UserList;
+		}else {
+			List<UserVO> UserList2 = us.UserList(uv);
+			
+			return UserList2;
+		}
+	}
+	// 유저 밴 리스트
+	@RequestMapping(value="/UserReport.do")
+	public String UserReport(UserVO uv, HttpServletRequest req, HttpSession session, Model model)
+	{
+		UserVO login = (UserVO) session.getAttribute("login");
+		if(login.getuType().equals("admin"))
+		{
+			List<UserVO> UserList = us.UserList(uv);
+			System.out.println("UserList="+UserList);
+			model.addAttribute("UserList",UserList);
+			return "User/UserReport";
+		}else {
+			
+			return "redirect:/";
+		}
+	}
+
 
 	// 1. 카카오톡에 사용자 코드 받기 (jsp의 a태그 href에 경로 잇다 )
 	// 2. code를 kakaoS.getAccessToken로 보냄
@@ -527,20 +770,7 @@ public class UserController
 	 * return "/User/kakaologin"; }
 	 */
 	
-	//이메일 find 이동
-	@RequestMapping(value="/emailfind")
-	public String emailfind(
-			)
-	{
-		return "/User/emailfind";
-	}
-	//이메일 찾기 해버려
-	@RequestMapping(value="/emailfindplay")
-	public String emailfindplay(
-			)
-	{
-		return "/User/emailfind";
-	}
+	
 	// 마이페이지 좋아요 리스트 전체갯수
 	@RequestMapping(value="/userlike")
 	public String userlike(
@@ -564,11 +794,12 @@ public class UserController
 		@ResponseBody
 		@RequestMapping(value="/rentalhomemore.do", method=RequestMethod.POST )
 		public PageMaker getMoreList(
-				
+				Criteria cri,
 				SearchVO searchVo,
 				HttpServletRequest req,
 				HttpServletResponse res,
-				HttpSession session
+				HttpSession session,
+				Model model
 				) throws JsonProcessingException
 		{
 			
@@ -584,7 +815,7 @@ public class UserController
 			pageMaker.setCri(searchVo);
 			pageMaker.setTotalCount(rentalhome_userlike_total);
 			
-			
+			model.addAttribute("cri", new PageMaker());
 			//String pageMake = pageMaker.toString();
 			//String pageMake = mapper.writeValueAsString(pageMaker);
 			System.out.println("pageMake"+pageMaker);

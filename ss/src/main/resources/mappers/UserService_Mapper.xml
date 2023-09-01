@@ -22,14 +22,42 @@
 	<!-- id(email) 중복체크 -->
 	<select id="uIdCheck" parameterType="String" resultType="int">
 		select count(*) as cnt from user where uDely="N" and uId=#{uId};
+		
 	</select>
 	<!-- 비밀번호  -->
 	<select id="uPwCheck" parameterType="String" resultType="uv">
 		select uNo, uId, uPw from user where uDely="N" and uId=#{uId};
 	</select>
+	<!-- 회원 정보 수정  -->
+	<update id="UserModifyAction" parameterType="uv" > 
+		UPDATE user SET 
+		uType = #{uType},
+		uName = #{uName},
+		uNick = #{uNick},
+		uPhone = #{uPhone}
+		WHERE uNo = #{uNo}
+		<selectKey keyProperty="uNo" resultType="uv" order="BEFORE">
+			SELECT * from user where uNo = #{uNo}
+		</selectKey>
+	</update>
 	<!-- 유저 조회 메소드  -->
 	<select id="userONE" parameterType="uv" resultType="uv">
 		select * from user where uDely="N" and uId=#{uId};
+	</select>
+	<select id="UserList" parameterType="uv" resultType="uv">
+		select * from user where uType="business" or uType="normal"
+	</select>
+	<select id="seaUserList" parameterType="String" resultType="uv">
+		select * from user where uType="business" or uType="normal"
+	</select>
+	<select id="searchList" parameterType="searchVO" resultType="uv">
+		select * from user 
+		WHERE uId like CONCAT('%',#{searchValue},'%')
+		OR uName like CONCAT('%',#{searchValue},'%')
+		OR uNick like CONCAT('%',#{searchValue},'%') 
+		<if test="searchType != null and searchType != ''">
+			OR uType like CONCAT('%',#{searchType},'%')
+		</if>
 	</select>
 	<!-- 이미지 수정 -->
 	<update id="profileimg" parameterType="hashMap">
@@ -40,17 +68,23 @@
 	<select id="selectAll_rentalhome_userlike" parameterType="int" resultType="rentalhomeVO">
 		select rl.rentalhome_idx, rh.name, rh.type, rh.info, rl.uNo 
 		from rentalhome_like rl, rentalhome rh
-		where rl.rentalhome_idx = rh.rentalhome_idx and rl.uNo = #{uNo};
+		where rl.rentalhome_idx = rh.rentalhome_idx and rl.uNo = #{uNo} limit 10;
 	</select>
 	<!-- 숙박 like 전체 갯수 -->
 	<select id="rentalhome_userlike" parameterType="int" resultType="int">
 		select count(*) from rentalhome_like where uNo= #{uNo}
 	</select>
 	<!-- my clicked 맛집 like -->
-		<select id="selectAll_food_userlike" parameterType="int" resultType="foodVO">
+	<select id="selectAll_food_userlike" parameterType="int" resultType="foodVO">
 		select fl.fNo, fo.food_name, fo.food_phone, fo.food_content, fl.uNo 
 		from food_like fl, food fo
 		where fl.fNo = fo.fNo and fl.uNo = #{uNo};
 	</select>
+	<!-- 맛집 like 전체 갯수 -->
+	
 	<!-- my writed review -->
+	
+	<!-- my writed 숙박 review -->
+	<!-- my writed 맛집 review -->
+	<!-- my writed 이벤트 review -->
 </mapper>

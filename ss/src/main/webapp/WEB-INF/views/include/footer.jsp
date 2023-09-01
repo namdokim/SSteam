@@ -2,11 +2,12 @@
 
 
 <style>
-  html,
+html,
   body {
-    height: 100%;
+    height: auto;
   }
 
+	
   .content {
     flex: 1;
     margin-bottom: 50px; /* 푸터의 높이만큼 여백 추가 */
@@ -22,7 +23,7 @@
     bottom: 0;
     width: 100%;
     margin-top: auto;
-   /*  z-index: 999; */ /* 푸터가 다른 요소 위에 표시되도록 z-index 설정 */
+    z-index: -1; /* 푸터가 다른 요소 위에 표시되도록 z-index 설정 */
   }
    .bd-placeholder-img {
         font-size: 1.125rem;
@@ -76,14 +77,14 @@
       }
 </style>
 	<!-- 하단 우측  스크롤 위로 올리기  -->
-	<div id="bottomClick" class="position-fixed bottom-0 end-0 md-3 me-2 bd-mode-toggle">
-		<button class="btn btn-bd-primary py-2 d-flex align-items-center" type="button" onclick="topClick();">
-			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
+	<div id="bottomClick" class="position-fixed bottom-0 end-0 md-3 my-4 mx-3 bd-mode-toggle">
+		<button class="btn btn-bd-primary py-2 d-flex align-items-center" type="button" onclick="topClick();" style="z-index:999;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
 			</svg>
 		</button>
 	</div>
-		<footer class="footer mt-auto py-3 bg-light navbar-wrapper root-container" style="position: relative;">
+		<footer class="footer mt-auto py-3 bg-light navbar-wrapper sticky-bottom root-container shadow-sm" style="position: relative;">
 			<div class="container">
 				<p class="text-center text-muted">Live v0.011&nbsp;<small class="text-muted">(000000)</small>
 					<span class="sep"></span>
