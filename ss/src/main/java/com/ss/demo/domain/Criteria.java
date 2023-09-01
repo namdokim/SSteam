@@ -2,14 +2,13 @@ package com.ss.demo.domain;
 
 public class Criteria {
 	
+	private int page;
 	
-	private int page;    //��������ȣ�� ��� ����	
+	private int perPageNum;
 	
-	private int perPageNum;  //�۸�ϰ���
+	private int sNum;
 	
-	private int sNum;    // ���� ���� ��ȣ
-	
-	public Criteria() {     // �����ڰ� �����ɶ� ������� �ʱ�ȭ ���� �ִ´�
+	public Criteria() {
 		this.page = 1;
 		this.perPageNum =10;
 		this.sNum = (page-1)*perPageNum;
@@ -40,11 +39,5 @@ public class Criteria {
 	public void setPerPageNum(int perPageNum) {
 		this.perPageNum = perPageNum;
 	}
-
-	
-	
-	
-	
-	
 
 }

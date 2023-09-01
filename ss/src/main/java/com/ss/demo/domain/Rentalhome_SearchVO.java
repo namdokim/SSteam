@@ -1,11 +1,16 @@
 package com.ss.demo.domain;
 
 public class Rentalhome_SearchVO extends Criteria{
+	
+	private int rentalhome_idx;
+	
 	private String location;
 	private String start_date;
 	private String end_date;
 	private String person;
 	
+	
+	private int uNo;
 	private int min_price;
 	private int max_price;
 	private double score;
@@ -19,12 +24,16 @@ public class Rentalhome_SearchVO extends Criteria{
 	private String bbq_yn;			// 바베큐
 	private String breakfast_yn;	// 조식
 	private String animal_yn;		// 반려동물
-	private String sort_price;		// 가격 낮은 순
-	private String sort_review;		// 리뷰 많은 순
-	private String sort_like;		// 좋아요 많은 순
+	private String sort;		// 가격 낮은 순
 	
 	
 	
+	public int getRentalhome_idx() {
+		return rentalhome_idx;
+	}
+	public void setRentalhome_idx(int rentalhome_idx) {
+		this.rentalhome_idx = rentalhome_idx;
+	}
 	public String getPerson() {
 		return person;
 	}
@@ -43,23 +52,11 @@ public class Rentalhome_SearchVO extends Criteria{
 	public void setEnd_date(String end_date) {
 		this.end_date = end_date;
 	}
-	public String getSort_price() {
-		return sort_price;
+	public String getSort() {
+		return sort;
 	}
-	public void setSort_price(String sort_price) {
-		this.sort_price = sort_price;
-	}
-	public String getSort_review() {
-		return sort_review;
-	}
-	public void setSort_review(String sort_review) {
-		this.sort_review = sort_review;
-	}
-	public String getSort_like() {
-		return sort_like;
-	}
-	public void setSort_like(String sort_like) {
-		this.sort_like = sort_like;
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 	public String getLocation() {
 		return location;
@@ -145,16 +142,23 @@ public class Rentalhome_SearchVO extends Criteria{
 	public void setAnimal_yn(String animal_yn) {
 		this.animal_yn = animal_yn;
 	}
-	
-	@Override
-	public String toString() {
-		return "Rentalhome_SearchVO [location=" + location + ", start_date=" + start_date + ", end_date=" + end_date
-				+ ", person=" + person + ", min_price=" + min_price + ", max_price=" + max_price + ", score=" + score
-				+ ", type=" + type + ", inPool_yn=" + inPool_yn + ", outPool_yn=" + outPool_yn + ", parking_yn="
-				+ parking_yn + ", pickup_yn=" + pickup_yn + ", wifi_yn=" + wifi_yn + ", beach_yn=" + beach_yn
-				+ ", bbq_yn=" + bbq_yn + ", breakfast_yn=" + breakfast_yn + ", animal_yn=" + animal_yn + ", sort_price="
-				+ sort_price + ", sort_review=" + sort_review + ", sort_like=" + sort_like + "]";
+	public int getuNo() {
+		return uNo;
+	}
+	public void setuNo(int uNo) {
+		this.uNo = uNo;
 	}
 	
 	
+	@Override
+	public String toString() {
+		return "Rentalhome_SearchVO [rentalhome_idx=" + rentalhome_idx + ", location=" + location + ", start_date="
+				+ start_date + ", end_date=" + end_date + ", person=" + person + ", uNo=" + uNo + ", min_price="
+				+ min_price + ", max_price=" + max_price + ", score=" + score + ", type=" + type + ", inPool_yn="
+				+ inPool_yn + ", outPool_yn=" + outPool_yn + ", parking_yn=" + parking_yn + ", pickup_yn=" + pickup_yn
+				+ ", wifi_yn=" + wifi_yn + ", beach_yn=" + beach_yn + ", bbq_yn=" + bbq_yn + ", breakfast_yn="
+				+ breakfast_yn + ", animal_yn=" + animal_yn + ", sort=" + sort + "]";
+	}
+	
+		
 }

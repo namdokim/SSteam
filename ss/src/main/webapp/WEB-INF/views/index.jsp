@@ -7,91 +7,65 @@
 		/* width: 400px; */
 		height: 500px;
 	}
-	#carouselExampleCaptions {
-		/* margin-left: 5%;
-		margin-right: 5%; */
-	}
-	</style>
-	<!-- 전광판 점보트론 -->
-	<style type="text/css">
-		/* 깜빡임 효과를 위해서  */
-		@keyframes blink-effect {
-		50% { opacity: 0.1; }
-		}
-		.notice {
-		/* background-image : url('img/jumbotronBackground.jpg'); */
-		background-color: write;
-		background-position: center;
-		background-size: 1em;
-		background-repeat: no-repeat;
-		text-shadow: black 0.2em 0.2em 0.2em;
-		color : red;
-		}
-		.jumbotroncontainer{
-			margin-left: 5%;
-			margin-right: 5%;
-		}
-		.notice-text-center{
-		animation: blink-effect 1s step-end infinite;
-		}
+	  .carousel-inner.rounded {
+        border-radius: 70px; /* 원하는 크기로 조정 */
+        overflow: hidden; /* 내용이 넘칠 경우 테두리를 넘치지 않도록 함 */
+    }
+    
+        /* 스타일링 */
+           .dark-overlay::before {
+            content: ""; /* 가상 요소 생성 */
+            position: absolute; /* 절대 포지션으로 이미지 위에 배치 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1c375e;/* 어둡게 만들기 위한 검은색 레이어 */
+            opacity: 0.5; /* 투명도 조절 */
+            pointer-events: none; /* 가상 요소에 마우스 이벤트를 허용하지 않음 */
+        }
+
+ 
 	</style>
 	
 	<!-- 전광판 점보 트론  -->
-<div class="jumbotroncontainer"> <!--어떤 내용이 담기는 하나의 공간, 그릇-->
-	<div class="notice">
-		<c:if test="${empty login}">
-		<span class="notice-text-center">로그인을 해주세요 로그인이 안되잇어요</span>
-		</c:if>
-		<c:if test="${not empty login}">
-		<span class="notice-text-center">${login.uName}님 환영합니다//<%= login.getuNick() %>님 이랏샤이마세!</span>
-		</c:if>
-			<!-- <p class="text-center"> 코딩 부스터는 IT 교육 사이트입니다. 다양한 IT 관련 무료 및 유료 강의가 존재합니다.</p>
-			<p class="text-center">
-				<a class="bit btn-primary btn-lg" href="tt" role="button">강의 들으러 가기</a>
-			</p> -->
-	</div>
-</div>
+<!-- 	style="background: linear-gradient( to top right, #32AAFF, #BEEFFF);" -->
+<main style="font-family:'jua';" >
+	
 	<!-- 이미지 슬라이드 캐러셀 -->
 	<!-- data-bs-interval="3000" 지연시간 설정 -->
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-	<div class="carousel-indicators">
-		<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-		<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-		<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-	</div>
-	<div class="carousel-inner">
-		<div class="carousel-item active" data-bs-interval="3000">
-			<img id="slide" src="./img/natural_wind.jpg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-				<h5>First slide label</h5>
-				<p>Some representative placeholder content for the first slide.</p>
-				</div>
-		</div>
-		<div class="carousel-item" data-bs-interval="3000">
-			<img id="slide" src="./img/Jamaica.jpg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-				<h5>Second slide label</h5>
-				<p>Some representative placeholder content for the second slide.</p>
-				</div>
-		</div>
-		<div class="carousel-item" data-bs-interval="3000">
-			<img id="slide" src="./img/hotel.jpg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-				<h5>Third slide label</h5>
-				<p>Some representative placeholder content for the third slide.</p>
-				</div>
-		</div>
-	</div> 
-	<!-- 슬라이드 쇼 컨트롤 -->
-	<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	<span class="visually-hidden">Previous</span>
-	</button>
-	<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-	<span class="carousel-control-next-icon" aria-hidden="true"></span>
-	<span class="visually-hidden">Next</span>
-	</button>
-</div> <!-- 슬라이드 쇼 div 끝  -->
+	<div class=" justify-content-center marketing pt-3" >
+		<div id="carouselExampleCaptions" class="carousel slide " data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="active2" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" class="active3" aria-label="Slide 3"></button>
+			</div>
+			<div class="carousel-inner rounded">
+				<a class="carousel-item active dark-overlay"  data-bs-interval="6000" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" >
+					<img id="slide" src="./img/houses.jpg" class="d-block w-100" alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h2>요즘 핫한 숙박 발견!</h2>
+						<h5>오늘 가장 인기 많은 숙박시설</h5>
+					</div>
+				</a>
+				<a class="carousel-item active2 dark-overlay" data-bs-interval="6000" href="<%=request.getContextPath()%>/food/foodMain.do">
+					<img id="slide" src="./img/food.jpg" class="d-block w-100 " alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h2>요즘 핫한 맛집 발견!</h2>
+						<h5>오늘 가장 인기 많은 맛집 핫 플레이스</h5>
+					</div>
+				</a>
+				<a class="carousel-item active3 dark-overlay" data-bs-interval="6000" href="<%=request.getContextPath()%>/event/eventMain.do">
+					<img id="slide" src="./img/hotel.jpg" class="d-block w-100 " alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h2>요즘 핫한 축제 발견!</h2>
+						<h5>오늘 가장 인기 많은 축제 핫 플레이스</h5>
+					</div>
+				</a>
+			</div> 
+		</div> <!-- 슬라이드 쇼 div 끝  -->
+	</div>	
 	<!-- 지도앱  margin-left: 5%; margin-right: 5%; -->
 <!-- 	<div style="float: left; width: 40%; margin-left: 5%; margin-right: 5%;">
 		<img alt="지도 구현" src="./img/map.jpg">
@@ -124,14 +98,13 @@
 	</div> <!-- container marketing -->
 	<hr class="featurette-divider">
 	<!-- 베스트글 보여주기  -->
-	<div>	
-	</div>
-<<<<<<< HEAD
+	<%@ include file="/WEB-INF/views/include/Homebest.jsp" %>
+	<%@ include file="/WEB-INF/views/include/Foodbest.jsp" %>
+	<%@ include file="/WEB-INF/views/include/Festbest.jsp" %>
+</main>
 
 
 <!-- 채팅 테스트 개발 중 (혁수) -->
 <a href = "<%=request.getContextPath() %>/Community/ChattingTest.do"> 채팅 테스트 </a>
-=======
->>>>>>> main
 
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>

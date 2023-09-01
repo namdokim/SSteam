@@ -61,7 +61,7 @@
 			rentalhome_idx = #{rentalhome_idx}
 	</update>
 	
-	<select id="selectAll" resultType="rentalhomeVO" parameterType="rentalhome_searchVO">
+	<!--  <select id="selectAll" resultType="rentalhomeVO" parameterType="rentalhome_searchVO">
 		SELECT * 
 		FROM rentalhome S LEFT OUTER JOIN (select * from rentalhome_attach where thumbnail = 'Y') D
 		ON S.rentalhome_idx = D.rentalhome_idx
@@ -71,22 +71,156 @@
 		</if>
 		ORDER BY s.rentalhome_idx desc
 		LIMIT #{sNum},#{perPageNum}
+	</select>-->
+
+	<select id="selectAll" resultType="rentalhomeVO" parameterType="rentalhome_searchVO">
+	SELECT * FROM(
+		SELECT * FROM(
+			SELECT *,(
+				SElECT avg(service+facility+clean+price)/4 FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM (SELECT room_idx, rentalhome_idx as c_rentalhome_idx FROM rentalhome_room WHERE status = 'Y') c WHERE c.c_rentalhome_idx = rentalhome.rentalhome_idx)) and status = 'Y' as all_avg,(
+				SELECT count(*) FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM (SELECT room_idx, rentalhome_idx as f_rentalhome_idx FROM rentalhome_room WHERE status = 'Y') f WHERE f.f_rentalhome_idx = rentalhome.rentalhome_idx))  and status = 'Y' as review_count,(
+				SELECT count(*) FROM rentalhome_like WHERE rentalhome_idx = rentalhome.rentalhome_idx) as like_count
+				<if test="uNo != null and uNo != 0">
+				,(SELECT count(*) FROM rentalhome_like WHERE rentalhome_idx = rentalhome.rentalhome_idx and uNo = #{uNo}) as dupl_count
+				</if>
+			FROM rentalhome WHERE status = 'Y' 
+			<if test="location != null and location != ''">
+			AND name like concat('%', #{location}, '%') OR address like concat('%', #{location}, '%')
+			</if>
+			) a
+			LEFT OUTER JOIN (
+			SELECT attach_idx, rentalhome_idx as attach_rentalhome_idx, logical_name, physical_name, thumbnail FROM rentalhome_attach WHERE thumbnail = 'Y'
+			) b
+			ON a.rentalhome_idx = b.attach_rentalhome_idx) d LEFT OUTER JOIN(
+		SELECT g.room_idx, g.rentalhome_idx, g.name AS room_name, g.min_person, g.max_person, g.weekday_price, g.weekend_price, g.smoking, g.wifi, g.bed_info, g.status, g.discount_reason, g.discount_money, g.discount_type,g.weekday_discount_price, g.weekend_discount_price
+		FROM rentalhome_room g INNER JOIN (
+			SELECT rentalhome_idx as room_rentalhome_idx, MIN(weekday_discount_price) AS min_weekday_discount_price
+			FROM rentalhome_room
+			WHERE status = 'Y'
+			GROUP BY room_rentalhome_idx
+		) min_price
+		ON g.rentalhome_idx = min_price.room_rentalhome_idx AND g.weekday_discount_price = min_price.min_weekday_discount_price
+		WHERE g.status = 'Y'
+		<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+		AND room_idx NOT IN (
+			SELECT room_idx FROM rentalhome_pay WHERE start_date BETWEEN #{start_date} AND #{end_date} AND pay_status = 'paid'
+			UNION
+			SELECT room_idx FROM rentalhome_pay WHERE end_date BETWEEN #{start_date} AND #{end_date} AND pay_status = 'paid'
+			UNION
+			SELECT room_idx FROM rentalhome_pay WHERE start_date &lt; #{start_date} AND end_date &gt; #{end_date} AND pay_status = 'paid')
+		</if>
+		) e
+		ON d.rentalhome_idx = e.rentalhome_idx
+		WHERE 1=1 
+		<if test="person != null and person != 0">
+			AND d.rentalhome_idx IN(
+			SELECT DISTINCT rentalhome_idx FROM rentalhome_room WHERE min_person &lt;= #{person} AND max_person &gt;= #{person} AND status = 'Y'
+			)
+		</if>
+		<if test="min_price != null and min_price != 0 and max_price != null and max_price != 0">
+			AND d.rentalhome_idx IN(SELECT DISTINCT rentalhome_idx FROM rentalhome_room WHERE weekend_discount_price BETWEEN #{min_price} and #{max_price}) 
+		</if>
+		<if test="score != null and score != 0.0">
+			AND e.all_avg &gt; #{score} 
+		</if>
+		<if test="type != null and type != ''">
+			AND type = #{type} 
+		</if>
+		<if test='inPool_yn != null and inPool_yn == "Y"'>
+			AND inPool_yn = 'Y'
+		</if>
+		<if test='outPool_yn != null and outPool_yn == "Y"'>
+			AND outPool_yn = 'Y' 
+		</if>
+		<if test='parking_yn != null and parking_yn == "Y"'>
+			AND parking_yn = 'Y'  
+		</if>
+		<if test='pickup_yn != null and pickup_yn == "Y"'>
+			AND pickup_yn = 'Y' 
+		</if>
+		<if test='wifi_yn != null and wifi_yn == "Y"'>
+			AND wifi_yn = 'Y' 
+		</if>
+		<if test='beach_yn != null and beach_yn == "Y"'>
+			AND beach_yn = 'Y' 
+		</if>
+		<if test='bbq_yn != null and bbq_yn == "Y"'>
+			AND bbq_yn = 'Y'  
+		</if>
+		<if test='breakfast_yn != null and breakfast_yn == "Y"'>
+			AND breakfast_yn = 'Y'  
+		</if>
+		<if test='animal_yn != null and animal_yn == "Y"'>
+			AND animal_yn = 'Y'  
+		</if>
+		<if test='sort != null and sort == "price"'>
+			ORDER BY weekday_discount_price asc 
+		</if>
+		<if test='sort != null and sort == "review"'>
+			ORDER BY review_count desc
+		</if>
+		<if test='sort != null and sort == "like"'>
+			ORDER BY like_count desc
+		</if>
+		
+		LIMIT #{sNum},#{perPageNum}
 	</select>
 	<select id="select_rentalhome_count" resultType="int">
 		SELECT COUNT(*) FROM rentalhome WHERE status = 'Y'
 	</select>
-	<select id="selectAll_room" resultType="rentalhome_roomVO">
+	
+	<!-- <select id="selectAll_room" resultType="rentalhome_roomVO">
 		SELECT *,
 			 (select physical_name from rentalhome_room_attach where thumbnail = 'Y' and room_idx = rentalhome_room.room_idx ) as physical_name 
 		FROM rentalhome_room 
 		WHERE rentalhome_idx = #{rentalhome_idx}
 			AND status = 'Y'
+	</select> -->
+
+	<select id="selectAll_room" resultType="rentalhome_roomVO" parameterType="rentalhome_searchVO">
+		SELECT *, 
+			(SELECT physical_name FROM rentalhome_room_attach where thumbnail ='Y' and room_idx = rentalhome_room.room_idx) as physical_name
+		FROM rentalhome_room
+		WHERE rentalhome_idx = #{rentalhome_idx}
+			AND status = 'Y'
+			<if test="start_date != '' and start_date != null and end_date != '' and end_date != null">
+			AND room_idx NOT IN (
+				SELECT room_idx FROM rentalhome_pay WHERE start_date BETWEEN #{start_date} AND #{end_date} AND pay_status = 'paid'
+				UNION
+				SELECT room_idx FROM rentalhome_pay WHERE end_date BETWEEN #{start_date} AND #{end_date} AND pay_status = 'paid'
+				UNION
+				SELECT room_idx FROM rentalhome_pay WHERE start_date &lt; #{start_date} AND end_date &gt; #{end_date} AND pay_status = 'paid'
+			)
+			</if>
+			<if test="person != '' and person != null">
+			AND min_person &lt;= #{person} AND max_person &gt;= #{person} 
+			</if>
 	</select>
 	
 	<select id="selectOneByIdx" resultType="rentalhomeVO" parameterType="int">
 		SELECT* FROM rentalhome WHERE rentalhome_idx = #{rentalhome_idx}
 	</select>
+	
+	<select id="select_review_count" resultType="int" parameterType="int">
+		SELECT count(*) as count 
+		FROM rentalhome_review 
+		WHERE room_idx IN (SELECT room_idx FROM rentalhome_room WHERE rentalhome_idx = #{rentalhome_idx}) and status = 'Y'
+	</select>
 
+	<select id="select_review_avg" resultType="rentalhome_reviewVO" parameterType="int">
+		SELECT AVG(service)as service_avg, AVG(facility) as facility_avg, AVG(clean) as clean_avg, AVG(price) as price_avg, AVG(service+facility+clean+price)/4 as all_avg
+		FROM rentalhome_review 
+		WHERE room_idx IN (SELECT room_idx FROM rentalhome_room WHERE rentalhome_idx = #{rentalhome_idx}) and status = 'Y'
+	</select>
+
+	<select id="selectAll_review" resultType="rentalhome_reviewVO" parameterType="int">
+		SELECT *,
+			((service+facility+clean+price)/4) as one_avg,
+			(SELECT uNick FROM User WHERE uNo = rentalhome_review.uNo) as uNick,
+			(SELECT name FROM rentalhome_room WHERE room_idx = rentalhome_review.room_idx) as room_name
+		 FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM rentalhome_room WHERE rentalhome_idx = #{rentalhome_idx}) and status = 'Y'
+	</select>
+	
 	<select id="selectOneByIdx_room" resultType="rentalhome_roomVO" parameterType="int">
 		SELECT* , (select physical_name from rentalhome_room_attach where thumbnail = 'Y' and room_idx = #{room_idx}) physical_name FROM rentalhome_room WHERE room_idx = #{room_idx}
 	</select>
@@ -120,10 +254,10 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO rentalhome_room(
-			rentalhome_idx, name, min_person, max_person, weekday_price, weekend_price,
+			rentalhome_idx, name, min_person, max_person, weekday_price, weekend_price, weekday_discount_price, weekend_discount_price,
 			smoking, wifi, bed_info, discount_reason, discount_type, discount_money
 		) VALUES (
-			#{rentalhome_idx}, #{name}, #{min_person}, #{max_person}, #{weekday_price}, #{weekend_price},
+			#{rentalhome_idx}, #{name}, #{min_person}, #{max_person}, #{weekday_price}, #{weekend_price}, #{weekday_discount_price}, #{weekend_discount_price},
 			#{smoking}, #{wifi}, #{bed_info}, #{discount_reason}, #{discount_type}, #{discount_money}
 		)
 	</insert>
@@ -135,6 +269,8 @@
 			max_person = #{max_person},
 			weekday_price = #{weekday_price},
 			weekend_price = #{weekend_price},
+			weekday_discount_price = #{weekday_discount_price},
+			weekend_discount_price = #{weekend_discount_price},
 			smoking = #{smoking},
 			wifi = #{wifi},
 			bed_info = #{bed_info},
@@ -163,8 +299,18 @@
 			thumbnail = 'Y'
 		WHERE attach_idx = #{attach_idx}
 	</update>
+
+	<update id="update_review" parameterType="rentalhome_reviewVO" >
+		UPDATE rentalhome_review SET
+			service = #{service},
+			facility = #{facility},
+			clean = #{clean},
+			price = #{price},
+			contents = #{contents}
+		WHERE review_idx = #{review_idx}
+	</update>
 	
-	<insert id="insert_review" parameterType="rentalhome_roomVO">
+	<insert id="insert_review" parameterType="rentalhome_reviewVO">
 		INSERT INTO rentalhome_review(
 			room_idx, contents, service, facility, clean, price, uNo, stay_date
 		) VALUES(
@@ -206,6 +352,12 @@
 		WHERE room_idx = #{room_idx}
 	</update>
 
+	<update id="update_pay_reviewYN" parameterType="String">
+		UPDATE rentalhome_pay SET
+			review_yn = 'Y'
+		WHERE reserve_number = #{reserve_number}
+	</update>
+
 	<update id="room_attach_thumbnail" parameterType="int">
 		UPDATE rentalhome_room_attach SET
 			thumbnail = 'Y'
@@ -214,6 +366,10 @@
 
 	<delete id="room_attach_delete" parameterType="int">
 		DELETE FROM rentalhome_room_attach WHERE attach_idx = #{attach_idx}
+	</delete>
+
+	<delete id="delete_review" parameterType="int">
+		UPDATE rentalhome_review SET status = 'N' WHERE review_idx = #{review_idx}
 	</delete>
 	
 	<insert id="insert_pay" parameterType="rentalhome_payVO">
@@ -235,4 +391,13 @@
 	<update id="update_pay_refund" parameterType="rentalhome_payVO">
 		UPDATE rentalhome_pay SET refund_date = #{refund_date}, pay_status = #{pay_status} WHERE pay_idx = #{pay_idx}
 	</update>
+
+	<update id="update_review_status" parameterType="int" >
+		UPDATE rentalhome_review SET status = 'N' WHERE room_idx = #{room_idx}
+	</update>
+	
+	<insert id="insert_review_report" parameterType="rentalhome_review_reportVO">
+		INSERT INTO rentalhome_review_report (review_idx, review_report_contents, review_report_reason, uNo)
+		VALUES (#{review_idx}, #{review_report_contents}, #{review_report_reason}, #{uNo})
+	</insert>
 </mapper>

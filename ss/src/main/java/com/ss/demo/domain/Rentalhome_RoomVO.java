@@ -16,26 +16,30 @@ public class Rentalhome_RoomVO {
 	private String discount_reason;
 	private String discount_type;
 	private int discount_money;
-	
-	
-	
 	private int uNo;			// 유저 번호
-	private String contents;	// 내용
-	private int service;		// 서비스
-	private int facility;		// 시설
-	private int clean;			// 청결
-	private int price;			// 가격
-	
+	private int weekday_discount_price;
+	private int weekend_discount_price;
 	// 첨부파일
 	private int attach_idx;
 	private String logical_name;	// 사용자가 올린 파일 이름
 	private String physical_name;	// 로컬에 저장된 파일 이름
 	private String thumbnail;		// 썸네일 Y, N	
-	
 
 	
 	
 	
+	public int getWeekday_discount_price() {
+		return weekday_discount_price;
+	}
+	public void setWeekday_discount_price(int weekday_discount_price) {
+		this.weekday_discount_price = weekday_discount_price;
+	}
+	public int getWeekend_discount_price() {
+		return weekend_discount_price;
+	}
+	public void setWeekend_discount_price(int weekend_discount_price) {
+		this.weekend_discount_price = weekend_discount_price;
+	}
 	public String getDiscount_reason() {
 		return discount_reason;
 	}
@@ -83,36 +87,6 @@ public class Rentalhome_RoomVO {
 	}
 	public void setuNo(int uNo) {
 		this.uNo = uNo;
-	}
-	public String getContents() {
-		return contents;
-	}
-	public void setContents(String contents) {
-		this.contents = contents;
-	}
-	public int getService() {
-		return service;
-	}
-	public void setService(int service) {
-		this.service = service;
-	}
-	public int getFacility() {
-		return facility;
-	}
-	public void setFacility(int facility) {
-		this.facility = facility;
-	}
-	public int getClean() {
-		return clean;
-	}
-	public void setClean(int clean) {
-		this.clean = clean;
-	}
-	public int getPrice() {
-		return price;
-	}
-	public void setPrice(int price) {
-		this.price = price;
 	}
 	public int getRoom_idx() {
 		return room_idx;
@@ -174,5 +148,22 @@ public class Rentalhome_RoomVO {
 	public void setBed_info(String bed_info) {
 		this.bed_info = bed_info;
 	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return "Rentalhome_RoomVO [room_idx=" + room_idx + ", rentalhome_idx=" + rentalhome_idx + ", name=" + name
+				+ ", min_person=" + min_person + ", max_person=" + max_person + ", weekday_price=" + weekday_price
+				+ ", weekend_price=" + weekend_price + ", smoking=" + smoking + ", wifi=" + wifi + ", bed_info="
+				+ bed_info + ", discount_reason=" + discount_reason + ", discount_type=" + discount_type
+				+ ", discount_money=" + discount_money + ", uNo=" + uNo + ", weekday_discount_price="
+				+ weekday_discount_price + ", weekend_discount_price=" + weekend_discount_price + ", attach_idx="
+				+ attach_idx + ", logical_name=" + logical_name + ", physical_name=" + physical_name + ", thumbnail="
+				+ thumbnail + "]";
+	}
+	
+	
+	
 	
 }

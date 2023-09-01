@@ -11,6 +11,8 @@ import com.ss.demo.dao.FoodDAO;
 import com.ss.demo.domain.FoodReviewVO;
 import com.ss.demo.domain.FoodVO;
 import com.ss.demo.domain.Food_LikeVO;
+import com.ss.demo.domain.Food_ReportVO;
+import com.ss.demo.domain.Food_Review_ReportVO;
 import com.ss.demo.domain.SearchVO;
 
 
@@ -61,8 +63,8 @@ public class FoodServiceImpl implements FoodService
 
 	// 특정 fNo 값을 가진 메뉴들을 조회하는 메서드 구현
 	@Override
-	public List<FoodVO> listMenu(int fNo){
-		return foodDAO.listMenu(fNo); 
+	public List<FoodVO> selectAllMenu(int fNo){
+		return foodDAO.selectAllMenu(fNo); 
 	}
 
 	// 특정 fNo 값을 가진 FoodVO 목록을 조회하는 메서드 구현
@@ -79,8 +81,8 @@ public class FoodServiceImpl implements FoodService
 
 	// 조건에 따라 FoodVO 목록을 조회하는 메서드 구현
 	@Override
-	public List<FoodVO> list(SearchVO searchVO){
-		return foodDAO.list(searchVO); 
+	public List<FoodVO> selectAll(SearchVO searchVO){
+		return foodDAO.selectAll(searchVO); 
 	}
 
 	// 특정 fNo 값을 가진 FoodVO의 첨부 파일 목록을 조회하는 메서드 구현
@@ -109,6 +111,23 @@ public class FoodServiceImpl implements FoodService
 	@Override
 	public int dupl_like(Food_LikeVO likeVO) {
 		return foodDAO.dupl_like(likeVO);
+	}
+	
+	@Override
+	public double selectAvg_foodreview(int fNo) {
+		return foodDAO.selectAvg_foodreview(fNo);
+	}
+	
+	// 리뷰 전체 카운트  
+	@Override
+	public int selectAllCount_foodreview(int fNo) {
+		return foodDAO.selectAllCount_foodreview(fNo);
+	}
+
+	// 리뷰 카운트  
+	@Override
+	public int selectCount_foodreview(FoodReviewVO foodreviewVO) {
+		return foodDAO.selectCount_foodreview(foodreviewVO);
 	}
 	
 	//================================================== 수정 
@@ -161,5 +180,30 @@ public class FoodServiceImpl implements FoodService
 	public int delete_like(Food_LikeVO likeVO) {
 		return foodDAO.delete_like(likeVO);
 	}
+
+	// 메뉴 삭제 
+	@Override
+	public int delete_menu(int food_menu_number) {
+		return foodDAO.delete_menu(food_menu_number);
+	}
+	
+	// 조회수 증가 
+	@Override
+	public int increment_hit(int fNo) {
+		return foodDAO.increment_hit(fNo);
+	}
+
+	// 식당 신고 내용 접수 
+	@Override
+	public int insert_report(Food_ReportVO food_reportVO) {
+		return foodDAO.insert_report(food_reportVO);
+	}
+
+	// 리뷰 신고 내용 접수 
+	@Override
+	public int insert_review_report(Food_Review_ReportVO food_review_reportVO) {
+		return foodDAO.insert_review_report(food_review_reportVO);
+	}
+
 
 }

@@ -44,8 +44,8 @@ body {
 }
 
 .form-signin {
-  max-width: 500px;
-  padding: 15px;
+  max-width: 400px;
+  padding: 1rem;
 }
 
 .form-signin .form-floating:focus-within {
@@ -90,26 +90,25 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 </div >
 </form> --%>
 <body>
-	<main class="form-signin">
+	<main class="form-signin ">
 		<!-- 버튼 클릭시 메인으로 이동 -->
-		<a class="navbar-brand" href="<%= request.getContextPath()%>/reHome.do" title="Arcalive">
+		<a class="navbar-brand mb-5" href="<%= request.getContextPath()%>/reHome.do" title="Arcalive">
 		<!-- <svg xmlns="http://www.w3.org/2000/svg" width="72" height="52" fill="currentColor" class="bi bi-google-play" viewBox="0 0 16 16">
 			<path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
 		</svg> -->
-		<img src="<%=request.getContextPath() %>/img/loginlogo2.jpg" style="width:420px; height: 230px;"><br>
-		<img src="<%=request.getContextPath() %>/img/loginicon.png" style="width:400px; height: 50px;">
-		</a><br>
+		<img class="text-center mb-5" src="<%=request.getContextPath() %>/img/logo_test4.png" width="290px" height="80px" >
+		</a>
 		<!--하단 마진 3px -->
 		<span id="toptitle" class="h3 mb-3 fw-normal"><img></span>
 		<!-- 로그인 폼 -->
 		<!--  -->	
 			<form name="login" id="login">
 				<div class="form-floating">
-					<input type="text" onkeyup="enterkey()" class="form-control" id="uId" placeholder="uId" name="uId" value="(Email형식으로 써주세요)">
+					<input type="text" class="form-control" id="uId" placeholder="uId" name="uId">
 					<label for="floatingInput" class="text-muted">ID</label>
 				</div>			
 				<div class="form-floating">
-					<input type="password" onkeyup="enterkey()" class="form-control" id="uPw" placeholder="uPw" name="uPw">
+					<input type="password" class="form-control" id="uPw" placeholder="uPw" name="uPw">
 					<label for="floatingPassword" class="text-muted">Password </label>								
 				</div>
 				<!-- <i class=" input password eyes fas fa-eye"></i> -->
@@ -119,35 +118,28 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 						<input type="checkbox" value="remember-me" class="text-muted"> Remember me
 					</label>
 				</div>
-				<button class="btn btn-lg btn-primary"  type="button" id="loginbtn"  onclick="loginFn();">
-					log in
+				<button class="btn btn-lg btn-primary" type="button" id="loginbtn" onclick="loginFn();">
+					로그인
 				</button>
 			</form>
-			<span class="h4 mb-3 fw-normal">don't you have account?</span>
-			<button class="btn btn-lg btn-secondary" onclick="window.location.href='<%= request.getContextPath() %>/User/userJoin.do'">
-			    create account
-			</button>
-			<span class="h2 mb-3 fw-normal">other login</span>
-			<!-- <button class="btn btn-lg btn-secondary"> -->
-			<a href="https://kauth.kakao.com/oauth/authorize?client_id=5315428a54e0f5a6062ed76926689b70&redirect_uri=http://localhost:8085/ss/User/kakaologin.do&response_type=code">
-				<img src="<%=request.getContextPath() %>/img/kakao_login_medium_narrow.png">
-			</a>
-			<!-- </button> -->
-			<div> <button type="button" onclick="location.href= '<%=request.getContextPath() %>/User/emailfind.do' "> email find</button>
-			</div>
-			<div> <button>password find</button>
-			</div>
+		
+				
+<!-- 					<span class="h4 fw-normal text-muted">계정이 없으신가요?</span> -->
+				
+				<button class="btn btn-lg btn-secondary my-3" onclick="window.location.href='<%= request.getContextPath() %>/User/userJoin.do'">
+					회원가입
+				</button>
 			<p></p>
 			<p class="text-center text-muted">Live v0.011&nbsp;<small class="text-muted">(000000)</small>
-				<span class="sep"></span>
-				<a href="mailto:leghorn0897@gmail.com">contact</a>
-				<span class="sep"></span>
-				<a href="https://arca.live/policy?gt=1#googtrans(ko)">PRIVACY POLICY AND RULES OF USE</a>
-			</p>
-			<p class="text-center text-muted">operate for leghorn_
-				<span class="sep"></span>
-				make with &lt;3  jeonju, republic of korea
-			</p>
+					<span class="sep"></span>
+					<a href="mailto:leghorn0897@gmail.com">contact</a>
+					<span class="sep"></span>
+					<a href="https://arca.live/policy?gt=1#googtrans(ko)">PRIVACY POLICY AND RULES OF USE</a>
+				</p>
+				<p class="text-center text-muted">operate for leghorn_
+					<span class="sep"></span>
+					make with &lt;3  jeonju, republic of korea
+				</p>
 	</main>
 
 <script type="text/javascript">
@@ -169,17 +161,6 @@ $(function(){
 </script>
 <!-- 로그인 유효성 검사  -->
 <script>
-$("#uId").click(function(){
-	$("#uId").val("").focus();
-});
-function enterkey() {
-	if (window.event.keyCode == 13) {
-    	// 엔터키가 눌렸을 때
-    	
-    	loginFn();
-    }
-}
-
 /* 버튼에 타입 버튼  안주면은 무조건 submit타입으로 인식해서 서브밋이 되는건가  */
 //async: false,     //값을 리턴시 해당코드를 추가하여 동기로 변경 ajax에서 return 값 얻을떄 
 function loginFn(){

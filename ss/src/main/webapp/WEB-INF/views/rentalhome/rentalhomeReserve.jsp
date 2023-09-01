@@ -22,23 +22,45 @@
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
 window.onload = function (){
+	const start_date = "${searchVO.start_date}";
+	const end_date = "${searchVO.end_date}";
+
+	const start = new Date(start_date);
+	const end = new Date(end_date);
+	var count_weekday = 0;
+	var count_weekend = 0;
+	while(start < end){
+		const dayOfWeek = start.getDay();
+		if(dayOfWeek == 0 || dayOfWeek == 6){
+			count_weekend++;
+		}else{
+			count_weekday++;
+		}
+		start.setDate(start.getDate() + 1);
+	}
+	document.getElementById("price_weekday_count").innerText = count_weekday;
+	document.getElementById("price_weekend_count").innerText = count_weekend;
+	document.getElementById("stay_day").innerText = count_weekend+count_weekday;
 	var price_ = document.getElementsByName("price");
 	for (var i = 0; i < price_.length; i++) {
 		var price = document.getElementsByName("price")[i];
-		console.log(price_.length);
-		console.log(price.innerText);
 		document.getElementsByName("price")[i].innerText = parseInt(price.innerText);
 	}
 	
+	const weekday_price_id = document.getElementById("price_weekday").innerText;
+	const weekend_price_id = document.getElementById("price_weekend").innerText;
+	const discount_id = document.getElementById("discount").innerText;
+	document.getElementById("pay_price").innerText = ((parseInt(weekday_price_id) - parseInt(discount_id))*parseInt(count_weekday))
+													+((parseInt(weekend_price_id) - parseInt(discount_id))*parseInt(count_weekend))
+
 	document.getElementById("point").onblur = function(){
-		const price_id = document.getElementById("price").innerText;
-		const discount_id = document.getElementById("discount").innerText;
 		const point_id = document.getElementById("point").value;
-		document.getElementById("pay_price").innerText = parseInt(price_id) - (parseInt(discount_id) + parseInt(point_id));
-		console.log(price_id);
-		console.log(discount_id);
-		console.log(point_id);
+		document.getElementById("pay_price").innerText = ((parseInt(weekday_price_id) - parseInt(discount_id))*parseInt(count_weekday))
+														+((parseInt(weekend_price_id) - parseInt(discount_id))*parseInt(count_weekend))
+														- parseInt(point_id);
 	};
+	
+	
 }
 // 	아임포트 객체 초기화
 	IMP.init('imp63231033');
@@ -133,25 +155,6 @@ window.onload = function (){
 			}
 		);
 	}
-	
-	
-	$.datepicker.setDefaults({
-	  dateFormat: 'yy-mm-dd',
-	  prevText: '이전 달',
-	  nextText: '다음 달',
-	  monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-	  monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-	  dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-	  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-	  dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-	  showMonthAfterYear: true,
-	  yearSuffix: '년'
-	});
-
-	$(function () {
-	  $('.datepicker').datepicker();
-	});
-	
 </script>
 <style>
 	.view{
@@ -160,7 +163,7 @@ window.onload = function (){
 		box-shadow:1px 1px 1px 1px #ddd;
 	}
 </style>
-<div style="width:1920px; text-align:left; background-color:#dfecfb; padding:50px 0px;">
+<div style="width:1920px; text-align:left; background-color:#dfecfb; padding:50px 0px; font-family: 'TheJamsil5Bold';">
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px; margin:20px auto; line-height:50px;">
 		<div style="width:100%; position:relative;">
 			<span style="font-size:15pt; font-weight:bold; background-color:#0863ec; color:white; padding:10px 20px; border-radius:10px;">예약 정보</span><br>
@@ -229,12 +232,15 @@ window.onload = function (){
 	</div>
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">
 		<span style="font-size:14pt; font-weight:bold; padding:0px 20px;">결제 정보</span><br>
-		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
+		<div style="width:30%; height:62px; text-align:right; margin:10px 0px; vertical-align:top; display:inline-block;">
 			<span style="font-weight:bold;">객실 가격</span>
 		</div>
-		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
-			<span id="price" style="font-weight:bold;">${roomVO.weekday_price}</span>
-			<span style="font-weight:bold;">원</span>
+		<div style="width:40%; height:62px; text-align:right; margin:10px 0px; display:inline-block;">
+			주간:<span id="price_weekday" style="font-weight:bold;">${roomVO.weekday_price}</span>
+			<span style="font-weight:bold;">원 X </span><span id="price_weekday_count"></span>
+			<div class="mx-3"></div>
+			주말:<span id="price_weekend" style="font-weight:bold;">${roomVO.weekend_price}</span>
+			<span style="font-weight:bold;">원 X </span><span id="price_weekend_count"></span>
 		</div>
 		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="font-weight:bold;">이벤트 할인</span>
@@ -243,11 +249,11 @@ window.onload = function (){
 			<span style="font-weight:bold; color:#f51818;">${roomVO.discount_reason}</span>
 			<c:if test="${roomVO.discount_type eq 'fix' }">
 				<span id="discount" name="price" style="font-weight:bold; color:#f51818;">${roomVO.discount_money}</span>
-				<span style="font-weight:bold; color:#f51818;">원</span>
+				<span style="font-weight:bold; color:#f51818;">원 X <span id="stay_day"></span></span>
 			</c:if>
 			<c:if test="${roomVO.discount_type eq 'rate' }">
 				<span id="discount" name="price" style="font-weight:bold; color:#f51818;">${roomVO.weekday_price*roomVO.discount_money/100}</span>
-				<span style="font-weight:bold; color:#f51818;">원</span>
+				<span style="font-weight:bold; color:#f51818;">원 X <span id="stay_day"></span></span>
 			</c:if>
 		</div>
 		<div style="width:30%; text-align:right; margin:10px 0px; display:inline-block;">
@@ -256,8 +262,8 @@ window.onload = function (){
 		<div style="width:20%; text-align:right; margin:10px 0px; display:inline-block;">
 			<span style="color:gray; font-size:10pt;">보유 포인트 <%=loginVO.getuPoint() %></span>
 		</div>
-		<div style="width:20%; text-align:right; margin:10px 0px; display:inline-block;">
-			<input type="number" id="point"  value="<%=loginVO.getuPoint()%>"style="text-align:right;border:0px; border-bottom:1px solid lightgray; font-weight:bold; color:#f51818;">
+		<div style="width:20%; text-align:right; margin:10px -5px; display:inline-block;">
+			<input type="number" id="point"  value="0"style="width:80%; text-align:right;border:0px; border-bottom:1px solid lightgray; font-weight:bold; color:#f51818;">
 			<span style="font-weight:bold; color:#f51818;">원</span>
 		</div>
 		<div style="width:100%; height:1px; background-color:lightgray; text-align:center; margin:10px 0px; display:inline-block;">
@@ -267,14 +273,8 @@ window.onload = function (){
 			<span style="font-weight:bold;">결제 금액</span>
 		</div>
 		<div style="width:40%; text-align:right; margin:10px 0px; display:inline-block;">
-			<c:if test="${roomVO.discount_type eq 'fix' }">
-				<span id="pay_price" name="price" style="font-weight:bold;">${roomVO.weekday_price - roomVO.discount_money}</span>
+				<span id="pay_price" name="price" style="font-weight:bold;"></span>
 				<span style="font-weight:bold;">원</span>
-			</c:if>
-			<c:if test="${roomVO.discount_type eq 'rate' }">
-				<span id="pay_price" name="price" style="font-weight:bold;">${roomVO.weekday_price - roomVO.weekday_price*roomVO.discount_money/100}</span>
-				<span style="font-weight:bold;">원</span>
-			</c:if>
 		</div>
 	</div>
 	<div class="view" style="width:1224px; margin:0 auto; padding:30px;margin:20px auto; line-height:30px; ">

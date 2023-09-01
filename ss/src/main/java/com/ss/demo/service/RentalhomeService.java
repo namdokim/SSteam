@@ -5,6 +5,8 @@ import java.util.List;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
 import com.ss.demo.domain.Rentalhome_PayVO;
+import com.ss.demo.domain.Rentalhome_ReviewVO;
+import com.ss.demo.domain.Rentalhome_Review_ReportVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
 import com.ss.demo.domain.Rentalhome_SearchVO;
 
@@ -30,11 +32,11 @@ public interface RentalhomeService {
 
 	public int insert_room(Rentalhome_RoomVO roomVO);
 
-	public int insert_review(Rentalhome_RoomVO roomVO);
+	public int insert_review(Rentalhome_ReviewVO reviewVO);
 	
 	public int insert_room_file(Rentalhome_RoomVO roomVO);
 	
-	public List<Rentalhome_RoomVO>selectAll_room(int rentalhome_idx);
+	public List<Rentalhome_RoomVO>selectAll_room(Rentalhome_SearchVO searchVO);
 
 	public Rentalhome_RoomVO selectOneByIdx_room(int room_idx);
 	
@@ -71,4 +73,20 @@ public interface RentalhomeService {
 	public List<Rentalhome_PayVO> selectAll_reserve(int uNo);
 
 	public int update_pay_refund(Rentalhome_PayVO rentalhome_payVO);
+
+	public int update_pay_reviewYN(String reserve_number);
+
+	public int select_review_count(int rentalhome_idx);
+
+	public Rentalhome_ReviewVO select_review_avg(int rentalhome_idx);
+	
+	public List<Rentalhome_ReviewVO> selectAll_review(int rentalhome_idx);
+
+	public int delete_review(int review_idx);
+
+	public int update_review(Rentalhome_ReviewVO reviewVO);
+
+	public int insert_review_report(Rentalhome_Review_ReportVO reportVO);
+	
+	public int update_review_status(int room_idx);
 }

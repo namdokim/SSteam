@@ -7,6 +7,7 @@ public class FoodVO
 	private int fNo;	//맛집 고유번호 
 	private int uNo;	//회원번호 					
 	private int count;	//회원번호 					
+	private String uNick;
 	
 	private String food_name;					// 식당 이름 
 	private String food_address;				// 식당 주소  
@@ -32,6 +33,10 @@ public class FoodVO
 	private String food_attach_physical_name;	// 로컬에 저장된 파일 이름
 	private String thumbnail;					// 썸네일 Y, N
 	
+	private double avg;							// 평점 (메인에서 보일거), resultType=foodVO라서 여기서 필드 선언 
+	private int food_hit;						// 조회수 
+	
+
 	//========================================== GETTER / SETTER
 	public int getfNo() {
 		return fNo;
@@ -170,18 +175,41 @@ public class FoodVO
 	public void setCount(int count) {
 		this.count = count;
 	}
+	
+	public double getAvg() {
+		return avg;
+	}
+	public void setAvg(double avg) {
+		this.avg = avg;
+	}
+		
+	public int getFood_hit() {
+		return food_hit;
+	}
+	public void setFood_hit(int food_hit) {
+		this.food_hit = food_hit;
+	}
+	
+	
+	public String getuNick() {
+		return uNick;
+	}
+	public void setuNick(String uNick) {
+		this.uNick = uNick;
+	}
 	//======================================================== toString
+	
 	@Override
 	public String toString() {
-		return "FoodVO [fNo=" + fNo + ", uNo=" + uNo + ", count=" + count + ", food_name=" + food_name
-				+ ", food_address=" + food_address + ", food_phone=" + food_phone + ", food_food_kind=" + food_food_kind
-				+ ", food_avg_price=" + food_avg_price + ", food_write_date=" + food_write_date
+		return "FoodVO [fNo=" + fNo + ", uNo=" + uNo + ", count=" + count + ", uNick=" + uNick + ", food_name="
+				+ food_name + ", food_address=" + food_address + ", food_phone=" + food_phone + ", food_food_kind="
+				+ food_food_kind + ", food_avg_price=" + food_avg_price + ", food_write_date=" + food_write_date
 				+ ", food_working_hours=" + food_working_hours + ", food_holiday=" + food_holiday + ", food_website="
 				+ food_website + ", food_content=" + food_content + ", food_menu_number=" + food_menu_number
 				+ ", food_menu_name=" + food_menu_name + ", food_menu_price=" + food_menu_price + ", LType=" + LType
 				+ ", food_attach_number=" + food_attach_number + ", food_attach_logical_name="
 				+ food_attach_logical_name + ", food_attach_physical_name=" + food_attach_physical_name + ", thumbnail="
-				+ thumbnail + "]";
+				+ thumbnail + ", avg=" + avg + ", food_hit=" + food_hit + "]";
 	}
 
 	

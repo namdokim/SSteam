@@ -25,8 +25,16 @@ public class Rentalhome_PayVO {
 	private String product_name;
 	private int point;
 	private int discount;
+	private String review_yn;
 	
 	
+	
+	public String getReview_yn() {
+		return review_yn;
+	}
+	public void setReview_yn(String review_yn) {
+		this.review_yn = review_yn;
+	}
 	public Timestamp getRefund_date() {
 		return refund_date;
 	}
@@ -148,6 +156,7 @@ public class Rentalhome_PayVO {
 		this.uno = uno;
 	}
 	
+	
 	@Override
 	public String toString() {
 		return "Rentalhome_PayVO [pay_idx=" + pay_idx + ", reserve_number=" + reserve_number + ", room_idx=" + room_idx
@@ -155,8 +164,9 @@ public class Rentalhome_PayVO {
 				+ pay_status + ", start_date=" + start_date + ", end_date=" + end_date + ", refund_date=" + refund_date
 				+ ", uno=" + uno + ", guest_name=" + guest_name + ", guest_tel=" + guest_tel + ", guest_email="
 				+ guest_email + ", request=" + request + ", product=" + product + ", product_name=" + product_name
-				+ ", point=" + point + ", discount=" + discount + "]";
+				+ ", point=" + point + ", discount=" + discount + ", review_yn=" + review_yn + "]";
 	}
+	
 	
 	
 	
