@@ -719,7 +719,6 @@ window.onload = function()
 	<ul>
 		
 		<c:forEach items="${list}" var="vo" varStatus="status">
-			<br>
 			<li class="menu">
 				<c:if test="${login.uNo eq vo.uNo}">
 					<button style="background-color:transparent; border:0px; color:orange;" onclick="delete_Menu(${status.index},${vo.food_menu_number})">
@@ -732,7 +731,8 @@ window.onload = function()
 				
 					<%-- <button style="color:red;" onclick="delete_Menu(${status.index},${vo.food_menu_number})">-</button> --%>
 				${vo.food_menu_name} - ${vo.food_menu_price}원 
-			</li><hr style="width : 40%;">
+				<hr style="width : 40%;">
+			</li>
 		</c:forEach>
 	</ul><br><br>
 	<div style="float: right; color:silver;"> 업데이트날짜 : ${vo.food_write_date}</div><br><hr>

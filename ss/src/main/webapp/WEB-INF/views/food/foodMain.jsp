@@ -418,7 +418,7 @@
 	</style>
 </head>
 <!-- ============================================================================== -->
-<div class="container-fluid " style="background-color:#FFFCF5;">
+<div class="container-fluid " style="background-color:#FFFCF5; font-family:'TheJamsil5Bold';">
 	<div class="masthead py-5">
 		<div class="container position-relative">
 		    <div class="row justify-content-center">
@@ -498,7 +498,7 @@
 							
 							
 <!-- 사이드바 -->							
-<div class="row justify-content-center" style="font-family:'TheJamsil5Bold';">
+<div class="row justify-content-center">
 		<div class="col-12 col-md-8 text-center ">
 			<div class="root-container" style=" margin: 20px 18px 0px 0px; vertical-align: top;">
 				<div class="row me-3">
