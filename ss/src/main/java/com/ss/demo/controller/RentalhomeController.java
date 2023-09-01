@@ -71,6 +71,10 @@ public class RentalhomeController {
 			
 			searchVO.setSort("review");
 		}
+		if(searchVO.getMax_price() ==  0) {
+			
+			searchVO.setMax_price(1000000);
+		}
 		System.out.println(searchVO.toString());
 
 		List<RentalhomeVO> list = rentalhomeService.selectAll(searchVO);

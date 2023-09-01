@@ -841,9 +841,11 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 						<div class="user" style="position:absolute;"></div>
 						<div style="position:absolute; width:200px; top:20px; left:80px; font-size:15pt; font-weight:bold;">${review.uNick}</div>
 						<div style="position:absolute; width:200px; top:50px; left:80px; color:#777777;">${review.wdate}</div>
-						<div style="position:absolute; width:300px; top:100px; color:#444444; font-weight:bold;">${rentalhomeVO.name}</div>
-						<div name="review_room" style="position:absolute; width:300px; top:130px; color:#444444;">${review.room_name}</div>
-						<div style="position:absolute; width:300px; top:160px; color:#777777;">투숙일: ${review.stay_date}</div>
+						<div style="position:absolute; width:300px; bottom:10px; color:#444444; font-weight:bold;">
+							${rentalhomeVO.name}<br>
+							<span name="review_room" style="color:#444444;">${review.room_name}</span><br>
+							<span style="color:#777777;">투숙일: ${review.stay_date}</span>
+						</div>
 						<div style="position:absolute; width:100px; top:30px; left:200px; background-color:#f0f5fe; border-radius:5px; text-align:center; ">
 							<span style="font-size:18pt; font-weight:bold; padding:10px; border-radius:10px; color:#0156df;">${review.one_avg }/5</span>
 						</div>

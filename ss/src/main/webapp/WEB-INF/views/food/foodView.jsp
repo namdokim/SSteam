@@ -677,20 +677,49 @@ window.onload = function()
    <!-- 모달 -->
 		
 	</p><hr><br><br>
-	<p><strong>주소 </strong>${vo.food_address}</p>
-	<p><strong>전화번호 </strong>${vo.food_phone}</p>
-	<p><strong>음식 종류 </strong>${vo.food_food_kind}</p>
-	<p><strong>가격대 </strong> ${vo.food_avg_price}</p>
-	<p><strong>영업시간 </strong>${vo.food_working_hours}</p>
-	<p><strong>휴일 </strong>${vo.food_holiday}</p>
-	<p><strong>웹사이트 </strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a></p><br><br>
-	<h3 style="display:inline-block;">메뉴</h3> 
+	<p>
+		<img src="../img/which.png" alt="위치 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		주소 :
+		${vo.food_address}
+	</p>
+	<p>
+		<img src="../img/foodcall.png" alt="전화번호 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		전화번호 : 
+		${vo.food_phone}
+	</p>
+	<p>
+		<img src="../img/foodnoodle.png" alt="음식 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		음식 종류 :
+		${vo.food_food_kind}
+	</p>
+	<p>
+		<img src="../img/foodmoney.png" alt="돈 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		가격대 :
+		${vo.food_avg_price}
+	</p>
+	<p>
+		<img src="../img/foodwork.png" alt="일 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		영업시간 : 
+		${vo.food_working_hours}
+	</p>
+	<p>
+		<img src="../img/foodtree.png" alt="나무 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		휴일 :
+		${vo.food_holiday}
+	</p>
+	<p><strong>
+		<img src="../img/insta.png" alt="Instagram 아이콘" style="width:28px; height:28px; cursor:pointer;">
+		웹사이트 
+		</strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a>
+	</p><br><br>
+	<h3 style="display:inline-block;">메뉴</h3>
 	<c:if test="${login.uNo eq vo.uNo}">
 		<button class="container1_SubmitButton" onclick = "location.href='<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}'">메뉴등록버튼 </button>
 	</c:if>
 	<ul>
 		
 		<c:forEach items="${list}" var="vo" varStatus="status">
+			<br>
 			<li class="menu">
 				<c:if test="${login.uNo eq vo.uNo}">
 					<button style="background-color:transparent; border:0px; color:orange;" onclick="delete_Menu(${status.index},${vo.food_menu_number})">
@@ -702,7 +731,8 @@ window.onload = function()
 				</c:if>
 				
 					<%-- <button style="color:red;" onclick="delete_Menu(${status.index},${vo.food_menu_number})">-</button> --%>
-				${vo.food_menu_name} - ${vo.food_menu_price}원 </li>
+				${vo.food_menu_name} - ${vo.food_menu_price}원 
+			</li><hr style="width : 40%;">
 		</c:forEach>
 	</ul><br><br>
 	<div style="float: right; color:silver;"> 업데이트날짜 : ${vo.food_write_date}</div><br><hr>

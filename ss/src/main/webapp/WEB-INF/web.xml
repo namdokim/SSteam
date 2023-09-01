@@ -6,7 +6,7 @@
 <!-- 톰캣 기본이 src/main/webapp 이쪽으로 잡힌다  -->
 <!-- 서버 쪽 server.xml d에서 Context의 docBase에 명시되어 있는 경로가 webapps/ 밑으로 들어오면서 Document Root-->
 <welcome-file-list>
-	<welcome-file>/WEB-INF/views/index.jsp</welcome-file>
+	<welcome-file>/WEB-INF/views/User/index.jsp</welcome-file>
 </welcome-file-list>
 
   <context-param>

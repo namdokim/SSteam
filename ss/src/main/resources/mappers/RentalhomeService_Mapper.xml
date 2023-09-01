@@ -121,7 +121,7 @@
 			AND d.rentalhome_idx IN(SELECT DISTINCT rentalhome_idx FROM rentalhome_room WHERE weekend_discount_price BETWEEN #{min_price} and #{max_price}) 
 		</if>
 		<if test="score != null and score != 0.0">
-			AND e.all_avg &gt; #{score} 
+			AND all_avg &gt; #{score} 
 		</if>
 		<if test="type != null and type != ''">
 			AND type = #{type} 

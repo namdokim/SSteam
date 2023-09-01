@@ -90,7 +90,7 @@
 <!-- CSS 스타일 ============================================================================== -->
 	<style type="text/css">
 		.active{
-			background-color:#ffb64c;
+			background-color:#ffb64c !important;
 		}
 		a {
 		text-decoration: none;
@@ -565,60 +565,60 @@
 									<li class="nav-item" >
 										<a href='foodMain.do?type=TT&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark  <%= activeTab.equals("TT") ? "active" : "" %>"  style="text-align:center;">
 											
-											전체
+											<span class="fs-5">전체</span>
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=GG&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark <%= activeTab.equals("GG") ? "active" : "" %>" style="text-align:center;">
 											
-											서울 / 경기
+											<span class="fs-5">서울 / 경기</span>
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=GW&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark <%= activeTab.equals("GW") ? "active" : "" %>" style="text-align:center;">
 											
-											강원
+											<span class="fs-5">강원</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=CB&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark <%= activeTab.equals("CB") ? "active" : "" %>" style="text-align:center;">
 											
-											충북
+											<span class="fs-5">충북</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=CN&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}'class="nav-link link-dark <%= activeTab.equals("CN") ? "active" : "" %>" style="text-align:center;">
 											
-											충남
+											<span class="fs-5">충남</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=GB&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}'class="nav-link link-dark <%= activeTab.equals("GB") ? "active" : "" %>" style="text-align:center;">
 											
-											경북
+											<span class="fs-5">경북</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=GN&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}'class="nav-link link-dark <%= activeTab.equals("GN") ? "active" : "" %>" style="text-align:center;">
 											
-											경남
+											<span class="fs-5">경남</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=JB&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark <%= activeTab.equals("JB") ? "active" : "" %>" style="text-align:center;">
 											
-											전북
+											<span class="fs-5">전북</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=JN&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}'class="nav-link link-dark <%= activeTab.equals("JN") ? "active" : "" %>" style="text-align:center;">
-											전남
+											<span class="fs-5">전남</span> 
 										</a>
 									</li>
 									<li>
 										<a href='foodMain.do?type=JJ&searchType=${searchVO.searchType}&searchValue=${searchVO.searchValue}' class="nav-link link-dark <%= activeTab.equals("JJ") ? "active" : "" %>" style="text-align:center;">
 											
-											제주
+											<span class="fs-5">제주</span> 
 										</a>
 									</li>
 								</ul>
