@@ -1,30 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp" %>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 window.onload = function(){
-	const openButton = document.getElementById("open-gallery-button");
-	const modal = document.getElementById("gallery-modal");
-	const closeButton = document.getElementById("close-button");
-
-	openButton.addEventListener("click", () => {
-	  modal.style.display = "block";
-	  document.body.style.overflow = "hidden";
-	});
-
-	closeButton.addEventListener("click", () => {
-	  modal.style.display = "none";
-	  document.body.style.overflow = "auto";
-	});
-
-	window.addEventListener("click", (event) => {
-	  if (event.target === modal) {
-	    modal.style.display = "none";
-	    document.body.style.overflow = "auto";
-	  }
-	});
-	
 	document.getElementById("search_address").addEventListener("click", function(){
 		new daum.Postcode({
 			oncomplete: function(data) {
@@ -37,22 +15,16 @@ window.onload = function(){
 	
 	// 주어진 문자열에서 요일 배열 만들기
 	const day = '${rentalhomeVO.breakfast_day}'.split(",");
-	console.log("111");
 	// 각 체크박스의 요일 값과 배열에 포함된 요일 비교하여 checked 속성 부여
 	const breakfast_day = document.getElementsByName("breakfast_day");
-	console.log("221");
 	for(var i=0; i <breakfast_day.length; i++){
-	console.log("331");
 		for(var j=0; j<day.length; j++){
-	console.log("332");
-	console.log(day[j]);
 			if(day[j] == breakfast_day[i].value){
 				console.log(breakfast_day[i].value);
 				breakfast_day[i].checked = true;
 			} 
 		}
 	}
-	
 }
 function thumbnail(index){
 	var attach_idx = document.getElementsByName("attach_idx")[index].value;
@@ -92,214 +64,261 @@ function attach_delete(index){
 	});
 }	
 </script>
+<!-- CSS ================================================================= -->
 <style>
-	.view{
-		border-radius:10px;
-		background-color:white;
-		box-shadow:1px 1px 1px 1px #ddd;
-	}
-		/* 갤러리 모달 스타일 */
-	.gallery-modal {
-	  display: none;
-	  position: fixed;
-	  z-index: 1000;
-	  top: 0;
-	  left: 0;
-	  width: 100%;
-	  height: 100%;
-	  background-color: rgba(0, 0, 0, 0.5);
-	  overflow: auto;
-	}
-	
-	.gallery-content {
-	  display: flex;
-	  flex-wrap: wrap;
-	  justify-content: center;
-	  padding: 20px;
-	}
-	
-	.gallery-content img {
-	  max-width: 100%;
-	  height: auto;
-	  margin:2px 0px;
-	}
-	
-	.close-button {
-	  color: white;
-	  font-size: 30px;
-	  position: absolute;
-	  top: 10px;
-	  right: 20px;
-	  cursor: pointer;
-	}	
-	
+.form-signin .scrollable-x {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.form-signin {
+  max-width: 700px;
+  padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input {
+  margin-bottom: 1px;
+
+
+}
+.masthead:before {
+    content: "";
+    position: absolute;
+    background-color: #1c375e;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}		
+.masthead {
+    position: relative;
+    background: url(../img/homeback.jpg) no-repeat center center;
+    background-size: cover;
+    height:400px
+}	
 </style>
-<div style="width:1920px; text-align:center; background-color:#dfecfb; padding:20px 0px;">
-	<div class="view" style="width:1224px; margin:0 auto; padding:30px;  line-height:50px; ">
-		<div class="gallery-modal" id="gallery-modal">
-		    <div class="gallery-content">
-		    	<div class="close-button" id="close-button" style="display:inline-block;">&times;</div>
-			    <div class="view" style="width:1224px; padding:20px;">
-				    <div style="text-align:left; margin:20px;">
-					    <span style="font-weight:bold; font-size:15pt;">숙소 제공 이미지</span>
-				    </div>
-				    <div style="margin:20px; width:1144px; height:1px; background-color:lightgray;"></div>
-				    <div style="margin:20px; text-align:left;">
-					    <c:forEach items="${attach}" var="attach"  varStatus="status">
-						    <div name="attach_img" style="display:inline-block; margin:20px 0px;">
-						   		<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="width:370px; height:250px; border-radius:5px; display:inline-block;"><br>
-							    	<input type="hidden" name="attach_idx" value="${attach.attach_idx}">
-							    	<input type="hidden" name="rentalhome_idx" value="${attach.rentalhome_idx}">
-							   		<button onclick="thumbnail(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">썸네일 등록</button>
-							   		<button onclick="attach_delete(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">등록 이미지 삭제</button>
-						    </div>
-					    </c:forEach>
-				    </div>
-			    </div>
-		    </div>
-		</div>		
-		<div style="width:100%; padding:10px; margin:10px 0px;"><span style="font-size:20pt; font-weight:bold;">숙소 정보 수정하기</span></div>
-		<div style="width:100%; padding:10px; margin:10px 0px; text-align:left;">
-			<form name="frm" action="rentalhomeModify.do" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px; vertical-align:top;">
-						<span style="font-weight:bold;">숙소 등록 이미지 관리</span>
+
+<div class="masthead text-center pt-5" style="height:200%; font-family: 'TheJamsil5Bold';">
+	<div class="form-signin card shadow-sm w-100 m-auto" >
+		<!-- Modal -->
+		<div class="modal fade" id="rentalhome_attach" tabindex="-1" aria-labelledby="rentalhome_attachLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-xl">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="rentalhome_attachLabel">숙소에 등록된 이미지</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div id="open-gallery-button" style="display:inline-block; cursor:pointer;">등록된 이미지 보기</div>
-				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px; vertical-align:top;">	
-						<span style="font-weight:bold;">숙소 이미지 추가 업로드</span>
+					<div class="modal-body">
+						<div style="margin:24px; text-align:left;">
+							<c:forEach items="${attach}" var="attach"  varStatus="status">
+								<div name="attach_img" style="display:inline-block; margin:20px 0px;">
+									<img src="<%=request.getContextPath()%>/resources/upload/${attach.physical_name}" style="width:350px; height:230px; border-radius:5px; display:inline-block;"><br>
+									<input type="hidden" name="attach_idx" value="${attach.attach_idx}">
+									<input type="hidden" name="rentalhome_idx" value="${attach.rentalhome_idx}">
+									<button onclick="thumbnail(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">썸네일 등록</button>
+									<button onclick="attach_delete(${status.index})" style="border:0px; background-color:transparent; border-radius:5px; padding:10px; height:50px; line-height:25px;font-weight:bold;">등록 이미지 삭제</button>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
-					<div style="display:inline-block; width:800px;">
-						<input type="file" name="multiFile" multiple>
-						<div id="preview" style="width:800px;"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>
 					</div>
 				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
-						<span style="font-weight:bold;">숙박 시설 이름</span>
-					</div>
-					<div style="display:inline-block; width:800px;">
-						<input type="text" name="name" value="${rentalhomeVO.name}" placeholder="숙박 시설의 상호 명을 입력해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-					</div>
-				</div>
-				<div style="margin:10px 0px 30px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
-						<span style="font-weight:bold;">주소</span>
-					</div>
-					<div style="display:inline-block; width:800px; height:110px;">
-						<div style="display:inline-block; width:800px;">
-							<span id="search_address" class="btn btn-secondary mb-1" style="cursor:pointer; padding:10px 20px;">주소 찾기</span>
-						</div>
-						<input type="text" id="address" name="address" readonly value="${rentalhomeVO.address}" placeholder="숙박 시설의 주소를 입력해주세요" style="width:100%;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-					</div>
-				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px; vertical-align:top;">
-						<span style="font-weight:bold;">숙소 소개글</span>
-					</div>
-					<div style="display:inline-block; width:800px;">
-						<textarea placeholder="숙소의 소개글을 입력해주세요." name="info" style="width:100%; padding:0px 5px; height:200px; resize:none;">${rentalhomeVO.info}</textarea>
-					</div>
-				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px;">
-						<span style="font-weight:bold;">숙소 종류</span>
-					</div>
-					<div style="display:inline-block; width:800px;">
-						<select name="type" style="width:300px; padding:10px; border:0px; border-bottom:1px solid gray; font-size:11pt;">
-							<option selected>등록할 숙소의 종류를 선택해주세요</option>
-							<option value="motel" <c:if test="${rentalhomeVO.type == 'motel'}">selected</c:if>>모텔</option>
-							<option value="hotel" <c:if test="${rentalhomeVO.type == 'hotel'}">selected</c:if>>호텔</option>
-							<option value="resort" <c:if test="${rentalhomeVO.type == 'resort'}">selected</c:if>>리조트</option>
-							<option value="pension" <c:if test="${rentalhomeVO.type == 'pension'}">selected</c:if>>펜션</option>
-							<option value="guesthouse" <c:if test="${rentalhomeVO.type == 'guesthouse'}">selected</c:if>>게스트 하우스</option>
-							<option value="camping" <c:if test="${rentalhomeVO.type == 'camping'}">selected</c:if>>캠핑  & 글램핑</option>
-						</select>
-					</div>
-				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px;  height:100px; text-align:right; margin-right:30px; vertical-align:top;">
-						<span style="font-weight:bold;">호텔 내 시설 체크</span>
-					</div>
-					<div style="display:inline-block; width:800px; height:100px; vertical-align:top;">
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.inPool_yn == 'Y'}">checked</c:if> class="facility" name="inPool_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">내부 수영장</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.outPool_yn == 'Y'}">checked</c:if> class="facility" name="outPool_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">야외 수영장</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.parking_yn == 'Y'}">checked</c:if> class="facility" name="parking_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">주차장</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.pickup_yn == 'Y'}">checked</c:if> class="facility" name="pickup_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">픽업</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.wifi_yn == 'Y'}">checked</c:if> class="facility" name="wifi_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">와이파이</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.beach_yn == 'Y'}">checked</c:if> class="facility" name="beach_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">인근해변</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.bbq_yn == 'Y'}">checked</c:if> class="facility" name="bbq_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">바베큐</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.breakfast_yn == 'Y'}">checked</c:if> class="facility" name="breakfast_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">조식</span>
-						</div>
-						<div style="display:inline-block; width:150px;">
-							<input type="checkbox" <c:if test="${rentalhomeVO.animal_yn == 'Y'}">checked</c:if> class="facility" name="animal_yn" value="Y" style="width:15px; height:15px;"><span style="margin-left:10px;font-size:11pt; color:#0f294d;">반려동물</span>
-						</div>
-					</div>
-				</div>
-				<div style="margin:10px 0px;">
-					<div style="display:inline-block; width:200px; text-align:right; margin-right:30px; vertical-align:top;">
-						<span style="font-weight:bold;">숙소 규정</span>
-					</div>
-					<div style="display:inline-block; width:800px;">
-						<div style="margin-bottom:20px;">
-							<span style="font-weight:bold;">체크인 & 체크아웃</span><br>
-							<span style="font-size:11pt; margin:0px 20px;">체크인 시간</span><input type="text" name="checkIn" value="${rentalhomeVO.checkIn}" style="height:30px; width:200px;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-							<span style="font-size:11pt; margin:0px 20px;">체크아웃 시간</span><input type="text" name="checkOut" value="${rentalhomeVO.checkOut}"style="height:30px; width:200px;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-						</div>
-						<div style="margin-bottom:20px;">
-							<span style="font-weight:bold;">체크인 방법</span><br>
-							<input type="text" value="${rentalhomeVO.checkIn_info}" name="checkIn_info"style="width:800px; height:30px;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-						</div>
-						<div style="margin-bottom:20px;">
-							<span style="font-weight:bold;">조식</span><br>
-							<div style="display:inline-block; width:120px; text-align:right; margin-right:30px; vertical-align:top;">
-								<span style="font-size:11pt; margin:0px 20px;">요금 / 1인</span>
-							</div>
-							<input type="text" value="${rentalhomeVO.breakfast_price}" name="breakfast_price" style="height:30px; width:200px;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-							<br>
-							<div style="display:inline-block; width:120px; text-align:right; margin-right:30px; vertical-align:top;">
-								<span style="font-size:11pt; margin:0px 20px;">영업시간</span>
-							</div>
-							<input type="text" value="${rentalhomeVO.breakfast_open}"name="breakfast_open" style="height:30px; width:100px;padding:0px 5px;border:0px; border-bottom:1px solid gray;">
-							~
-							<input type="text" value="${rentalhomeVO.breakfast_close}" name="breakfast_close"style="height:30px; width:100px;padding:0px 5px;border:0px; border-bottom:1px solid gray;"><br>
-							<div style="display:inline-block; width:120px; text-align:right; margin-right:30px; vertical-align:top;">
-								<span style="font-size:11pt; margin:0px 20px;">영업일</span>
-							</div>
-							<input type="checkbox" name="breakfast_day" value="월요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">월요일</span>
-							<input type="checkbox" name="breakfast_day" value="화요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">화요일</span>
-							<input type="checkbox" name="breakfast_day" value="수요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">수요일</span>
-							<input type="checkbox" name="breakfast_day" value="목요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">목요일</span>
-							<input type="checkbox" name="breakfast_day" value="금요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">금요일</span>
-							<input type="checkbox" name="breakfast_day" value="토요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">토요일</span>
-							<input type="checkbox" name="breakfast_day" value="일요일" style="width:15px; height:15px;"><span style="margin:0px 10px;font-size:11pt; color:#0f294d;">일요일</span>
-						</div>
-					</div>
-				</div>
-				<div style="margin:30px 0px; text-align:right; width:1050px;">
-					<input type="button" onclick="location.href='rentalhomeView.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" style="width:120px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;" value="이전 페이지로">
-					<button style="width:100px; border:0px; color:white; background-color:#0863ec; border-radius:10px; font-weight:bold; font-size:11pt; cursor:pointer;">숙소 수정</button>
-				</div>
-			</form>
+			</div>
 		</div>
+		<form name="frm" action="rentalhomeModify.do" method="post" style="text-align: center;" enctype="multipart/form-data">
+			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
+			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
+			<svg xmlns="http://www.w3.org/2000/svg" style="color:#0863ec" width="72" height="60" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
+			  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+			  <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 1 0 1 0v-1h1a.5.5 0 1 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"/>
+			</svg>
+			</a>
+			<h1 class="h3 mb-3 fw-normal" style="color:#0863ec">숙소 수정하기</h1>
+	
+			<div class="form-floating">
+				<input type="text" class="form-control" placeholder="숙박 시설 이름" id="name" name="name" value="${rentalhomeVO.name}">
+				<label for="floatingInput" class="text-muted">숙박 시설 이름</label>
+			</div>
+			<div class="d-flex">
+			<span class=" btn btn-outline-primary py-1 my-1 float-left w-25" id="search_address" style="cursor:pointer;">주소 찾기</span>
+			</div>
+			<div class="form-floating ">
+				<input type="text" class="form-control" id="address" readonly placeholder="주소" name="address" value="${rentalhomeVO.address}">
+				<label for="floatingPassword" class="text-muted">주소</label>
+			</div>
+	
+			<div class="form-floating mb-3">
+				<textarea class="form-control" placeholder="숙소 소개글"  name="info"  style="height: 200px; resize: none">${rentalhomeVO.info}</textarea>
+  				<label for="floatingTextarea2" class="text-muted">숙소 소개글</label>
+			</div>
+			
+			
+			
+			<div class="mb-2">
+				<select name="type" class="form-select" aria-label="Default select example">
+					<option selected value="">숙소 종류</option>
+					<option value="motel" <c:if test="${rentalhomeVO.type == 'motel'}">selected</c:if> >모텔</option>
+					<option value="hotel" <c:if test="${rentalhomeVO.type == 'hotel'}">selected</c:if> >호텔</option>
+					<option value="resort" <c:if test="${rentalhomeVO.type == 'resort'}">selected</c:if>>리조트</option>
+					<option value="pension" <c:if test="${rentalhomeVO.type == 'pension'}">selected</c:if>>펜션</option>
+					<option value="guesthouse" <c:if test="${rentalhomeVO.type == 'guesthouse'}">selected</c:if>>게스트 하우스</option>
+					<option value="camping" <c:if test="${rentalhomeVO.type == 'camping'}">selected</c:if>>캠핑  & 글램핑</option>
+				</select>
+			</div>
+			<div class="card mb-2">
+				<span class="text-muted ">호텔내 시설체크</span>
+				<div class="py-md-1 ms-4" style="text-align: left;">
+					<input type="checkbox" <c:if test="${rentalhomeVO.inPool_yn == 'Y'}">checked</c:if> class="btn-check" name="inPool_yn" value="Y" id="btn-check-outlined1" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined1">내부 수영장</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.outPool_yn == 'Y'}">checked</c:if> class="btn-check" name="outPool_yn" value="Y" id="btn-check-outlined2" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined2">야외 수영장</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.parking_yn == 'Y'}">checked</c:if> class="btn-check" name="parking_yn" value="Y" id="btn-check-outlined3" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined3">주차장</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.pickup_yn == 'Y'}">checked</c:if> class="btn-check" name="pickup_yn" value="Y" id="btn-check-outlined4" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined4">픽업</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.wifi_yn == 'Y'}">checked</c:if> class="btn-check" name="wifi_yn" value="Y" id="btn-check-outlined5" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined5">와이파이</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.beach_yn == 'Y'}">checked</c:if> class="btn-check" name="beach_yn" value="Y" id="btn-check-outlined6" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined6">인근해변</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.bbq_yn == 'Y'}">checked</c:if> class="btn-check" name="bbq_yn" value="Y" id="btn-check-outlined7" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined7">바베큐</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.breakfast_yn == 'Y'}">checked</c:if> class="btn-check" name="breakfast_yn" value="Y" id="btn-check-outlined8" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined8">조식</label>
+					<input type="checkbox" <c:if test="${rentalhomeVO.animal_yn == 'Y'}">checked</c:if> class="btn-check" name="animal_yn" value="Y" id="btn-check-outlined9" autocomplete="off">
+					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined9">반려동물</label>
+				</div>
+			</div>
+			
+			<div class="d-flex mt-3">
+				<h5 class="text-left ms-2" >체크인</h5>
+			</div>
+			<div class="card px-3 py-3">
+				<div class="row align-items-center">
+					<div class="form-floating col">	
+						<input type="text" class="form-control ps-3" value="${rentalhomeVO.checkIn}" placeholder="체크 인 시간" name="checkIn">
+						<label for="floatingInput" class="text-muted ms-3">체크 인 시간</label>
+					</div>
+						
+						-
+					
+					<div class="form-floating col">	
+						<input type="text" class="form-control ps-3" value="${rentalhomeVO.checkOut}" placeholder="체크 아웃 시간" name="checkOut">
+						<label for="floatingInput2" class="text-muted ms-3">체크 아웃 시간</label>
+					</div>
+				</div>
+				
+				<div class="form-floating my-2">
+					<input type="text" value="${rentalhomeVO.checkIn_info}" class="form-control" name="checkIn_info" placeholder="체크인 방법">
+					<label for="floatingInput" class="text-muted">체크인 방법</label>
+				</div>
+			</div>
+			<div class="d-flex mt-3">
+				<h5 class="text-left ms-2" >조식</h5>
+			</div>
+			<div class="card px-3 py-3">
+				<div class="form-floating mx-1 my-1">
+					<input type="text" value="${rentalhomeVO.breakfast_price}" class="form-control" placeholder="요금 / 1인" name="breakfast_price">
+					<label for="floatingInput" class="text-muted">요금 / 1인</label>
+				</div>
+				
+				<div class="d-flex">
+					<span class="text-left ms-2 mt-2">영업시간</span>
+				</div>
+				<div class="d-flex">
+					<div class="form-floating col mx-1 my-1">
+						<input type="text" value="${rentalhomeVO.breakfast_open}" class="form-control ps-3" id="breakfast_open" placeholder="open" name="breakfast_open">
+						<label for="breakfast_open" class="text-muted ms-1">open</label>
+					</div>
+					<div class="form-floating col mx-1 my-1">
+						<input type="text" value="${rentalhomeVO.breakfast_close}" class="form-control ps-3" id="breakfast_close" placeholder="close" name="breakfast_close">
+						<label for="breakfast_close" class="text-muted ms-1">close</label>
+					</div>
+				</div>	
+				<div class="d-flex">
+					<span class="text-left ms-2 mt-2">영업일</span>
+				</div>
+				<div class="card mb-2 mx-1">
+				<div class="d-flex my-3 justify-content-center">
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="월요일">
+						<label class="form-check-label" for="flexCheckDefault">
+							월요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="화요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							 화요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="수요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							수요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="목요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							목요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="금요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							금요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="토요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							토요일
+						</label>
+					</div>
+					
+					<div class="form-check mx-2">
+						<input class="form-check-input" type="checkbox" name="breakfast_day" value="일요일">
+						<label class="form-check-label ms-0" for="flexCheckDefault">
+							일요일
+						</label>
+					</div>
+				</div>
+			</div>
+			</div>
+		
+			<div class="d-flex ms-2 align-items-center">
+				<span class="h5 my-3 me-3 fw-normal">파일 업로드</span>
+				<button type="button" class="btn btn-primary w-20 h-50 my-3" data-bs-toggle="modal" data-bs-target="#rentalhome_attach">
+					등록된 이미지 보기
+				</button>
+			</div>	
+		
+			<div class="card">
+				<div class="d-flex">
+					<label class="btn btn-primary float-left ms-2 my-2" >
+					이미지 선택			
+					<input type="file" name="multiFile" multiple style="display: none;">
+					</label>
+				</div>	
+				<div class="ms-4" id="preview" style="overflow-y: auto; max-height: 230px; text-align: left;"></div>
+			</div>	
+			<br>
+			<button class="w-100 btn btn-lg btn-primary" >
+				수정
+			</button>
+		</form>
 	</div>
-</div>	
-<%@ include file="../include/footer.jsp" %>
+</div>
+<%@ include file="../include/footer.jsp" %> 

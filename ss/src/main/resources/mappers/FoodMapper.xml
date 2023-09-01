@@ -18,7 +18,6 @@
 			,food_phone
 			,food_food_kind
 			,food_avg_price
-			,food_write_date
 			,food_working_hours
 			,food_holiday
 			,food_website
@@ -31,7 +30,6 @@
 			,#{food_phone}
 			,#{food_food_kind}
 			,#{food_avg_price}
-			,#{food_write_date}
 			,#{food_working_hours}
 			,#{food_holiday}
 			,#{food_website}
@@ -83,10 +81,12 @@
 			fNo
 			,uNo
 			,food_review_content
+			,food_review_grade
 		) VALUES (
 			#{fNo},
 			#{uNo},
-			#{food_review_content}
+			#{food_review_content},
+			#{food_review_grade}
 		)
 	</insert>
 	
@@ -95,15 +95,26 @@
 		INSERT INTO food_like (fNo, uNo) 
 		VALUES (#{fNo}, #{uNo} )
 	</insert>
+	
+	<!-- 신고 내용 접수  -->
+	<insert id="insert_report" parameterType="food_reportVO">
+		INSERT INTO food_report (food_report_content,fNo,uNo,food_report_reson) 
+		VALUES (#{food_report_content},#{fNo},#{uNo},#{food_report_reson}) 
+	</insert>
+	
+	<!-- 리뷰 신고 내용 접수  -->
+	<insert id="insert_review_report" parameterType="food_review_reportVO">
+		INSERT INTO food_review_report (food_review_report_content,food_review_number,uNo,food_review_report_reson) 
+		VALUES (#{food_review_report_content},#{food_review_number},#{uNo},#{food_review_report_reson}) 
+	</insert>
 <!-- ============================================================ select(조회)-->	
 	
 	<!-- 특정 조건에 따라 식당 목록을 조회하는 쿼리 -->
 	<select id="selectAll" resultType="foodVO" parameterType="searchVO">
 		SELECT *, (select count(*) from food_like where fNo = a.fNo 
-		<if test='uNo != null'>and uNo =#{uNo}</if>) count 
+		<if test='uNo != null'>and uNo =#{uNo}</if>) count, (select avg(food_review_grade) from food_review where fNo = a.fNo) as avg
 		FROM (SELECT * FROM food LEFT OUTER JOIN (select food_attach_number,fNo as fNo2 ,food_attach_logical_name,food_attach_physical_name,thumbnail from food_attach where thumbnail = 'Y') D 
-		ON food.fNo = D.fNo2
-	  	WHERE food.status = 'Y' ) a
+		ON food.fNo = D.fNo2 WHERE food.status = 'Y' ) a
 	  	WHERE 1=1
 
 		<!-- 글 검색 -->
@@ -133,8 +144,9 @@
 	</select>
 
 	<!-- 특정 fNo 값을 가진 식당의 메뉴 목록을 조회하는 쿼리 -->
-	 <select id="selectAllMenu" resultType="foodVO">
-		SELECT *
+	<!-- 메뉴삭제시 로그인한 사람만 지울 수 있게 uNo 조회하는 쿼리 -->
+	 <select id="selectAllMenu" resultType="foodVO" parameterType="int" >
+		SELECT * ,(select uNo from food where fNo= food_menu.fNo)as uNo
 		FROM food_menu
 		WHERE fNo = #{fNo}
 	</select> 
@@ -162,7 +174,7 @@
 	
 	<!-- 모든 식당 리뷰 정보를 조회하는 쿼리 -->
 	<select id="selectAll_foodreview" resultType="foodreviewVO" parameterType="int">
-		SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo,(select uNick from User WHERE uNo = food_review.uNo) as uNick
+		SELECT food_review_number, food_review_content, food_review_writedate, fNo, uNo, food_review_grade, (select uNick from User WHERE uNo = food_review.uNo) as uNick
 		FROM food_review
 		WHERE fNo = #{fNo}
 		order by food_review_number desc
@@ -180,18 +192,39 @@
 		SELECT count(*) 
 		FROM food_like 
 		WHERE fNo = #{fNo}
-<!-- 		<if test="uno != null"> -->
-<!-- 			and uno = #{uno} -->
-<!-- 		</if> -->
 	</select>
 	
-	<!--  -->
+	<!-- 좋아요 중복 체크 -->
 	<select id="dupl_like" parameterType="food_likeVO" resultType="int">
 		SELECT count(*) 
 		FROM food_like 
 		WHERE fNo = #{fNo}
 				and uNo = #{uNo}
 	</select>
+	
+
+	<!-- 평점 -->
+	<select id="selectAvg_foodreview" parameterType="foodreviewVO" resultType="double">
+		SELECT AVG(food_review_grade) 
+		FROM food_review
+		WHERE fNo = #{fNo}
+	</select>
+
+	<!-- 리뷰 전체 카운트 -->
+	<select id="selectAllCount_foodreview" parameterType="int" resultType="int">
+		SELECT COUNT(*) 
+		FROM food_review 
+		WHERE fNo = #{fNo}
+	</select>
+	
+	<!-- 리뷰 평점별 카운트 -->
+	<select id="selectCount_foodreview" parameterType="foodreviewVO" resultType="int">
+		SELECT COUNT(*) 
+		FROM food_review 
+		WHERE fNo = #{fNo}
+			<if test="food_review_grade!=null">and food_review_grade = #{food_review_grade}</if>
+	</select>
+	
 <!-- ============================================================ update(수정) -->	
 	
 	<!-- 글 수정 -->
@@ -227,9 +260,18 @@
 
 	<!-- 특정 식당 리뷰를 수정하는 쿼리 -->
 	<update id="modify_foodreview" parameterType="foodreviewVO">
-		UPDATE food_review
-		SET food_review_content = #{food_review_content}
+		UPDATE food_review 
+		SET 
+			 food_review_content = #{food_review_content}
+			,food_review_grade = #{food_review_grade}
 		WHERE food_review_number = #{food_review_number}
+	</update>
+	
+	<!-- 조회수 증가 -->
+	<update id="increment_hit" parameterType="int">
+		UPDATE food
+		SET food_hit = food_hit+1
+		WHERE fNo = #{fNo}
 	</update>
 	
 <!-- ============================================================ delete(삭제) -->	
@@ -268,4 +310,11 @@
 		WHERE fNo = #{fNo}
 			and uNo = #{uNo}
 	</delete>
+	
+	<delete id="delete_menu" parameterType="int">
+		DELETE 
+		FROM food_menu
+		WHERE food_menu_number = #{food_menu_number}
+	</delete>
+	
 </mapper>

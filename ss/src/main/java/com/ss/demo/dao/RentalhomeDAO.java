@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
 import com.ss.demo.domain.Rentalhome_PayVO;
+import com.ss.demo.domain.Rentalhome_ReviewVO;
+import com.ss.demo.domain.Rentalhome_Review_ReportVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
 import com.ss.demo.domain.Rentalhome_SearchVO;
 
@@ -70,8 +72,8 @@ public class RentalhomeDAO {
 	}
 	
 	// 객실 리스트 불러오기
-	public List<Rentalhome_RoomVO> selectAll_room(int rentalhome_idx) {
-		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room", rentalhome_idx);
+	public List<Rentalhome_RoomVO> selectAll_room(Rentalhome_SearchVO searchVO) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_room", searchVO);
 	}
 
 	// 객실 정보 불러오기
@@ -114,8 +116,8 @@ public class RentalhomeDAO {
 	}
 	
 	// 리뷰 등록하기
-	public int insert_review(Rentalhome_RoomVO roomVO) {
-		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_review", roomVO);
+	public int insert_review(Rentalhome_ReviewVO reviewVO) {
+		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_review", reviewVO);
 	}
 
 	// 좋아요 등록하기
@@ -176,5 +178,45 @@ public class RentalhomeDAO {
 	// 환불
 	public int update_pay_refund(Rentalhome_PayVO rentalhome_payVO) {
 		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_pay_refund", rentalhome_payVO);
+	}
+
+	// 리뷰 등록시 리뷰등록여부 업데이트
+	public int update_pay_reviewYN(String reserve_number) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_pay_reviewYN", reserve_number);
+	}
+
+	// 리뷰 갯수 카운트
+	public int select_review_count(int rentalhome_idx) {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.select_review_count", rentalhome_idx);
+	}
+
+	// 리뷰 4개 기준 평점 
+	public Rentalhome_ReviewVO select_review_avg(int rentalhome_idx) {
+		return sqlSession.selectOne("com.ss.demo.dao.RentalhomeService_Mapper.select_review_avg", rentalhome_idx);
+	}
+
+	// 리뷰 리스트 불러오기
+	public List<Rentalhome_ReviewVO> selectAll_review(int rentalhome_idx) {
+		return sqlSession.selectList("com.ss.demo.dao.RentalhomeService_Mapper.selectAll_review", rentalhome_idx);
+	}
+
+	// 리뷰 삭제
+	public int delete_review(int review_idx) {
+		return sqlSession.delete("com.ss.demo.dao.RentalhomeService_Mapper.delete_review", review_idx);
+	}
+
+	// 리뷰 수정
+	public int update_review(Rentalhome_ReviewVO reviewVO) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_review", reviewVO);
+	}
+	
+	// 신고 등록
+	public int insert_review_report(Rentalhome_Review_ReportVO reportVO) {
+		return sqlSession.insert("com.ss.demo.dao.RentalhomeService_Mapper.insert_review_report", reportVO);
+	}
+
+	// 객실 삭제시 리뷰 상태 비활성 업데이트
+	public int update_review_status(int room_idx) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_review_status", room_idx);
 	}
 }

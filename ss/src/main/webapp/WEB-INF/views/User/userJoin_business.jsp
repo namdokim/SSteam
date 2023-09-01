@@ -190,8 +190,8 @@ function DoRewrite()
 						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
 						</div>
 						<div class="col-12">
-						<label for="Phone" class="form-label">사업자 확인 절차</label>
-						<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="사업자 확인 절차 " required value="">
+						<label for="business" class="form-label">사업자 확인 절차</label>
+						<input  class="form-control" type="text" id="business" name="business" placeholder="사업자 확인 절차 " required value="">
 						<div class="invalid-feedback">
 							사업자 확인 절차
 						</div>

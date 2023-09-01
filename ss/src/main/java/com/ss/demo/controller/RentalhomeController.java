@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,8 @@ import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
 import com.ss.demo.domain.Rentalhome_PayVO;
+import com.ss.demo.domain.Rentalhome_ReviewVO;
+import com.ss.demo.domain.Rentalhome_Review_ReportVO;
 import com.ss.demo.domain.Rentalhome_RoomVO;
 import com.ss.demo.domain.Rentalhome_SearchVO;
 import com.ss.demo.domain.UserVO;
@@ -58,11 +61,24 @@ public class RentalhomeController {
 	private IamportClient client = new IamportClient(api_key, api_secret);
 	
 	@RequestMapping(value="/rentalhomeMain.do")
-	public String rentalhomeMain(Model model, Rentalhome_SearchVO searchVO){
+	public String rentalhomeMain(Model model, Rentalhome_SearchVO searchVO, HttpSession session){
+		
+		if(session.getAttribute("login") != null) {
+			UserVO loginVO = (UserVO)session.getAttribute("login");
+			searchVO.setuNo(loginVO.getuNo());
+		}
+		if(searchVO.getSort() == null || searchVO.getSort() == "") {
+			
+			searchVO.setSort("review");
+		}
 		System.out.println(searchVO.toString());
+
 		List<RentalhomeVO> list = rentalhomeService.selectAll(searchVO);
 		model.addAttribute("list", list);
-		
+		for(int i=0; i<list.size(); i++) {
+				System.out.println(list.get(i).getDupl_count());
+			
+		}
 		int totalCount = rentalhomeService.select_rentalhome_count();
 		
 		pageMaker.setCri(searchVO);
@@ -76,8 +92,9 @@ public class RentalhomeController {
 	}
 	
 	@RequestMapping(value="/rentalhomeView.do")
-	public String rentalhomeView(Model model, int rentalhome_idx, Rentalhome_LikeVO likeVO, Rentalhome_SearchVO searchVO, HttpServletRequest req){
-		System.out.println(searchVO.toString());
+	public String rentalhomeView(
+			Model model, int rentalhome_idx, Rentalhome_LikeVO likeVO, Rentalhome_SearchVO searchVO, HttpServletRequest req
+			){
 		RentalhomeVO rentalhomeVO = rentalhomeService.selectOneByIdx(rentalhome_idx);
 		model.addAttribute("rentalhomeVO", rentalhomeVO);
 		
@@ -87,9 +104,9 @@ public class RentalhomeController {
 		List<Rentalhome_RoomVO> list_rentalhome_room_attach = rentalhomeService.selectAll_room_attach();
 		model.addAttribute("attach_room", list_rentalhome_room_attach);
 		
-		List<Rentalhome_RoomVO> list = rentalhomeService.selectAll_room(rentalhome_idx);
+		List<Rentalhome_RoomVO> list = rentalhomeService.selectAll_room(searchVO);
 		model.addAttribute("list", list);
-		
+		System.out.println(searchVO.toString());
 		int like_count = rentalhomeService.select_like(rentalhome_idx);
 		model.addAttribute("like_count", like_count);
 
@@ -103,6 +120,19 @@ public class RentalhomeController {
 		}else {
 			model.addAttribute("like_dupl", 0);
 		}
+		
+		if(rentalhomeService.select_review_count(rentalhome_idx) > 0) {
+			Rentalhome_ReviewVO reviewVO = rentalhomeService.select_review_avg(rentalhome_idx);
+			reviewVO.setCount(rentalhomeService.select_review_count(rentalhome_idx));
+			model.addAttribute("reviewVO", reviewVO);
+			
+			List<Rentalhome_ReviewVO> reviewVO_list = rentalhomeService.selectAll_review(rentalhome_idx);
+			model.addAttribute("reviewVO_list", reviewVO_list);
+			for(Rentalhome_ReviewVO item : reviewVO_list) {
+				item.setWdate(item.getWdate().split(" ")[0]);
+			}
+		}
+		
 		return "rentalhome/rentalhomeView";
 	}
 
@@ -354,7 +384,7 @@ public class RentalhomeController {
 		Rentalhome_RoomVO roomVO_ = rentalhomeService.selectOneByIdx_room(roomVO.getRoom_idx());
 		model.addAttribute("roomVO", roomVO_);
 		
-		List<Rentalhome_RoomVO> roomVO_attach = rentalhomeService.selectAll_room_attach();
+		List<Rentalhome_RoomVO> roomVO_attach = rentalhomeService.selectAll_room_attach_ByIdx(roomVO.getRoom_idx());
 		model.addAttribute("attach", roomVO_attach);
 		
 		return "rentalhome/rentalhomeModify_room";
@@ -425,7 +455,7 @@ public class RentalhomeController {
 	@RequestMapping(value="/rentalhomeDelete_room.do", method=RequestMethod.POST)
 	public String rentalhomeDelete_room(Rentalhome_RoomVO roomVO){
 		int value = rentalhomeService.delete_room(roomVO.getRoom_idx());
-		
+		rentalhomeService.update_review_status(roomVO.getRoom_idx());
 		return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+roomVO.getRentalhome_idx();
 	}
 	
@@ -445,14 +475,6 @@ public class RentalhomeController {
 	public void rentalhomeDelete_room_attach(int attach_idx){
 		System.out.println("111");
 		int value = rentalhomeService.delete_attach(attach_idx);
-	}
-	
-	@RequestMapping(value="/insert_review.do")
-	@ResponseBody
-	public void insert_review(Rentalhome_RoomVO roomVO) {
-		System.out.println("ajax 호출");
-		System.out.println(roomVO.toString());
-		rentalhomeService.insert_review(roomVO);
 	}
 
 	@RequestMapping(value="/insert_like.do")
@@ -493,7 +515,8 @@ public class RentalhomeController {
 	@RequestMapping(value="/room_thumbnail.do")
 	@ResponseBody
 	public void room_thumbnail(Rentalhome_RoomVO roomVO) {
-		
+		System.out.println("1: " + roomVO.getRoom_idx());
+		System.out.println("2: " + roomVO.getAttach_idx());
 		rentalhomeService.init_attach_room_thumbmail(roomVO.getRoom_idx()); // 썸네일 N
 		rentalhomeService.room_attach_thumbmail(roomVO.getAttach_idx()); // 썸네일 등록
 	}
@@ -521,6 +544,20 @@ public class RentalhomeController {
 		model.addAttribute("searchVO", searchVO);
 		
 		return "rentalhome/rentalhomeReserve";
+	}
+	
+	@RequestMapping(value="/rentalhome_review_write.do", method=RequestMethod.POST)
+	@Transactional
+	public String rentalhome_review_write(Rentalhome_ReviewVO reviewVO, String reserve_number){
+		System.out.println(reviewVO.toString());
+		System.out.println("reserve_number: "+ reserve_number);
+		
+		rentalhomeService.insert_review(reviewVO);
+		
+		rentalhomeService.update_pay_reviewYN(reserve_number);
+		
+		
+		return "redirect:/rentalhome/rentalhomeReserveInfo.do?reserve_number="+reserve_number;
 	}
 	
 	@RequestMapping(value="/iamport.do", method=RequestMethod.POST)
@@ -595,6 +632,10 @@ public class RentalhomeController {
 		}
 		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
 		List<Rentalhome_PayVO> list = rentalhomeService.selectAll_reserve(loginVO.getuNo());
+		for(int i=0; i <list.size(); i++) {
+			list.get(i).setPay_date(list.get(i).getPay_date().split(" ")[0]);
+		}
+		
 		model.addAttribute("list", list);
 		return "rentalhome/rentalhomeReserveList";
 	}
@@ -634,5 +675,32 @@ public class RentalhomeController {
 
 		return true;
 	}
+	@RequestMapping(value="rentalhome_review_delete.do", method=RequestMethod.POST)
+	public String rentalhome_review_delete(int review_idx, int rentalhome_idx) {
+		System.out.println("review_idx: " + review_idx);
+		System.out.println("rentalhome_idx: " + rentalhome_idx);
+		
+		rentalhomeService.delete_review(review_idx);
+		return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+rentalhome_idx;
+	} 
+
+	@RequestMapping(value="update_review.do", method=RequestMethod.POST)
+	public String update_review(Rentalhome_ReviewVO reviewVO, int rentalhome_idx) {
+		System.out.println(reviewVO.toString());
+		System.out.println("rentalhome_idx" + rentalhome_idx);
+		
+		rentalhomeService.update_review(reviewVO);
+		return "redirect:/rentalhome/rentalhomeView.do?rentalhome_idx="+rentalhome_idx;
+	} 
+	@RequestMapping(value="insert_review_report.do", method=RequestMethod.POST)
+	@ResponseBody
+	public void insert_review_report(Rentalhome_Review_ReportVO reportVO, HttpServletRequest req) {
+		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
+		reportVO.setuNo(loginVO.getuNo());
+		System.out.println(reportVO.toString());
+		
+		rentalhomeService.insert_review_report(reportVO);
+	}
+	
 	
 }

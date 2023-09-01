@@ -1,7 +1,5 @@
 package com.ss.demo.domain;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import org.springframework.stereotype.Component;
 
@@ -9,15 +7,15 @@ import org.springframework.stereotype.Component;
 public class PageMaker {
 	
 	private int displayPageNum = 10; 	
-	private int startPage;		
-	private int endPage;     
+	private int startPage;
+	private int endPage;
 	
 	private int totalCount; 
 	
-	private boolean prev;   
+	private boolean prev;
 	private boolean next;	
 	
-	private Criteria cri;   
+	private Criteria cri;
 	
 	public int getDisplayPageNum() {
 		return displayPageNum;
@@ -49,13 +47,12 @@ public class PageMaker {
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
-		calcData();   
+		calcData();
 	}
 
 	private void calcData() {
 		endPage = (int)(Math.ceil(cri.getPage()/(double)displayPageNum) * displayPageNum);
 		startPage = (endPage-displayPageNum)+1;   
-//		cri.setsNum((cri.getPage()-1)*cri.getPerPageNum());
 		int tempEndPage = (int)(Math.ceil(totalCount/(double)cri.getPerPageNum()));
 		
 		if (endPage > tempEndPage) {
@@ -96,12 +93,5 @@ public class PageMaker {
 		return "PageMaker [displayPageNum=" + displayPageNum + ", startPage=" + startPage + ", endPage=" + endPage
 				+ ", totalCount=" + totalCount + ", prev=" + prev + ", next=" + next + ", cri=" + cri.getPage() + ", cri=" + cri.getPerPageNum() + ", cri=" + cri.getsNum() + "]";
 	}
-
-	
-	
-	
-	
-	
-	
 
 }

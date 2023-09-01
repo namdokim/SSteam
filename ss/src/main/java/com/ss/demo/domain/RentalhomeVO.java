@@ -25,12 +25,114 @@ public class RentalhomeVO {
 	private String breakfast_close;	// 조식 마감시간
 	private String breakfast_day;	// 조식 영업일
 
+	private double all_avg;			// 평점
+	private int review_count;		// 리뷰 갯수
+	private int like_count;			// 좋아요 갯수
+	private int dupl_count;			// 로그인 시 좋아요 ON/OFF
+	private String room_name;		// 최저가 방 이름
+	private int min_person;			// 최저가 방의 최소 인원
+	private int max_person;			// 최저가 방의 최대 인원
+	private int weekday_price;		// 최저가 방의 평일가
+	private int weekend_price;		// 최저가 방의 주말가
+	private String discount_reason;	// 할인 이유
+	private int discount_money;		// 할인 수치
+	private String discount_type;	// 할인 종류
+	private int weekday_discount_price;		// 최저가 방의 평일 할인가
+	private int weekend_discount_price;		// 최저가 방의 주말 할인가
+	
+	
 	private int attach_idx;			// 숙소 첨부파일 번호
 	private String logical_name;	// 사용자가 올린 파일 이름
 	private String physical_name;	// 로컬에 저장된 파일 이름
 	private String thumbnail;		// 썸네일 Y, N	
 	
 	
+	
+	
+	public double getAll_avg() {
+		return all_avg;
+	}
+	public void setAll_avg(double all_avg) {
+		this.all_avg = all_avg;
+	}
+	public int getReview_count() {
+		return review_count;
+	}
+	public void setReview_count(int review_count) {
+		this.review_count = review_count;
+	}
+	public int getLike_count() {
+		return like_count;
+	}
+	public void setLike_count(int like_count) {
+		this.like_count = like_count;
+	}
+	public int getDupl_count() {
+		return dupl_count;
+	}
+	public void setDupl_count(int dupl_count) {
+		this.dupl_count = dupl_count;
+	}
+	public String getRoom_name() {
+		return room_name;
+	}
+	public void setRoom_name(String room_name) {
+		this.room_name = room_name;
+	}
+	public int getMin_person() {
+		return min_person;
+	}
+	public void setMin_person(int min_person) {
+		this.min_person = min_person;
+	}
+	public int getMax_person() {
+		return max_person;
+	}
+	public void setMax_person(int max_person) {
+		this.max_person = max_person;
+	}
+	public int getWeekday_price() {
+		return weekday_price;
+	}
+	public void setWeekday_price(int weekday_price) {
+		this.weekday_price = weekday_price;
+	}
+	public int getWeekend_price() {
+		return weekend_price;
+	}
+	public void setWeekend_price(int weekend_price) {
+		this.weekend_price = weekend_price;
+	}
+	public String getDiscount_reason() {
+		return discount_reason;
+	}
+	public void setDiscount_reason(String discount_reason) {
+		this.discount_reason = discount_reason;
+	}
+	public int getDiscount_money() {
+		return discount_money;
+	}
+	public void setDiscount_money(int discount_money) {
+		this.discount_money = discount_money;
+	}
+	public String getDiscount_type() {
+		return discount_type;
+	}
+	public void setDiscount_type(String discount_type) {
+		this.discount_type = discount_type;
+	}
+	public int getWeekday_discount_price() {
+		return weekday_discount_price;
+	}
+	public void setWeekday_discount_price(int weekday_discount_price) {
+		this.weekday_discount_price = weekday_discount_price;
+	}
+	public int getWeekend_discount_price() {
+		return weekend_discount_price;
+	}
+	public void setWeekend_discount_price(int weekend_discount_price) {
+		this.weekend_discount_price = weekend_discount_price;
+	}
 	public int getAttach_idx() {
 		return attach_idx;
 	}
@@ -188,6 +290,7 @@ public class RentalhomeVO {
 		this.breakfast_day = breakfast_day;
 	}
 	
+	
 	@Override
 	public String toString() {
 		return "RentalhomeVO [rentalhome_idx=" + rentalhome_idx + ", uNo=" + uNo + ", name=" + name + ", address="
@@ -196,7 +299,15 @@ public class RentalhomeVO {
 				+ ", beach_yn=" + beach_yn + ", bbq_yn=" + bbq_yn + ", breakfast_yn=" + breakfast_yn + ", animal_yn="
 				+ animal_yn + ", checkIn=" + checkIn + ", checkOut=" + checkOut + ", checkIn_info=" + checkIn_info
 				+ ", breakfast_price=" + breakfast_price + ", breakfast_open=" + breakfast_open + ", breakfast_close="
-				+ breakfast_close + ", breakfast_day=" + breakfast_day + "]";
+				+ breakfast_close + ", breakfast_day=" + breakfast_day + ", all_avg=" + all_avg + ", review_count="
+				+ review_count + ", like_count=" + like_count + ", dupl_count=" + dupl_count + ", room_name="
+				+ room_name + ", min_person=" + min_person + ", max_person=" + max_person + ", weekday_price="
+				+ weekday_price + ", weekend_price=" + weekend_price + ", discount_reason=" + discount_reason
+				+ ", discount_money=" + discount_money + ", discount_type=" + discount_type
+				+ ", weekday_discount_price=" + weekday_discount_price + ", weekend_discount_price="
+				+ weekend_discount_price + ", attach_idx=" + attach_idx + ", logical_name=" + logical_name
+				+ ", physical_name=" + physical_name + ", thumbnail=" + thumbnail + "]";
 	}
+	
 	
 }

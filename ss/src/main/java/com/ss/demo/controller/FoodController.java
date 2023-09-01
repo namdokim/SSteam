@@ -12,7 +12,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,13 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ss.demo.domain.Criteria;
 import com.ss.demo.domain.FoodReviewVO;
 import com.ss.demo.domain.FoodVO;
 import com.ss.demo.domain.Food_LikeVO;
+import com.ss.demo.domain.Food_ReportVO;
+import com.ss.demo.domain.Food_Review_ReportVO;
 import com.ss.demo.domain.PageMaker;
-import com.ss.demo.domain.RentalhomeVO;
-import com.ss.demo.domain.Rentalhome_LikeVO;
 import com.ss.demo.domain.SearchVO;
 import com.ss.demo.domain.UserVO;
 import com.ss.demo.service.FoodService;
@@ -59,7 +57,12 @@ public class FoodController
 		FoodVO vo = new FoodVO();
 		vo.setLType(type);
 		
-		List<FoodVO> list = foodService.list(searchVO);
+		// -> 메인화면에서 평점을 소수점 첫째자리까지 [형변환]!!! ***  
+		List<FoodVO> list = foodService.selectAll(searchVO);
+		for (int i =0; i<list.size(); i++) {
+				double avg = Math.round(list.get(i).getAvg() * 10.0) / 10.0;
+				list.get(i).setAvg(avg);
+		}
 		model.addAttribute("list", list);
 		
 		int totalCount = foodService.select_food_count();
@@ -67,14 +70,14 @@ public class FoodController
 		pageMaker.setTotalCount(totalCount);
 		System.out.println(pageMaker.toString());
 		model.addAttribute("pageMaker", pageMaker);
-
+		model.addAttribute("searchVO",searchVO);
 		return "food/foodMain";
 	}
 	
 	// [1] 메인 페이지 -> 식당 등록 
 	@RequestMapping(value="/foodMainWrite.do")
 	public String foodMainWrite() { return "food/foodMainWrite"; }
-
+	
 	// [1] 메인 페이지 -> 식당 첨부 파일 등록 
 	@RequestMapping(value="/foodMainWrite.do",method=RequestMethod.POST)
 	public String foodMainWrite( FoodVO vo, @RequestParam("multiFile") List<MultipartFile> multiFileList, HttpServletRequest req) 
@@ -82,8 +85,14 @@ public class FoodController
 		// vo.setuNo(1);
 		int value = foodService.insert(vo);
 		System.out.println(vo.toString());
-		System.out.println("multiFileList : " + multiFileList);	// 받아온 것 출력 확인
+
+		if( multiFileList.get(0).isEmpty() )
+		{
+			return "redirect:/food/foodView.do?fNo="+vo.getfNo();	
+		}
 		
+		System.out.println("multiFileList : " + multiFileList);	// 받아온 것 출력 확인
+// 식당 첨부파일 시작 		
 		// path 가져오기 (윈도우)
 		String path = req.getSession().getServletContext().getRealPath("resources/upload");
 		File file = new File(path);
@@ -147,6 +156,8 @@ public class FoodController
 			}
 			e.printStackTrace();
 		}
+// 식당 첨부파일 끝 			
+	
 		return "redirect:/food/foodView.do?fNo="+vo.getfNo();
 	}
 	
@@ -169,7 +180,11 @@ public class FoodController
 	{
 		//System.out.println(foodVO.toString());
 		int result = foodService.update(foodVO);
-		System.out.println("multiFileList : " + multiFileList);	// 받아온것 출력 확인
+
+		if( multiFileList.get(0).isEmpty() )
+		{
+			return "redirect:/food/foodMain.do?fNo="+foodVO.getfNo();	
+		}
 		
 		// path 가져오기
 		String path = request.getSession().getServletContext().getRealPath("resources/upload");
@@ -241,6 +256,8 @@ public class FoodController
 			pw.flush();
 		}
 		
+	
+		
 		
 		
 		
@@ -249,13 +266,12 @@ public class FoodController
 	
 	// [2] 뷰 페이지 -> 식당 상세 화면 
 	@RequestMapping(value="/foodView.do")
-	public String foodView(int fNo,Model model ,Food_LikeVO likeVO, HttpServletRequest req)
-//	public String foodView(int fNo,Model model ,Food_LikeVO likeVO, HttpServletRequest req)
+	public String foodView(int fNo,Model model ,Food_LikeVO likeVO, HttpServletRequest req, FoodReviewVO foodreviewVO)
 	{
 		FoodVO vo = foodService.selectOneByFno(fNo);
 		model.addAttribute("vo",vo);
 		
-		List<FoodVO> list = foodService.listMenu(fNo);
+		List<FoodVO> list = foodService.selectAllMenu(fNo);
 		model.addAttribute("list", list);
 		
 		List<FoodVO> listAttach = foodService.selectListByFno(fNo);
@@ -263,11 +279,41 @@ public class FoodController
 
 		List<FoodReviewVO> listReview = foodService.list(fNo);
 		model.addAttribute("listReview", listReview);
+
+		double roundedGrade = 0;
+		try{
+			double avgReview = foodService.selectAvg_foodreview(fNo);
+			roundedGrade = Math.round(avgReview * 10.0) / 10.0;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-//		int like_count = foodService.select_like(fNo);
-//		System.out.println("like_count: "+like_count);
-//		model.addAttribute("like_count", like_count);
-//		
+		// 1. 전체 리뷰 개수  
+		foodreviewVO.setCount_all(foodService.selectAllCount_foodreview(fNo));		
+		
+		// 2. 5점에 대한 리뷰 개수 
+		
+		foodreviewVO.setFood_review_grade(5);
+		foodreviewVO.setCount_good(foodService.selectCount_foodreview(foodreviewVO));	
+		
+		// 3. 3점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(3);
+		foodreviewVO.setCount_soso(foodService.selectCount_foodreview(foodreviewVO));
+
+		// 4. 1점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(1);
+		foodreviewVO.setCount_bad(foodService.selectCount_foodreview(foodreviewVO));
+		
+		// 5. 좋아요 개수 
+		int countLike= foodService.select_like(fNo);
+		
+		// 6. 조회수 증가  
+		foodService.increment_hit(fNo);
+		
+		model.addAttribute("roundedGrade",roundedGrade);
+		model.addAttribute("countLike",countLike);
+		model.addAttribute("foodreviewVO",foodreviewVO);
+		
 		if (req.getSession().getAttribute("login") != null) {
 	        UserVO loginVO = (UserVO) req.getSession().getAttribute("login");
 	        likeVO.setuNo(loginVO.getuNo());
@@ -277,7 +323,7 @@ public class FoodController
 			int like_dupl = -1;
 			model.addAttribute("like_dupl", like_dupl);
 		}
-//		
+		
 		return "food/foodView";
 	}
 	
@@ -290,7 +336,7 @@ public class FoodController
 	}
 		
 	
-	// [2] 뷰 페이지 -> [POST] 메뉴 등록
+	// [2] 뷰 페이지 -> [POST] 메뉴 등록 
 	@RequestMapping(value="/foodMenuWrite.do",method=RequestMethod.POST)
 	public String foodMenuWrite(FoodVO foodVO) 
 	{
@@ -356,7 +402,7 @@ public class FoodController
 		if(foodService.dupl_like(likeVO) == 0) {
 			foodService.insert_like(likeVO);
 			System.out.println("좋아요 등록 성공");
-			return 1;
+			return foodService.select_like(likeVO.getfNo());
 		}else {
 			System.out.println("좋아요 중복");
 			return 0;
@@ -378,6 +424,30 @@ public class FoodController
 		}
 	}
 	
+	@RequestMapping(value="/delete_menu.do", method=RequestMethod.POST)
+	@ResponseBody
+	public void delete_menu(int food_menu_number) {
+		int value = foodService.delete_menu(food_menu_number);
+	}
+	
+	// 식당 신고
+	@RequestMapping(value="/insert_report.do")
+	@ResponseBody
+	public void insert_report(Food_ReportVO food_reportVO, HttpServletRequest req ) {
+		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
+		food_reportVO.setuNo(loginVO.getuNo());
+		System.out.println(food_reportVO.toString());
+		int value = foodService.insert_report(food_reportVO);
+	}
+
+	// 리뷰 신고
+	@RequestMapping(value="/insert_review_report.do")
+	@ResponseBody
+	public void insert_reveiw_report(Food_Review_ReportVO food_review_reportVO ,HttpServletRequest req ) {
+		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
+		food_review_reportVO.setuNo(loginVO.getuNo());
+		int value = foodService.insert_review_report(food_review_reportVO);
+	}
 	
 	// ======================================================================================== [3] 맛집 리뷰 페이지 
 	
@@ -387,12 +457,19 @@ public class FoodController
 	public FoodReviewVO insert_foodreview(FoodReviewVO foodreviewVO,HttpServletRequest req) 
 	{
 		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
+		// -> 이걸 하는 이유는 foodreviewVO에 uNo 없으니까 , setuNo 를 통해서 세팅을 하는데,
+		// -> loginVO.getuNo()를 통해서 가져온다. (-> int형)
+		// -> loginVO 변수는 UserVO 타입인데, 세션에서 값을 가져올 때 타입을 맞추기 위해 
+		// -> (UserVO)로 강제 형변환을 해준다. 
+		// -> 매개변수에 HttpServletRequest req 를 받아서, req를 써서, .getSession() 메소드를 호출해서 
+		// -> 세션을 가져오고, 세션의 getAttribute를 통해 키값이 "login"인 정보를 가져와서 loginVO에 저장. 
 		foodreviewVO.setuNo(loginVO.getuNo()); 
 		
+		System.out.println(foodreviewVO.getFood_review_number());
 		foodService.insert(foodreviewVO);
 		FoodReviewVO foodreviewVO2 = foodService.selectOneByFRno(foodreviewVO.getFood_review_number());
 		
-		System.out.println(foodreviewVO.toString());
+		System.out.println(foodreviewVO2.toString());
 		return foodreviewVO2;
 	}
 	
@@ -407,10 +484,32 @@ public class FoodController
 	// [3] 뷰 페이지 -> 리뷰 -> 글 수정 
 	@RequestMapping(value="/foodReviewModify.do" ,method=RequestMethod.POST)
 	@ResponseBody 
-	public void foodReviewModify(FoodReviewVO foodreviewVO)
+	public FoodReviewVO foodReviewModify(FoodReviewVO foodreviewVO)
 	{
 		System.out.println(foodreviewVO.toString());
 		int value = foodService.modify_foodreview(foodreviewVO);
+		foodreviewVO = foodService.selectOneByFRno(foodreviewVO.getFood_review_number());
+		double avg_ = foodService.selectAvg_foodreview(foodreviewVO.getfNo());
+		double avg = Math.round(avg_ * 10.0) / 10.0;
+		foodreviewVO.setAvg(avg);
+		System.out.println(":::"+foodreviewVO.getAvg());
+		// 1. 전체 리뷰 개수  
+		foodreviewVO.setCount_all(foodService.selectAllCount_foodreview(foodreviewVO.getfNo()));		
+				
+		// 2. 5점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(5);
+		foodreviewVO.setCount_good(foodService.selectCount_foodreview(foodreviewVO));	
+		
+		// 3. 3점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(3);
+		foodreviewVO.setCount_soso(foodService.selectCount_foodreview(foodreviewVO));
+
+		// 4. 1점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(1);
+		foodreviewVO.setCount_bad(foodService.selectCount_foodreview(foodreviewVO));
+		return foodreviewVO;
 	}
+	
+	
 	
 }

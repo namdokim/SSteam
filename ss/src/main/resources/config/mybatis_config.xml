@@ -3,29 +3,37 @@
  
 <configuration> 
 	
-<typeAliases>
-	<!-- 회원 정보 -->
-	<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
-	<!-- 숙박 -->
-	<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
-	<typeAlias type="com.ss.demo.domain.Rentalhome_RoomVO" alias="rentalhome_roomVO" />
-	<typeAlias type="com.ss.demo.domain.Rentalhome_LikeVO" alias="rentalhome_likeVO" />
-	<typeAlias type="com.ss.demo.domain.Rentalhome_PayVO" alias="rentalhome_payVO" />
-	<typeAlias type="com.ss.demo.domain.Rentalhome_SearchVO" alias="rentalhome_searchVO" />
-	<typeAlias type="com.ss.demo.domain.Criteria" alias="cri" />
-	<!-- 게시글 -->
-	<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
+	<typeAliases>
+		<!-- 공통 -->
+		<typeAlias type="com.ss.demo.domain.Criteria" alias="cri" />
+		<typeAlias type="com.ss.demo.domain.SearchVO" alias="searchVO"/>
+		
+		<!-- 회원 정보 -->
+		<typeAlias type="com.ss.demo.domain.UserVO" alias="uv" />
+		
+		<!-- 숙박 -->
+		<typeAlias type="com.ss.demo.domain.RentalhomeVO" alias="rentalhomeVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_RoomVO" alias="rentalhome_roomVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_LikeVO" alias="rentalhome_likeVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_PayVO" alias="rentalhome_payVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_SearchVO" alias="rentalhome_searchVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_ReviewVO" alias="rentalhome_reviewVO" />
+		<typeAlias type="com.ss.demo.domain.Rentalhome_Review_ReportVO" alias="rentalhome_review_reportVO" />
+		
+		<!-- 게시글 -->
+		<typeAlias type = "com.ss.demo.domain.Community_BoardVO" alias = "Community_BoardVO" />
+		
+		<!-- 맛집 -->
+		<typeAlias type="com.ss.demo.domain.FoodVO" alias="foodVO" />
+		<typeAlias type="com.ss.demo.domain.FoodReviewVO" alias="foodreviewVO"/>
+		<typeAlias type="com.ss.demo.domain.Food_LikeVO" alias="food_likeVO"/>
+		<typeAlias type="com.ss.demo.domain.Food_ReportVO" alias="food_reportVO"/>
+		<typeAlias type="com.ss.demo.domain.Food_Review_ReportVO" alias="food_review_reportVO" />
 	
-	<!-- food -->
-	<typeAlias alias="foodVO" type="com.ss.demo.domain.FoodVO"/>
-	<typeAlias alias="searchVO" type="com.ss.demo.domain.SearchVO"/>
-	<typeAlias alias="foodreviewVO" type="com.ss.demo.domain.FoodReviewVO"/>
-	<typeAlias alias="food_likeVO" type="com.ss.demo.domain.Food_LikeVO"/>
-<!-- 	<typeAlias alias="attachVO" type="com.ss.demo.domain.FoodAttachVO"/> -->
-</typeAliases>
-<!-- 
-<mappers>
-	<mapper resource = "../mappers/Community_Mapper.xml" />
-</mappers> -->
+		<!-- 축제 -->
+		<typeAlias type="com.ss.demo.domain.EventVO" alias="ev" /> 
+		<typeAlias type="com.ss.demo.domain.EventReviewVO" alias="erv" /> 
+		<typeAlias alias="event_likeVO" type="com.ss.demo.domain.Event_LikeVO"/>
+	</typeAliases>
 
 </configuration>
