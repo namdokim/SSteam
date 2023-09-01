@@ -123,7 +123,7 @@ PW : <input type="password" id="uPw"  name="uPw" style="width: 100%;">
 			</form>
 <!-- 					<span class="h4 fw-normal text-muted">계정이 없으신가요?</span> -->
 				
-				<button class="btn btn-lg btn-secondary my-3" onclick="window.location.href='<%= request.getContextPath() %>/User/userjoinCheck.do'">
+				<button class="btn btn-lg btn-secondary my-3" onclick="window.location.href='<%= request.getContextPath() %>/User/joinCheck.do'">
 					회원가입
 				</button>
 			<p></p>

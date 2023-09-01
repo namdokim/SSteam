@@ -132,7 +132,7 @@
 		<if test='type != null and !type.equals("TT")'>
 			AND LType = #{type}
 		</if>
-			ORDER BY food.fNo desc
+			ORDER BY a.fNo desc
 			LIMIT #{sNum},#{perPageNum}
 	</select> 
 	

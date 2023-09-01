@@ -12,7 +12,7 @@
 		</selectKey>
 		insert into Event_index( event_title, event_content,uNo,event_tel,event_start,event_end,event_local,LType,hit_count) 
 		 
-		 values ( #{event_title}, #{event_content},1,#{event_tel},#{event_start},#{event_end},#{event_local},#{LType},#{hit_count} );
+		 values ( #{event_title}, #{event_content},#{uNo},#{event_tel},#{event_start},#{event_end},#{event_local},#{LType},#{hit_count} );
 	</insert> 
 	
 	<insert id="insert" parameterType="ev">
@@ -21,7 +21,7 @@
 	</selectKey>
 		insert into Event_index( event_title, event_content, event_discript,uNo,event_tel,event_start,event_end,event_local,LType,hit_count)
 		 
-		values ( #{event_title}, #{event_content},#{event_discript},1,#{event_tel},#{event_start},#{event_end},#{event_local},#{LType},#{hit_count} );
+		values ( #{event_title}, #{event_content},#{event_discript},#{uNo},#{event_tel},#{event_start},#{event_end},#{event_local},#{LType},#{hit_count} );
 	</insert>
 	
 	<insert id="insert_file" parameterType="ev">
@@ -99,7 +99,7 @@
 		<if test='type != null and !type.equals("TT")'>
 			AND LType = #{type}
 		</if>
-		order by event_index.event_number desc
+		order by a.event_number desc
 	</select>
 	
 	<select id="select_event_count" resultType="int">
@@ -188,7 +188,7 @@
 				SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into event_review_list(comment_title,comment_number,event_number,comment_content,event_review_grade,uNo) 
-		 values (  #{comment_title},#{comment_number}, #{event_number},#{comment_content},#{event_review_grade},1);
+		 values (#{comment_title},#{comment_number}, #{event_number},#{comment_content},#{event_review_grade},#{uNo});
 	</insert> 
 
 	<update id="update_review" parameterType="erv">

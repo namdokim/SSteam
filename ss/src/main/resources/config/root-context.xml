@@ -23,9 +23,9 @@
 	<!-- 스프링과 DB연결 06-16 -->
 	<bean id="db" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ss?useSSL=false&amp;serverTimezone=UTC" />
-		<property name="username" value="root" />
-		<property name="password" value="1234" />
+		<property name="url" value="jdbc:mysql://jjezen.cafe24.com:3307/fullstack_2_team_a?characterEncoding=utf8&amp;useSSL=false&amp;autoReconnection=true" />
+		<property name="username" value="fullstack_2_team_a_user" />
+		<property name="password" value="!fullstack_2_team_a_1234" />
 	</bean>
 		
 	<!-- MyBatis사용하기 위한 bean 06-16 -->
