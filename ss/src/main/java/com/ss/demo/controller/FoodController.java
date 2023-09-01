@@ -88,7 +88,8 @@ public class FoodController
 
 		if( multiFileList.get(0).isEmpty() )
 		{
-			return "redirect:/food/foodView.do?fNo="+vo.getfNo();	
+//			return "redirect:/food/foodView.do?fNo="+vo.getfNo();
+			return "redirect:/food/foodMain.do";
 		}
 		
 		System.out.println("multiFileList : " + multiFileList);	// 받아온 것 출력 확인
@@ -158,7 +159,8 @@ public class FoodController
 		}
 // 식당 첨부파일 끝 			
 	
-		return "redirect:/food/foodView.do?fNo="+vo.getfNo();
+//		return "redirect:/food/foodView.do?fNo="+vo.getfNo();
+		return "redirect:/food/foodMain.do";
 	}
 	
 	// [1] 메인 페이지 -> [GET] 메인 수정

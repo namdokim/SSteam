@@ -702,7 +702,7 @@ window.onload = function()
 				</c:if>
 				
 					<%-- <button style="color:red;" onclick="delete_Menu(${status.index},${vo.food_menu_number})">-</button> --%>
-				${vo.food_menu_name} - ${vo.food_menu_price}</li>
+				${vo.food_menu_name} - ${vo.food_menu_price}원 </li>
 		</c:forEach>
 	</ul><br><br>
 	<div style="float: right; color:silver;"> 업데이트날짜 : ${vo.food_write_date}</div><br><hr>

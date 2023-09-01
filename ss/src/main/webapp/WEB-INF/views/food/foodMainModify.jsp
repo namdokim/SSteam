@@ -8,6 +8,7 @@
 <!-- 첨부파일 수정 -->
 <script>
 window.onload = function(){
+	limitTextarea(document.getElementById("food_content"),200);
 	const openButton = document.getElementById("open-gallery-button");
 	const modal = document.getElementById("gallery-modal");
 	const closeButton = document.getElementById("close-button");
@@ -28,6 +29,7 @@ window.onload = function(){
 	    document.body.style.overflow = "auto";
 	  }
 	});
+	
 }
 </script>
 
@@ -196,8 +198,19 @@ window.onload = function(){
 			</div>
 			
 			<div class="form-floating">
-				<textarea type="text" class="form-control" id="food_content" placeholder="맛집 설명" name="food_content" value="${vo.food_content}" style="resize:none; height:200px;"></textarea>
+				<textarea class="form-control" id="food_content" placeholder="맛집 설명" name="food_content" oninput="limitTextarea(this, 200)" style="resize:none; height:200px;">${vo.food_content}</textarea>
+				<div class="text-muted" style="text-align:right;"><span id="charCount">200</span> 자 남음</div>
 				<label for="floatingInput" class="text-muted">맛집 설명</label>
+				<script>
+					function limitTextarea(element, limit) {
+					    const text = element.value;
+					    if (text.length > limit) {
+					        element.value = text.substring(0, limit);
+					    }
+					    const charCount = limit - text.length;
+					    document.getElementById('charCount').textContent = charCount;
+					}
+				</script>
 			</div>
 			<label for="floatingInput" class="text-muted">맛집 지역</label>
 			<div class="form-floating">
