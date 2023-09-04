@@ -72,6 +72,9 @@ window.onload = function() {
 	});
 };
 	function cancelPay(merchant_uid){
+		if(!confirm("예약을 취소하시겠습니까?")){
+			return;
+		}
 		var reserve_number = '${payVO.reserve_number}';
 		$.ajax({
 			url:'rentalhome_pay_cancel.do',
@@ -97,7 +100,47 @@ window.onload = function() {
 			review_write.style.display = "none";
 		}
 	}
-	
+	function validation(){
+		document.getElementById("contents").value = decodeHTMLEntities(document.getElementById("contents").value);
+		const contents = document.getElementById("contents").value;
+		if(contents == ""){
+			alert("내용을 입력해주세요.");
+			return false;
+		}
+		if(document.getElementById("service").value == 0){
+			alert("평점을 입력해주세요.");
+			return false;
+		}
+		if(document.getElementById("facility").value == 0){
+			alert("평점을 입력해주세요.");
+			return false;
+		}
+		if(document.getElementById("clean").value == 0){
+			alert("평점을 입력해주세요.");
+			return false;
+		}
+		if(document.getElementById("price").value == 0){
+			alert("평점을 입력해주세요.");
+			return false;
+		}
+		if(!confirm("리뷰를 작성하시겠습니까?")){
+			return false;
+		}
+		return true;
+	}
+	function decodeHTMLEntities (str) {
+		if(str !== undefined && str !== null && str !== '') {
+			str = String(str);
+
+			str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+			str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+			var element = document.createElement('div');
+			element.innerHTML = str;
+			str = element.textContent;
+			element.textContent = '';
+		}
+		return str;
+	}
 </script>
 <style>
 	.view{
@@ -246,7 +289,7 @@ window.onload = function() {
 		<fmt:formatDate value='${today}' pattern='yyyy-MM-dd' var="nowDate"/>
 			<c:choose>
 				<c:when test="${not empty payVO.refund_date}">
-					<span style="font-weight:bold; font-size:15pt; padding:15px 20px; color:#dd2a21;">${payVO.refund_date} 예약 취소</span>
+					<span  style="font-weight:bold; font-size:15pt; padding:15px 20px; color:#dd2a21;">${payVO.refund_date} 예약 취소</span>
 				</c:when>
 				<c:when test="${empty payVO.refund_date and nowDate >= payVO.start_date and payVO.review_yn eq 'N'}">
 					<button style="width:120px; height:50px; font-weight:bold; font-size:15pt;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">리뷰 작성</button>
@@ -267,7 +310,7 @@ window.onload = function() {
 	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form action="rentalhome_review_write.do" method="post">
+				<form action="rentalhome_review_write.do" method="post" onsubmit="return validation()">
 					<input type="hidden" name="room_idx" value="${payVO.room_idx}">
 					<input type="hidden" name="uNo" value="${login.uNo}">
 					<input type="hidden" name="stay_date" value="${payVO.start_date}">

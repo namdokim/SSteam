@@ -75,6 +75,9 @@ public class RentalhomeController {
 			
 			searchVO.setMax_price(1000000);
 		}
+		if(searchVO.getCurrentPage() ==  0) {
+			searchVO.setCurrentPage(1);
+		}
 		System.out.println(searchVO.toString());
 
 		List<RentalhomeVO> list = rentalhomeService.selectAll(searchVO);
@@ -150,10 +153,11 @@ public class RentalhomeController {
 	public String rentalhomeWrite(
 			RentalhomeVO rentalhomeVO,
 			@RequestParam("multiFile") List<MultipartFile> multiFileList,
-			HttpServletRequest request
+			HttpServletRequest request,
+			HttpSession session
 			){
-		
-		rentalhomeVO.setuNo(1);
+		UserVO loginVO = (UserVO)session.getAttribute("login");
+		rentalhomeVO.setuNo(loginVO.getuNo());
 		int value = rentalhomeService.insert(rentalhomeVO);
 		
 		if( multiFileList.get(0).isEmpty() )
@@ -481,11 +485,11 @@ public class RentalhomeController {
 		int value = rentalhomeService.delete_attach(attach_idx);
 	}
 
-	@RequestMapping(value="/insert_like.do")
+	@RequestMapping(value="/insert_like.do", method=RequestMethod.POST)
 	@ResponseBody
 	public int insert_like(Rentalhome_LikeVO likeVO, HttpServletRequest req) {
 		if(req.getSession().getAttribute("login") == null) {
-			return 0;
+			return -1;
 		}
 		
 		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
@@ -501,9 +505,12 @@ public class RentalhomeController {
 		}
 	}
 
-	@RequestMapping(value="/delete_like.do")
+	@RequestMapping(value="/delete_like.do", method=RequestMethod.POST)
 	@ResponseBody
 	public int delete_like(Rentalhome_LikeVO likeVO, HttpServletRequest req) {
+		if(req.getSession().getAttribute("login") == null) {
+			return -1;
+		}
 		UserVO loginVO = (UserVO)req.getSession().getAttribute("login");
 		likeVO.setUno(loginVO.getuNo());
 		if(rentalhomeService.dupl_like(likeVO) > 0) {
@@ -516,7 +523,7 @@ public class RentalhomeController {
 		}
 	}
 
-	@RequestMapping(value="/room_thumbnail.do")
+	@RequestMapping(value="/room_thumbnail.do", method=RequestMethod.POST)
 	@ResponseBody
 	public void room_thumbnail(Rentalhome_RoomVO roomVO) {
 		System.out.println("1: " + roomVO.getRoom_idx());
@@ -525,7 +532,7 @@ public class RentalhomeController {
 		rentalhomeService.room_attach_thumbmail(roomVO.getAttach_idx()); // 썸네일 등록
 	}
 
-	@RequestMapping(value="/room_attach_delete.do")
+	@RequestMapping(value="/room_attach_delete.do", method=RequestMethod.POST)
 	@ResponseBody
 	public void room_attach_delete(int attach_idx) {
 		rentalhomeService.room_attach_delete(attach_idx); // 객실에 등록된 이미지 삭제

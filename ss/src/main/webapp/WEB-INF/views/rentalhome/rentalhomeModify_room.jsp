@@ -105,6 +105,110 @@ function room_attach_delete(index){
 		}
 	});
 }
+function validation(){
+	document.getElementById("name").value = decodeHTMLEntities(document.getElementById("name").value);
+	var name = document.getElementById("name").value;
+	if( name == null || name == ""){
+		alert("객실 이름을 입력해주세요.");
+		return false;
+	}
+	var min_person = document.getElementById("min_person").value;
+	var max_person = document.getElementById("max_person").value;
+	if(!(min_person > 0)){
+		alert("최소 인원수를 확인해주세요.");
+		return false;
+	}
+	if(!(max_person > 0)){
+		alert("최대 인원수를 확인해주세요.");
+		return false;
+	}
+
+
+	var smoking_yes = document.getElementById("smoking_yes");
+	var smoking_no = document.getElementById("smoking_no");
+	var smoking = ""
+	if(smoking_yes.checked){
+		smoking = smoking_yes.value;
+	}
+	if(smoking_no.checked){
+		smoking = smoking_no.value;
+	}
+	if( smoking == ""){
+		alert("흡연여부를 선택해주세요.");
+		return false;
+	}
+
+	var wifi_yes = document.getElementById("wifi_yes");
+	var wifi_no = document.getElementById("wifi_no");
+	var wifi = ""
+	if(wifi_yes.checked){
+		wifi = wifi_yes.value;
+	}
+	if(wifi_no.checked){
+		wifi = wifi_no.value;
+	}
+	if( wifi == ""){
+		alert("와이파이 설치여부를 선택해주세요.");
+		return false;
+	}
+
+	document.getElementById("bed_info").value = decodeHTMLEntities(document.getElementById("bed_info").value);
+	var info = document.getElementById("bed_info").value;
+
+	var weekday_price = document.getElementById("weekday_price").value;
+	var weekend_price = document.getElementById("weekend_price").value;
+	
+	if(weekday_price == null || weekday_price == "" || weekday_price == 0){
+		alert("객실 가격을 입력해주세요.");
+		return false;
+	}
+	if(weekend_price == null || weekend_price == "" || weekend_price == 0){
+		alert("객실 가격을 입력해주세요.");
+		return false;
+	}
+	if(weekday_price <= 0 || weekend_price <= 0 ){
+		alert("객실 가격은 0보다 커야합니다.");
+		return false;
+	}
+
+	var discount_type = document.getElementById("discount_type").value;
+	var discount_money = document.getElementById("discount_money").value;
+	document.getElementById("discount_reason").value = decodeHTMLEntities(document.getElementById("discount_reason").value);
+	var discount_reason = document.getElementById("discount_reason").value;
+	if(discount_type == "rate"){
+		if(discount_money <= 0 || discount_money >= 100){
+			alert("할인율은 1~99사이의 숫자만 입력가능합니다.");
+			return false;
+		}
+	}
+	if(discount_type == "fix"){
+		if(discount_money <= 0){
+			alert("할인가격은 0보다 커야합니다.");
+			return false;
+		}
+	}
+
+	if(!confirm("객실을 등록하시겠습니까?")){
+		return false;
+	}
+	
+	return true;
+	
+}
+function decodeHTMLEntities (str) {
+	if(str !== undefined && str !== null && str !== '') {
+		str = String(str);
+
+		str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+		str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+		var element = document.createElement('div');
+		element.innerHTML = str;
+		str = element.textContent;
+		element.textContent = '';
+	}
+
+	return str;
+}
 </script>
 <!-- CSS ================================================================= -->
 <style>
@@ -175,7 +279,7 @@ function room_attach_delete(index){
 				</div>
 			</div>
 		</div>
-		<form name="frm" action="rentalhomeModify_room.do" method="post" style="text-align: center;" enctype="multipart/form-data">
+		<form name="frm" action="rentalhomeModify_room.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
 			<input type="hidden" name="room_idx" value="${roomVO.room_idx}">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
@@ -200,7 +304,7 @@ function room_attach_delete(index){
 				<span class="text-muted ms-2" style="text-align: left">객실 인원 수</span>
 				<div class="row mx-1 my-1">
 					<div class="form-floating col ms-1 my-1">
-						<select class="form-select ms-1" name="min_person" aria-label="Default select example">
+						<select class="form-select ms-1" id="min_person" name="min_person" aria-label="Default select example">
 							<option selected>최소 인원을 선택해주세요</option>
 							<option value="1" <c:if test="${roomVO.min_person == 1}">selected</c:if>>1</option>
 							<option value="2" <c:if test="${roomVO.min_person == 2}">selected</c:if>>2</option>
@@ -216,7 +320,7 @@ function room_attach_delete(index){
 						<label for="min_person" class="form-label text-muted ms-3">최소 인원 수</label>
 					</div>
 					<div class="form-floating col ms-1 my-1">	
-						<select class="form-select ms-1" name="max_person" aria-label="Default select example">
+						<select class="form-select ms-1" id="max_person" name="max_person" aria-label="Default select example">
 							<option selected>최대 인원을 선택해주세요</option>
 							<option value="1" <c:if test="${roomVO.max_person == 1}">selected</c:if>>1</option>
 							<option value="2" <c:if test="${roomVO.max_person == 2}">selected</c:if>>2</option>
@@ -237,13 +341,13 @@ function room_attach_delete(index){
 				<span class="text-muted ms-2" style="text-align: left">흡연 가능 여부</span>
 				<div class="d-flex my-2">
 					<div class="form-check form-check-inline mx-2">
-						<input class="form-check-input"  type="radio" name="smoking" value="Y" id="smoking" <c:if test="${roomVO.smoking eq 'Y'}">checked</c:if>>
+						<input class="form-check-input"  type="radio" name="smoking" value="Y" id="smoking_yes" <c:if test="${roomVO.smoking eq 'Y'}">checked</c:if>>
 						<label class="form-check-label" for="smoking">
 							가능
 						</label>
 					</div>
 					<div class="form-check form-check-inline mx-2">
-						<input class="form-check-input" type="radio" name="smoking" value="N" id="smoking" <c:if test="${roomVO.smoking eq 'N'}">checked</c:if>>
+						<input class="form-check-input" type="radio" name="smoking" value="N" id="smoking_no" <c:if test="${roomVO.smoking eq 'N'}">checked</c:if>>
 						<label class="form-check-label ms-0" for="smoking">
 							 불가능
 						</label>
@@ -253,13 +357,13 @@ function room_attach_delete(index){
 				<span class="text-muted ms-2" style="text-align: left">와이파이</span>
 				<div class="d-flex my-2">
 					<div class="form-check mx-2">
-						<input class="form-check-input" type="radio" name="wifi" value="Y" id="wifi" <c:if test="${roomVO.wifi eq 'Y'}">checked</c:if>>
+						<input class="form-check-input" type="radio" name="wifi" value="Y" id="wifi_yes" <c:if test="${roomVO.wifi eq 'Y'}">checked</c:if>>
 						<label class="form-check-label" for="wifi">
 							설치
 						</label>
 					</div>
 					<div class="form-check mx-2">
-						<input class="form-check-input" type="radio" name="wifi" value="N" id="wifi" <c:if test="${roomVO.wifi eq 'N'}">checked</c:if>>
+						<input class="form-check-input" type="radio" name="wifi" value="N" id="wifi_no" <c:if test="${roomVO.wifi eq 'N'}">checked</c:if>>
 						<label class="form-check-label ms-0" for="wifi">
 							 미설치
 						</label>
@@ -280,11 +384,11 @@ function room_attach_delete(index){
 			<div class="card px-2 py-2">
 				<div class="d-flex">
 					<div class="form-floating col mx-1 my-1">
-						<input type="text" value="${roomVO.weekday_price }"  class="form-control px-3" name="weekday_price" id="weekday_price" placeholder="상시가">
+						<input type="number" value="${roomVO.weekday_price }"  class="form-control px-3" name="weekday_price" id="weekday_price" placeholder="상시가">
 						<label for="weekday_price" class="text-muted mx-1">상시가</label>
 					</div>
 					<div class="form-floating col mx-1 my-1">
-						<input type="text" value="${roomVO.weekend_price }" class="form-control px-3" name="weekend_price" id="weekend_price" placeholder="주말가">
+						<input type="number" value="${roomVO.weekend_price }" class="form-control px-3" name="weekend_price" id="weekend_price" placeholder="주말가">
 						<label for="weekend_price" class="text-muted mx-1">주말가</label>
 					</div>
 				</div>	

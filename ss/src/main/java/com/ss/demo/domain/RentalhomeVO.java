@@ -47,13 +47,12 @@ public class RentalhomeVO {
 	private String thumbnail;		// 썸네일 Y, N	
 	
 	
-	
-	
 	public double getAll_avg() {
 		return all_avg;
 	}
 	public void setAll_avg(double all_avg) {
-		this.all_avg = all_avg;
+		double all_avg_ = Double.parseDouble(String.format("%.1f", all_avg));
+		this.all_avg = all_avg_;
 	}
 	public int getReview_count() {
 		return review_count;

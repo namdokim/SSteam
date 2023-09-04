@@ -13,6 +13,79 @@ window.onload = function(){
 	    }).open();
 	  });
 }
+
+function validation(){
+	document.getElementById("name").value = decodeHTMLEntities(document.getElementById("name").value);
+	var name = document.getElementById("name").value;
+
+	document.getElementById("info").value = decodeHTMLEntities(document.getElementById("info").value);
+	var info = document.getElementById("info").value;
+
+	var type = document.getElementById("type").value;
+
+	var checkIn = document.getElementById("checkIn").value;
+	var checkOut = document.getElementById("checkOut").value;
+
+	document.getElementById("checkIn_info").value = decodeHTMLEntities(document.getElementById("checkIn_info").value);
+	var checkIn_info = document.getElementById("checkIn_info").value;
+
+	var breakfast_price = document.getElementById("breakfast_price").value;
+	
+	var breakfast_open = document.getElementById("breakfast_open").value;
+	var breakfast_close = document.getElementById("breakfast_close").value;
+	
+	// 유효성 검사
+	const pattern_time = /^(0?[1-9]|1\d|2[0-3]):[0-5]\d$/;
+	const pattern_num = /^[1-9][0-9]*$/;
+	
+	// 숙소 종류 선택
+	if(type == ''){
+		alert("숙소 종류를 선택해주세요.");
+		return false;
+	}
+
+	// 체크인 체크아웃
+	if(!(pattern_time.test(checkIn) && pattern_time.test(checkOut))){
+		alert("체크인&체크아웃 시간을 확인해주세요.");
+		return false;
+	}
+	// 조식 요금
+	if(breakfast_price != null || breakfast_price != ""){
+		if(!pattern_num.test(breakfast_price)){
+			alert("조식 요금을 확인해 주세요");
+			return false;
+		}
+		// 조식 시간
+		if(!pattern_time.test(breakfast_open) && !pattern_time.test(breakfast_close)){
+			alert("조식 시간을 확인해주세요.");
+			return false;
+		}
+		if(parseInt(breakfast_open.replace(':','')) >= parseInt(breakfast_close.replace(':',''))){
+			alert("조식의 오픈 시간이 마감 시간보다 크거나 같을 수 없습니다.");
+			return false;
+		}
+	}
+	if(!confirm("숙소를 등록하시겠습니까?")){
+		return false;
+	}
+	
+	return true;
+	
+}
+function decodeHTMLEntities (str) {
+	if(str !== undefined && str !== null && str !== '') {
+		str = String(str);
+
+		str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+		str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+		var element = document.createElement('div');
+		element.innerHTML = str;
+		str = element.textContent;
+		element.textContent = '';
+	}
+
+	return str;
+}
 </script>
 <!-- CSS ================================================================= -->
 <style>
@@ -55,7 +128,7 @@ window.onload = function(){
 
 <div class="masthead text-center pt-5" style="height:200%; font-family: 'TheJamsil5Bold';">
 	<div class="form-signin card shadow-sm w-100 m-auto" >
-		<form action="rentalhomeWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data">
+		<form action="rentalhomeWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
 			<svg xmlns="http://www.w3.org/2000/svg" style="color:#0863ec" width="72" height="60" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
 			  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
@@ -63,10 +136,9 @@ window.onload = function(){
 			</svg>
 			</a>
 			<h1 class="h3 mb-3 fw-normal" style="color:#0863ec">숙소 등록하기</h1>
-	
 			<div class="form-floating">
 				<input type="text" class="form-control" placeholder="숙박 시설 이름" id="name" name="name">
-				<label for="floatingInput" class="text-muted">숙박 시설 이름</label>
+				<label for="floatingInput" class="text-muted">숙박 시설 이름 </label>
 			</div>
 			<div class="d-flex">
 			<span class=" btn btn-outline-primary py-1 my-1 float-left w-25" id="search_address" style="cursor:pointer;">주소 찾기</span>
@@ -77,14 +149,14 @@ window.onload = function(){
 			</div>
 	
 			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="숙소 소개글"  name="info"  style="height: 200px; resize: none"></textarea>
+				<textarea class="form-control" placeholder="숙소 소개글" id="info" name="info"  style="height: 200px; resize: none"></textarea>
   				<label for="floatingTextarea2" class="text-muted">숙소 소개글</label>
 			</div>
 			
 			
 			
 			<div class="mb-2">
-				<select name="type" class="form-select" aria-label="Default select example">
+				<select id="type" name="type" class="form-select" aria-label="Default select example">
 					<option selected value="">숙소 종류</option>
 					<option value="motel">모텔</option>
 					<option value="hotel">호텔</option>
@@ -124,20 +196,20 @@ window.onload = function(){
 			<div class="card px-3 py-3">
 				<div class="row align-items-center">
 					<div class="form-floating col">	
-						<input type="text" class="form-control ps-3" placeholder="체크 인 시간" name="checkIn">
-						<label for="checkIn" class="text-muted ms-3">체크 인 시간</label>
+						<input type="text" class="form-control ps-3" placeholder="체크 인 시간" id="checkIn" name="checkIn">
+						<label for="checkIn" class="text-muted ms-3">체크인 시간</label>
 					</div>
 						
 						-
 					
 					<div class="form-floating col">	
-						<input type="text" class="form-control ps-3" placeholder="체크 아웃 시간" name="checkOut">
-						<label for="checkOut" class="text-muted ms-3">체크 아웃 시간</label>
+						<input type="text" class="form-control ps-3" placeholder="체크 아웃 시간" id="checkOut" name="checkOut">
+						<label for="checkOut" class="text-muted ms-3">체크아웃 시간</label>
 					</div>
 				</div>
 				
 				<div class="form-floating my-2">
-					<input type="text" class="form-control" name="checkIn_info" placeholder="체크인 방법">
+					<input type="text" class="form-control" id="checkIn_info" name="checkIn_info" placeholder="체크인 방법">
 					<label for="checkIn_info" class="text-muted">체크인 방법</label>
 				</div>
 			</div>
@@ -146,7 +218,7 @@ window.onload = function(){
 			</div>
 			<div class="card px-3 py-3">
 				<div class="form-floating mx-1 my-1">
-					<input type="text" class="form-control" placeholder="요금 / 1인" name="breakfast_price">
+					<input type="text" class="form-control" placeholder="요금 / 1인" id="breakfast_price" name="breakfast_price">
 					<label for="floatingInput" class="text-muted">요금 / 1인</label>
 				</div>
 				
@@ -223,7 +295,7 @@ window.onload = function(){
 			<div class="d-flex ms-2">
 				<h1 class="h5 my-3 fw-normal">파일 업로드</h1>
 			</div>	
-		
+			<span>이미지는 1개 이상 등록해주세요.</span>
 			<div class="card">
 				<div class="d-flex">
 					<label class="btn btn-primary float-left ms-2 my-2" >

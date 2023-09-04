@@ -46,14 +46,17 @@ window.onload = function(){
 	// 신고 완료 ajax
 	document.getElementById("review_report_insert").onclick = function(){
 		const review_idx = document.getElementById("review_report_review_idx").value;
+		document.getElementById("review_report_contents").value = decodeHTMLEntities(document.getElementById("review_report_contents").value);
 		const review_report_contents = document.getElementById("review_report_contents").value;
 		const review_report_reason = document.getElementById("review_report_reason").value;
-		
+
 		if(review_idx == "" || review_report_contents == "" || review_report_reason == ""){
 			alert("신고 이유와 신고 내용을 작성 확인해주세요.");
 			return;
 		}
-		
+		if(!confirm("신고하시겠습니까?")){
+			return;
+		}
 		$.ajax({
 			url:'insert_review_report.do',
 			method:'post',
@@ -63,7 +66,8 @@ window.onload = function(){
 				review_report_reason:review_report_reason
 			},
 			success:function(){
-				
+				document.getElementById("reportModal").style.display = "none";
+				document.getElementsByClassName("modal-backdrop")[0].style.display = "none";
 			},
 			error:function(){
 				alert("신고를 처리하는데 오류가 발생했습니다. 고객센터에 문의바랍니다.");
@@ -244,6 +248,10 @@ function insert_like(){
 				insert_.style.display="none";
 				delete_.style.display="block";
 				like_count.innerHTML = data;
+			}else if(data < 0 ){
+				if(confirm("로그인 페이지로 이동하시겠습니까?")){
+					location.href = "<%=request.getContextPath()%>/User/joinCheck.do";
+				}
 			}
 			
 		},
@@ -265,10 +273,14 @@ function delete_like(){
 			rentalhome_idx: rentalhome_idx
 		},											
 		success: function(data) {
-			delete_.style.display="none";
-			insert_.style.display="block";
-			like_count.innerHTML = data;
-			
+			if(data > 0){
+				delete_.style.display="none";
+				insert_.style.display="block";
+				like_count.innerHTML = data;
+			}else if(data < 0 ){
+				confirm("로그인 페이지로 이동하시겠습니까?");
+				location.href = "<%=request.getContextPath()%>/User/joinCheck.do";
+			}
 		},
 		error: function(xhr, status, error) {
 			console.log('Error:', error);
@@ -281,11 +293,27 @@ function search_view(){
 	const end_date = document.getElementById("end_date").value;
 	const person = document.getElementById("person").value;
 	
+	if(!compareDates(start_date, end_date)){
+		alert("날짜를 확인해주세요.");
+		return;
+	}
+	
 	location.href = "rentalhomeView.do?rentalhome_idx="+${rentalhomeVO.rentalhome_idx}+"&location="+location_+"&start_date="+start_date+"&end_date="+end_date+"&person="+person;
 	
 }
-
+function compareDates(startDate, endDate) {
+	const startDateObj = new Date(startDate);
+	const endDateObj = new Date(endDate);
+	const currentDate = new Date();
+	
+	if (startDateObj >= endDateObj || startDateObj <= currentDate) {
+		return false;
+	} else {
+		return true;
+	} 
+}
 function need_search(){
+	
 	alert("날짜, 인원수와 함께 검색해주세요");
 }
 function set_review_report_modal(review_idx){
@@ -338,6 +366,47 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 	document.getElementById("review_price").value=price;
 	document.getElementById("review_idx").value=review_idx;
 	
+}
+function validation(){
+	document.getElementById("review_modify_modal_contents").value = decodeHTMLEntities(document.getElementById("review_modify_modal_contents").value);
+	const review_modify_modal_contents = document.getElementById("review_modify_modal_contents").value;
+	if(review_modify_modal_contents == ""){
+		alert("내용을 입력해주세요.");
+		return false;
+	}
+	if(document.getElementById("review_service").value == 0){
+		alert("평점을 입력해주세요.");
+		return false;
+	}
+	if(document.getElementById("review_facility").value == 0){
+		alert("평점을 입력해주세요.");
+		return false;
+	}
+	if(document.getElementById("review_clean").value == 0){
+		alert("평점을 입력해주세요.");
+		return false;
+	}
+	if(document.getElementById("review_price").value == 0){
+		alert("평점을 입력해주세요.");
+		return false;
+	}
+	if(!confirm("리뷰를 작성하시겠습니까?")){
+		return false;
+	}
+	return true;
+}
+function decodeHTMLEntities (str) {
+	if(str !== undefined && str !== null && str !== '') {
+		str = String(str);
+
+		str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+		str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+		var element = document.createElement('div');
+		element.innerHTML = str;
+		str = element.textContent;
+		element.textContent = '';
+	}
+	return str;
 }
 </script>
 <style type="text/css">
@@ -506,23 +575,23 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 	<div style="position:sticky; width:100%; top:0px; background-color:#0863ec; z-index:100; border-radius:0px 0px 20px 20px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
-			<input type="text" value="${searchVO.location}" id="location" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:24px; left:10px; height:25px; outline:none;">
+			<input type="text" value="${searchVO.location}" id="location" class="search" readonly style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
 		</div>
 		<div class="mx-1" style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 				<div class="row justify-content-center">
 					<div class="col-md-5">
 						<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
-						<input readonly type="text" value="${searchVO.start_date}" id="start_date"  class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:100px;position:absolute; top:24px; left:10px; height:25px; z-index:120; outline:none;">
+						<input readonly type="text" value="${searchVO.start_date}" id="start_date"  class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; z-index:120; outline:none;">
 				</div>
 				<div class="col-md-5">
 						<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:140px;">체크아웃</span><br>
-						<input readonly type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold;font-size:11pt; width:100px;position:absolute; top:24px; left:140px; height:25px; z-index:120; outline:none;">
+						<input readonly type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold;font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; z-index:120; outline:none;">
 					</div>
 				</div>
 		</div>
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br>
-			<select id="person" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:24px; left:10px; height:25px; outline:none; ">
+			<select id="person" class="search" style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none; ">
 				<option selected ></option>
 				<option value="1" <c:if test="${searchVO.person eq '1'}">selected</c:if>>1</option>
 				<option value="2" <c:if test="${searchVO.person eq '2'}">selected</c:if>>2</option>
@@ -661,9 +730,11 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 			<div style="display:inline-block;padding:20px;">
 				<span style="font-weight:bold; font-size:15pt;">객실 정보</span>
 			</div>
-			<div style="display:inline-block; width:1040px; text-align:right;">
-				<button onclick="location.href='rentalhomeWrite_room.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'"style="background-color:transparent; border:0px; width:150px; height:30px; display:inline-block; font-weight:bold;">객실 등록하기</button>
-			</div>
+			<c:if test="${not empty login.uNo and login.uNo == rentalhomeVO.uNo }">
+				<div style="display:inline-block; width:1040px; text-align:right;">
+					<button onclick="location.href='rentalhomeWrite_room.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'"style="background-color:transparent; border:0px; width:150px; height:30px; display:inline-block; font-weight:bold;">객실 등록하기</button>
+				</div>
+			</c:if>
 		</div>
 		<div style="height:1px; background-color:lightgray;"></div>
 		<c:forEach items="${list}" var="list" varStatus="status">
@@ -686,9 +757,11 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 					<div style="display:inline-block; width:180px; height:30px;">
 						<img src="../img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인${list.min_person}명 - 성인${list.max_person}명</span>
 					</div>
-					<div style="display:inline-block; width:150px; height:30px;">
-						<img src="../img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${list.bed_info}</span>
-					</div>
+					<c:if test="${list.bed_info != ''}">
+						<div style="display:inline-block; width:150px; height:30px;">
+							<img src="../img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${list.bed_info}</span>
+						</div>
+					</c:if>
 					<c:if test="${list.smoking eq 'N'}">
 						<div style="display:inline-block; width:120px; height:30px;">
 							<img src="../img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
@@ -757,12 +830,14 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 						<span class="review_btn" onclick="need_search()" style="cursor:pointer; width:160px; height:80px; padding:20px 20px; position:absolute; top:120px; left:1030px; border-radius:10px; font-size:20pt;">검색</span>				
 					</c:otherwise>
 				</c:choose>
-				<button class="review_btn" onclick="location.href='rentalhomeModify_room.do?room_idx=${list.room_idx}&rentalhome_idx=${list.rentalhome_idx }'" style="position:absolute; top:0px; right:35px; font-size:12pt; margin:0px 10px;">객실 정보 수정</button>
-				<form action="rentalhomeDelete_room.do" method="post">
-					<input type="hidden" name="room_idx" value="${list.room_idx}">
-					<input type="hidden" name="rentalhome_idx" value="${list.rentalhome_idx}">
-					<button class="review_btn" style="text-align:center; position:absolute; top:0px; right:220px; font-size:12pt;">객실 삭제</button>
-				</form>
+				<c:if test="${not empty login.uNo and login.uNo == rentalhomeVO.uNo }">
+					<button class="review_btn" onclick="location.href='rentalhomeModify_room.do?room_idx=${list.room_idx}&rentalhome_idx=${list.rentalhome_idx }'" style="position:absolute; top:0px; right:35px; font-size:12pt; margin:0px 10px;">객실 정보 수정</button>
+					<form action="rentalhomeDelete_room.do" method="post">
+						<input type="hidden" name="room_idx" value="${list.room_idx}">
+						<input type="hidden" name="rentalhome_idx" value="${list.rentalhome_idx}">
+						<button class="review_btn" style="text-align:center; position:absolute; top:0px; right:220px; font-size:12pt;">객실 삭제</button>
+					</form>
+				</c:if>
 			</div>
 			<div style="height:1px; background-color:lightgray;"></div>
 		</c:forEach>
@@ -852,27 +927,31 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 						<div name="review_contents" style="position:absolute; width:600px; top:30px; left:350px;">
 							${review.contents}
 						</div>
-						<button onclick="set_review_report_modal(${review.review_idx})" type="button" data-bs-toggle="modal" data-bs-target="#reportModal" style="position:absolute; top:20px; right:40px; text-align:center;  border:0px; background-color:transparent; ">
-							<svg class="siren" height="40" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255.5 255.5" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 255.5 255.5">
-								<g><path d="m200.583,222.5h-6.333v-99.66c0-36.362-29.145-65.34-65.507-65.34h-0.32c-36.362,0-66.173,28.978-66.173,65.34v99.66h-6.667c-5.522,0-10.333,3.977-10.333,9.5v13c0,5.523 4.811,10.5 10.333,10.5h145c5.523,0 9.667-4.977 9.667-10.5v-13c0-5.523-4.145-9.5-9.667-9.5zm-72.16-141h-0.173v16h0.173c-14.248,0-25.84,12-25.84,26h-16c0-23 18.769-42 41.84-42z"/>
-								<path d="m128.25,33c4.418,0 8-3.582 8-8v-17c0-4.418-3.582-8-8-8s-8,3.582-8,8v17c0,4.418 3.582,8 8,8z"/>
-								<path d="m93.935,42.519c1.563,1.562 3.609,2.343 5.657,2.343 2.048,0 4.095-0.781 5.657-2.343 3.124-3.125 3.124-8.189 0-11.315l-12.02-12.021c-3.125-3.123-8.189-3.123-11.314,0-3.124,3.125-3.124,8.19 0,11.315l12.02,12.021z"/>
-								<path d="m157.575,44.861c2.048,0 4.096-0.781 5.657-2.344l12.02-12.022c3.124-3.124 3.124-8.189-0.001-11.313-3.125-3.125-8.191-3.124-11.314,0.001l-12.02,12.021c-3.124,3.124-3.124,8.189 0.001,11.314 1.563,1.563 3.609,2.343 5.657,2.343z"/></g>
-							</svg><br>
-							<span style="color:#3a3a3a; font-weight:bold; font-size:11pt;" >
-								신고
-							</span>
-						</button>
-						<form action="rentalhome_review_delete.do" method="post">
-							<input type="hidden" name="review_idx" value="${review.review_idx }">
-							<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
-							<button class="review_btn" style="position:absolute; bottom:10px; right:20px; ">
-								삭제
+						<c:if test="${not empty login}">
+							<button onclick="set_review_report_modal(${review.review_idx})" type="button" data-bs-toggle="modal" data-bs-target="#reportModal" style="position:absolute; top:20px; right:40px; text-align:center;  border:0px; background-color:transparent; ">
+								<svg class="siren" height="40" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255.5 255.5" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 255.5 255.5">
+									<g><path d="m200.583,222.5h-6.333v-99.66c0-36.362-29.145-65.34-65.507-65.34h-0.32c-36.362,0-66.173,28.978-66.173,65.34v99.66h-6.667c-5.522,0-10.333,3.977-10.333,9.5v13c0,5.523 4.811,10.5 10.333,10.5h145c5.523,0 9.667-4.977 9.667-10.5v-13c0-5.523-4.145-9.5-9.667-9.5zm-72.16-141h-0.173v16h0.173c-14.248,0-25.84,12-25.84,26h-16c0-23 18.769-42 41.84-42z"/>
+									<path d="m128.25,33c4.418,0 8-3.582 8-8v-17c0-4.418-3.582-8-8-8s-8,3.582-8,8v17c0,4.418 3.582,8 8,8z"/>
+									<path d="m93.935,42.519c1.563,1.562 3.609,2.343 5.657,2.343 2.048,0 4.095-0.781 5.657-2.343 3.124-3.125 3.124-8.189 0-11.315l-12.02-12.021c-3.125-3.123-8.189-3.123-11.314,0-3.124,3.125-3.124,8.19 0,11.315l12.02,12.021z"/>
+									<path d="m157.575,44.861c2.048,0 4.096-0.781 5.657-2.344l12.02-12.022c3.124-3.124 3.124-8.189-0.001-11.313-3.125-3.125-8.191-3.124-11.314,0.001l-12.02,12.021c-3.124,3.124-3.124,8.189 0.001,11.314 1.563,1.563 3.609,2.343 5.657,2.343z"/></g>
+								</svg><br>
+								<span style="color:#3a3a3a; font-weight:bold; font-size:11pt;" >
+									신고
+								</span>
 							</button>
-						</form>
-						<button class="review_btn" onclick="review_modify('${review.room_name}','${review.contents}', ${review.service}, ${review.facility}, ${review.clean}, ${review.price},${review.review_idx })" type="button" data-bs-toggle="modal" data-bs-target="#reviewModal" style="position:absolute; bottom:55px; right:20px;">
-							수정
-						</button>
+						</c:if>
+						<c:if test="${not empty login and review.uNo eq login.uNo }">
+							<form action="rentalhome_review_delete.do" method="post">
+								<input type="hidden" name="review_idx" value="${review.review_idx }">
+								<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
+								<button class="review_btn" style="position:absolute; bottom:10px; right:20px; ">
+									삭제
+								</button>
+							</form>
+							<button class="review_btn" onclick="review_modify('${review.room_name}','${review.contents}', ${review.service}, ${review.facility}, ${review.clean}, ${review.price},${review.review_idx })" type="button" data-bs-toggle="modal" data-bs-target="#reviewModal" style="position:absolute; bottom:55px; right:20px;">
+								수정
+							</button>
+						</c:if>
 					</div>
 				</c:forEach>
 			</c:when>
@@ -918,7 +997,7 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModal" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
-				<form action="update_review.do" method="post">
+				<form action="update_review.do" method="post" onsubmit="return validation()">
 					<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx }">
 					<input type="hidden" id="review_idx" name="review_idx">
 					<div class="modal-header">
@@ -1141,15 +1220,14 @@ function review_modify(room_name, contents, service, facility, clean, price, rev
 			</div>
 		</div>
 	</div>
-		<!-- and login.id eq vo.id -->
-<%-- 				<c:if test="${not empty login}"> --%>
-					<div style="width:1224px; display:inline-block; text-align:right; margin:20px 0px;">
-						<form action="rentalhomeDelete.do" method="post" style="display:inline-block;">
-							<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
-							<button class="btn btn-primary btn-sm mr-2" style="padding:15px; border-radius:10px; font-size:11pt;">숙소 삭제</button>
-						</form>
-						<span onclick="location.href='rentalhomeModify.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" class="btn btn-primary btn-sm mr-2" style="padding:15px; border-radius:10px; font-size:11pt; cursor:pointer;">숙소 정보 변경</span>
-					</div>
-<%-- 				</c:if> --%>
+	<div style="width:1224px; display:inline-block; text-align:right; margin:20px 0px;">
+		<c:if test="${not empty login.uNo and login.uNo == rentalhomeVO.uNo }">
+			<form action="rentalhomeDelete.do" method="post" style="display:inline-block;">
+				<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
+				<button class="btn btn-primary btn-sm mr-2" style="padding:15px; border-radius:10px; font-size:11pt;">숙소 삭제</button>
+			</form>
+			<span onclick="location.href='rentalhomeModify.do?rentalhome_idx=${rentalhomeVO.rentalhome_idx}'" class="btn btn-primary btn-sm mr-2" style="padding:15px; border-radius:10px; font-size:11pt; cursor:pointer;">숙소 정보 변경</span>
+		</c:if>
+	</div>
 </div>
 <%@ include file="../include/footer.jsp" %>
