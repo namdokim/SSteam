@@ -77,7 +77,7 @@
 	SELECT * FROM(
 		SELECT * FROM(
 			SELECT *,(
-				SElECT avg(service+facility+clean+price)/4 FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM (SELECT room_idx, rentalhome_idx as c_rentalhome_idx FROM rentalhome_room WHERE status = 'Y') c WHERE c.c_rentalhome_idx = rentalhome.rentalhome_idx)) and status = 'Y' as all_avg,(
+				SElECT avg(service+facility+clean+price)/4 FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM (SELECT room_idx, rentalhome_idx as c_rentalhome_idx FROM rentalhome_room WHERE status = 'Y') c WHERE c.c_rentalhome_idx = rentalhome.rentalhome_idx) and status = 'Y') as all_avg,(
 				SELECT count(*) FROM rentalhome_review WHERE room_idx IN (SELECT room_idx FROM (SELECT room_idx, rentalhome_idx as f_rentalhome_idx FROM rentalhome_room WHERE status = 'Y') f WHERE f.f_rentalhome_idx = rentalhome.rentalhome_idx))  and status = 'Y' as review_count,(
 				SELECT count(*) FROM rentalhome_like WHERE rentalhome_idx = rentalhome.rentalhome_idx) as like_count
 				<if test="uNo != null and uNo != 0">

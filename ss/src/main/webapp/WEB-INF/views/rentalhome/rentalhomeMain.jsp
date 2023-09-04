@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="../css/datepicker.css">
 <link rel="stylesheet" href="../css/font.css">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services"></script>
 <script>
 	$.datepicker.setDefaults({
 	  dateFormat: 'yy-mm-dd',
@@ -29,6 +30,7 @@
 	  $('.datepicker').datepicker();
 	});
 window.onload = function(){
+	
 	let yn_ = document.getElementsByName("yn");
 	yn_.forEach(function(yn, index) {
 		if(yn.checked == true){
@@ -47,6 +49,9 @@ window.onload = function(){
 	
 	let avg_ = document.getElementsByName("avg");
 	avg_.forEach(function(avg, index) {
+		if(document.getElementById("score").value == parseInt(avg_[index].innerText)){
+			avg_[index].style.backgroundColor = "#aed2fe";
+		}
 		avg.onclick = function(){
 			if(document.getElementById("score").value != avg_[index].innerText){
 				for(var i=0; i < avg_.length; i++){
@@ -83,13 +88,10 @@ window.onload = function(){
 		searchMain();
 	}
 	
-	
 	const empty_star_ = document.getElementsByName("empty_star");
 	const fill_star_ = document.getElementsByName("fill_star");
 	const dupl_count = document.getElementsByName("dupl_count");
 	empty_star_.forEach(function(empty, index) {
-		console.log(dupl_count[index].value);
-		console.log(empty_star_.length);
 		if(dupl_count[index].value == 0){
 			empty_star_[index].style.display = "block";
 			fill_star_[index].style.display = "none";
@@ -156,19 +158,22 @@ window.onload = function(){
 	
 	minPriceInput.addEventListener("blur", function() {
 		if ( parseInt(maxPriceInput.value) <= parseInt(this.value) ) {
-			alert("최소 가격은 최대 가격보다 작아야합니다.");
+			alert("최소가는 최대가보다 작아야합니다.");
 			this.value = parseInt(maxPriceInput.value) - 10000;
 		}
 		setLeft();
 	});
 	maxPriceInput.addEventListener("blur", function() {
 		if ( parseInt(this.value) <= parseInt(minPriceInput.value) ) {
-			alert("최대 가격은 최소 가격보다 커야합니다.");
+			alert("최고가는 최저가보다 커야합니다.");
 			this.value = parseInt(minPriceInput.value) + 10000;
 		}
 		setRight();
 	});
 };
+	let distance_count = 0;
+
+
 	function search(){
 		const location_ = document.getElementById("location").value;
 		const start_date = document.getElementById("start_date").value;
@@ -199,6 +204,10 @@ window.onload = function(){
 					like_count[index].innerHTML = data;
 					insert_[index].style.display="none";
 					delete_[index].style.display="block";
+				}else if(data < 0 ){
+					if(confirm("로그인 페이지로 이동하시겠습니까?")){
+						location.href = "<%=request.getContextPath()%>/User/joinCheck.do";
+					}
 				}
 				
 			},
@@ -251,6 +260,7 @@ window.onload = function(){
 		let breakfast_yn = document.getElementById("breakfast_yn").value;
 		let animal_yn = document.getElementById("animal_yn").value;
 		let sort = document.getElementById("sort").value;
+		let page = document.getElementById("page").value;
 		
 		const type_ = document.getElementsByName("type");	// radio name
 		let type_value = "";
@@ -261,10 +271,86 @@ window.onload = function(){
 			}
 		});
 		
+		if(!compareDates(start_date, end_date)){
+			alert("날짜를 확인해주세요.");
+			return;
+		}
+		
 		window.location.href = "rentalhomeMain.do?location="+location+"&start_date="+start_date+"&end_date="+end_date+
 						"&person="+person+"&min_price="+min_price+"&max_price="+max_price+"&score="+score+"&inPool_yn="+inPool_yn+
 						"&outPool_yn="+outPool_yn+"&parking_yn="+parking_yn+"&pickup_yn="+pickup_yn+"&wifi_yn="+wifi_yn+"&beach_yn="+beach_yn+
 						"&bbq_yn="+bbq_yn+"&breakfast_yn="+breakfast_yn+"&animal_yn="+animal_yn+"&sort="+sort+"&type="+type_value+"&page="+page;
+	}
+	
+	function pageSet(page){
+		document.getElementById("page").value= page;
+		console.log(document.getElementById("page").value);
+		searchMain();
+	}
+	// 현재 위치의 위도
+	let current_latitude = 0;
+	// 현재 위치의 경도
+	let current_longitude = 0;
+	function whereami() {
+		// 이 객체를 getCurrentPosition() 메서드의 세번째 인자로 전달한다.
+		var options = {
+		// 가능한 경우, 높은 정확도의 위치(예를 들어, GPS 등) 를 읽어오려면 true로 설정
+		// 그러나 이 기능은 배터리 지속 시간에 영향을 미친다. 
+		enableHighAccuracy: false, // 대략적인 값이라도 상관 없음: 기본값
+		// 위치 정보가 충분히 캐시되었으면, 이 프로퍼티를 설정하자, 
+		// 위치 정보를 강제로 재확인하기 위해 사용하기도 하는 이 값의 기본 값은 0이다.
+		maximumAge: 30000,     // 5분이 지나기 전까지는 수정되지 않아도 됨
+		// 위치 정보를 받기 위해 얼마나 오랫동안 대기할 것인가?
+		// 기본값은 Infinity이므로 getCurrentPosition()은 무한정 대기한다.
+		timeout: 15000    // 15초 이상 기다리지 않는다.
+		}
+
+		if(navigator.geolocation) // geolocation 을 지원한다면 위치를 요청한다. 
+			navigator.geolocation.getCurrentPosition(success, error, options);
+		else
+			console.log("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
+		// geolocation 요청이 실패하면 이 함수를 호출한다.
+		function error(e) {
+			// 오류 객체에는 수치 코드와 텍스트 메시지가 존재한다.
+			// 코드 값은 다음과 같다.
+			// 1: 사용자가 위치 정보를 공유 권한을 제공하지 않음.
+			// 2: 브라우저가 위치를 가져올 수 없음.
+			// 3: 타임아웃이 발생됨.
+			console.log( "Geolocation 오류 "+e.code +": " + e.message);
+		}
+		// geolocation 요청이 성공하면 이 함수가 호출된다.
+		function success(pos) {
+			console.log(pos); // [디버깅] Position 객체 내용 확인
+
+			// 항상 가져올 수 있는 필드들이다. timestamp는 coords 객체 내부에 있지 않고, 
+			// 외부에서 가져오는 필드라는 점에 주의하다. 
+			var msg = 	"당신은 " +
+						new Date(pos.timestamp).toLocaleString() + "에 " +
+						" 위도 " + pos.coords.latitude + 
+						" 경도 " + pos.coords.longitude + "에서 "+ 
+						" 약 " + pos.coords.accuracy + " 미터 떨어진 곳에 있습니다.";
+			// 모든 위치 정보를 출력한다.
+			console.log(msg);
+			current_latitude = pos.coords.latitude;
+			current_longitude = pos.coords.longitude;
+			console.log(current_latitude);
+			console.log(current_longitude);
+			
+			
+		}
+	}
+	whereami();
+	
+	function compareDates(startDate, endDate) {
+		const startDateObj = new Date(startDate);
+		const endDateObj = new Date(endDate);
+		const currentDate = new Date();
+		
+		if (startDateObj >= endDateObj || startDateObj <= currentDate) {
+			return false;
+		} else {
+			return true;
+		} 
 	}
 </script>
 <style type="text/css">
@@ -428,7 +514,7 @@ input[type="range"]::-webkit-slider-thumb {
 }	
 .masthead {
 	position: relative;
-	background: url(../img/houses.jpg) no-repeat center center;
+	background: url(../img/houses2.jpg) no-repeat center center;
 	background-size: cover;
 	height:400px
 }	
@@ -455,6 +541,7 @@ input[type="range"]::-webkit-slider-thumb {
 						<input type="hidden" id="sort" value="${searchVO.sort}">
 						<!-- Page heading-->
 						<br><br>
+
 						<div class="text-left text-white fs-1 fw-bold ms-2">
 							호텔
 							<span class="text-right ms-0 fs-1 mb-1 text-warning fw-bold">.</span>
@@ -464,23 +551,23 @@ input[type="range"]::-webkit-slider-thumb {
 								<div class="text-center text-white py-4" style="line-height: 50px;">
 									<div class="mt-2" style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;">
 										<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
-										<input type="text" value="${searchVO.location}" id="location" class="search form-control" style="box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+										<input type="text" value="${searchVO.location}" id="location" class="search form-control" style="padding:0px; box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:230px;position:absolute; top:22px; left:10px; height:25px; outline:none;">
 									</div>
 									<div class="mt-2" style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;">
 										<div class="row justify-content-center">
 											<div class="col-md-5">
 												<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">체크인</span><br>
-												<input type="text" value="${searchVO.start_date}" id="start_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt;width:100px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
+												<input type="text" value="${searchVO.start_date}" id="start_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt;width:100px;position:absolute; top:22px; left:10px; height:25px; outline:none;">
 											</div>
 											<div class="col-md-5">
 												<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:140px;">체크아웃</span><br>
-												<input type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt; width:100px;position:absolute; top:23px; left:140px; height:25px; outline:none;">
+												<input type="text" value="${searchVO.end_date}" id="end_date" class="search form-control datepicker" style="padding:0px; box-shadow:0 0 0 0; font-size:11pt; width:100px;position:absolute; top:22px; left:140px; height:25px; outline:none;">
 											</div>
 										</div>
 									</div>
 									<div class="mt-2" style="background-color:white; border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;">
 										<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">인원 수</span><br>
-										<select class="search form-select" id="person" style="box-shadow:0 0 0 0; font-weight:bold; font-size:11pt;width:238px;position:absolute; top:23px; left:10px; height:25px; outline:none; padding:0;">
+										<select class="search form-select" id="person" style="box-shadow:0 0 0 0; font-weight:bold; font-size:11pt; width:238px; position:absolute; top:22px; left:10px; height:25px; outline:none; padding:0;">
 											<option selected></option>
 											<option value="1" <c:if test="${searchVO.person eq 1}">selected</c:if>>1</option>
 											<option value="2" <c:if test="${searchVO.person eq 2}">selected</c:if>>2</option>
@@ -568,6 +655,9 @@ input[type="range"]::-webkit-slider-thumb {
 						<div class="ms-3" style="width: 100%;">
 							<div class="fw-semibold" style="font-size: 12pt; text-align: left;">숙소 종류</div>
 							<div class="check" style="margin: 20px 0px; width: 100%; text-align: left;">
+								<input type="radio" class="btn-check" name="type" id="total" value="" checked autocomplete="off">
+								<label class="btn mt-1" for="total" style="width:80%;">전체</label>
+
 								<input type="radio" class="btn-check" name="type" id="motel" value="motel" <c:if test="${searchVO.type eq 'motel'}">checked</c:if> autocomplete="off">
 								<label class="btn mt-1" for="motel" style="width:80%;">모텔</label>
 								
@@ -618,7 +708,7 @@ input[type="range"]::-webkit-slider-thumb {
 								<label class="btn mt-1" for="animal_yn" style="display:inline-block; width:80%;">반려동물</label>
 							</div>
 						</div>
-						<div class="mt-2" onclick="searchMain()" style="background-color:#0863ec; width:80%; padding:10px 0px; display:inline-block; border-radius:5px; cursor:pointer;">
+						<div class="my-3" onclick="searchMain()" style="background-color:#0863ec; width:80%; padding:10px 0px; display:inline-block; border-radius:5px; cursor:pointer;">
 							<span style="font-weight:bold;color:white; font-size:15pt; ">검색</span>
 						</div>
 					</div>
@@ -627,17 +717,17 @@ input[type="range"]::-webkit-slider-thumb {
 							<div class="view border pe-3 shadow-sm d-flex my-2" style="width:100%; height: 200px; margin: 0px 0px; ">
 								<c:choose>
 									<c:when test="${empty list.logical_name}">
-										<div class="hotel col" style="cursor: pointer; width: 200px; height: 180px;" onclick="location.href='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'"></div>
+										<div class="hotel col" style="cursor: pointer; width: 200px; height: 180px;" onclick="location.href='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location }&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}'"></div>
 									</c:when>
 									<c:otherwise>
 										<div class="flex-shrink-0 avatar me-2 pt-2 ms-2">
-											<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor: pointer; border-radius:5px; width: 200px; height: 180px;" onclick="location.href='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
+											<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor: pointer; border-radius:5px; width: 200px; height: 180px;" onclick="location.href='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location }&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}'">
 										</div>
 									</c:otherwise>
 								</c:choose>
 								<div class="d-flex align-items-start ps-2 pt-2" style="width:70%; position:relative;">
 									<div class="flex-column px-1 py-1" style="width:100%;">
-											<a style="text-decoration: none; color: black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}">
+											<a style="text-decoration: none; color: black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location }&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}">
 												<span style="font-size: 13pt; font-weight: bold; text-align:left;">${list.name}</span>
 											</a>
 										<div class="flex-column py-1" style="text-align: left;">
@@ -648,7 +738,48 @@ input[type="range"]::-webkit-slider-thumb {
 										</div>
 										<div class="flex-column ">
 											<span style="font-size: 10pt; color: #686868;">${list.address}</span>
-											<span style="font-size: 10pt; color: #686868;">현재 위치에서 134km</span>
+											<span style="font-size: 10pt; color: #686868;">현재 위치에서 <span name="distance"></span>km</span>
+<script>
+	function deg2rad(deg) {
+		return deg * (Math.PI / 180);
+	}
+	// 주소-좌표 변환 객체를 생성합니다
+	var geocoder = new kakao.maps.services.Geocoder();
+
+	// 주소로 좌표를 검색합니다
+	geocoder.addressSearch('${list.address}', function(result, status) {
+
+		// 정상적으로 검색이 완료됐으면 
+		if (status === kakao.maps.services.Status.OK) {
+			
+			console.log(current_latitude);
+			console.log(current_longitude);
+			console.log(result[0].y);
+			console.log(result[0].x);
+
+			var R = 6371; // 지구의 반지름 (킬로미터)
+			var lat1 = current_latitude; // 첫 번째 지점의 위도
+			var lon1 = current_longitude; // 첫 번째 지점의 경도
+			var lat2 = result[0].y; // 두 번째 지점의 위도
+			var lon2 = result[0].x; // 두 번째 지점의 경도
+
+			var dLat = deg2rad(lat2 - lat1);
+			var dLon = deg2rad(lon2 - lon1);
+
+			var a =
+				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+				Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+			var distance = R * c; // 두 지점 간의 거리 (킬로미터)
+			let distance_ = parseFloat(distance).toFixed(4);
+			document.getElementsByName("distance")[distance_count].innerText = Math.round(distance_);
+			distance_count++;
+		}
+	});
+</script>
 										</div>
 										<c:if test="${list.discount_type eq 'fix' }">
 											<span style="position:absolute; bottom:50px; right:-50px; background-color:#529ffe; color:white; font-size:10pt; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}원 할인</span><br>
@@ -707,23 +838,28 @@ input[type="range"]::-webkit-slider-thumb {
 						</c:forEach>
 					</div>
 					<div class="d-flex justify-content-end my-3">
-						<span onclick="location.href='rentalhomeReserveList.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px; cursor:pointer;">MY 예약 리스트</span>
-						<div style="width:5px;"></div>
-						<span onclick="location.href='rentalhomeWrite.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px;">숙소 등록</span>
+						<c:if test="${login != null }">
+							<span onclick="location.href='rentalhomeReserveList.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px; cursor:pointer;">MY 예약 리스트</span>
+						</c:if>
+							<div style="width:5px;"></div>
+						<c:if test="${login != null && login.uType eq business }">
+							<span onclick="location.href='rentalhomeWrite.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px;">숙소 등록</span>
+						</c:if>
 					</div>
 					<nav aria-label="Page navigation example">
+						<input type="hidden" id="page" value="${searchVO.currentPage}">
 						<ul class="pagination justify-content-center">
 							<%-- 이전 페이지 링크 생성 --%>
 							<li class="page-item">
 							<% if (pageMaker.isPrev()){ %>
-								<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=">Previous</span>
+								<span class="page-link" onclick="pageSet(<%=pageMaker.getStartPage()-1%>)" id="preview_page">Previous</span>
 							<%} %> 
 							</li>
 							<% 
 							for(int i = pageMaker.getStartPage();i<=pageMaker.getEndPage();i++) {
 							%>
 							<li class="page-item">
-							<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
+							<span class="page-link" onclick="pageSet(<%=i%>)" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=i%>">
 								<%=i %>
 							</span>
 							</li>
@@ -733,7 +869,8 @@ input[type="range"]::-webkit-slider-thumb {
 							<%-- 다음 페이지 링크 생성 --%>
 							<li class="page-item">
 							<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %> 
-								<span class="page-link" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>">Next</span>
+<%-- 								<span class="page-link" id="next_page" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>">Next</span> --%>
+								<span class="page-link" onclick="pageSet(<%=pageMaker.getEndPage()+1%>)" id="next_page">Next</span>
 							<% } %> 
 							</li>
 						</ul>

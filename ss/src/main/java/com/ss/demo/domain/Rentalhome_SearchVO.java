@@ -8,7 +8,7 @@ public class Rentalhome_SearchVO extends Criteria{
 	private String start_date;
 	private String end_date;
 	private String person;
-	
+	private int currentPage;
 	
 	private int uNo;
 	private int min_price;
@@ -28,6 +28,13 @@ public class Rentalhome_SearchVO extends Criteria{
 	
 	
 	
+	
+	public int getCurrentPage() {
+		return currentPage;
+	}
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
 	public int getRentalhome_idx() {
 		return rentalhome_idx;
 	}
@@ -153,12 +160,15 @@ public class Rentalhome_SearchVO extends Criteria{
 	@Override
 	public String toString() {
 		return "Rentalhome_SearchVO [rentalhome_idx=" + rentalhome_idx + ", location=" + location + ", start_date="
-				+ start_date + ", end_date=" + end_date + ", person=" + person + ", uNo=" + uNo + ", min_price="
-				+ min_price + ", max_price=" + max_price + ", score=" + score + ", type=" + type + ", inPool_yn="
-				+ inPool_yn + ", outPool_yn=" + outPool_yn + ", parking_yn=" + parking_yn + ", pickup_yn=" + pickup_yn
-				+ ", wifi_yn=" + wifi_yn + ", beach_yn=" + beach_yn + ", bbq_yn=" + bbq_yn + ", breakfast_yn="
-				+ breakfast_yn + ", animal_yn=" + animal_yn + ", sort=" + sort + "]";
+				+ start_date + ", end_date=" + end_date + ", person=" + person + ", currentPage=" + currentPage + ", uNo=" + uNo
+				+ ", min_price=" + min_price + ", max_price=" + max_price + ", score=" + score + ", type=" + type
+				+ ", inPool_yn=" + inPool_yn + ", outPool_yn=" + outPool_yn + ", parking_yn=" + parking_yn
+				+ ", pickup_yn=" + pickup_yn + ", wifi_yn=" + wifi_yn + ", beach_yn=" + beach_yn + ", bbq_yn=" + bbq_yn
+				+ ", breakfast_yn=" + breakfast_yn + ", animal_yn=" + animal_yn + ", sort=" + sort + "]";
 	}
+	
+	
+	
 	
 		
 }
