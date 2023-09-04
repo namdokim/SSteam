@@ -251,7 +251,7 @@ function decodeHTMLEntities (str) {
 </style>
 
 <div class="masthead text-center pt-5" style="height:170%; font-family: 'TheJamsil5Bold'; ">
-	<div class="form-signin card shadow-sm w-100 m-auto" >
+	<div class="form-signin m-auto w-100" >
 		<!-- 모달 -->
 		<div class="modal fade" id="rentalhome_room_attach" tabindex="-1" aria-labelledby="rentalhome_room_attachLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-xl">
@@ -279,7 +279,7 @@ function decodeHTMLEntities (str) {
 				</div>
 			</div>
 		</div>
-		<form name="frm" action="rentalhomeModify_room.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
+		<form class="card shadow-sm w-100 py-3 px-3" name="frm" action="rentalhomeModify_room.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
 			<input type="hidden" name="room_idx" value="${roomVO.room_idx}">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">

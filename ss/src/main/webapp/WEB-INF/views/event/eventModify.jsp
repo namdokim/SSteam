@@ -137,7 +137,7 @@ window.onload = function() { $("#event_title").focus(); }
 </style>
 <!-- <script src="./js/write.js"></script> -->
 <body>
-	<div class="masthead text-center pt-5" style="height:150%; ">
+	<div class="masthead text-center pt-5" style="height:150%; font-family: 'TheJamsil5Bold'; ">
 	<div class="form-signin card shadow-sm w-100 m-auto" >
 		<form name="write" method="post" action="eventModify.do" onsubmit="return DoSubmit();" enctype="multipart/form-data" >	
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/event/eventMain.do" title="Arcalive">

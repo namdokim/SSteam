@@ -202,8 +202,8 @@ function decodeHTMLEntities (str) {
 </style>
 
 <div class="masthead text-center pt-5" style="height:170%; font-family: 'TheJamsil5Bold'; ">
-	<div class="form-signin card shadow-sm w-100 m-auto" >
-		<form name="frm" action="rentalhomeWrite_room.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
+	<div class="form-signin m-auto w-100" >
+		<form class="card shadow-sm w-100 py-3 px-3" name="frm" action="rentalhomeWrite_room.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
 			<svg xmlns="http://www.w3.org/2000/svg" style="color:#0863ec" width="72" height="60" fill="currentColor" class="bi bi-house-gear" viewBox="0 0 16 16">

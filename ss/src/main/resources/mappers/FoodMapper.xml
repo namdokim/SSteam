@@ -235,7 +235,6 @@
 		     , food_phone = #{food_phone}
 		     , food_food_kind = #{food_food_kind}
 		     , food_avg_price = #{food_avg_price}
-		     , food_write_date = #{food_write_date}
 		     , food_working_hours = #{food_working_hours}
 		     , food_holiday = #{food_holiday}
 		     , food_website = #{food_website}

@@ -86,6 +86,9 @@
 		alert("로그인을 해주세요.");
 		location.href = "<%=request.getContextPath()%>/User/userLogin.do";
 	}
+	function delete_food(){
+		return confirm("글을 삭제하시겠습니까?");
+	}
 	</script>
 <!-- CSS 스타일 ============================================================================== -->
 	<style type="text/css">
@@ -724,7 +727,7 @@
 				<!--  글 수정, 삭제 버튼  (로그인시에만 보임/ 글쓴사람만 보임) --> 
 											
 													<div class="justify-content-between pt-3 ">
-														<form name="frm" action="delete.do" method="post" style="display: inline;">
+														<form name="frm" action="delete.do" method="post" style="display: inline;" onsubmit="return delete_food()">
 													        <input type="hidden" name="fNo" value="${food.fNo}">
 													       <%--  <% if(session.getAttribute("login") != null) { %> --%>
 													       <c:if test="${login.uNo eq food.uNo}">

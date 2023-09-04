@@ -32,8 +32,11 @@ ev.setEvent_content(ev.getEvent_content().replace("</p>", ""));
 
 
 
+
 <!DOCTYPE html>
 <html>
+
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,6 +95,49 @@ ev.setEvent_content(ev.getEvent_content().replace("</p>", ""));
 		         }
 		      }).open();
 		   });
+		}
+		function DoSubmit() {
+		    var event_title = document.getElementById("event_title").value;
+		    var event_content = $('#summernote').summernote('code');
+		    var event_start = document.getElementById("event_start").value;
+		    var event_local = document.getElementById("event_local").value;
+		    var event_tel = document.getElementById("event_tel").value;
+		    var multiFile = document.getElementById("multiFile");
+
+		    // Check if any of the required fields are empty
+		    if (event_title.trim() === "") {
+		        alert("제목을 입력하세요");
+		        document.getElementById("event_title").focus();
+		        return false;
+		    }
+
+		    if (event_content.trim() === "") {
+		        alert("내용을 입력하세요");
+		        $('#summernote').summernote('focus');
+		        return false;
+		    }
+		    if (event_local.trim() === "") {
+		        alert("위치를 입력하세요");
+		        document.getElementById("event_local").focus();
+		        return false;
+		    }
+		    if (event_start.trim() === "") {
+		        alert("날짜를 입력하세요");
+		        document.getElementById("event_start").focus();
+		        return false;
+		    }
+		    if (event_tel.trim() === "") {
+		        alert("전화번호를 입력하세요");
+		        document.getElementById("event_tel").focus();
+		        return false;
+		    }
+				
+		    // Additional validation can be added here if needed
+		    if (multiFile.files.length === 0) {
+	            alert('파일을 선택해주세요.');
+	            return false;
+	        }
+		    return confirm("작성된 게시물을 저장하시겠습니까?");
 		}
 	</script>
 <!-- <script src="./js/write.js"></script> -->
@@ -245,10 +291,10 @@ ev.setEvent_content(ev.getEvent_content().replace("</p>", ""));
 				<div class="d-flex">
 					<label class="btn float-left ms-2 my-2" style="background-color:#02c9a5; color:white; ">
 					이미지 선택			
-					<input type="file" name="multiFile" multiple style="display: none;">
+					<input type="file" name="multiFile" id="multiFile" multiple style="display: none;">
 					</label>
 				</div>	
-				<div class="ms-4" id="preview" style="overflow-y: auto; max-height: 230px; text-align: left;"></div>
+				<div class="ms-4" id="preview" style="overflow-y: auto; max-height: 300px; text-align: left;"></div>
 			</div>	
 			<br>
 			<button class="w-100 btn" style="background-color:#02c9a5; color:white; ">

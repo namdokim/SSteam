@@ -32,6 +32,7 @@
         var foodWebsite = document.getElementById("food_website").value;
         var foodContent = document.getElementById("food_content").value;
         var LType = document.getElementById("LType").value;
+        var multiFile = document.getElementById("multiFile");
 
         // 모든 필수 입력란이 작성되지 않았을 경우 경고 메시지를 보여주고 false를 반환하여 폼 제출을 막습니다.
         if (foodName === "" ) {
@@ -70,11 +71,18 @@
             alert("맛집설명을 작성해주세요 .");
             return false;
         }
-        if (LType === "" ) {
+        if (LType === "TT" ) {
             alert("지역 타입을 작성해주세요 .");
             return false;
         }
-
+        
+        if (multiFile.files.length === 0) {
+            alert('파일을 선택해주세요.');
+            return false;
+        } else if (multiFile.files.length < 5){
+        	alert('이미지를 5개이상 넣어주세요.');
+        	return false;
+        }
         // 모든 필수 입력란이 작성된 경우 true를 반환하여 폼 제출을 허용합니다.
         return true;
     }
@@ -182,7 +190,7 @@
 				<h1 class="h5 mb-3 fw-normal text-muted">파일 업로드</h1>
 				<label class="btn" style="background-color:#FFA500; color:white">
 					이미지 선택			
-					<input type="file" name="multiFile" multiple style="display: none;">
+					<input type="file" id="multiFile" name="multiFile" multiple style="display: none;">
 				</label>
 				<div id="preview"></div>
 				<br>

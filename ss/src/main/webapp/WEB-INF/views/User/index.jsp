@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
+<link rel="stylesheet" href="css/font.css">
 	<style>
 
 	#slide {
@@ -101,9 +102,5 @@
 	<%@ include file="/WEB-INF/views/include/Foodbest.jsp" %>
 	<%@ include file="/WEB-INF/views/include/Festbest.jsp" %>
 </main>
-
-
-<!-- 채팅 테스트 개발 중 (혁수) -->
-<a href = "<%=request.getContextPath() %>/Community/ChattingTest.do"> 채팅 테스트 </a>
 
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>
