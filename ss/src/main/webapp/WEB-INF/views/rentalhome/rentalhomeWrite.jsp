@@ -95,7 +95,7 @@ function decodeHTMLEntities (str) {
 }
 
 .form-signin {
-  max-width: 700px;
+  max-width: 800px;
   padding: 15px;
 }
 
@@ -127,8 +127,8 @@ function decodeHTMLEntities (str) {
 </style>
 
 <div class="masthead text-center pt-5" style="height:200%; font-family: 'TheJamsil5Bold';">
-	<div class="form-signin card shadow-sm w-100 m-auto" >
-		<form action="rentalhomeWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
+	<div class="form-signin m-auto w-100" >
+		<form class="card shadow-sm w-100 py-3 px-3" action="rentalhomeWrite.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
 			<svg xmlns="http://www.w3.org/2000/svg" style="color:#0863ec" width="72" height="60" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
 			  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>

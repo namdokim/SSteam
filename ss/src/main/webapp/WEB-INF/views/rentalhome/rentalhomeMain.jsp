@@ -519,19 +519,19 @@ input[type="range"]::-webkit-slider-thumb {
 	height:400px
 }	
 
-.btn{
+.saerchView .btn{
 	border:none;
 	color:black;
 	background-color:transparent;
 }
 
-.btn-check:checked+.btn{
+.searchView .btn-check:checked+.btn{
 	color:black;
 	background-color:#f5f9fe;
 	border:1px solid lightgray; 
 }
 </style>
-<div class="container-fluid " style="background-color:#FBFDFF; font-family: 'TheJamsil5Bold';">
+<div class="container-fluid " style="background-color:#f7fafc; font-family: 'TheJamsil5Bold';">
 	<div class="masthead py-5">
 		<div class="container position-relative sticky-top">
 			<div class="row justify-content-center">
@@ -623,7 +623,7 @@ input[type="range"]::-webkit-slider-thumb {
 			</div>
 			<div class="container" style=" margin: 20px 18px 0px 0px; vertical-align: top;">
 				<div class="row">
-					<div class="card shadow-sm col-md-3 mt-3 text-center" style="padding:10px; display:block;">
+					<div class="searchView card shadow-sm col-md-3 mt-3 text-center" style="padding:10px; display:block;">
 						<div class="fw-semibold ms-3" style="font-size: 12pt; text-align: left;">가격</div>
 						<div class="middle" style="margin:20px 0px; text-align:center;">
 							<div class="multi-range-slider" style="position: relative; width:80%; display:inline-block;">
@@ -842,7 +842,7 @@ input[type="range"]::-webkit-slider-thumb {
 							<span onclick="location.href='rentalhomeReserveList.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px; cursor:pointer;">MY 예약 리스트</span>
 						</c:if>
 							<div style="width:5px;"></div>
-						<c:if test="${login != null && login.uType eq business }">
+						<c:if test="${login != null && login.uType == 'business' }">
 							<span onclick="location.href='rentalhomeWrite.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px;">숙소 등록</span>
 						</c:if>
 					</div>

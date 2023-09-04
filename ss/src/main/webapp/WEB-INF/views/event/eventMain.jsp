@@ -354,7 +354,7 @@ input[type="range"]::-webkit-slider-thumb {
     height:400px
 }	
 </style>
-<div class="container-fluid " style="background-color:#fafefb;">
+<div class="container-fluid " style="background-color:#fafefb; font-family: 'TheJamsil5Bold';">
 	<div class="masthead py-5">
 		<div class="container position-relative">
 		    <div class="row justify-content-center">

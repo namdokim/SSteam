@@ -541,7 +541,7 @@ function decodeHTMLEntities (str) {
 		background-color:#2078fc;
 	}
 </style>
-<div style="width:1920px; text-align:center; background-color:#FBFDFF; padding-bottom:50px; font-family: 'TheJamsil5Bold';">
+<div style="width:1920px; text-align:center; background-color:#f7fafc; padding-bottom:50px; font-family: 'TheJamsil5Bold';">
 	<div class="modal fade" id="rentalhome_attach" tabindex="-1" aria-labelledby="rentalhome_attachLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-xl">
 			<div class="modal-content">

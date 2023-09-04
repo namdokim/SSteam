@@ -145,7 +145,7 @@ function decodeHTMLEntities (str) {
 }
 
 .form-signin {
-  max-width: 700px;
+  max-width: 800px;
   padding: 15px;
 }
 
@@ -177,7 +177,7 @@ function decodeHTMLEntities (str) {
 </style>
 
 <div class="masthead text-center pt-5" style="height:200%; font-family: 'TheJamsil5Bold';">
-	<div class="form-signin card shadow-sm w-100 m-auto" >
+	<div class="form-signin m-auto w-100">
 		<!-- Modal -->
 		<div class="modal fade" id="rentalhome_attach" tabindex="-1" aria-labelledby="rentalhome_attachLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-xl">
@@ -205,7 +205,7 @@ function decodeHTMLEntities (str) {
 				</div>
 			</div>
 		</div>
-		<form action="rentalhomeModify.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
+		<form class="card shadow-sm w-100 py-3 px-3" action="rentalhomeModify.do" method="post" style="text-align: center;" enctype="multipart/form-data" onsubmit="return validation()">
 			<input type="hidden" name="rentalhome_idx" value="${rentalhomeVO.rentalhome_idx}">
 			<a class="navbar-brand" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do" title="Arcalive">
 			<svg xmlns="http://www.w3.org/2000/svg" style="color:#0863ec" width="72" height="60" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
