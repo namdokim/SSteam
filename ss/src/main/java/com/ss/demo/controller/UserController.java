@@ -37,9 +37,13 @@ import com.ss.demo.domain.FoodVO;
 import com.ss.demo.domain.PageMaker;
 import com.ss.demo.domain.RentalhomeVO;
 import com.ss.demo.domain.Rentalhome_LikeVO;
+import com.ss.demo.domain.Rentalhome_SearchVO;
 import com.ss.demo.domain.SearchVO;
 import com.ss.demo.domain.UserVO;
+import com.ss.demo.service.EventService;
+import com.ss.demo.service.FoodService;
 import com.ss.demo.service.MailSendService;
+import com.ss.demo.service.RentalhomeService;
 import com.ss.demo.service.UserService;
 import com.ss.demo.service.kakaologin;
 
@@ -50,6 +54,8 @@ public class UserController
 	// 유저 서비스 
 	@Autowired
 	UserService us;
+
+	
 	
 	// 이메일 서비스 불러오기
 	@Autowired

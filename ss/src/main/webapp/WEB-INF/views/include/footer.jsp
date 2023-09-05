@@ -1,12 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-
 <style>
 html,
   body {
     height: auto;
   }
-
 	
   .content {
     flex: 1;
@@ -23,6 +20,7 @@ html,
     bottom: 0;
     width: 100%;
     margin-top: auto;
+    height: 300px;
     z-index: -1; /* 푸터가 다른 요소 위에 표시되도록 z-index 설정 */
   }
    .bd-placeholder-img {
@@ -77,31 +75,37 @@ html,
       }
 </style>
 	<!-- 하단 우측  스크롤 위로 올리기  -->
-	<div id="bottomClick" class="position-fixed bottom-0 end-0 md-3 my-4 mx-3 bd-mode-toggle">
-		<button class="btn btn-bd-primary py-2 d-flex align-items-center" type="button" onclick="topClick();" style="z-index:999;">
-			<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
+<div id="bottomClick" class="position-fixed bottom-0 end-0 md-3 my-4 mx-3 bd-mode-toggle">
+	<button class="btn btn-bd-primary py-2 d-flex align-items-center" type="button" onclick="topClick();" style="z-index:999;">
+		<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
-			</svg>
-		</button>
-	</div>
-		<footer class="footer mt-auto py-3 bg-light navbar-wrapper sticky-bottom root-container shadow-sm" style="position: relative;">
-			<div class="container">
-				<p class="text-center text-muted">Live v0.011&nbsp;<small class="text-muted">(000000)</small>
-					<span class="sep"></span>
-					<a href="mailto:leghorn0897@gmail.com">contact</a>
-					<span class="sep"></span>
-					<a href="https://arca.live/policy?gt=1#googtrans(ko)">PRIVACY POLICY AND RULES OF USE</a>					
-				</p>
-				<p class="text-center text-muted">dev for team SADARI 
-					<span class="sep"></span>
-					make with &lt;3  jeonju, republic of korea
-				</p>
-				<p class="footer-current-users text-center text-muted">
-					<span class="ion-ios-people"></span>&nbsp;
-					<span id="arcalive-current-users">000000</span>명
-				</p>
+		</svg>
+	</button>
+</div>
+<div class="root-container mt-auto py-3 navbar-wrapper sticky-bottom root-container shadow-sm" style="position:relative; background-color:#f8f9fa; font-family: 'TheJamsil5Bold';">
+	<div class="container">
+		<footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-2">
+			<div class="col mb-3 px-0" style="width:30%;">
+				<a class="navbar-brand" href="<%=request.getContextPath() %>/" title="Arcalive" style="padding: 0px; ">
+					<img src="${pageContext.request.contextPath}/resources/img/logo_test4.png" width="250px" height="80px">
+				</a>
+				<div style="margin:20px 0px;"></div>
+				<div class="text-body-secondary text-muted">주소 : 전북 전주시 덕진구 금암동 123-4</div>
+				<div class="text-body-secondary text-muted">대표 : 김진규(ezen@gmail.com)</div>
+				<div class="text-body-secondary text-muted">사업자번호 : 313-03-798521</div>
+				<div class="text-body-secondary text-muted">개인정보담당자 : 홍세정(ezen@naver.com)</div>
+			</div>
+			<div class="col mx-3 py-5" style="width:20%;">
+			</div>
+			<div class="col mx-3" style="width:45%; padding-top:30px;">
+				<h3>프로젝트 명</h3>
+				<h5 class="text-muted ps-5 mt-3">AWESOME TRIP</h5><br>
+				<h3>조원</h3>
+				<h5 class="text-muted ps-5 mt-3">김남도 설무리 홍세정 김진규</h5>
 			</div>
 		</footer>
+	</div>
+</div>	
 <!-- 스크롤 이벤트 보여주기 안 보여주기  -->
 <script type="text/javascript">
 	

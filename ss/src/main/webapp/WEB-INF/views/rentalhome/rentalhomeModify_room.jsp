@@ -244,7 +244,7 @@ function decodeHTMLEntities (str) {
 }		
 .masthead {
     position: relative;
-    background: url(../img/homeback.jpg) no-repeat center center;
+    background: url(${pageContext.request.contextPath}/resources/img/homeback.jpg) no-repeat center center;
     background-size: cover;
     height:400px
 }	

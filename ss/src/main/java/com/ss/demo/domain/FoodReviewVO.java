@@ -96,7 +96,8 @@ public class FoodReviewVO {
 		return avg;
 	}
 	public void setAvg(double avg) {
-		this.avg = avg;
+		double double1 = Math.round(avg * 10.0) / 10.0;
+		this.avg = double1;
 	}
 	
 	//==========================================

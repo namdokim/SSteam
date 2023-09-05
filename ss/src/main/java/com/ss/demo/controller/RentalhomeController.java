@@ -615,6 +615,7 @@ public class RentalhomeController {
 			UserVO loginVO = (UserVO)session.getAttribute("login");
 			rentalhome_payVO.setUno(loginVO.getuNo());
 			rentalhomeService.insert_pay(rentalhome_payVO);
+			rentalhomeService.update_point_minus(rentalhome_payVO);
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("결제 실패");
@@ -683,6 +684,7 @@ public class RentalhomeController {
 		payVO.setRefund_date(timestamp);
 		payVO.setPay_status("refund");
 		rentalhomeService.update_pay_refund(payVO);
+		rentalhomeService.update_point_plus(payVO);
 
 		return true;
 	}

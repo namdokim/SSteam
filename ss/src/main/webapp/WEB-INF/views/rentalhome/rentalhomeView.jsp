@@ -5,7 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="../css/datepicker.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
 </head>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services"></script>
@@ -425,13 +425,13 @@ function decodeHTMLEntities (str) {
 	.user {
 		width: 50px;
 		height: 50px;
-		background-image: url(../img/love_full.png);
+		background-image: url(${pageContext.request.contextPath}/resources/img/love_full.png);
 		background-size: contain;
 		background-repeat: no-repeat;
 		background-position: center;
 	}
 	.hotel {
-		background-image: url(../img/hotel.jpg);
+		background-image: url(${pageContext.request.contextPath}/resources/img/hotel.jpg);
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -572,7 +572,7 @@ function decodeHTMLEntities (str) {
 			<div id="insert_img" style="margin:20px; text-align:left;"></div>
 		</div>
 	</div>
-	<div style="position:sticky; width:100%; top:0px; background-color:#0863ec; z-index:100; border-radius:0px 0px 20px 20px; margin:0 auto; padding:10px;  line-height:50px;">
+	<div style="position:sticky; width:100%; top:0px; background-color:#0863ec; z-index:9; border-radius:0px 0px 20px 20px; margin:0 auto; padding:10px;  line-height:50px;">
 		<div style="background-color:white;border:1px solid lightgray; width:250px; height:50px; display:inline-block; border-radius:5px; text-align:left; padding:0px 10px; position:relative;" >
 			<span style="color:#282828; font-size:9pt; line-height:normal; position:absolute; top:5px; left:10px;">여행지</span><br>
 			<input type="text" value="${searchVO.location}" id="location" class="search" readonly style="font-weight:bold; font-size:11pt;width:230px;position:absolute; top:23px; left:10px; height:25px; outline:none;">
@@ -624,12 +624,12 @@ function decodeHTMLEntities (str) {
 			</div>
 		</div>
 										
-		<span id="love_full" onclick="delete_like()" src="../img/love_full.png" class="like" style="color:#fe7c4d; display:none; width:50px; height:50px; position:absolute; top:30px; right:210px;">
+		<span id="love_full" onclick="delete_like()" src="${pageContext.request.contextPath}/resources/img/love_full.png" class="like" style="color:#fe7c4d; display:none; width:50px; height:50px; position:absolute; top:30px; right:210px;">
 			<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
 				<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
 			</svg>
 		</span>
-		<span id="love_empty" onclick="insert_like()" src="../img/love_empty.png" class="like" style="color:silver; width:50px; height:50px; position:absolute; top:30px; right:210px;">
+		<span id="love_empty" onclick="insert_like()" src="${pageContext.request.contextPath}/resources/img/love_empty.png" class="like" style="color:silver; width:50px; height:50px; position:absolute; top:30px; right:210px;">
 			<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
 			<path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
 			</svg>
@@ -678,42 +678,42 @@ function decodeHTMLEntities (str) {
 			<div style="width:100px; height:30px; margin:5px 0px;"><span style="font-weight:bold;color:#282828;">호텔 시설</span></div>
 				<c:if test="${rentalhomeVO.inPool_yn == 'Y' || rentalhomeVO.outPool_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
+						<img src="${pageContext.request.contextPath}/resources/img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.parking_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
+						<img src="${pageContext.request.contextPath}/resources/img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.pickup_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
+						<img src="${pageContext.request.contextPath}/resources/img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.wifi_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+						<img src="${pageContext.request.contextPath}/resources/img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.beach_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
+						<img src="${pageContext.request.contextPath}/resources/img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
 					</div>	
 				</c:if>
 				<c:if test="${rentalhomeVO.bbq_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
+						<img src="${pageContext.request.contextPath}/resources/img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.breakfast_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
+						<img src="${pageContext.request.contextPath}/resources/img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.animal_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
+						<img src="${pageContext.request.contextPath}/resources/img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
 					</div>
 				</c:if>
 			</div>
@@ -755,21 +755,21 @@ function decodeHTMLEntities (str) {
 						<span style="font-weight:bold; font-size:15pt;">${list.name }</span><br>
 					</div>
 					<div style="display:inline-block; width:180px; height:30px;">
-						<img src="../img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인${list.min_person}명 - 성인${list.max_person}명</span>
+						<img src="${pageContext.request.contextPath}/resources/img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인${list.min_person}명 - 성인${list.max_person}명</span>
 					</div>
 					<c:if test="${list.bed_info != ''}">
 						<div style="display:inline-block; width:150px; height:30px;">
-							<img src="../img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${list.bed_info}</span>
+							<img src="${pageContext.request.contextPath}/resources/img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${list.bed_info}</span>
 						</div>
 					</c:if>
 					<c:if test="${list.smoking eq 'N'}">
 						<div style="display:inline-block; width:120px; height:30px;">
-							<img src="../img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
+							<img src="${pageContext.request.contextPath}/resources/img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
 						</div>
 					</c:if>
 					<c:if test="${list.wifi eq 'Y'}">
 						<div style="display:inline-block; width:100px; height:30px;">
-							<img src="../img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+							<img src="${pageContext.request.contextPath}/resources/img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 						</div>
 					</c:if>
 					<br>
@@ -1179,42 +1179,42 @@ function decodeHTMLEntities (str) {
 			<div style="display:inline-block; width:800px;">
 				<c:if test="${rentalhomeVO.inPool_yn == 'Y' || rentalhomeVO.outPool_yn == 'Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
+						<img src="${pageContext.request.contextPath}/resources/img/pool.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">수영장</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.parking_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
+						<img src="${pageContext.request.contextPath}/resources/img/parking.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">주차장</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.pickup_yn  =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
+						<img src="${pageContext.request.contextPath}/resources/img/pickup.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">픽업</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.wifi_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+						<img src="${pageContext.request.contextPath}/resources/img/wifi.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.beach_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
+						<img src="${pageContext.request.contextPath}/resources/img/beach.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">인근해변</span>
 					</div>	
 				</c:if>
 				<c:if test="${rentalhomeVO.bbq_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
+						<img src="${pageContext.request.contextPath}/resources/img/bbq.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">바베큐</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.breakfast_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
+						<img src="${pageContext.request.contextPath}/resources/img/breakfast.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">조식</span>
 					</div>
 				</c:if>
 				<c:if test="${rentalhomeVO.animal_yn =='Y'}">
 					<div style="display:inline-block; width:100px; height:30px; margin:10px 0px;">
-						<img src="../img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
+						<img src="${pageContext.request.contextPath}/resources/img/dog.png" style="width:30px; height:30px;"><span style="font-size:10pt; margin-left:5px;">반려동물</span>
 					</div>
 				</c:if>
 			</div>

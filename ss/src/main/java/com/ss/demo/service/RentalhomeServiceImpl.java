@@ -250,5 +250,17 @@ public class RentalhomeServiceImpl implements RentalhomeService{
 		
 		return rentalhomeDAO.update_review_status(room_idx);
 	}
+
+	@Override
+	public int update_point_minus(Rentalhome_PayVO payVO) {
+		
+		return rentalhomeDAO.update_point_minus(payVO);
+	}
+
+	@Override
+	public int update_point_plus(Rentalhome_PayVO payVO) {
+		
+		return rentalhomeDAO.update_point_plus(payVO);
+	}
 	
 }

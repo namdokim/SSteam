@@ -89,4 +89,8 @@ public interface RentalhomeService {
 	public int insert_review_report(Rentalhome_Review_ReportVO reportVO);
 	
 	public int update_review_status(int room_idx);
+
+	public int update_point_minus(Rentalhome_PayVO payVO);
+	
+	public int update_point_plus(Rentalhome_PayVO payVO);
 }

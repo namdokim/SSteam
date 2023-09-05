@@ -29,7 +29,7 @@ if (ev.getEvent_content() != null) {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services,clusterer"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=089c5e3c9c5fcbe308692c32c61c06b8&libraries=services,clusterer"></script>
 <script>
 window.onload = function()
 {
@@ -71,7 +71,7 @@ window.onload = function()
 			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 			var marker = new kakao.maps.Marker({ map: map, position: coords });
 			   var infowindow = new kakao.maps.InfoWindow({
-				   content: '<div class="ms-5" style="text-align:center">${ev.event_title}</div>'
+				   content: '<div class="text-center" style="width:150px;">${ev.event_title}</div>'
 		        });
 		        infowindow.open(map, marker);// 결과값으로 받은 위치를 마커로 표시합니다
 			map.setCenter(coords); } });												// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
@@ -387,7 +387,7 @@ function eventReviewModify(obj,comment_number,event_review_grade){
 		</ul >
 		<ul class="col-4 border-start">
 			<a type="button" class="btn btn-light nav-link link-button" href="#scrollspyHeading3">
-				주변정보
+				위치안내
 			</a>
 		</ul>
 	</nav >
@@ -407,16 +407,7 @@ function eventReviewModify(obj,comment_number,event_review_grade){
 		<br>
 		<h4 style="color:gray">무료</h4>
 	</div>
-	<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0"  >
-		<h3>홈페이지</h3>
-		<br>
-		<a class="btn btn-lg btn-link" href="www.gimje.go.kr" role="button">www.gimje.go.kr</a>
-	</div>
-	<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-2" tabindex="0"  >
-		<h3>주최 / 주관</h3>
-		<br>
-		<h4 style="color:gray">김제시 / (사)김제시지평선축제제전위원회</h4>
-	</div>
+	
 	<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top border-bottom mx-auto py-2" tabindex="0"  >
 		<h3>전화번호</h3>
 		<br>
@@ -582,7 +573,7 @@ function eventReviewModify(obj,comment_number,event_review_grade){
 	        </div>
 	    </div>
 		<c:forEach items="${list}" var="review">
-			<div class="lead review container review-container card py-3 my-2 shadow-sm" >
+			<div class="lead review container review-container card py-3 my-2 shadow-sm lead" >
 				<div class="row">
 					<div class="col-md-2 text-center px-0">
 			            <h1 class="font-400 ">
@@ -718,13 +709,13 @@ function eventReviewModify(obj,comment_number,event_review_grade){
 		
 <!-- 			<p style="text-align: center;"><span style="color:#000000;"> 첫 리뷰를 작성해 주세요 </span></p> -->
 	<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="border-top mx-auto py-3 mt-5" tabindex="0" id="scrollspyHeading1" >
-		<p class="ititle">위치안내</p>
+		<p class="ititle" id="scrollspyHeading3">위치안내</p>
 		<br>
 		
 		<div id="map" style="width: 100%; height: 40vh; overflow: hidden;"></div>
 	</div>
 	
-	<div class="row">
+<!-- 	<div class="row">
 		<div class="col-12 col-md-6" id="scrollspyHeading3">
 		<p class="ititle1 mt-3 my-md-4">주변 음식</p>					
 			<div class="double-slider-hold-arround owl-carousel owl-no-dots visible-slider-medium owl-loaded owl-drag">
@@ -764,7 +755,7 @@ function eventReviewModify(obj,comment_number,event_review_grade){
 				<div class="owl-nav disabled"><div class="owl-prev"><i class="fa fa-angle-left"></i></div><div class="owl-next"><i class="fa fa-angle-right"></i></div></div><div class="owl-dots"><div class="owl-dot active"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div></div>
 			</div>
 		</div>
-	</div>	
+	</div>	 -->
 </div>	
 </div>
 		<!-- 메인 부문 ======================================================================= -->

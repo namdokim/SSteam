@@ -6,8 +6,10 @@
 %> --%>
 
 <!-- 첨부파일 수정 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-window.onload = function(){
+window.onload = function()
+{
 	limitTextarea(document.getElementById("food_content"),200);
 	const openButton = document.getElementById("open-gallery-button");
 	const modal = document.getElementById("gallery-modal");
@@ -30,7 +32,87 @@ window.onload = function(){
 	  }
 	});
 	
+	//주소찾기 
+	document.getElementById("search_address").addEventListener("click", function(){
+      new daum.Postcode({
+         oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+            document.getElementById("food_address").value = data.address; // 주소 넣기
+         }
+      }).open();
+   });
 }
+
+	
+    function validateForm() {
+    	/* alert("유효성검사  "); */
+        var foodName = document.getElementById("food_name").value;
+        var foodAddress = document.getElementById("food_address").value;
+        var foodPhone = document.getElementById("food_phone").value;
+        var foodKind = document.getElementById("food_food_kind").value;
+        var foodPrice = document.getElementById("food_avg_price").value;
+        var foodWorking = document.getElementById("food_working_hours").value;
+        var foodHoliday = document.getElementById("food_holiday").value;
+        var foodWebsite = document.getElementById("food_website").value;
+        var foodContent = document.getElementById("food_content").value;
+        var LType = document.getElementById("LType").value;
+
+        // 모든 필수 입력란이 작성되지 않았을 경우 경고 메시지를 보여주고 false를 반환하여 폼 제출을 막습니다.
+        if (foodName === "" ) {
+            alert("가게이름을 작성해주세요 .");
+            return false;
+        }
+        if (foodAddress === "" ) {
+            alert("주소를 작성해주세요 .");
+            return false;
+        }
+        if (foodPhone === "" ) {
+            alert("전화번호를 작성해주세요 .");
+            return false;
+        }
+        if (foodKind === "" ) {
+            alert("대표음식종류를 작성해주세요 .");
+            return false;
+        }
+        if (foodPrice === "" ) {
+            alert("음식평균가격대를 작성해주세요 .");
+            return false;
+        }
+        if (foodWorking === "" ) {
+            alert("영업시간을 작성해주세요 .");
+            return false;
+        }
+        if (foodHoliday === "" ) {
+            alert("휴일을 작성해주세요 .");
+            return false;
+        }
+        // 빈값일때는 빈값을 받고, 값을 넣었을 때는 http로 받도록 유효성 검사 
+        /*  if (foodWebsite === "") {
+             alert("웹사이트를 작성해주세요.");
+             return false;
+         } */
+	// 웹사이트 유효성 검사 추가 
+	if (foodWebsite !== "") {
+	    if (!foodWebsite.startsWith("http://") && !foodWebsite.startsWith("https://")) {
+	        alert("웹사이트 주소는 'http://' 또는 'https://'로 시작해야 합니다.");
+	        return false;
+	    }
+	}
+
+
+        if (foodContent === "" ) {
+            alert("맛집설명을 작성해주세요 .");
+            return false;
+        }
+        if (LType === "" ) {
+            alert("지역 타입을 작성해주세요 .");
+            return false;
+        }
+
+        // 모든 필수 입력란이 작성된 경우 true를 반환하여 폼 제출을 허용합니다.
+        return true;
+    }
 </script>
 
 <!-- CSS ================================================================= -->
@@ -281,64 +363,4 @@ window.onload = function(){
 		}
 	</script> -->
 	
-	<!-- 유효성 검사확인  -->
-	<script>
-    function validateForm() {
-        var foodName = document.getElementById("food_name").value;
-        var foodAddress = document.getElementById("food_address").value;
-        var foodPhone = document.getElementById("food_phone").value;
-        var foodKind = document.getElementById("food_food_kind").value;
-        var foodPrice = document.getElementById("food_avg_price").value;
-        var foodWorking = document.getElementById("food_working_hours").value;
-        var foodHoliday = document.getElementById("food_holiday").value;
-        var foodWebsite = document.getElementById("food_website").value;
-        var foodContent = document.getElementById("food_content").value;
-        var Ltype = document.getElementById("Ltype").value;
-
-        // 모든 필수 입력란이 작성되지 않았을 경우 경고 메시지를 보여주고 false를 반환하여 폼 제출을 막습니다.
-        if (foodName === "" ) {
-            alert("가게이름을 작성해주세요 .");
-            return false;
-        }
-        if (foodAddress === "" ) {
-            alert("주소를 작성해주세요 .");
-            return false;
-        }
-        if (foodPhone === "" ) {
-            alert("전화번호를 작성해주세요 .");
-            return false;
-        }
-        if (foodKind === "" ) {
-            alert("대표음식종류를 작성해주세요 .");
-            return false;
-        }
-        if (foodPrice === "" ) {
-            alert("음식평균가격대를 작성해주세요 .");
-            return false;
-        }
-        if (foodWorking === "" ) {
-            alert("영업시간을 작성해주세요 .");
-            return false;
-        }
-        if (foodHoliday === "" ) {
-            alert("휴일을 작성해주세요 .");
-            return false;
-        }
-        if (foodWebsite === "" ) {
-            alert("웹사이트를 작성해주세요 .");
-            return false;
-        }
-        if (foodContent === "" ) {
-            alert("맛집설명을 작성해주세요 .");
-            return false;
-        }
-        if (Ltype === "" ) {
-            alert("지역을 선택해주세요 .");
-            return false;
-        }
-
-        // 모든 필수 입력란이 작성된 경우 true를 반환하여 폼 제출을 허용합니다.
-        return true;
-    }
-	</script>
 <%@ include file="../include/footer.jsp" %>  

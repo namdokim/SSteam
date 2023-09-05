@@ -267,19 +267,19 @@ window.onload = function (){
 			<span style="position:absolute; left:0px; top:70px; font-size:15pt; font-weight:bold;">${name }</span><br>
 			<span style="position:absolute; left:0px; top:100px; color:#545454; font-size:12pt;">${roomVO.name }</span><br>
 			<div style="display:inline-block; width:180px; height:30px;">
-				<img src="../img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인${roomVO.min_person}명 - 성인 ${roomVO.max_person}명</span>
+				<img src="${pageContext.request.contextPath}/resources/img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인${roomVO.min_person}명 - 성인 ${roomVO.max_person}명</span>
 			</div>
 			<c:if test="${roomVO.smoking eq 'N' }">
 				<div style="display:inline-block; width:120px; height:30px;">
-					<img src="../img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
+					<img src="${pageContext.request.contextPath}/resources/img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
 				</div>
 			</c:if>
 			<div style="display:inline-block; width:150px; height:30px;">
-				<img src="../img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${roomVO.bed_info}</span>
+				<img src="${pageContext.request.contextPath}/resources/img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${roomVO.bed_info}</span>
 			</div>
 			<c:if test="${roomVO.wifi eq 'Y'}">
 				<div style="display:inline-block; width:100px; height:30px;">
-					<img src="../img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+					<img src="${pageContext.request.contextPath}/resources/img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 				</div>
 			</c:if>
 			<div style="margin:20px 0px;">

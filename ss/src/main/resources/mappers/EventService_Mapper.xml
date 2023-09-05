@@ -85,7 +85,8 @@
 	
 
 	<select id="selectAll" parameterType="searchVO" resultType="ev">
-		SELECT *, (select avg(event_review_grade) from event_review_list where event_number = a.event_number) as avg
+		SELECT *, (select avg(event_review_grade) from event_review_list where event_number = a.event_number) as avg,
+				  (SELECT uNick FROM user WHERE uNo = a.uNo) as uNick
 		<if test='uNo != null'>, (select count(*) from event_like where event_number = a.event_number and uNo = #{uNo}) as count
 		</if>
 		FROM (SELECT * FROM event_index LEFT OUTER JOIN (select attach_number,event_number as event_number2 ,attach_logical_name,attach_physical_name,Thumbnail from event_attach where Thumbnail = 'Y') D 

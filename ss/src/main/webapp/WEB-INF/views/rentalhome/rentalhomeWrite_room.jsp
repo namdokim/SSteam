@@ -138,7 +138,11 @@ function validation(){
 			return false;
 		}
 	}
-
+	var multiFile = document.getElementById("multiFile");
+	if (multiFile.files.length === 0) {
+		alert('파일을 선택해주세요.');
+		return false;
+	}
 	if(!confirm("객실을 등록하시겠습니까?")){
 		return false;
 	}
@@ -195,7 +199,7 @@ function decodeHTMLEntities (str) {
 }		
 .masthead {
     position: relative;
-    background: url(../img/homeback.jpg) no-repeat center center;
+    background: url(${pageContext.request.contextPath}/resources/img/homeback.jpg) no-repeat center center;
     background-size: cover;
     height:400px
 }	
@@ -357,7 +361,7 @@ function decodeHTMLEntities (str) {
 				<div class="d-flex">
 					<label class="btn btn-primary float-left ms-2 my-2" >
 					이미지 선택			
-					<input type="file" name="multiFile" multiple required style="display: none;">
+					<input type="file" name="multiFile" id="multiFile" multiple style="display: none;">
 					</label>
 				</div>	
 				<div class="ms-4" id="preview" style="overflow-y: auto; max-height: 400px; text-align: left;"></div>
