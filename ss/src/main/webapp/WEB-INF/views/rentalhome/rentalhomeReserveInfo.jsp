@@ -72,10 +72,10 @@ window.onload = function() {
 	});
 };
 	function cancelPay(merchant_uid){
+		const reserve_number = '${payVO.reserve_number}';
 		if(!confirm("예약을 취소하시겠습니까?")){
 			return;
 		}
-		var reserve_number = '${payVO.reserve_number}';
 		$.ajax({
 			url:'rentalhome_pay_cancel.do',
 			method:'post',
@@ -171,7 +171,7 @@ window.onload = function() {
 		color:#fff;
 	}
 </style>
-<div style="width:1920px; text-align:left; background-color:#dfecfb; padding:50px 0px; font-family: 'TheJamsil5Bold';">
+<div style="width:1920px; text-align:left; background-color:#f1f7fd; padding:50px 0px; font-family: 'TheJamsil5Bold';">
 	<div class="view" style="width:1224px; margin:0 auto; padding:58px; margin:20px auto; line-height:40px;">
 		<div style="width:100%; position:relative;">
 			<div style="text-align:center; margin:30px 0px;">
@@ -189,19 +189,19 @@ window.onload = function() {
 				<span style="color:#545454; font-size:12pt;">${payVO.product_name}</span>
 			</div>
 			<div style="display:inline-block; width:180px; height:30px;">
-				<img src="../img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인 ${roomVO.min_person }명 - 성인 ${roomVO.max_person }명</span>
+				<img src="${pageContext.request.contextPath}/resources/img/user.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">성인 ${roomVO.min_person }명 - 성인 ${roomVO.max_person }명</span>
 			</div>
 			<div style="display:inline-block; width:150px; height:30px;">
-				<img src="../img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${roomVO.bed_info }</span>
+				<img src="${pageContext.request.contextPath}/resources/img/bed.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">${roomVO.bed_info }</span>
 			</div>
 			<c:if test="${roomVO.smoking eq 'N'}">
 				<div style="display:inline-block; width:120px; height:30px;">
-					<img src="../img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
+					<img src="${pageContext.request.contextPath}/resources/img/dont-smoke.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">금연객실</span>
 				</div>
 			</c:if>
 			<c:if test="${roomVO.wifi eq 'Y'}">
 				<div style="display:inline-block; width:100px; height:30px;">
-					<img src="../img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
+					<img src="${pageContext.request.contextPath}/resources/img/wifi.png" style="width:20px; height:20px;"><span style="font-size:10pt; margin-left:5px;">와이파이</span>
 				</div>
 			</c:if>
 			<div style="margin:15px 0px;">

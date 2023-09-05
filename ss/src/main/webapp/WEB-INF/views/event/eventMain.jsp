@@ -192,7 +192,12 @@ function delete_(index,event_number){
 
 </script>
 	<style type="text/css">
-
+	
+	.active{
+		background-color: #02c9a5 !important;
+		color:white !important;
+	    }
+	
 	a {
 		text-decoration:none;
 		color:black;
@@ -211,7 +216,7 @@ function delete_(index,event_number){
 		border-radius:0px;
 	}
 	.hotel {
-		background-image: url(../img/hotel.jpg);
+		background-image: url(${pageContext.request.contextPath}/resources/img/hotel.jpg);
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -349,7 +354,7 @@ input[type="range"]::-webkit-slider-thumb {
 }		
 .masthead {
     position: relative;
-    background: url(../img/backboard.jpg) no-repeat center center ;
+    background: url(${pageContext.request.contextPath}/resources/img/backboard.jpg) no-repeat center center ;
     background-size: cover;
     height:400px
 }	
@@ -371,13 +376,14 @@ input[type="range"]::-webkit-slider-thumb {
 							<form class="form-subscribe" action="eventMain.do" method="get" id="contactForm" data-sb-form-api-token="API_TOKEN">
 								    <!-- Email address input-->
 								<div class="row">
-									<div class="col-auto px-0" style="display: none;">
-								    	<select class="form-select-sm font-weight-bold " size="1" aria-label="Size 3 select example" style="height: 50px; color:#777777;" >
-											<option value="event_title" >축제 이름</option>
-										</select>
+									<div class="col-auto px-0" style="">
+								    		<select name="searchType" class="form-select-sm font-weight-bold " size="1" aria-label="Size 3 select example" style="height: 50px; color:#777777;" >
+												<option value="event_title" <c:if test="${searchVO.searchType == 'event_title'}">selected</c:if>>축제이름</option> 
+												<option value="event_local" <c:if test="${searchVO.searchType == 'event_local'}">selected</c:if>>축제주소</option> 
+											</select> &nbsp; 
 									 </div>	
 								    <div class="col">
-								        <input class="form-control form-control-lg" id="emailAddress" type="text" placeholder="검색어를 입력하세요" data-sb-validations="required,email" data-sb-can-submit="no">
+								        <input class="form-control form-control-lg" id="emailAddress" type="text" placeholder="검색어를 입력하세요" data-sb-validations="required,email" data-sb-can-submit="no" name="searchValue" size="30" value="${searchVO.searchValue}" >
 								        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
 								        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
 								    </div>
@@ -480,61 +486,52 @@ input[type="range"]::-webkit-slider-thumb {
 								
 									<li class="nav-item" >
 										<a href="eventMain.do?type=TT" class="nav-link link-dark  <%= activeTab.equals("TT") ? "active" : "" %>"  style="text-align:center;">
-											
-											전체
+										<span class="fs-5">전체</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=GG" class="nav-link link-dark <%= activeTab.equals("GG") ? "active" : "" %>" style="text-align:center;">
-											
-											서울 / 경기
+											<span class="fs-5">서울 / 경기</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=GW" class="nav-link link-dark <%= activeTab.equals("GW") ? "active" : "" %>" style="text-align:center;">
-											
-											강원
+											<span class="fs-5">강원</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=CB" class="nav-link link-dark <%= activeTab.equals("CB") ? "active" : "" %>" style="text-align:center;">
-											
-											충북
+											<span class="fs-5">충북</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=CN" class="nav-link link-dark <%= activeTab.equals("CN") ? "active" : "" %>" style="text-align:center;">
-											
-											충남
+											<span class="fs-5">충남</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=GB" class="nav-link link-dark <%= activeTab.equals("GB") ? "active" : "" %>" style="text-align:center;">
-											
-											경북
+											<span class="fs-5">경북</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=GN" class="nav-link link-dark <%= activeTab.equals("GN") ? "active" : "" %>" style="text-align:center;">
-											
-											경남
+											<span class="fs-5">경남</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=JB" class="nav-link link-dark <%= activeTab.equals("JB") ? "active" : "" %>" style="text-align:center;">
-											
-											전북
+											<span class="fs-5">전북</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=JN" class="nav-link link-dark <%= activeTab.equals("JN") ? "active" : "" %>" style="text-align:center;">
-											전남
+											<span class="fs-5">전남</span>	
 										</a>
 									</li>
 									<li>
 										<a href="eventMain.do?type=JJ" class="nav-link link-dark <%= activeTab.equals("JJ") ? "active" : "" %>" style="text-align:center;">
-											
-											제주
+											<span class="fs-5">제주</span>											
 										</a>
 									</li>
 								</ul>
@@ -560,20 +557,30 @@ input[type="range"]::-webkit-slider-thumb {
 													</c:otherwise>
 												</c:choose>
 											<div class="restaurant-info col-7 d-flex align-items-start">
-											<%-- 	<h2 class="restaurant-title"><span>${food.fNo}. </span><span>${food.food_name}</span><!-- <span class="mirai">4.7</span> --> --%>
+										
 												<div class="flex-column py-1" style="text-align: left;">
-													<h2 class="restaurant-title flex-column px-1" src="<%=request.getContextPath() %>/resources/upload/${event.attach_physical_name}" onclick="location.href ='<%=request.getContextPath() %>/event/eventView.do?event_number=${event.event_number}'">
-													<span>${event.event_number}. </span><span>${event.event_title} </span><span class="mirai"><c:if test="${event.avg != 0.0}">${event.avg}</c:if> </span>
+													<h2 class="restaurant-title flex-column my-2 px-1" src="<%=request.getContextPath() %>/resources/upload/${event.attach_physical_name}" onclick="location.href ='<%=request.getContextPath() %>/event/eventView.do?event_number=${event.event_number}'">
+													<span>${event.event_number}. </span><span>${event.event_title} </span><span class="mirai" style="color:#ff952b;"><c:if test="${event.avg != 0.0}">${event.avg}</c:if> </span>
 													</h2>
 											
-													<div class="user-thumbnail py-1">
-														<img class="rounded-circle" width="48" height="48" src="https://slp-
-														statics.astockcdn.net/static_assets/staging/23summer/home/kr/featured-contributors/card-3.jpg?
-														width=580&format=webp" alt="사용자 썸네일">
-														<span class="user-nickname" >세이콩</span>
+													<div class="fs-6 restaurant-address text-muted">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+														<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+													</svg>
+													${event.event_local}</div>
+													<div class="user-thumbnail mb-3">
+														<span class="user-nickname" >${event.uNick}</span>
 													</div>
-													<p class="fs-6 restaurant-address" style="color: silver;">${event.event_local}</p>
-													
+													<div>
+														<span>
+															<img src="${pageContext.request.contextPath}/resources/img/foodcall.png" alt="전화번호 아이콘" style="display:inline-block; width:28px; height:28px; cursor:pointer;">
+															전화번호 : <span>${event.event_tel}</span>
+														</span><br>
+														<span>
+															<img src="${pageContext.request.contextPath}/resources/img/foodwork.png" alt="일 아이콘" style="display:inline-block; width:28px; height:28px; cursor:pointer;">
+															영업시간 : <span>${event.event_start}</span> - <span>${event.event_end}</span>
+														</span>
+													</div>
 												</div>
 												
 												
@@ -622,12 +629,12 @@ input[type="range"]::-webkit-slider-thumb {
 													</div> 
 										        	<br>
 												
-													<a class="btn btn-lg btn-primary mb-2 mt-4" href="<%=request.getContextPath()%>/event/eventView.do?event_number=${event.event_number}">상세보기</a>
+													<a class="btn btn-lg mb-2 mt-4" style="background-color: #02c9a5; color: white" href="<%=request.getContextPath()%>/event/eventView.do?event_number=${event.event_number}">상세보기</a>
 									        	</div>
 									        </div>	
 									</div>
 								</c:forEach>
-								<nav aria-label="Page navigation example">
+								<nav aria-label="Page navigation example" class="my-5">
 									<ul class="pagination justify-content-center">
 								        <%-- 이전 페이지 링크 생성 --%>
 								        <li class="page-item">

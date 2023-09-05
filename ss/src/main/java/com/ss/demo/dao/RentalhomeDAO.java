@@ -219,4 +219,13 @@ public class RentalhomeDAO {
 	public int update_review_status(int room_idx) {
 		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_review_status", room_idx);
 	}
+
+	// 결제시 유저 포인트 감소
+	public int update_point_minus(Rentalhome_PayVO payVO) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_point_minus", payVO);
+	}
+	// 결제시 유저 포인트 증가
+	public int update_point_plus(Rentalhome_PayVO payVO) {
+		return sqlSession.update("com.ss.demo.dao.RentalhomeService_Mapper.update_point_plus", payVO);
+	}
 }

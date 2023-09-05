@@ -6,7 +6,7 @@
   />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/font.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font_style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <!-- 부트스트랩 설정 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -96,49 +96,47 @@ function DoRewrite()
 }		
 .masthead {
     position: relative;
-    background: url(../img/joinback.jpg) no-repeat center center;
+    background: url(${pageContext.request.contextPath}/resources/img/joinback.jpg) no-repeat center center;
     background-size: cover;
 
 }	
 
 </style>
 <!-- 회원가입 입력 란  -->
-<div class="masthead" style="height:120%; ">
+<div style="height:120%; background-color:#f5f5f5; font-family: 'TheJamsil5Bold';">
 	<div class="container custom-container d-flex justify-content-center align-items-center">
 		<div class="py-5 text-center">
 			 <div class="row g-5">
-				 <div class="card " style="width:700px">
+				 <div class="card" style="width:500px">
 				 	<a class="my-3 d-flex justify-content-left " href="<%= request.getContextPath()%>/reHome.do" title="Arcalive">
-						<img src="<%=request.getContextPath() %>/img/join.png" style="width:550px; height: 150px;">
+						<img src="${pageContext.request.contextPath}/resources/img/join.png" style="width:470px; height: 120px;">
 					</a>
 					<!-- 회원가입 폼  -->
 					<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
-						<input type="hidden" id="uType" name="uType" value="normal">
 						<div class="col-12">
 						<div class="g-3">
 							<div class="grid text-center">
-								<label for="ID" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">아이디</label>
-								<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
-								<div class="invalid-feedback">
-								이메일 이름을 써주세요
-								</div>
-	<!-- 							<div class="invalid-feedback">
-								도메인을 선택해주세요.
-								</div> -->
-								<select class="form-select" id="uId_email" name="uId_email" onchange="email();">	
-									<option value="">도메인을 선택해주세요</option>
-									<option value="@naver.com">naver.com</option>
-									<option value="@daum.net">daum.net</option>
-									<option value="@hanmail.net">hanmail.net</option>
-									<option value="@gmail.com">gmail.com</option>
-									<option value="@kakao.com">kakao.com</option>
-									<option value="@nate.com">nate.com</option>
-									<option value="@outlook.com">outlook.com</option>
-									<option value="@hotmail.com">hotmail.com</option>
-								</select>
-									<div>
-										<span id="msg_check_email"></span>
-									</div>
+							<div class="form-floating my-2">
+								<input type="text" class="form-control" id="uId" placeholder="uId" name="uId">
+								<label for="floatingInput" class="text-muted">ID</label>
+							</div>		
+							<div class="invalid-feedback">
+							이메일 이름을 써주세요
+							</div>
+<!-- 							<div class="invalid-feedback">
+							도메인을 선택해주세요.
+							</div> -->
+							<select class="form-select" id="uId_email" name="uId_email" onchange="email();">	
+								<option value="">도메인을 선택해주세요</option>
+								<option value="@naver.com">naver.com</option>
+								<option value="@daum.net">daum.net</option>
+								<option value="@hanmail.net">hanmail.net</option>
+								<option value="@gmail.com">gmail.com</option>
+								<option value="@kakao.com">kakao.com</option>
+								<option value="@nate.com">nate.com</option>
+								<option value="@outlook.com">outlook.com</option>
+								<option value="@hotmail.com">hotmail.com</option>
+							</select>
 								<!-- float-end py-1 -->
 								<!-- d-flex justify-content -->
 								<!-- class="float-end btn btn-secondary mb-1" -->
@@ -152,12 +150,10 @@ function DoRewrite()
 							</div>
 						</div> <!-- g-3 -->
 						</div> <!-- col-12 -->
-						<input type="hidden" id="AuthCheck" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;" ><br>
-						<input type="hidden" id="AuthCheck2" >	
-							<span id="msg_id"></span><br>
+						<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
+							<span id="msg_id"></span>
 							<span id="msg_email"></span>
-						<div class="col-12">
-							<label for="password" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">비밀번호 </label>
+						<div class="col-12 my-2">
 							<div class="input password">
 							<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
 								<div class="eyes mt-2"><i class="fas fa-eye"></i></div>
@@ -166,7 +162,7 @@ function DoRewrite()
 							</div>
 							</div>
 						</div>
-						<div class="col-12">
+						<div class="col-12 my-2">
 							<div class="input password">
 							<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
 							<input class="form-control" type="password"  id="uPwc" name="uPwc" placeholder="비밀번호확인">
@@ -177,32 +173,37 @@ function DoRewrite()
 							</div>
 						</div>
 							<span id="msg_pw"></span>
-						<div class="col-12">
-							<label for="Name" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">이름</label>
-							<input  class="form-control" type="text" id="uName" name="uName" placeholder="이름" required value="">
+						<div class="col-12 mt-2 my-2">
 							<div class="invalid-feedback">
 								이름을 입력하세요
 							</div>
+							<div class="form-floating">
+								<input type="text" class="form-control" id="uName" placeholder="이름" name="uName" required value="">
+								<label for="floatingInput" class="text-muted">이름</label>
+							</div>		
 						</div>
-						<div class="col-12">
-							<label for="Nick" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">닉네임</label>
-							<input  class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
+						<div class="col-12 my-2">
 							<div class="invalid-feedback">
 								닉네임을 입력하세요
 							</div>
+							<div class="form-floating">
+								<input class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
+								<label for="floatingInput" class="text-muted">닉네임</label>
+							</div>		
 						</div>
 							<span id="msg_nick"></span>
-						<div class="col-12">
-							<label for="Phone" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">전화번호</label>
-							<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
+						<div class="col-12 mb-2 my-2">				
 							<div class="invalid-feedback">
 								전화번호 입력하세요
 							</div>
+							<div class="form-floating">
+								<input class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
+								<label for="floatingInput" class="text-muted">전화번호(ex= 01012345678)</label>
+							</div>		
 						</div>
 						<!-- 우편번호 주소 -->
-							<label for="address" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">우편번호</label>
-						<div class="col-12 d-flex justify-content-between align-items-center mt-0">
-							<div class="col-md-6">
+						<div class="col-12 d-flex justify-content-between align-items-center mt-2 ">
+							<div class="col-md-6 my-2">
 							<input  class="form-control" type="text" id="uAddsPostCode"  placeholder="우편번호">
 							</div>
 							<input class="float-end btn btn-outline-secondary my-1" onclick="DaumPostcode();" type="button" value="우편번호찾기">
@@ -217,13 +218,7 @@ function DoRewrite()
 							<div class="col-12">
 							<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
 							</div>	
-							
-							<label for="address" class="form-label mb-0 mt-2 rounded-top" style="background-color:#D0E7F5;">참고항목</label>
-							<div class="col-md-5">
-							<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
-							</div>
 						<!-- 회원가입 입력란 끝 -->
-							<hr class="my-4">
 							<div class="d-flex justify-content-center my-4">
 								<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
 								<a href="javascript:DoRewrite()">
@@ -241,7 +236,114 @@ function DoRewrite()
 	
  <!-- container 끝 -->
 </div>
-
+<%-- 
+				<td>	
+					<select id="uId_email" name="uId_email" style="width: 90%;" onchange="email();">	
+						<option value="">도메인을 선택해주세요</option>
+						<option value="@naver.com">naver.com</option>
+						<option value="@daum.net">daum.net</option>
+						<option value="@hanmail.net">hanmail.net</option>
+						<option value="@gmail.com">gmail.com</option>
+						<option value="@kakao.com">kakao.com</option>
+						<option value="@nate.com">nate.com</option>
+						<option value="@outlook.com">outlook.com</option>
+						<option value="@hotmail.com">hotmail.com</option>
+					</select>
+				</td>
+				<td>
+					<!-- <input type="button" value="중복확인" id="userIdCheck" onclick="idCheck();"> -->
+					<input type="button" value="인증하기" id="emailCheck" onclick="emailAuth();">
+					<input type="button" value="중복확인" id="emaildomain" onclick="emailcheck();">
+					<input type="hidden" name="idchecked" value="checkednot">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<span id="msg_id"></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<span id="msg_email"></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="input password">
+					<input type="password" id="uPw" name="uPw" style="width:100%;" placeholder="비밀번호" required value="">
+						<div class="eyes">
+							<i class="fas fa-eye"></i>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="input password">
+					<input type="password" id="uPwc" name="uPwc" style="width:100%;" placeholder="비밀번호 확인" required value="">
+						<div class="eyes2">
+							<i class="fas fa-eye"></i>
+						</div>
+					</div>
+					<span id="msg_pw"></span>
+				</td >
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="text" id="uName" name="uName" style="width:100%;" placeholder="이름" required value="">
+				</td>
+				<td >
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="text" id="uNick" name="uNick" style="width:100%;" placeholder="닉네임" required value="">
+					<div><input type="hidden" ></div>
+					<span id="msg_nick"></span>
+				</td>
+				<td>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="text" id="uPhone" name="uPhone" style="width:100%;" placeholder="전화번호(ex= 01012345678)" required value="">
+					<input type="button" id="Auth" name="Auth" onclick="Authentication();" value="Auth"> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div style="text-align: left; width: 100%; display: inline-block;">
+						<input type="text" id="uAddsPostCode"  placeholder="우편번호">
+						<br>
+						<input type="text" id="uRoadAddress" style="width: 100%;" placeholder="도로명주소">
+						<input type="text" id="uJibunAddress" style="width: 100%;" placeholder="지번주소"><br>
+						<!-- <span id="guide" style="color:#999;display:none"></span> -->
+						<input type="text" id="uDetailAddress" style="width: 60%;" placeholder="상세주소">
+						<input type="text" id="sample4_extraAddress" placeholder="참고항목">
+					</div>
+				</td>
+				<td>
+						<input type="button"  onclick="DaumPostcode()" value="우편번호 찾기">
+				</td>
+			</tr>
+			<tr >
+				<td id="jbar" colspan="3" style="text-align:center;">
+					<!-- <a href="javascript:DoSubmit();" onclick="javascript:document.join.DoSubmit()" id="check" class="btn sfn">가입하기</a> -->
+					<!-- <input type="submit" value="가입하기" onclick="false DoSubmit();"> -->
+					<button type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
+					<a href="javascript:DoRewrite()"><input type="button" value="다시쓰기"></a>
+					<a href="<%=request.getContextPath() %>/index.jsp"><input type="button" value="취소"></a> 
+				</td>
+			</tr>
+		</table>
+	</form> 
+	--%>
 <!-- api 연동 -->
 <script type="text/javascript">
 //coolsms
@@ -357,7 +459,6 @@ $(function(){
 		var frontuId = $("#uId").val();
 		var uId_email =$("#uId_email").val();
 		var	checkinput = $(".mail-check-input") //인증번호 입력 창 
-		$("#AuthCheck").focus();
 		if( frontuId.trim() == "")
 		{
 			$("#msg_id").text("이메일 이름을 써주세요");
@@ -380,7 +481,6 @@ $(function(){
 					//히든 값 변경으로 인증번호 쓰기 
 					console.log("emailAuth="+data);
 					code = data;
-					
 				},
 				error : function(){
 					alert("요청실패");
@@ -392,15 +492,11 @@ $(function(){
 	$('.mail-check-input').blur(function () {
 		var inputCode = $(this).val();
 		const $resultMsg = $('#msg_email');
-		var flagemail = false;
-		console.log("inputCode=="+inputCode);
-		console.log("inputCode=="+code);
+		
 		if(inputCode === code){
 			$resultMsg.html('인증번호가 일치합니다.');
 			$resultMsg.css('color','green');
 			$('#mail-Check-Btn').attr('disabled',true);
-			falgemail = true;
-			console.log("falgemail1="+falgemail);
 			$('#userEamil1').attr('readonly',true);
 			$('#userEamil2').attr('readonly',true);
 			$('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
@@ -408,8 +504,6 @@ $(function(){
 		}else{
 			$resultMsg.html('인증번호가 불일치 합니다. 다시 확인해주세요!.');
 			$resultMsg.css('color','red');
-			falgemail = false;
-			console.log("falgemail2="+falgemail);
 		}
 	});
 	
@@ -605,7 +699,6 @@ $(function(){
 		var uPwc	= $("#uPwc").val();
 		var uName	= $("#uName").val();
 		var uId_email = $("#uId_email").val();
-		var AuthCheck = $("#AuthCheck").val();
 		if(join.uId.value.length == 0 || $("#uId").val() == "")
 		{
 			alert("아이디를 써주세요");
@@ -627,13 +720,7 @@ $(function(){
 			console.log("uIdemailDup = "+uIdemailDup);
 			$("#uId").val("").focus();
 			return false;
-		} else if( falgemail == false){
-			alert("인증번호가 일치 하지 않습니다");
-			$("#msg_check_email").text("메일 요청을 다시 보내고 혹은 잘못된 이메일이 아닌지 확인해주세요");
-			$("#msg_check_email").css("color","#FE642E");
-			$("#uId_email").focus();
-			return false;
-		}else if( uIdDup == false){
+		} else if( uIdDup == false){
 			
 			alert("아이디가 중복됩니다");
 			console.log("uIdDup="+uIdDup);
@@ -680,4 +767,3 @@ $(function(){
 		
 	}
 </script>
-	

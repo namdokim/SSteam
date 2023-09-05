@@ -129,7 +129,7 @@ window.onload = function() { $("#event_title").focus(); }
 }		
 .masthead {
     position: relative;
-    background: url(../img/pxfuel.jpg) no-repeat  center;
+    background: url(${pageContext.request.contextPath}/resources/img/pxfuel.jpg) no-repeat  center;
     background-size: cover;
     height:400px
 }	

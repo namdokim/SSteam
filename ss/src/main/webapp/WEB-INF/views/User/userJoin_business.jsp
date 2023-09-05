@@ -1,14 +1,24 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../include/header.jsp" %>
-<% %>
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
   />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font_style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<!-- 부트스트랩 설정 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<!-- 부트스트랩의 달력 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>                     
+<!-- popper -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<!-- summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
 function DoRewrite()
 {
@@ -17,6 +27,7 @@ function DoRewrite()
 </script>
 
 <style>
+	
 	.container
 	{
 		text-align: center;
@@ -53,43 +64,60 @@ function DoRewrite()
 }
 
  .input .eyes {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10px;
-  margin: auto ;
-  height: 40px;
-  font-size: 25px;
-  cursor: pointer;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 10px;
+	margin: auto ;
+	height: 40px;
+	font-size: 25px;
+	cursor: pointer;
 }
 .input .eyes2 {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10px;
-  margin: auto ;
-  height: 40px;
-  font-size: 25px;
-  cursor: pointer;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 10px;
+	margin: auto ;
+	height: 40px;
+	font-size: 25px;
+	cursor: pointer;
 }
 
-
+.masthead:before {
+	content: "";
+	position: absolute;
+	background-color: #1c375e;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0.2;
+}		
+.masthead {
+	position: relative;
+	background: url(${pageContext.request.contextPath}/resources/img/joinback.jpg) no-repeat center center;
+	background-size: cover;
+}	
 </style>
 <!-- 회원가입 입력 란  -->
-<div class="container">
-	<div class="py-5 text-center">
-		<!-- <div class="row g-5"> -->
-			<!-- <div class="col-md-7 col-lg-8"> -->
-				<div class="mb-3"><img src="<%=request.getContextPath() %>/img/joinicon.png" style="width:420px; height: 230px;">
-				</div>
-				<!-- 회원가입 폼  -->
-				<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
-					<input type="hidden" id="uType" name="uType" value="business">
-					<div class="col-12">
-					<div class="g-3">
-						<div class="grid text-center">
-							<label for="ID" class="form-label">사업용 아이디</label>
-							<input class="g-col-6 form-control" type="text" id="uId" name="uId"  placeholder="Email로 써주세요" required value="">
+<div style="height:120%; background-color:#f5f5f5; font-family: 'TheJamsil5Bold';">
+	<div class="container custom-container d-flex justify-content-center align-items-center">
+		<div class="py-5 text-center">
+			 <div class="row g-5">
+				 <div class="card" style="width:500px;">
+				 	<a class="my-3 d-flex justify-content-left " href="<%= request.getContextPath()%>/reHome.do" title="Arcalive">
+						<img src="${pageContext.request.contextPath}/resources/img/join.png" style="width:470px; height: 120px;">
+					</a>
+					<!-- 회원가입 폼  -->
+					<form name="join" id="join" method="post" action="<%= request.getContextPath()%>/User/userJoinAction.do">
+						<div class="col-12">
+						<div class="g-3">
+							<div class="grid text-center">
+							<div class="form-floating my-2">
+								<input type="text" class="form-control" id="uId" placeholder="uId" name="uId">
+								<label for="floatingInput" class="text-muted">ID</label>
+							</div>		
 							<div class="invalid-feedback">
 							이메일 이름을 써주세요
 							</div>
@@ -107,108 +135,104 @@ function DoRewrite()
 								<option value="@outlook.com">outlook.com</option>
 								<option value="@hotmail.com">hotmail.com</option>
 							</select>
-							<!-- float-end py-1 -->
-							<!-- d-flex justify-content -->
-							<!-- class="float-end btn btn-secondary mb-1" -->
-							<div id="idbutton" class="d-flex justify-content align-items-right">
-								<div class="col-md-12">
-								<input type="button" class="btn btn-secondary mb-1" value="인증하기" id="emailCheck" onclick="emailAuth();">
-								<input type="button" class="btn btn-primary mb-1" value="중복확인 " id="emaildomain" onclick="emailcheck();">
+								<!-- float-end py-1 -->
+								<!-- d-flex justify-content -->
+								<!-- class="float-end btn btn-secondary mb-1" -->
+								<div id="idbutton" class="d-flex justify-content align-items-right">
+									<div class="col-md-12 mt-1">
+									<input type="button" class="btn btn-outline-secondary mb-1" value="인증하기" id="emailCheck" onclick="emailAuth();">
+									<input type="button" class="btn btn-primary mb-1" value="중복확인 " id="emaildomain" onclick="emailcheck();">
+									</div>
+									<!-- <input type="hidden" name="idchecked" id=""value="checkednot"> -->
 								</div>
-								<!-- <input type="hidden" name="idchecked" id=""value="checkednot"> -->
+							</div>
+						</div> <!-- g-3 -->
+						</div> <!-- col-12 -->
+						<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
+							<span id="msg_id"></span>
+							<span id="msg_email"></span>
+						<div class="col-12 my-2">
+							<div class="input password">
+							<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
+								<div class="eyes mt-2"><i class="fas fa-eye"></i></div>
+							<div class="invalid-feedback eyes">
+								비밀번호를 입력해 주세요
+							</div>
 							</div>
 						</div>
-					</div> <!-- g-3 -->
-					</div> <!-- col-12 -->
-					<input type="hidden" class="mail-check-input" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6" style="width: 70%;">
-						<span id="msg_id"></span>
-						<span id="msg_email"></span>
-						<label for="password" class="form-label">비밀번호 </label>
-					<div class="col-12">
-						<div class="input password">
-						<input class="form-control" type="password" id="uPw" name="uPw" placeholder="비밀번호" required value="">
-							<div class="eyes"><i class="fas fa-eye"></i></div>
-						<div class="invalid-feedback eyes">
-							비밀번호를 입력해 주세요
+						<div class="col-12 my-2">
+							<div class="input password">
+							<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
+							<input class="form-control" type="password"  id="uPwc" name="uPwc" placeholder="비밀번호확인">
+								<div class="eyes2 mt-2"><i class="fas fa-eye"></i></div>
+							<div class="invalid-feedback eyes">
+							비밀번호와 일치하지 않습니다
+							</div>
+							</div>
 						</div>
+							<span id="msg_pw"></span>
+						<div class="col-12 mt-2 my-2">
+							<div class="invalid-feedback">
+								이름을 입력하세요
+							</div>
+							<div class="form-floating">
+								<input type="text" class="form-control" id="uName" placeholder="이름" name="uName" required value="">
+								<label for="floatingInput" class="text-muted">이름</label>
+							</div>		
 						</div>
-					</div>
-					<div class="col-12">
-						<div class="input password">
-						<!-- <label for="email" class="form-label">비밀번호 확인 </label> -->
-						<input class="form-control" type="password"  id="uPwc" name="uPwc" placeholder="비밀번호확인">
-							<div class="eyes2"><i class="fas fa-eye"></i></div>
-						<div class="invalid-feedback eyes">
-						비밀번호와 일치하지 않습니다
+						<div class="col-12 my-2">
+							<div class="invalid-feedback">
+								닉네임을 입력하세요
+							</div>
+							<div class="form-floating">
+								<input class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
+								<label for="floatingInput" class="text-muted">닉네임</label>
+							</div>		
 						</div>
+							<span id="msg_nick"></span>
+						<div class="col-12 mb-2 my-2">				
+							<div class="invalid-feedback">
+								전화번호 입력하세요
+							</div>
+							<div class="form-floating my-2">
+								<input class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
+								<label for="floatingInput" class="text-muted">전화번호(ex= 01012345678)</label>
+							</div>		
 						</div>
-					</div>
-						<span id="msg_pw"></span>
-					<div class="col-12">
-						<label for="Name" class="form-label">이름</label>
-						<input  class="form-control" type="text" id="uName" name="uName" placeholder="이름" required value="">
-						<div class="invalid-feedback">
-							이름을 입력하세요
+						<!-- 우편번호 주소 -->
+						<div class="col-12 d-flex justify-content-between align-items-center mt-2 my-2">
+							<div class="col-md-6">
+							<input  class="form-control" type="text" id="uAddsPostCode" readonly placeholder="우편번호">
+							</div>
+							<input class="float-end btn btn-outline-secondary my-1" onclick="DaumPostcode();" type="button" value="우편번호찾기">
 						</div>
-					</div>
-					<div class="col-12">
-						<label for="Nick" class="form-label">닉네임</label>
-						<input  class="form-control" type="text" id="uNick" name="uNick" placeholder="닉네임" required value="">
-						<div class="invalid-feedback">
-							닉네임을 입력하세요
-						</div>
-					</div>
-						<span id="msg_nick"></span>
-					<div class="col-12">
-						<label for="Phone" class="form-label">전화번호</label>
-						<input  class="form-control" type="text" id="uPhone" name="uPhone" placeholder="전화번호(ex= 01012345678)" required value="">
-						<div class="invalid-feedback">
-							전화번호 입력하세요
-						</div>
-					</div>
-					<!-- 우편번호 주소 -->
-						<label for="address" class="form-label">우편번호</label>
-					<div class="col-12 d-flex justify-content-between align-items-center">
-						<div class="col-md-6">
-						<input  class="form-control" type="text" id="uAddsPostCode"  placeholder="우편번호">
-						</div>
-						<input class="float-end btn btn-secondary mb-1" onclick="DaumPostcode();" type="button" value="우편번호찾기">
-					</div>
-						<div class="col-12">
-						<input class="form-control" type="text" id="uRoadAddress"  placeholder="도로명주소">
-						</div>
-						<div class="col-12">
-						<input  class="form-control" type="text" id="uJibunAddress"  placeholder="지번주소">            
-						</div>
-						
-						<div class="col-12">
-						<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
-						</div>	
-						
-						<label for="address" class="form-label">참고항목</label>
-						<div class="col-md-5">
-						<input class="form-control" type="text" id="sample4_extraAddress" placeholder="참고항목">
-						</div>
-						<div class="col-12">
-						<label for="business" class="form-label">사업자 확인 절차</label>
-						<input  class="form-control" type="text" id="business" name="business" placeholder="사업자 확인 절차 " required value="">
-						<div class="invalid-feedback">
-							사업자 확인 절차
-						</div>
-					</div>
-					<!-- 회원가입 입력란 끝 -->
-						<hr class="my-4">
-						<div class="d-flex justify-content-center my-4">
-							<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
-							<a href="javascript:DoRewrite()">
-							<input class="w-33 btn btn-primary btn-lg mx-2" type="button" value="다시쓰기">
-							</a>
-							<a href="<%=request.getContextPath() %>/">
-							<input class="w-33 btn btn-primary btn-lg" type="button" value="취소">
-							</a>
-						</div>
-				</form>
+							<div class="col-12 my-1">
+							<input class="form-control" type="text" id="uRoadAddress"  placeholder="도로명주소">
+							</div>
+							<div class="col-12 my-1">
+							<input  class="form-control" type="text" id="uJibunAddress"  placeholder="지번주소">            
+							</div>
+							
+							<div class="col-12 my-1">
+							<input class="form-control" type="text" id="uDetailAddress" placeholder="상세주소">
+							</div>	
+							<!-- 회원가입 입력란 끝 -->
+							<div class="d-flex justify-content-center my-4">
+								<button class="btn btn-primary btn-lg" type="button" value="가입하기" onclick="DoSubmit();">회원가입</button>
+								<a href="javascript:DoRewrite()">
+								<input class="w-33 btn btn-primary btn-lg mx-2" type="button" value="다시쓰기">
+								</a>
+								<a href="<%=request.getContextPath() %>/">
+								<input class="w-33 btn btn-danger btn-lg" type="button" value="취소">
+								</a>
+							</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
+	
+ <!-- container 끝 -->
 </div>
 		<!-- </div> col-md-7 col-lg-8 -->
 	<!-- </div> row g-5 끝  -->
@@ -744,6 +768,3 @@ $(function(){
 		
 	}
 </script>
-	
->>>>>>> main
-<%@ include file="../include/footer.jsp" %>

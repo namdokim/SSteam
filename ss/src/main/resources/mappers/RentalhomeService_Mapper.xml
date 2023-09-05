@@ -392,6 +392,14 @@
 		UPDATE rentalhome_pay SET refund_date = #{refund_date}, pay_status = #{pay_status} WHERE pay_idx = #{pay_idx}
 	</update>
 
+	<update id="update_point_plus" parameterType="rentalhome_payVO">
+		UPDATE user SET uPoint = uPoint + #{point} WHERE uNo = #{uno}
+	</update>
+
+	<update id="update_point_minus" parameterType="rentalhome_payVO">
+		UPDATE user SET uPoint = uPoint - #{point} WHERE uNo = #{uno}
+	</update>
+
 	<update id="update_review_status" parameterType="int" >
 		UPDATE rentalhome_review SET status = 'N' WHERE room_idx = #{room_idx}
 	</update>

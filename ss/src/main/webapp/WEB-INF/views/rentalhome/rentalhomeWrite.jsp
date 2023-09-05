@@ -12,6 +12,26 @@ window.onload = function(){
 	        }
 	    }).open();
 	  });
+	let bf = document.getElementById("bf");
+	let bf_view = document.getElementById("bf_view");
+	let breakfast_price = document.getElementById("breakfast_price");
+	let breakfast_open = document.getElementById("breakfast_open");
+	let breakfast_close = document.getElementById("breakfast_close");
+	let breakfast_day = document.getElementsByName("breakfast_day");
+	bf.onchange = function(){
+		if(bf.checked){
+			bf_view.style.display = "block";
+		}else{
+			bf_view.style.display = "none";
+			breakfast_price.value = 0;
+			breakfast_open.value = "";
+			breakfast_close.value = "";
+			
+			breakfast_day.forEach(function(day, index) {
+				day.checked = false;
+			});
+		}
+	}
 }
 
 function validation(){
@@ -31,7 +51,9 @@ function validation(){
 
 	var breakfast_price = document.getElementById("breakfast_price").value;
 	
+	document.getElementById("breakfast_open").value = decodeHTMLEntities(document.getElementById("breakfast_open").value);
 	var breakfast_open = document.getElementById("breakfast_open").value;
+	document.getElementById("breakfast_close").value = decodeHTMLEntities(document.getElementById("breakfast_close").value);
 	var breakfast_close = document.getElementById("breakfast_close").value;
 	
 	// 유효성 검사
@@ -50,11 +72,8 @@ function validation(){
 		return false;
 	}
 	// 조식 요금
-	if(breakfast_price != null || breakfast_price != ""){
-		if(!pattern_num.test(breakfast_price)){
-			alert("조식 요금을 확인해 주세요");
-			return false;
-		}
+	
+	if(breakfast_open != "" || breakfast_close != ""){
 		// 조식 시간
 		if(!pattern_time.test(breakfast_open) && !pattern_time.test(breakfast_close)){
 			alert("조식 시간을 확인해주세요.");
@@ -65,6 +84,16 @@ function validation(){
 			return false;
 		}
 	}
+	var multiFile = document.getElementById("multiFile");
+	
+	if (multiFile.files.length === 0) {
+		alert('파일을 선택해주세요.');
+		return false;
+	} else if (multiFile.files.length < 3){
+		alert('이미지를 3개이상 넣어주세요.');
+		return false;
+	}
+	
 	if(!confirm("숙소를 등록하시겠습니까?")){
 		return false;
 	}
@@ -120,7 +149,7 @@ function decodeHTMLEntities (str) {
 }		
 .masthead {
     position: relative;
-    background: url(../img/homeback.jpg) no-repeat center center;
+    background: url(${pageContext.request.contextPath}/resources/img/homeback.jpg) no-repeat center center;
     background-size: cover;
     height:400px
 }	
@@ -168,25 +197,27 @@ function decodeHTMLEntities (str) {
 			</div>
 			<div class="card mb-2">
 				<span class="text-muted ">호텔내 시설체크</span>
-				<div class="py-md-1 ms-4" style="text-align: left;">
-					<input type="checkbox" class="btn-check" name="inPool_yn" value="Y" id="btn-check-outlined1" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined1">내부 수영장</label>
-					<input type="checkbox" class="btn-check" name="outPool_yn" value="Y" id="btn-check-outlined2" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined2">야외 수영장</label>
-					<input type="checkbox" class="btn-check" name="parking_yn" value="Y" id="btn-check-outlined3" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined3">주차장</label>
-					<input type="checkbox" class="btn-check" name="pickup_yn" value="Y" id="btn-check-outlined4" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined4">픽업</label>
-					<input type="checkbox" class="btn-check" name="wifi_yn" value="Y" id="btn-check-outlined5" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined5">와이파이</label>
-					<input type="checkbox" class="btn-check" name="beach_yn" value="Y" id="btn-check-outlined6" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined6">인근해변</label>
-					<input type="checkbox" class="btn-check" name="bbq_yn" value="Y" id="btn-check-outlined7" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined7">바베큐</label>
-					<input type="checkbox" class="btn-check" name="breakfast_yn" value="Y" id="btn-check-outlined8" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined8">조식</label>
-					<input type="checkbox" class="btn-check" name="animal_yn" value="Y" id="btn-check-outlined9" autocomplete="off">
-					<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined9">반려동물</label>
+				<div style="text-align: center;">
+					<div style="text-align:left; display:inline-block; width:84%;">
+						<input type="checkbox" class="btn-check" name="inPool_yn" value="Y" id="btn-check-outlined1" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined1">내부 수영장</label>
+						<input type="checkbox" class="btn-check" name="outPool_yn" value="Y" id="btn-check-outlined2" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined2">야외 수영장</label>
+						<input type="checkbox" class="btn-check" name="parking_yn" value="Y" id="btn-check-outlined3" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined3">주차장</label>
+						<input type="checkbox" class="btn-check" name="pickup_yn" value="Y" id="btn-check-outlined4" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined4">픽업</label>
+						<input type="checkbox" class="btn-check" name="wifi_yn" value="Y" id="btn-check-outlined5" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined5">와이파이</label>
+						<input type="checkbox" class="btn-check" name="beach_yn" value="Y" id="btn-check-outlined6" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined6">인근해변</label>
+						<input type="checkbox" class="btn-check" name="bbq_yn" value="Y" id="btn-check-outlined7" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined7">바베큐</label>
+						<input type="checkbox" class="btn-check" name="breakfast_yn" value="Y" id="btn-check-outlined8" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined8">조식</label>
+						<input type="checkbox" class="btn-check" name="animal_yn" value="Y" id="btn-check-outlined9" autocomplete="off">
+						<label style="display:inline-block; width:120px;" class="btn btn-outline-primary my-1" for="btn-check-outlined9">반려동물</label>
+					</div>
 				</div>
 			</div>
 			
@@ -197,14 +228,14 @@ function decodeHTMLEntities (str) {
 				<div class="row align-items-center">
 					<div class="form-floating col">	
 						<input type="text" class="form-control ps-3" placeholder="체크 인 시간" id="checkIn" name="checkIn">
-						<label for="checkIn" class="text-muted ms-3">체크인 시간</label>
+						<label for="checkIn" class="text-muted ms-3">체크인 시간 ex)00:00</label>
 					</div>
 						
 						-
 					
 					<div class="form-floating col">	
 						<input type="text" class="form-control ps-3" placeholder="체크 아웃 시간" id="checkOut" name="checkOut">
-						<label for="checkOut" class="text-muted ms-3">체크아웃 시간</label>
+						<label for="checkOut" class="text-muted ms-3">체크아웃 시간 ex)00:00</label>
 					</div>
 				</div>
 				
@@ -213,12 +244,14 @@ function decodeHTMLEntities (str) {
 					<label for="checkIn_info" class="text-muted">체크인 방법</label>
 				</div>
 			</div>
-			<div class="d-flex mt-3">
-				<h5 class="text-left ms-2" >조식</h5>
+			<div class="d-flex my-3">
+				<h5 class="text-left mx-2" >조식</h5> 
+					<input type="checkbox" id="bf" name="bf" style="width:25px; height:25px; display:none;">
+					<label for="bf" style="border-radius:5px; background-color:#0d6efd; color:white; padding:3px 5px;">제공시 클릭</label>
 			</div>
-			<div class="card px-3 py-3">
+			<div class="card px-3 py-3" id="bf_view" style="display:none;">
 				<div class="form-floating mx-1 my-1">
-					<input type="text" class="form-control" placeholder="요금 / 1인" id="breakfast_price" name="breakfast_price">
+					<input type="number" class="form-control" placeholder="요금 / 1인" id="breakfast_price" name="breakfast_price">
 					<label for="floatingInput" class="text-muted">요금 / 1인</label>
 				</div>
 				
@@ -227,12 +260,12 @@ function decodeHTMLEntities (str) {
 				</div>
 				<div class="d-flex">
 					<div class="form-floating col mx-1 my-1">
-						<input type="text" class="form-control ps-3" id="breakfast_open" placeholder="open" name="breakfast_open">
-						<label for="breakfast_open" class="text-muted ms-1">open</label>
+						<input type="text" class="form-control ps-3" id="breakfast_open" value="" placeholder="open" name="breakfast_open">
+						<label for="breakfast_open" class="text-muted ms-1">open ex)00:00</label>
 					</div>
 					<div class="form-floating col mx-1 my-1">
-						<input type="text" class="form-control ps-3" id="breakfast_close" placeholder="close" name="breakfast_close">
-						<label for="breakfast_close" class="text-muted ms-1">close</label>
+						<input type="text" class="form-control ps-3" id="breakfast_close" value="" placeholder="close" name="breakfast_close">
+						<label for="breakfast_close" class="text-muted ms-1">close ex)00:00</label>
 					</div>
 				</div>	
 				<div class="d-flex">
@@ -295,12 +328,12 @@ function decodeHTMLEntities (str) {
 			<div class="d-flex ms-2">
 				<h1 class="h5 my-3 fw-normal">파일 업로드</h1>
 			</div>	
-			<span>이미지는 1개 이상 등록해주세요.</span>
+			<span>이미지는 3개 이상 등록해주세요.</span>
 			<div class="card">
 				<div class="d-flex">
 					<label class="btn btn-primary float-left ms-2 my-2" >
 					이미지 선택			
-					<input type="file" name="multiFile" multiple required style="display: none;">
+					<input type="file" name="multiFile" id="multiFile" multiple style="display: none;">
 					</label>
 				</div>	
 				<div class="ms-4" id="preview" style="overflow-y: auto; max-height: 230px; text-align: left;"></div>

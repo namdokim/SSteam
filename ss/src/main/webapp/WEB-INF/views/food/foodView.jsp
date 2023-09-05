@@ -52,8 +52,15 @@
     
     /* 직접 작성한 스타일 */
     .custom-modal 					{ display: none; position: fixed; z-index: 1500; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); overflow: auto; }
+	.modal-backdrop				{ display: none; }
+	/* 이미지 슬라이드 모달 내 이미지 스타일 설정 */
+	.modal-body img { max-width: 100%; height: auto;  display: block;  margin: 0 auto; }
+	
+	/* 이미지 슬라이드 모달 내 다른 사진들 가로 정렬 */
+	.other-photos { display: flex; flex-wrap: wrap; justify-content: flex-start; }
+	.other-photos img { max-width: 100px;  max-height: 100px; margin: 5px; flex-grow: 1; }
 </style>																
-																	<!-- VIEW/스크립트  -->
+<!-- VIEW/스크립트  -->
 <script>
 window.onload = function() 
 {
@@ -293,6 +300,7 @@ window.onload = function()
 				}
 				console.log(data.avg);
 				avg.innerText = data.avg;
+				
 				for(var i=0; i<count_all.length; i++){
 					count_all[i].innerText = data.count_all;
 				}
@@ -311,6 +319,13 @@ window.onload = function()
 		const fNo = document.getElementById("fNo");			
 		const review = document.getElementById("review");	
 		const grade = document.getElementById("grade");	
+		
+		const avg = document.getElementById("avg");
+		
+		const count_all = document.getElementsByName("count_all");
+		const count_good = document.getElementById("count_good");
+		const count_soso = document.getElementById("count_soso");
+		const count_bad = document.getElementById("count_bad");
 		
 		console.log(review.value);
 		if( review.value == "" ){ alert("리뷰 글을 작성해 주세요. "); $("#review").focus(); return; }
@@ -379,8 +394,29 @@ window.onload = function()
 						'<hr>';
 
 
-					document.getElementById("insertDiv").innerHTML = html; 
+			document.getElementById("insertDiv").innerHTML = html; 
+			console.log("1:::"+data.avg);
+			console.log("1:::"+data.count_all);
+			console.log("1:::"+data.count_good);
+			console.log("1:::"+data.count_soso);
+			console.log("1:::"+data.count_bad);
+			
+			// 평점 ajax에서 강제로 소수점을 만들어줌.
+			var avg1 = parseFloat(data.avg.toFixed(1));
+			if(avg1%1 == 0){
+				avg1 += '.0';
+			}
+			document.getElementById("avg").innerHTML = avg1; // "avg"는 해당 HTML 요소의 id여야 합니다.
+
+			for(var i=0; i<count_all.length; i++){
+				count_all[i].innerText = data.count_all;
+			}
+			count_good.innerText = data.count_good;
+			count_soso.innerText = data.count_soso;
+			count_bad.innerText = data.count_bad;
+			
 			},error: function(xhr, status, error) {console.log('Error:', error);} }) }
+
 	
 	// 메뉴 삭제하는 함수 
 	function delete_Menu(index,food_menu_number){
@@ -483,9 +519,64 @@ window.onload = function()
 <!-- 1 VIEW-Modal X -> 상단사진 5개 -->
 <div class="header-images">
 	<div>
-		<c:forEach items="${listAttach}" var="listAttach">
-			<img src="<%=request.getContextPath() %>/resources/upload/${listAttach.food_attach_physical_name}" width="250" height="250" alt="맛집 썸네일">  
+		<c:forEach items="${listAttach}" var="listAttach" varStatus="status" begin="0" end="4">
+		    <div style="position:relative; display:inline-block;">
+				<c:if test="${status.last}">
+					<!-- <button style="position:absolute; bottom:10px; right:10px; ">사진 더보기</button> -->
+      		      <button data-bs-toggle="modal" data-bs-target="#photoModal" style="position: absolute; bottom: 10px; right: 15px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; border-radius: 10px; padding: 5px 10px; ">사진 더보기 →</button>
+			    </c:if>
+				<img src="<%=request.getContextPath() %>/resources/upload/${listAttach.food_attach_physical_name}" width="250" height="250" alt="맛집 썸네일" >  
+		    </div>
 		</c:forEach>
+		
+		<!-- 이미지 슬라이드 모달 -->
+		<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-dialog-centered modal-lg">
+		        <div class="modal-content " style="background-color: rgba(0,0,0,0.7);">
+		            <div class="modal-body" >
+		                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+		                    <div class="carousel-inner">
+		                        <c:forEach items="${listAttach}" var="attach" varStatus="status">
+		                            <div class="carousel-item ${status.first ? 'active' : ''}">
+		                                <img src="<%=request.getContextPath() %>/resources/upload/${attach.food_attach_physical_name}" class="d-block w-100" alt="맛집 이미지" style="max-width: 100%; height: auto;">
+		                            </div>
+		                        </c:forEach>
+		                    </div>
+		                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+		                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		                        <span class="visually-hidden">Previous</span>
+		                    </button>
+		                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+		                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		                        <span class="visually-hidden">Next</span>
+		                    </button>
+		                </div>
+		                <!-- 다른 사진들을 나열 -->
+		                <div class="other-photos">
+		                    <c:forEach items="${listAttach}" var="attach" varStatus="status">
+		                        <img src="<%=request.getContextPath() %>/resources/upload/${attach.food_attach_physical_name}" class="thumbnail" alt="맛집 이미지" style="max-width:100px; max-height:100px; margin:5px;">
+		                    </c:forEach>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		<script>
+		    $(document).ready(function() {
+		        // 각 썸네일 이미지에 대한 클릭 이벤트 처리
+		        $('.thumbnail').on('click', function() {
+		            // 클릭된 썸네일의 이미지 경로 가져오기
+		            var imagePath = $(this).attr('src');
+		            
+		            // 모달 창에 이미지 경로 설정
+		            $('#carouselExample .carousel-inner').html('<div class="carousel-item active"><img src="' + imagePath + '" class="d-block w-100" alt="맛집 이미지"></div>');
+		            
+		            // 모달 창 열기
+		            $('#photoModal').modal('show');
+		        });
+		    });
+		</script>
 	</div>
 </div>
 
@@ -498,9 +589,16 @@ window.onload = function()
 			<h2>
 				<span>
 					<span style="color: black;">${vo.food_name}</span>
-					<c:if test="${roundedGrade!=0.0}">
-						<span id="avg" style="color: orange;">&nbsp;${roundedGrade}</span>
-					</c:if>
+					
+					<%-- ajax로 평점 바로 나오게 하기  --%>
+					<c:choose>
+						<c:when test="${roundedGrade!=0.0}">
+							<span id="avg" style="color: orange;">&nbsp;${roundedGrade}</span>
+						</c:when>
+						<c:otherwise>
+							<span id="avg" style="color: orange;"></span>
+						</c:otherwise>
+					</c:choose>
 				</span>
 				
 				<!--  빈 별  -->
@@ -678,46 +776,61 @@ window.onload = function()
 		
 	</p><hr><br><br>
 	<p>
-		<img src="../img/which.png" alt="위치 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		주소 :
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/which.png" alt="위치 아이콘" style="width:28px; height:28px; ">
+		주소 
+		</div>
 		${vo.food_address}
 	</p>
 	<p>
-		<img src="../img/foodcall.png" alt="전화번호 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		전화번호 : 
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/foodcall.png" alt="전화번호 아이콘" style="width:28px; height:28px; ">
+		전화번호  
+		</div>
 		${vo.food_phone}
 	</p>
 	<p>
-		<img src="../img/foodnoodle.png" alt="음식 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		음식 종류 :
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/foodnoodle.png" alt="음식 아이콘" style="width:28px; height:28px; ">
+		음식 종류 
+		</div>
 		${vo.food_food_kind}
 	</p>
 	<p>
-		<img src="../img/foodmoney.png" alt="돈 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		가격대 :
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/foodmoney.png" alt="돈 아이콘" style="width:28px; height:28px;">
+		가격대 
+		</div>
 		${vo.food_avg_price}
 	</p>
 	<p>
-		<img src="../img/foodwork.png" alt="일 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		영업시간 : 
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/foodwork.png" alt="일 아이콘" style="width:28px; height:28px; ">
+		영업시간 
+		</div>
 		${vo.food_working_hours}
 	</p>
 	<p>
-		<img src="../img/foodtree.png" alt="나무 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		휴일 :
+		<div style="display:inline-block; width:13%;">
+		<img class="me-2" src="${pageContext.request.contextPath}/resources/img/foodtree.png" alt="나무 아이콘" style="width:28px; height:28px;">
+		휴일 
+		</div>
 		${vo.food_holiday}
 	</p>
-	<p><strong>
-		<img src="../img/insta.png" alt="Instagram 아이콘" style="width:28px; height:28px; cursor:pointer;">
-		웹사이트 
-		</strong> <a href="${vo.food_website}">식당 홈페이지로 가기</a>
+	<p>
+		<c:if test="${not empty vo.food_website}">
+			<div style="display:inline-block; width:13%;">
+			<img class="me-2" src="${pageContext.request.contextPath}/resources/img/insta.png" alt="Instagram 아이콘" style="width:28px; height:28px;">
+		    웹사이트 
+		    </div>
+		<a href="${vo.food_website}" target="_blank">식당 홈페이지로 가기</a>
+		</c:if>
 	</p><br><br>
 	<h3 style="display:inline-block;">메뉴</h3>
 	<c:if test="${login.uNo eq vo.uNo}">
 		<button class="container1_SubmitButton" onclick = "location.href='<%=request.getContextPath()%>/food/foodMenuWrite.do?fNo=${vo.fNo}'">메뉴등록버튼 </button>
 	</c:if>
 	<ul>
-		
 		<c:forEach items="${list}" var="vo" varStatus="status">
 			<li class="menu">
 				<c:if test="${login.uNo eq vo.uNo}">
@@ -744,7 +857,7 @@ window.onload = function()
 </div>
 </div>
 <!-- 2 REVIEW-MODAL X -->  
-<div class="container">
+<div class="container" style="font-family: 'TheJamsil5Bold';">
 	<div class="food-item">
 		<div class="food-item2" style="width:70%; border:0px solid blue;">
 			<div style="border:0px solid black; width:100%;">
@@ -759,8 +872,8 @@ window.onload = function()
 			</div><br>
 			
 <!-- 첫 번째 댓글S -->  
-			<div id="testDiv" > 
-				<div id="insertDiv"></div>
+			<div id="testDiv" style="font-family:'TheJamsil5Bold';"> 
+				<div id="insertDiv" ></div>
 			</div>
 <!-- 리뷰신고 모달 -->
 				    <div class="modal custom-modal fade" id="reviewreportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

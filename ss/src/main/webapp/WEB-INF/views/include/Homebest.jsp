@@ -1,251 +1,77 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.owl-carousel').owlCarousel({
+      items: 3, // Number of items to display
+      loop: true, // Enable loop
+      margin: 10, // Spacing between items
+      nav: true, // Enable navigation buttons
+      responsive:{
+        0:{
+            items:1 // Number of items to display on smaller screens
+        },
+        768:{
+            items:2 // Number of items to display on medium screens
+        },
+        992:{
+            items:3 // Number of items to display on larger screens
+        }
+      },
+      autoplay: true, // Enable auto play
+      autoplayTimeout: 4000 // Time between auto scrolls in milliseconds (5 seconds in this example)
+    });
+  });
+</script>
+
 <div class="album py-3 bg-body-tertiary ">
 		<div class="container">
 			<div style="text-align:left; margin:20px;">
-				<span style="font-weight:bold; font-size:20pt;">주간 베스트 숙박 </span>
+				<span style="font-weight:bold; font-size:20pt;">인기있는 베스트 숙소 TOP 10</span><span class="text-muted" style="font-size:10pt; padding:0px 20px;"> 유저들의 즐겨찾기 기준으로 정했습니다.</span>
 			</div>
-		<div class="tab-content card my-2">
-			<div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-				<div class="carousel-inner">
-					<div class="carousel-item d-flex active">
-						<c:forEach items="${list}" var="list" begin="1" end="3" >
-							<div class="col">
-								<div class="card shadow-sm">
-									<div class="flex-shrink-0 avatar me-3 pt-2">
-						                	<img src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" style="cursor: pointer; width: 200px; height: 180px;" onclick="location.href='<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}'">
-						            	</div>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
+			<div class="owl-carousel owl-theme">
+				<c:forEach items="${rentalhome_list}" var="list">
+					<div class="item" >
+						<div class="col">
+							<div class="card shadow-sm">
+								<a class="bd-placeholder-img card-img-top" href="<%=request.getContextPath()%>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}" >
+									<img class="d-block w-100 " src="<%=request.getContextPath() %>/resources/upload/${list.physical_name}" width="100%" height="225px" role="img" aria-label="Placeholder: Thumbnail"  alt="...">
+								</a>
+								<div class="card-body" style="height:200px; position:relative;">							
+									<span class="card-text" style="font-weight:bold; font-size:15pt;">${list.name}</span>
+									
+									<div class="text-muted">${list.address}</div>
+									<div class="text-muted mt-2">
+										<c:if test="${list.all_avg != 0.0}">
+											<span class="py-1" style="font-size: 10pt; padding: 2px 7px; border-radius: 0px 5px 5px 10px; font-weight: bold; background-color: #333fff; color: white;">${list.all_avg}<span style="color: #e2e2e2;">/5</span></span> 이용자 리뷰 ${list.review_count}
+										</c:if>
 									</div>
-								</div>
-							</div>
-						</c:forEach>
-					</div>	
-				    <div class="carousel-item d-flex">
-				    <!-- 두 번째 세트의 이미지 -->
-			    		<c:forEach items="${attach}" var="event" begin="4" end="6">
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+									<div style="text-align:right;">
+										<c:if test="${not empty list.room_name }">
+											<div style="position:absolute; bottom:5px; right:15px;">
+												<p class="restaurant-description">${list.room_name }</p>
+												<c:if test="${not empty list.discount_reason}">
+													<small class="text-body-secondary" style="background-color:#333fff; color:white; font-size:12pt; border-radius:20px 10px 0px 15px; padding:10px 15px;">
+														${list.discount_reason} ${list.discount_money}
+														<c:if test="${list.discount_type eq 'rate'}">%</c:if>
+														<c:if test="${list.discount_type eq 'fix'}">원</c:if>
+													</small><br>
+												</c:if>
+												<div class="mt-2">
+													<span class="text-muted" style="text-decoration:line-through; ">
+														${list.weekday_price}원
+													</span>
+													<span style="font-weight:bold; font-size:18pt;">
+														${list.weekday_discount_price}원
+													</span>
+												</div>
 											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:forEach>				
-					</div>
-				    <div class="carousel-item  d-flex">
-				      <!-- 세 번째 세트의 이미지 -->
-						<c:forEach items="${attach}" var="event" begin="7" end="9">
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:forEach>				
-				    </div>
-			  </div>
-			  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev" onclick="prevCarousel()">
-			    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			    <span class="visually-hidden">이전</span>					
-			  </button>
-			  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next" onclick="nextCarousel()">
-			    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-			    <span class="visually-hidden">다음</span>
-			  </button>
-			</div>
-		</div>
-		
-			<div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-					<div class="carousel-inner">
-						<div class="carousel-item d-flex active">
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">언능언능 하세요</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						
-						 <!-- 두 번째 세트의 이미지 -->
-						<div class="carousel-item d-flex ">
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">안뇽안뇽 하세요</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						
-						 <!-- 세 번째 세트의 이미지 -->
-						<div class="carousel-item d-flex ">
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-				
-							<div class="col">
-								<div class="card shadow-sm">
-									<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-									<div class="card-body">
-										<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											</div>
-											<small class="text-body-secondary">9 mins</small>
-										</div>
+										</c:if>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>	
-				<button class="carousel-control-prev justify-content-start px-1" type="button" data-bs-target="#myCarousel" data-bs-slide="prev" onclick="prevCarousel()">
-				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				    <span class="visually-hidden">이전</span>					
-				  </button>
-				  <button class="carousel-control-next justify-content-end px-1" type="button" data-bs-target="#myCarousel" data-bs-slide="next" onclick="nextCarousel()">
-				    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-				    <span class="visually-hidden">다음</span>
-				</button>
+				</c:forEach>
 			</div>
 		</div>
 	</div>

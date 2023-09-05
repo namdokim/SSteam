@@ -7,6 +7,7 @@ public class EventVO {
 	private int hit_count;
 	private int count;
 	
+	private String uNick;
 	private String  event_title;
 	private String  event_content;
 	private String event_discript;
@@ -26,6 +27,12 @@ public class EventVO {
 	
 	
 	
+	public String getuNick() {
+		return uNick;
+	}
+	public void setuNick(String uNick) {
+		this.uNick = uNick;
+	}
 	public int getCount() {
 		return count;
 	}
@@ -153,16 +160,16 @@ public class EventVO {
 		Thumbnail = thumbnail;
 	}
 	
-
 	
 	@Override
 	public String toString() {
-		return "EventVO [event_number=" + event_number + ", uNo=" + uNo + ", hit_count=" + hit_count + ", event_title="
-				+ event_title + ", event_content=" + event_content + ", event_discript=" + event_discript
-				+ ", write_date=" + write_date + ", event_tel=" + event_tel + ", event_start=" + event_start
-				+ ", event_end=" + event_end + ", event_local=" + event_local + ", LType=" + LType + ", attach_number="
-				+ attach_number + ", Thumbnail=" + Thumbnail + ", attach_logical_name=" + attach_logical_name
-				+ ", attach_physical_name=" + attach_physical_name + "]";
+		return "EventVO [event_number=" + event_number + ", uNo=" + uNo + ", hit_count=" + hit_count + ", count="
+				+ count + ", uNick=" + uNick + ", event_title=" + event_title + ", event_content=" + event_content
+				+ ", event_discript=" + event_discript + ", write_date=" + write_date + ", event_tel=" + event_tel
+				+ ", event_start=" + event_start + ", event_end=" + event_end + ", event_local=" + event_local
+				+ ", LType=" + LType + ", attach_number=" + attach_number + ", Thumbnail=" + Thumbnail
+				+ ", attach_logical_name=" + attach_logical_name + ", attach_physical_name=" + attach_physical_name
+				+ ", avg=" + avg + ", event_hit=" + event_hit + "]";
 	}
 	
 	

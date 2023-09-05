@@ -9,8 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="../css/datepicker.css">
-<link rel="stylesheet" href="../css/font.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/datepicker.css">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=471bd87d2c2bfa282198a74a11556a57&libraries=services"></script>
 <script>
 	$.datepicker.setDefaults({
@@ -50,17 +49,17 @@ window.onload = function(){
 	let avg_ = document.getElementsByName("avg");
 	avg_.forEach(function(avg, index) {
 		if(document.getElementById("score").value == parseInt(avg_[index].innerText)){
-			avg_[index].style.backgroundColor = "#aed2fe";
+			avg_[index].style.backgroundColor = "#f1f6fd";
 		}
 		avg.onclick = function(){
 			if(document.getElementById("score").value != avg_[index].innerText){
 				for(var i=0; i < avg_.length; i++){
-					avg_[i].style.backgroundColor = "#f5f9fe";
+					avg_[i].style.backgroundColor = "white";
 				}
-				avg_[index].style.backgroundColor = "#aed2fe";
+				avg_[index].style.backgroundColor = "#f1f6fd"
 				document.getElementById("score").value = avg_[index].innerText;
 			}else{
-				avg_[index].style.backgroundColor = "#f5f9fe";
+				avg_[index].style.backgroundColor = "white";
 				document.getElementById("score").value = 0;
 			}
 		}
@@ -373,7 +372,7 @@ window.onload = function(){
 		border-radius:0px;
 	}
 	.hotel {
-		background-image: url(../img/hotel.jpg);
+		background-image: url(${pageContext.request.contextPath}/resources/img/hotel.jpg);
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -471,7 +470,6 @@ input[type="range"]::-webkit-slider-thumb {
 	width:50px;
 	font-weight:bold;
 	font-size:10pt;
-	background-color:#f5f9fe;
 	border:1px solid lightgray;
 	border-radius:5px;
 	margin:20px 0px;
@@ -514,7 +512,7 @@ input[type="range"]::-webkit-slider-thumb {
 }	
 .masthead {
 	position: relative;
-	background: url(../img/houses2.jpg) no-repeat center center;
+	background: url(${pageContext.request.contextPath}/resources/img/backboard.jpg) no-repeat center center;
 	background-size: cover;
 	height:400px
 }	
@@ -527,11 +525,11 @@ input[type="range"]::-webkit-slider-thumb {
 
 .searchView .btn-check:checked+.btn{
 	color:black;
-	background-color:#f5f9fe;
+	background-color:#eef3fb;
 	border:1px solid lightgray; 
 }
 </style>
-<div class="container-fluid " style="background-color:#f7fafc; font-family: 'TheJamsil5Bold';">
+<div class="container-fluid " style="background-color:#fbfcfd; font-family: 'TheJamsil5Bold';">
 	<div class="masthead py-5">
 		<div class="container position-relative sticky-top">
 			<div class="row justify-content-center">
@@ -728,17 +726,16 @@ input[type="range"]::-webkit-slider-thumb {
 								<div class="d-flex align-items-start ps-2 pt-2" style="width:70%; position:relative;">
 									<div class="flex-column px-1 py-1" style="width:100%;">
 											<a style="text-decoration: none; color: black;" href="<%=request.getContextPath() %>/rentalhome/rentalhomeView.do?rentalhome_idx=${list.rentalhome_idx}&location=${searchVO.location }&start_date=${searchVO.start_date}&end_date=${searchVO.end_date}&person=${searchVO.person}">
-												<span style="font-size: 13pt; font-weight: bold; text-align:left;">${list.name}</span>
+												<span style="font-size: 18pt; font-weight: bold; text-align:left;">${list.name}</span>
 											</a>
-										<div class="flex-column py-1" style="text-align: left;">
-											<c:if test="${list.all_avg != 0.0}">
-												<span class="py-1" style="font-size: 10pt; padding: 2px 7px; border-radius: 0px 5px 5px 10px; font-weight: bold; background-color: #333fff; color: white;">${list.all_avg}<span style="color: #e2e2e2;">/5</span></span>
-											</c:if>
-											<span style="font-size: 10pt; color: #686868;">이용자 리뷰 ${list.review_count}개</span>
-										</div>
 										<div class="flex-column ">
-											<span style="font-size: 10pt; color: #686868;">${list.address}</span>
-											<span style="font-size: 10pt; color: #686868;">현재 위치에서 <span name="distance"></span>km</span>
+											<span style="font-size: 12pt; color: #686868;">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+											  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+											</svg>
+											${list.address}</span>
+											<span style="font-size: 12pt; color: #686868;">현재 위치에서 <span name="distance"></span>km</span>
+
 <script>
 	function deg2rad(deg) {
 		return deg * (Math.PI / 180);
@@ -781,11 +778,17 @@ input[type="range"]::-webkit-slider-thumb {
 	});
 </script>
 										</div>
+										<div class="flex-column py-1" style="text-align: left;">
+											<c:if test="${list.all_avg != 0.0}">
+												<span class="py-1" style="font-size: 10pt; padding: 2px 7px; border-radius: 0px 5px 5px 10px; font-weight: bold; background-color: #333fff; color: white;">${list.all_avg}<span style="color: #e2e2e2;">/5</span></span>
+												<span style="font-size: 10pt; color: #686868;">이용자 리뷰 ${list.review_count}개</span>
+											</c:if>
+										</div>
 										<c:if test="${list.discount_type eq 'fix' }">
-											<span style="position:absolute; bottom:50px; right:-50px; background-color:#529ffe; color:white; font-size:10pt; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}원 할인</span><br>
+											<span style="position:absolute; bottom:40px; right:-60px; background-color:#529ffe; color:white; font-size:10pt; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}원 할인</span><br>
 										</c:if>
 										<c:if test="${list.discount_type eq 'rate' }">
-											<span style="position:absolute; bottom:50px; right:-50px; background-color:#529ffe; color:white; font-size:10pt; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}% 할인</span><br>
+											<span style="position:absolute; bottom:40px; right:-60px; background-color:#529ffe; color:white; font-size:10pt; border-radius:20px 10px 0px 15px; padding:7px 10px;">${list.discount_reason} ${list.discount_money}% 할인</span><br>
 										</c:if>
 									</div>
 								</div>
@@ -838,10 +841,6 @@ input[type="range"]::-webkit-slider-thumb {
 						</c:forEach>
 					</div>
 					<div class="d-flex justify-content-end my-3">
-						<c:if test="${login != null }">
-							<span onclick="location.href='rentalhomeReserveList.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px; cursor:pointer;">MY 예약 리스트</span>
-						</c:if>
-							<div style="width:5px;"></div>
 						<c:if test="${login != null && login.uType == 'business' }">
 							<span onclick="location.href='rentalhomeWrite.do'" class="btn btn-primary btn-sm mr-2" style="padding:10px 20px;">숙소 등록</span>
 						</c:if>
@@ -852,7 +851,7 @@ input[type="range"]::-webkit-slider-thumb {
 							<%-- 이전 페이지 링크 생성 --%>
 							<li class="page-item">
 							<% if (pageMaker.isPrev()){ %>
-								<span class="page-link" onclick="pageSet(<%=pageMaker.getStartPage()-1%>)" id="preview_page">Previous</span>
+								<span class="page-link" onclick="pageSet(<%=pageMaker.getStartPage()-1%>)" id="preview_page">이전 페이지</span>
 							<%} %> 
 							</li>
 							<% 
@@ -870,7 +869,7 @@ input[type="range"]::-webkit-slider-thumb {
 							<li class="page-item">
 							<%if(pageMaker.isNext()&&pageMaker.getEndPage()>0 ){ %> 
 <%-- 								<span class="page-link" id="next_page" href="<%=request.getContextPath()%>/rentalhome/rentalhomeMain.do?page=<%=pageMaker.getEndPage()+1%>">Next</span> --%>
-								<span class="page-link" onclick="pageSet(<%=pageMaker.getEndPage()+1%>)" id="next_page">Next</span>
+								<span class="page-link" onclick="pageSet(<%=pageMaker.getEndPage()+1%>)" id="next_page">다음 페이지</span>
 							<% } %> 
 							</li>
 						</ul>

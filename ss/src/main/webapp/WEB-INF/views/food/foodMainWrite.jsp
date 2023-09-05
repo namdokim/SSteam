@@ -63,9 +63,12 @@
             alert("휴일을 작성해주세요 .");
             return false;
         }
-        if (foodWebsite === "" ) {
-            alert("웹사이트를 작성해주세요 .");
-            return false;
+     	// 웹사이트 유효성 검사 추가 
+        if (foodWebsite !== "") {
+            if (!foodWebsite.startsWith("http://") && !foodWebsite.startsWith("https://")) {
+                alert("웹사이트 주소는 'http://' 또는 'https://'로 시작해야 합니다.");
+                return false;
+            }
         }
         if (foodContent === "" ) {
             alert("맛집설명을 작성해주세요 .");

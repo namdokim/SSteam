@@ -465,14 +465,48 @@ public class FoodController
 		// -> (UserVO)로 강제 형변환을 해준다. 
 		// -> 매개변수에 HttpServletRequest req 를 받아서, req를 써서, .getSession() 메소드를 호출해서 
 		// -> 세션을 가져오고, 세션의 getAttribute를 통해 키값이 "login"인 정보를 가져와서 loginVO에 저장. 
+		
 		foodreviewVO.setuNo(loginVO.getuNo()); 
 		
-		System.out.println(foodreviewVO.getFood_review_number());
 		foodService.insert(foodreviewVO);
-		FoodReviewVO foodreviewVO2 = foodService.selectOneByFRno(foodreviewVO.getFood_review_number());
 		
-		System.out.println(foodreviewVO2.toString());
+		double avg = foodService.selectAvg_foodreview(foodreviewVO.getfNo());
+		
+//			foodreviewVO.setAvg(avg);
+		// 1. 전체 리뷰 개수  
+		int count_all = foodService.selectAllCount_foodreview(foodreviewVO.getfNo());
+		foodreviewVO.setCount_all(count_all);		
+		System.out.println(foodreviewVO.getCount_all());
+		
+		// 2. 5점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(5);
+		int count_good = foodService.selectCount_foodreview(foodreviewVO);
+		foodreviewVO.setCount_good(count_good);	
+		System.out.println(foodreviewVO.getCount_good());
+		
+		// 3. 3점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(3);
+		int count_soso = foodService.selectCount_foodreview(foodreviewVO);
+		foodreviewVO.setCount_soso(count_soso);
+		System.out.println(foodreviewVO.getCount_soso());
+		
+		// 4. 1점에 대한 리뷰 개수 
+		foodreviewVO.setFood_review_grade(1);
+		int count_bad = foodService.selectCount_foodreview(foodreviewVO);
+		foodreviewVO.setCount_bad(count_bad);
+		System.out.println(foodreviewVO.getCount_bad());
+		
+		FoodReviewVO foodreviewVO2 = foodService.selectOneByFRno(foodreviewVO.getFood_review_number());
+		System.out.println(avg);
+		foodreviewVO2.setAvg(avg);
+		foodreviewVO2.setCount_all(count_all);
+		foodreviewVO2.setCount_good(count_good);
+		foodreviewVO2.setCount_soso(count_soso);
+		foodreviewVO2.setCount_bad(count_bad);
+		System.out.println(foodreviewVO.toString());
 		return foodreviewVO2;
+		
+		
 	}
 	
 	// [3] 뷰 페이지 -> 리뷰 -> 글 삭제   

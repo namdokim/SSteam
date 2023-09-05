@@ -19,7 +19,7 @@
 		text-decoration:underline;
 	}
 </style>
-<div style="width:1920px; text-align:left; background-color:#dfecfb; padding:50px 0px; font-family: 'TheJamsil5Bold';">
+<div style="width:1920px; min-height:800px; text-align:left; background-color:#f1f7fd; padding:50px 0px; font-family: 'TheJamsil5Bold';">
 	<div class="view" style="width:1600px; margin:0 auto; padding:30px; margin:20px auto; line-height:50px;">
 		<div style="margin:20px 0px;"><span style="font-weight:bold; padding:15px 20px; background-color:#0863ec; color:white; border-radius:10px;">MY 예약 리스트</span></div>
 		<div class="d-flex" style="margin:10px 0px;">

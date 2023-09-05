@@ -276,7 +276,7 @@
 			border-radius:0px;
 		}
 		.hotel {
-			background-image: url(../img/hotel.jpg);
+			background-image: url(${pageContext.request.contextPath}/resources/img/hotel.jpg);
 			background-size: cover;
 			background-repeat: no-repeat;
 			background-position: center;
@@ -414,7 +414,7 @@
 		}		
 		.masthead {
 		    position: relative;
-		    background: url(../img/food.jpg) no-repeat center center;
+		    background: url(${pageContext.request.contextPath}/resources/img/food.jpg) no-repeat center center;
 		    background-size: cover;
 		    height:400px
 		}	
@@ -664,15 +664,20 @@
 													</svg>
 													${food.food_address}
 													</p>
+													<!-- 웹사이트의 주소가 없으면 insta 사진 출력안함. -->
 													<div class="mt-3">
-														<a href="${food.food_website}" target="_blank">
-														    <img src="../img/insta.png" alt="Instagram 아이콘" style="width:28px; height:28px; cursor:pointer;">
-														</a>
-														<span style="font-size:13pt; background-color:#ffb64c; padding:3px 8px; border-radius:41px;">#${food.food_food_kind}</span> 
-														<span style="font-size:13pt; background-color:#ffb64c; padding:3px 8px; border-radius:41px;">#${food.food_avg_price}</span>
-													</div>
-													<div class="restaurant-description mt-3" style="display:inline-block; width:470px; height:120px;">
-													    ${food.food_content}
+													    <c:choose>
+													        <c:when test="${not empty food.food_website}">
+													            <a href="${food.food_website}" target="_blank">
+													                <img src="${pageContext.request.contextPath}/resources/img/insta.png" alt="Instagram 아이콘" style="width:28px; height:28px; cursor:pointer;">
+													            </a>
+													        </c:when>
+													        <c:otherwise>
+													            <!-- 아무 내용도 표시하지 않음 -->
+													        </c:otherwise>
+													    </c:choose>
+													    <span style="font-size:13pt; background-color:#ffb64c; padding:3px 8px; border-radius:41px;">#${food.food_food_kind}</span> 
+													    <span style="font-size:13pt; background-color:#ffb64c; padding:3px 8px; border-radius:41px;">#${food.food_avg_price}</span>
 													</div>
 
 
